@@ -1,24 +1,28 @@
 import type { Page } from '../../App';
+import { CdnIcon } from '../shared/CdnIcon';
+import { CONVERSATIONS } from '@/lib/chat-config';
 
 interface SidebarProps {
   activePage: Page;
   onNavigate: (page: Page) => void;
+  chatOpen?: boolean;
+  onChatToggle?: () => void;
+  activeConversationId?: string;
+  onSelectConversation?: (id: string) => void;
 }
 
 const NAV_ITEMS: { label: string; page?: Page }[] = [
   { label: 'Home', page: 'home' },
-  { label: 'Explore' },
+  { label: 'Explore', page: 'explore' },
   { label: 'Portfolio' },
   { label: 'Alva Skill' },
-  { label: 'About' },
 ];
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
-  { label: 'Trading Strategy Playbook' },
   { label: 'Google / X Trends Tracker', page: 'trends' },
 ];
 
-export function Sidebar({ activePage, onNavigate }: SidebarProps) {
+export function Sidebar({ activePage, onNavigate, chatOpen, onChatToggle, activeConversationId, onSelectConversation }: SidebarProps) {
   return (
     <aside
       className="fixed left-0 top-0 w-[228px] h-screen flex flex-col p-[8px] overflow-y-auto z-20"
@@ -36,6 +40,34 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
           <path d="M50.8804 2.85254C51.6828 2.85254 52.4001 2.9563 53.0317 3.16406C53.6665 3.37181 54.2029 3.67234 54.6411 4.06543C55.0826 4.45858 55.4198 4.93983 55.6519 5.50879C55.8838 6.07757 55.9995 6.72152 55.9995 7.44043V13.7119H53.5728V10.9414C53.4471 11.4142 53.2569 11.8405 53.0024 12.2207C52.7511 12.5978 52.4436 12.9193 52.0796 13.1846C51.7155 13.4466 51.3014 13.6484 50.8374 13.7891C50.3766 13.9297 49.8749 14 49.3335 14C48.7697 14 48.2554 13.9229 47.7915 13.7695C47.3309 13.6193 46.9365 13.4066 46.6079 13.1318C46.2793 12.857 46.0247 12.5263 45.8442 12.1396C45.667 11.7497 45.5786 11.3178 45.5786 10.8447C45.5787 10.3526 45.676 9.91136 45.8726 9.52148C46.0691 9.13153 46.3519 8.80099 46.7192 8.5293C47.0898 8.25767 47.5411 8.05006 48.0728 7.90625C48.6044 7.75928 49.2037 7.68555 49.8706 7.68555H53.5728V7.44043C53.5727 7.04114 53.5099 6.68347 53.3843 6.36719C53.2586 6.04755 53.0768 5.7755 52.8384 5.55176C52.6032 5.32805 52.3163 5.15733 51.978 5.03906C51.6397 4.92081 51.2578 4.86134 50.8325 4.86133C50.4009 4.86133 50.0255 4.91078 49.7065 5.00977C49.3907 5.10566 49.1296 5.24385 48.9233 5.42285C48.7172 5.60181 48.5633 5.81689 48.4634 6.06934C48.3635 6.32177 48.314 6.60485 48.314 6.91797H45.8921C45.8921 6.2948 46.0087 5.73222 46.2407 5.23047C46.4727 4.72876 46.8025 4.30173 47.231 3.9502C47.6627 3.59541 48.1868 3.32433 48.8022 3.13574C49.4209 2.94718 50.1136 2.85256 50.8804 2.85254ZM30.103 13.7129H27.396L26.3091 10.4854H20.3442L19.2368 13.7129H16.5884L21.5474 0H25.2114L30.103 13.7129ZM33.5015 13.7129H31.0747V0H33.5015V13.7129ZM40.0366 12.207L42.9956 3.14062H45.4751L41.772 13.7129H38.2437L34.5747 3.14062H37.1128L40.0366 12.207ZM50.0103 9.37305C49.3466 9.37309 48.844 9.48359 48.5024 9.7041C48.1643 9.92459 47.9947 10.2504 47.9946 10.6816C47.9946 11.1355 48.1807 11.4846 48.5513 11.7275C48.9251 11.9671 49.4633 12.0869 50.1655 12.0869C50.6617 12.0869 51.1181 12.0274 51.5337 11.9092C51.9522 11.7878 52.3113 11.6202 52.6108 11.4062C52.9137 11.1921 53.1493 10.9376 53.3169 10.6436C53.4876 10.3463 53.5728 10.0232 53.5728 9.6748V9.37305H50.0103ZM21.0786 8.33789H25.5835L23.3462 1.71191L21.0786 8.33789Z" fill="white" />
         </svg>
       </div>
+
+      {/* New Thread button (Approach B: sidebar mode) */}
+      {onChatToggle && (
+        <div className="py-[4px] shrink-0">
+          <div
+            className="h-[32px] rounded-[6px] flex items-center justify-center gap-[8px] cursor-pointer transition-opacity hover:opacity-90"
+            style={{ background: '#49A3A6' }}
+            onClick={() => {
+              if (activePage === 'home') {
+                const input = document.querySelector<HTMLElement>('[contenteditable], textarea, input[type="text"], .ProseMirror');
+                if (input) { input.focus(); } else {
+                  const fallback = document.querySelector<HTMLElement>('[placeholder]');
+                  fallback?.focus();
+                }
+              } else if (activePage.startsWith('thread/')) {
+                onNavigate('thread/new' as Page);
+              } else {
+                onSelectConversation?.('new');
+              }
+            }}
+          >
+            <CdnIcon name="sidebar-new-normal" size={16} color="#fff" />
+            <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-white">
+              New Thread
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Nav items */}
       <div className="py-[4px]">
@@ -63,7 +95,12 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
             className={`h-[36px] leading-[36px] rounded-[4px] px-[8px] text-[13px] tracking-[0.13px] cursor-pointer transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
               item.page === activePage ? 'text-[#49A3A6]' : 'text-white hover:bg-white/5'
             }`}
-            onClick={() => item.page && onNavigate(item.page)}
+            onClick={() => {
+              if (item.page) {
+                if (onChatToggle) sessionStorage.setItem('openChatWithThread', 'demo');
+                onNavigate(item.page);
+              }
+            }}
           >
             {item.label}
           </div>
@@ -76,9 +113,20 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
           <div className="h-[36px] flex items-center px-[8px] text-[12px] text-white/50 tracking-[0.12px] shrink-0">
             Threads
           </div>
-          <div className="h-[36px] leading-[36px] rounded-[4px] px-[8px] text-[13px] text-white tracking-[0.13px] cursor-pointer hover:bg-white/5 whitespace-nowrap overflow-hidden text-ellipsis">
-            General Discussion
-          </div>
+          {CONVERSATIONS.map(conv => {
+            const isActive = activePage === `thread/${conv.id}`;
+            return (
+              <div
+                key={conv.id}
+                className={`h-[36px] leading-[36px] rounded-[4px] px-[8px] text-[13px] tracking-[0.13px] cursor-pointer transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
+                  isActive ? 'text-[#49A3A6] bg-white/5' : 'text-white hover:bg-white/5'
+                }`}
+                onClick={() => onNavigate(`thread/${conv.id}`)}
+              >
+                {conv.label}
+              </div>
+            );
+          })}
         </div>
       </div>
 

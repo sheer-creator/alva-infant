@@ -132,16 +132,6 @@ export function Topbar({ title, author = 'YGGYLL', starCount, remixCount, commen
               Trade
             </span>
           </button>
-          <button className="bg-[rgba(73,163,166,0.08)] flex gap-[4px] h-[32px] items-center justify-center px-[10px] py-[6px] rounded-[6px] cursor-pointer hover:bg-[rgba(73,163,166,0.14)] transition-colors" style={{ border: '0.5px solid rgba(73,163,166,0.5)' }} onClick={onChatToggle}>
-            <div className="flex items-center overflow-clip shrink-0">
-              <div className="shrink-0 size-[16px]">
-                <CdnIcon name="chat-ai-l" size={16} color="var(--main-m1)" />
-              </div>
-            </div>
-            <span className="font-['Delight',sans-serif] font-medium leading-[20px] text-[12px] text-[var(--main-m1)] tracking-[0.12px] whitespace-nowrap">
-              Chat
-            </span>
-          </button>
         </div>
       </div>
     </div>

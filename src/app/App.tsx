@@ -1,14 +1,22 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 
-const VALID_PAGES = ['home', 'trends'] as const;
-export type Page = (typeof VALID_PAGES)[number];
+const VALID_PAGES = ['home', 'explore', 'trends'] as const;
+export type Page = (typeof VALID_PAGES)[number] | `thread/${string}`;
 
 const Home = lazy(() => import('../pages/Home'));
+const Explore = lazy(() => import('../pages/Explore'));
 const Trends = lazy(() => import('../pages/Trends'));
+const Thread = lazy(() => import('../pages/Thread'));
 
 function getPageFromHash(): Page {
   const hash = window.location.hash.slice(1);
-  return VALID_PAGES.includes(hash as Page) ? (hash as Page) : 'home';
+  if (hash.startsWith('thread/')) return hash as Page;
+  return VALID_PAGES.includes(hash as (typeof VALID_PAGES)[number]) ? (hash as Page) : 'home';
+}
+
+export function getThreadId(page: Page): string | null {
+  if (typeof page === 'string' && page.startsWith('thread/')) return page.slice(7);
+  return null;
 }
 
 export default function App() {
@@ -24,10 +32,14 @@ export default function App() {
     window.location.hash = p;
   }, []);
 
+  const threadId = getThreadId(page);
+
   return (
     <Suspense fallback={null}>
       {page === 'home' && <Home onNavigate={navigate} />}
+      {page === 'explore' && <Explore onNavigate={navigate} />}
       {page === 'trends' && <Trends onNavigate={navigate} />}
+      {threadId && <Thread threadId={threadId} onNavigate={navigate} />}
     </Suspense>
   );
 }
