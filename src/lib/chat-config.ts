@@ -1,5 +1,3 @@
-import type { Page } from '@/app/App';
-
 export type ChatTriggerMode = 'floating-bar' | 'sidebar' | 'fab';
 
 /** Change this to switch between the three approaches */

@@ -114,7 +114,7 @@ export function Sidebar({ activePage, onNavigate, chatOpen, onChatToggle, active
             Threads
           </div>
           {CONVERSATIONS.map(conv => {
-            const isActive = activePage === `thread/${conv.id}`;
+            const isActive = activePage === `thread/${conv.id}` || (chatOpen && activeConversationId === conv.id);
             return (
               <div
                 key={conv.id}

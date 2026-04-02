@@ -101,55 +101,6 @@ const AVATAR_COLORS: Record<string, string> = {
 
 /* ---- sub-components ---------------------------------------------------- */
 
-function StarIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-      <path
-        d="M8 1.5l1.76 3.57 3.94.57-2.85 2.78.67 3.93L8 10.42l-3.52 1.93.67-3.93L2.3 5.64l3.94-.57L8 1.5z"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function RemixIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
-      <path
-        d="M12 2H6.5A2.5 2.5 0 004 4.5V12m0 0l2.5-2.5M4 12l2.5 2.5M4 12h5.5A2.5 2.5 0 0012 9.5V4"
-        stroke="currentColor"
-        strokeWidth="1.1"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function FireIcon({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none">
-      <path
-        d="M7 1c0 2.5-2 3.5-2 5.5a3 3 0 006 0c0-1.5-.5-2.5-1-3.5-.5 1-1.5 1.5-1.5 1.5S8.5 3 7 1z"
-        stroke="currentColor"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ClockIcon({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none">
-      <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1" />
-      <path d="M7 4v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function PlaybookCard({ title, desc, author, stars, remixes }: typeof PLAYBOOK_CARDS[0]) {
   const initial = author.charAt(0).toUpperCase();
   const color = AVATAR_COLORS[author] ?? '#838383';

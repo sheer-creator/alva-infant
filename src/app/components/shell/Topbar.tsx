@@ -96,7 +96,7 @@ function CdnIcon({ name, size = 16, color }: { name: string; size?: number; colo
   );
 }
 
-export function Topbar({ title, author = 'YGGYLL', starCount, remixCount, commentCount, onChatToggle }: TopbarProps) {
+export function Topbar({ title, author = 'YGGYLL', starCount, remixCount, commentCount, onChatToggle: _onChatToggle }: TopbarProps) {
   return (
     <div className="flex gap-[12px] h-[56px] items-center py-[10px] sticky top-0 shrink-0 w-full z-10 bg-[var(--b0-page)] text-[var(--text-n9)]">
       {/* Left: avatar + author + dot + title + status */}
