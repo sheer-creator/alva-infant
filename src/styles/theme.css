@@ -1,0 +1,84 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ── Alva Design Tokens ── */
+  --text-n9:  rgba(0, 0, 0, 0.9);
+  --text-n7:  rgba(0, 0, 0, 0.7);
+  --text-n5:  rgba(0, 0, 0, 0.5);
+  --text-n3:  rgba(0, 0, 0, 0.3);
+  --text-n2:  rgba(0, 0, 0, 0.2);
+
+  --main-m1:    #49A3A6;
+  --main-m1-10: rgba(73, 163, 166, 0.1);
+  --main-m3:    #2a9b7d;
+  --main-m3-10: rgba(42, 155, 125, 0.1);
+  --main-m4:    #e05357;
+  --main-m4-10: rgba(224, 83, 87, 0.1);
+  --main-m5:    #E6A91A;
+  --main-m6:    #ff9800;
+
+  --b0-page:      #ffffff;
+  --b0-sidebar:   #2A2A38;
+  --grey-g01:     #fafafa;
+
+  --line-l05: rgba(0, 0, 0, 0.05);
+  --line-l07: rgba(0, 0, 0, 0.07);
+  --line-l2:  rgba(0, 0, 0, 0.2);
+
+  --shadow-xs: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
+  --shadow-s:  0 6px 20px 0 rgba(0, 0, 0, 0.04);
+
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+
+  --background: rgba(246, 246, 246, 1);
+  --foreground: rgba(0, 0, 0, 0.9);
+  --primary: rgba(73, 163, 166, 1);
+  --primary-foreground: rgba(255, 255, 255, 1);
+  --card: rgba(255, 255, 255, 1);
+  --card-foreground: rgba(0, 0, 0, 0.9);
+  --border: rgba(0, 0, 0, 0.3);
+  --muted: rgba(250, 250, 250, 1);
+  --muted-foreground: rgba(0, 0, 0, 0.7);
+  --destructive: rgba(224, 83, 87, 1);
+  --ring: rgba(73, 163, 166, 1);
+  --radius: 6px;
+  --radius-card: 8px;
+
+  --sidebar: rgba(42, 42, 56, 1);
+  --sidebar-foreground: rgba(0, 0, 0, 0.9);
+  --sidebar-primary: rgba(73, 163, 166, 1);
+}
+
+@theme inline {
+  --font-sans: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-card);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

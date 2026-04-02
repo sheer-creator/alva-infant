@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home · Alva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Delight:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #49A3A6;
+            --orange: #FF9800;
+            --green: #40A544;
+            --blue: #5F75C9;
+            --red: #E05357;
+            --yellow: #E6A91A;
+            --deep-blue: #3D8BD1;
+            --sidebar-bg: #2A2A38;
+            --sidebar-w: 228px;
+            --page-bg: #fafafa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Delight', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ══════ SIDEBAR ══════ */
+        .sidebar {
+            position: fixed; left: 0; top: 0;
+            width: var(--sidebar-w); height: 100vh;
+            background: var(--sidebar-bg);
+            background-image: radial-gradient(circle, rgba(0,0,0,0.4) 0.6px, transparent 0.6px);
+            background-size: 3px 3px;
+            display: flex; flex-direction: column;
+            padding: 8px; overflow-y: auto; z-index: 20;
+        }
+        .sidebar-logo {
+            height: 48px; display: flex; align-items: center;
+            padding: 16px 8px; flex-shrink: 0;
+        }
+        .sidebar-section-label {
+            height: 36px; display: flex; align-items: center;
+            padding: 4px 8px; font-size: 12px;
+            color: rgba(255,255,255,0.5); letter-spacing: 0.12px; flex-shrink: 0;
+        }
+        .sidebar-item {
+            height: 36px; line-height: 36px; border-radius: 4px;
+            padding: 0 8px; font-size: 13px; color: white;
+            letter-spacing: 0.13px; cursor: pointer; transition: background 0.15s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sidebar-item:hover { background: rgba(255,255,255,0.05); }
+        .sidebar-item.active { color: var(--primary); }
+        a.sidebar-item { text-decoration: none; color: white; display: block; }
+        a.sidebar-item.active { color: var(--primary); }
+        .sidebar-threads { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+        .sidebar-user {
+            border-radius: 4px; padding: 8px;
+            display: flex; align-items: center; gap: 8px;
+            flex-shrink: 0; margin-top: auto;
+        }
+        .sidebar-avatar {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--primary); display: flex; align-items: center;
+            justify-content: center; font-size: 11px; font-weight: 500;
+            color: white; flex-shrink: 0;
+        }
+        .sidebar-username { font-size: 13px; color: white; letter-spacing: 0.13px; }
+
+        /* ══════ MAIN ══════ */
+        .main {
+            margin-left: var(--sidebar-w);
+            background: var(--page-bg);
+            min-height: 100vh;
+            border-radius: 8px 0 0 8px;
+            overflow-y: auto;
+        }
+
+        /* ══════ HERO ══════ */
+        .hero {
+            width: 100%; display: flex; flex-direction: column;
+            align-items: center; padding: 80px 50px 40px; gap: 40px;
+            position: relative;
+        }
+        .hero-dots {
+            position: absolute; inset: 0; pointer-events: none;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+            background-size: 20px 20px;
+            -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 40%, black 20%, transparent 70%);
+            mask-image: radial-gradient(ellipse 60% 80% at 50% 40%, black 20%, transparent 70%);
+        }
+        .hero h1 {
+            font-size: 45px; line-height: 1.2; font-weight: 400;
+            color: rgba(0,0,0,0.9); text-align: center;
+            max-width: 616px; letter-spacing: 0.45px; position: relative; z-index: 1;
+        }
+
+        /* ══════ CHAT INPUT ══════ */
+        .chat-box {
+            width: 100%; max-width: 780px; position: relative; z-index: 1;
+        }
+        .chat-input-wrap {
+            border-radius: 16px; background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 0.5px solid rgba(0,0,0,0.2); overflow: visible;
+        }
+        .chat-input-wrap textarea {
+            width: 100%; resize: none; border: none; outline: none;
+            padding: 16px 16px 0; font-size: 14px; line-height: 22px;
+            font-family: 'Delight', sans-serif; color: rgba(0,0,0,0.85);
+            background: transparent; min-height: 48px; max-height: 480px;
+            letter-spacing: 0.14px;
+        }
+        .chat-input-wrap textarea::placeholder { color: rgba(0,0,0,0.3); }
+        .chat-toolbar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px 16px; height: 28px; box-sizing: content-box;
+        }
+        .chat-toolbar button {
+            background: none; border: none; padding: 0;
+            width: 16px; height: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .chat-toolbar .spacer { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+        .model-btn {
+            background: none !important; border: none !important;
+            width: auto !important; height: auto !important;
+            padding: 4px 0 !important; font-family: 'Delight', sans-serif;
+            font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+            color: rgba(0,0,0,0.5); cursor: pointer; display: flex !important;
+            align-items: center; gap: 4px;
+        }
+        .send-btn {
+            width: 28px !important; height: 28px !important;
+            border-radius: 6px !important; background: rgba(0,0,0,0.05) !important;
+            flex-shrink: 0;
+        }
+        .send-btn:hover { background: rgba(0,0,0,0.1) !important; }
+
+        /* ══════ WHAT YOU CAN BUILD ══════ */
+        .build-section {
+            width: 100%; background: #f6f6f6;
+            border-top: 0.5px solid rgba(0,0,0,0.15);
+            border-bottom: 0.5px solid rgba(0,0,0,0.15);
+        }
+        .build-inner {
+            max-width: 1272px; margin: 0 auto; padding: 20px 50px;
+            display: flex; gap: 28px; align-items: stretch;
+        }
+        .build-left {
+            flex: 1; display: flex; flex-direction: column;
+            gap: 24px; padding: 10px 0;
+        }
+        .build-left h2 {
+            font-size: 24px; line-height: 1.2; font-weight: 400;
+            color: rgba(0,0,0,0.9); letter-spacing: 0.24px;
+        }
+        .build-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .build-tag {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.3);
+            background: white; font-family: 'Delight', sans-serif;
+            font-size: 14px; line-height: 22px; font-weight: 400;
+            color: rgba(0,0,0,0.9); white-space: nowrap; cursor: pointer;
+            letter-spacing: 0.14px;
+        }
+        .build-tag.active { background: #e5eeee; }
+        .build-explore {
+            display: flex; align-items: center; padding: 8px 0;
+            font-size: 14px; line-height: 22px; color: rgba(0,0,0,0.5);
+            cursor: pointer; letter-spacing: 0.14px;
+        }
+        .remix-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 9px 16px; border-radius: 8px; background: var(--primary);
+            border: none; cursor: pointer; width: fit-content;
+        }
+        .remix-btn:hover { filter: brightness(1.05); }
+        .remix-btn span {
+            font-family: 'Delight', sans-serif; font-size: 14px;
+            line-height: 22px; font-weight: 500; color: white; letter-spacing: 0.14px;
+        }
+
+        /* Preview card */
+        .build-right {
+            flex: 1; border-radius: 12px; overflow: hidden;
+            border: 0.5px solid rgba(0,0,0,0.3); background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative; aspect-ratio: 522/666;
+        }
+        .build-thumb { position: absolute; inset: 8px; bottom: 160px; }
+        .build-thumb-inner {
+            width: 100%; height: 100%; border-radius: 4px;
+            overflow: hidden; background: #fafafa;
+        }
+        .build-footer {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 56px 16px 16px;
+            background: linear-gradient(180deg, transparent 0%, white 60%);
+        }
+        .build-footer-row {
+            display: flex; align-items: center; gap: 16px;
+            padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.07);
+        }
+        .build-footer-row .creator {
+            display: flex; align-items: center; gap: 4px;
+        }
+        .build-footer-row .stats {
+            flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 16px;
+        }
+        .stat { display: flex; align-items: center; gap: 4px; }
+        .stat span { font-size: 14px; line-height: 22px; color: rgba(0,0,0,0.9); letter-spacing: 0.14px; }
+
+        /* ══════ FEATURED ══════ */
+        .featured-section {
+            max-width: 1272px; margin: 0 auto; padding: 28px 50px;
+        }
+        .featured-header {
+            display: flex; align-items: center; margin-bottom: 24px;
+        }
+        .featured-header h2 {
+            font-size: 16px; line-height: 26px; font-weight: 400;
+            color: rgba(0,0,0,0.9); flex: 1; letter-spacing: 0.16px;
+        }
+        .featured-header .view-all {
+            font-size: 14px; line-height: 22px; color: rgba(0,0,0,0.5);
+            cursor: pointer; letter-spacing: 0.14px;
+        }
+        .featured-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+        }
+        .featured-card {
+            border-radius: 12px; overflow: hidden; background: white;
+            border: 0.5px solid rgba(0,0,0,0.12); cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .featured-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .card-thumb {
+            width: 100%; aspect-ratio: 16/9; background: #fafafa; overflow: hidden;
+        }
+        .card-thumb svg { width: 100%; height: 100%; }
+        .card-info { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .card-info h3 {
+            font-size: 15px; line-height: 22px; font-weight: 400;
+            color: rgba(0,0,0,0.9); letter-spacing: 0.15px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .card-info p {
+            font-size: 13px; line-height: 20px; color: rgba(0,0,0,0.5);
+            letter-spacing: 0.13px; height: 40px; overflow: hidden;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+        }
+        .card-meta {
+            display: flex; align-items: center; gap: 8px; margin-top: 4px;
+        }
+        .card-meta .avatar {
+            width: 20px; height: 20px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; color: white; flex-shrink: 0;
+        }
+        .card-meta .name {
+            font-size: 13px; line-height: 20px; color: rgba(0,0,0,0.7);
+            flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; letter-spacing: 0.13px;
+        }
+        .card-stat {
+            display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+        }
+        .card-stat span { font-size: 12px; line-height: 18px; color: rgba(0,0,0,0.4); }
+
+        .load-more {
+            display: flex; justify-content: center; margin-top: 24px;
+            font-size: 14px; line-height: 22px; color: rgba(0,0,0,0.5);
+            cursor: pointer; letter-spacing: 0.14px;
+        }
+
+        /* ══════ AVATAR HELPER ══════ */
+        .avatar-img {
+            border-radius: 50%; flex-shrink: 0; object-fit: cover; background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <svg width="56" height="14" viewBox="0 0 56 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.45309 0.109342C10.459 -0.0358007 11.4804 -0.0357918 12.4863 0.109342C12.5668 0.120963 12.648 0.133308 12.8095 0.159147C12.8634 0.167773 12.8909 0.172321 12.915 0.177701C13.2242 0.246672 13.4653 0.488598 13.5341 0.797819C13.5395 0.821873 13.5441 0.848717 13.5527 0.902311C13.5786 1.06397 13.5919 1.14499 13.6035 1.22555C13.7487 2.23163 13.7487 3.25365 13.6035 4.25973C13.5919 4.34022 13.5785 4.42148 13.5527 4.58297C13.5441 4.63657 13.5395 4.66339 13.5341 4.68747C13.4652 4.9967 13.2242 5.23863 12.915 5.30758C12.8909 5.31296 12.8634 5.31654 12.8095 5.32516C12.648 5.35101 12.5668 5.36432 12.4863 5.37594C11.9756 5.44962 11.4609 5.48548 10.9463 5.48434C7.92804 5.49714 5.48541 7.94851 5.48532 10.9697C5.48532 11.4765 5.44851 11.9834 5.37594 12.4863C5.36432 12.5668 5.35197 12.6481 5.32614 12.8095C5.31751 12.8635 5.31296 12.8909 5.30758 12.915C5.23862 13.2242 4.99669 13.4653 4.68746 13.5341C4.66339 13.5395 4.63658 13.5441 4.58297 13.5527C4.42141 13.5786 4.34025 13.5919 4.25973 13.6035C3.25363 13.7487 2.23165 13.7487 1.22555 13.6035C1.145 13.5919 1.06395 13.5786 0.902309 13.5527C0.848711 13.5441 0.821879 13.5395 0.797816 13.5341C0.488597 13.4653 0.24667 13.2242 0.177699 12.915C0.172319 12.8909 0.167771 12.8635 0.159145 12.8095C0.133305 12.648 0.120961 12.5668 0.10934 12.4863C-0.0357934 11.4804 -0.0357978 10.459 0.10934 9.45309C0.120962 9.37256 0.1333 9.29138 0.159145 9.12985C0.167771 9.07594 0.172319 9.04853 0.177699 9.02438C0.246684 8.71521 0.488612 8.47413 0.797816 8.40524C0.821878 8.39989 0.848713 8.39526 0.902309 8.38669C1.06395 8.36082 1.145 8.34753 1.22555 8.3359C1.72846 8.26333 2.23534 8.22655 2.74215 8.22653C5.77133 8.22653 8.22745 5.77129 8.2275 2.74215C8.22752 2.23533 8.26333 1.72847 8.3359 1.22555C8.34753 1.14499 8.36082 1.06397 8.38668 0.902311C8.39526 0.848722 8.39989 0.82187 8.40524 0.797819C8.47412 0.488628 8.71523 0.246699 9.02438 0.177701C9.04853 0.172321 9.07593 0.167773 9.12985 0.159147C9.2914 0.133298 9.37255 0.120965 9.45309 0.109342Z" fill="#49A3A6" />
+            <path d="M12.4873 8.33595C11.4813 8.19076 10.4592 8.19079 9.45317 8.33595C9.3726 8.34757 9.29158 8.36087 9.12992 8.38673C9.07601 8.39536 9.04861 8.3999 9.02446 8.40528C8.71549 8.47431 8.47428 8.71543 8.40532 9.02442C8.39994 9.04857 8.39539 9.07598 8.38676 9.12989C8.36091 9.29144 8.3476 9.3726 8.33598 9.45314C8.19086 10.459 8.19086 11.4805 8.33598 12.4863C8.3476 12.5669 8.36091 12.648 8.38676 12.8096C8.39539 12.8635 8.39994 12.8909 8.40532 12.915C8.47428 13.224 8.71549 13.4652 9.02446 13.5342C9.04861 13.5396 9.07601 13.5441 9.12992 13.5527C9.29158 13.5786 9.3726 13.5919 9.45317 13.6035C10.4592 13.7487 11.4813 13.7487 12.4873 13.6035C12.5677 13.5919 12.6484 13.5785 12.8096 13.5527C12.8635 13.5441 12.8909 13.5396 12.9151 13.5342C13.2242 13.4653 13.4652 13.2241 13.5342 12.915C13.5396 12.8909 13.5442 12.8635 13.5528 12.8096C13.5786 12.648 13.5919 12.5669 13.6036 12.4863C13.7487 11.4805 13.7487 10.459 13.6036 9.45314C13.5919 9.37259 13.5786 9.29147 13.5528 9.12989C13.5442 9.07598 13.5396 9.04857 13.5342 9.02442C13.4652 8.71537 13.2242 8.47422 12.9151 8.40528C12.8909 8.3999 12.8635 8.39536 12.8096 8.38673C12.6484 8.36094 12.5677 8.34755 12.4873 8.33595ZM4.25981 0.109385C3.25371 -0.0358108 2.23173 -0.0358107 1.22563 0.109385C1.14514 0.121004 1.0639 0.133348 0.902386 0.15919C0.8488 0.167764 0.821955 0.172392 0.797894 0.177745C0.488602 0.246652 0.246683 0.48857 0.177776 0.797862C0.172441 0.821897 0.167791 0.848793 0.159222 0.902354C0.133356 1.06401 0.121044 1.14503 0.109417 1.2256C-0.035776 2.23169 -0.0357781 3.25369 0.109417 4.25978C0.121032 4.34023 0.13339 4.42157 0.159222 4.58302C0.167795 4.6366 0.172418 4.66344 0.177776 4.68751C0.246683 4.9968 0.488602 5.23872 0.797894 5.30763C0.821922 5.31297 0.84892 5.31665 0.902386 5.32521C1.06393 5.35105 1.14512 5.36437 1.22563 5.37599C2.23173 5.52118 3.25371 5.52118 4.25981 5.37599C4.34034 5.36436 4.42145 5.35106 4.58305 5.32521C4.63651 5.31665 4.66352 5.31296 4.68754 5.30763C4.99683 5.23872 5.23875 4.9968 5.30766 4.68751C5.31302 4.66344 5.31764 4.6366 5.32621 4.58302C5.35204 4.42158 5.3644 4.34023 5.37602 4.25978C5.52121 3.25368 5.52121 2.23169 5.37602 1.2256C5.36439 1.14503 5.35208 1.06401 5.32621 0.902354C5.31764 0.848788 5.313 0.821899 5.30766 0.797862C5.23875 0.48857 4.99683 0.246652 4.68754 0.177745C4.66349 0.172397 4.63663 0.167763 4.58305 0.15919C4.42148 0.13334 4.34033 0.121007 4.25981 0.109385Z" fill="white" />
+            <path d="M50.8804 2.85254C51.6828 2.85254 52.4001 2.9563 53.0317 3.16406C53.6665 3.37181 54.2029 3.67234 54.6411 4.06543C55.0826 4.45858 55.4198 4.93983 55.6519 5.50879C55.8838 6.07757 55.9995 6.72152 55.9995 7.44043V13.7119H53.5728V10.9414C53.4471 11.4142 53.2569 11.8405 53.0024 12.2207C52.7511 12.5978 52.4436 12.9193 52.0796 13.1846C51.7155 13.4466 51.3014 13.6484 50.8374 13.7891C50.3766 13.9297 49.8749 14 49.3335 14C48.7697 14 48.2554 13.9229 47.7915 13.7695C47.3309 13.6193 46.9365 13.4066 46.6079 13.1318C46.2793 12.857 46.0247 12.5263 45.8442 12.1396C45.667 11.7497 45.5786 11.3178 45.5786 10.8447C45.5787 10.3526 45.676 9.91136 45.8726 9.52148C46.0691 9.13153 46.3519 8.80099 46.7192 8.5293C47.0898 8.25767 47.5411 8.05006 48.0728 7.90625C48.6044 7.75928 49.2037 7.68555 49.8706 7.68555H53.5728V7.44043C53.5727 7.04114 53.5099 6.68347 53.3843 6.36719C53.2586 6.04755 53.0768 5.7755 52.8384 5.55176C52.6032 5.32805 52.3163 5.15733 51.978 5.03906C51.6397 4.92081 51.2578 4.86134 50.8325 4.86133C50.4009 4.86133 50.0255 4.91078 49.7065 5.00977C49.3907 5.10566 49.1296 5.24385 48.9233 5.42285C48.7172 5.60181 48.5633 5.81689 48.4634 6.06934C48.3635 6.32177 48.314 6.60485 48.314 6.91797H45.8921C45.8921 6.2948 46.0087 5.73222 46.2407 5.23047C46.4727 4.72876 46.8025 4.30173 47.231 3.9502C47.6627 3.59541 48.1868 3.32433 48.8022 3.13574C49.4209 2.94718 50.1136 2.85256 50.8804 2.85254ZM30.103 13.7129H27.396L26.3091 10.4854H20.3442L19.2368 13.7129H16.5884L21.5474 0H25.2114L30.103 13.7129ZM33.5015 13.7129H31.0747V0H33.5015V13.7129ZM40.0366 12.207L42.9956 3.14062H45.4751L41.772 13.7129H38.2437L34.5747 3.14062H37.1128L40.0366 12.207ZM50.0103 9.37305C49.3466 9.37309 48.844 9.48359 48.5024 9.7041C48.1643 9.92459 47.9947 10.2504 47.9946 10.6816C47.9946 11.1355 48.1807 11.4846 48.5513 11.7275C48.9251 11.9671 49.4633 12.0869 50.1655 12.0869C50.6617 12.0869 51.1181 12.0274 51.5337 11.9092C51.9522 11.7878 52.3113 11.6202 52.6108 11.4062C52.9137 11.1921 53.1493 10.9376 53.3169 10.6436C53.4876 10.3463 53.5728 10.0232 53.5728 9.6748V9.37305H50.0103ZM21.0786 8.33789H25.5835L23.3462 1.71191L21.0786 8.33789Z" fill="white" />
+        </svg>
+    </div>
+
+    <div style="padding:4px 0;">
+        <a class="sidebar-item active" href="Home.html">Home</a>
+        <div class="sidebar-item">Explore</div>
+        <div class="sidebar-item">Portfolio</div>
+        <div class="sidebar-item">Alva Skill</div>
+        <div class="sidebar-item">About</div>
+    </div>
+
+    <div style="padding:4px 0;">
+        <div class="sidebar-section-label">Playbooks</div>
+        <a class="sidebar-item" href="Basic Frame.html">NVDA Popular Stock Tracking v1.0</a>
+        <div class="sidebar-item">Trading Strategy Playbook</div>
+        <div class="sidebar-item">Google / X Trends Tracker</div>
+    </div>
+
+    <div class="sidebar-threads">
+        <div style="padding:4px 0;">
+            <div class="sidebar-section-label">Threads</div>
+            <div class="sidebar-item">NVDA Blackwell Ramp and Data Center Outlook</div>
+        </div>
+    </div>
+
+    <div class="sidebar-user">
+        <div class="sidebar-avatar">A</div>
+        <span class="sidebar-username">Alva Intern</span>
+    </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-dots"></div>
+        <h1>Turn Ideas into Live Investing Playbooks in Minutes</h1>
+        <div class="chat-box">
+            <div class="chat-input-wrap">
+                <textarea rows="2" placeholder="Build an investing playbook from your ideas"></textarea>
+                <div class="chat-toolbar">
+                    <button>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 13.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="rgba(0,0,0,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13.5 10v1.25a2.25 2.25 0 0 0 4.5 0V10a8 8 0 1 0-3.12 6.35" stroke="rgba(0,0,0,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                            <rect x="2" y="3" width="16" height="14" rx="2" stroke="rgba(0,0,0,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="7" cy="8" r="1.5" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/>
+                            <path d="M18 13l-4.293-4.293a1 1 0 0 0-1.414 0L5 16" stroke="rgba(0,0,0,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="spacer">
+                        <button class="model-btn">
+                            <span>Sonnet 4.6</span>
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 4.5L6 7.5L9 4.5" stroke="rgba(0,0,0,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <button class="send-btn">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M7 11V3M7 3L3.5 6.5M7 3l3.5 3.5" stroke="rgba(0,0,0,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What You Can Build -->
+    <section class="build-section">
+        <div class="build-inner">
+            <div class="build-left">
+                <h2>What You Can Build</h2>
+                <div class="build-tags">
+                    <button class="build-tag active">EV Supply Chain Intelligence</button>
+                    <button class="build-tag">Unusual Volume Scanner</button>
+                    <button class="build-tag">Earnings Whisper Board</button>
+                    <button class="build-tag">Thesis Debate Room</button>
+                    <button class="build-tag">Macro Regime Adaptive Trading</button>
+                    <span class="build-explore">Explore More</span>
+                </div>
+                <button class="remix-btn">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                        <path d="M5 3v4.5c0 .83.67 1.5 1.5 1.5h3c.83 0 1.5.67 1.5 1.5V13M5 3L3 5M5 3l2 2M11 13l-2-2M11 13l2-2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Remix This</span>
+                </button>
+            </div>
+            <div class="build-right">
+                <div class="build-thumb">
+                    <div class="build-thumb-inner" id="build-preview-thumb"></div>
+                </div>
+                <div class="build-footer">
+                    <div class="build-footer-row">
+                        <div class="creator">
+                            <img class="avatar-img" src="https://api.dicebear.com/9.x/notionists/svg?seed=AlvaIntern&backgroundColor=e8f5e9" width="22" height="22" alt="A">
+                            <span style="font-size:14px;line-height:22px;color:rgba(0,0,0,0.9);letter-spacing:0.14px">alva</span>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.09 6.26H18.18l-4.93 3.58L15.34 18 10 14.27 4.66 18l2.09-6.16L1.82 8.26h6.09L10 2z" stroke="rgba(0,0,0,0.9)" stroke-width="1.2" fill="none"/></svg>
+                                <span>12.8K</span>
+                            </div>
+                            <div class="stat">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 3v4.5c0 .83.67 1.5 1.5 1.5h3c.83 0 1.5.67 1.5 1.5V13M5 3L3 5M5 3l2 2M11 13l-2-2M11 13l2-2" stroke="rgba(0,0,0,0.9)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Playbooks -->
+    <section class="featured-section">
+        <div class="featured-header">
+            <h2>Featured Playbooks</h2>
+            <span class="view-all">View All</span>
+        </div>
+        <div class="featured-grid" id="featured-grid"></div>
+        <div class="load-more">Load More</div>
+    </section>
+
+</div>
+
+<script>
+/* ══════ DATA ══════ */
+const C = { primary:'#49A3A6', orange:'#FF9800', green:'#40A544', blue:'#5F75C9', red:'#E05357', yellow:'#E6A91A', deepBlue:'#3D8BD1' };
+const AVATAR_COLORS = ['#49A3A6','#FF9800','#40A544','#8FC13A','#3D8BD1','#0D7498','#5F75C9','#7474D8','#A878DC','#DC7AA5','#C76466','#E6A91A','#E05357','#007949','#838383'];
+const AVATARS = {
+    'Alva Intern':'https://api.dicebear.com/9.x/notionists/svg?seed=AlvaIntern&backgroundColor=e8f5e9',
+    'Harry Zzz':'https://api.dicebear.com/9.x/notionists/svg?seed=HarryZzz&backgroundColor=e3f2fd',
+    'Smart Jing':'https://api.dicebear.com/9.x/notionists/svg?seed=SmartJing&backgroundColor=fce4ec',
+    'Sheer YLL YGG':'https://api.dicebear.com/9.x/notionists/svg?seed=SheerYLL&backgroundColor=fff3e0',
+    'Macro Scope X':'https://api.dicebear.com/9.x/notionists/svg?seed=MacroScopeX&backgroundColor=ede7f6',
+};
+
+const PLAYBOOKS = [
+    { id:'btc-ultimate', title:'BTC Ultimate AI Trader', creator:'Alva Intern', desc:'Dual-engine analysis: RSI oversold alerts + Bollinger Band breakouts. Automatically trimming position extremities to capture core BTC price movements.', tickers:['BTC','ETH','SOL'], color:C.primary, stars:142, remixes:23 },
+    { id:'mag7-rebalance', title:'MAG7 Equal-Weight', creator:'Harry Zzz', desc:'Maintains a fully invested equal-weight portfolio of the Magnificent 7 stocks and rebalances monthly to capture sector rotation alpha.', tickers:['AAPL','MSFT','GOOGL','AMZN','NVDA','META','TSLA'], color:C.blue, stars:89, remixes:14 },
+    { id:'nvda-tsm', title:'NVDA +3% Triggered TSM', creator:'Smart Jing', desc:'Buys TSM at the close when NVDA gains >3% close-to-close, then exits on +10% take-profit or -5% stop-loss.', tickers:['NVDA','TSM'], color:C.red, stars:48, remixes:7 },
+    { id:'attribution', title:'Attribution Analysis', creator:'Sheer YLL YGG', desc:'Monitor selected tokens to detect abnormal changes in Open Interest and trading volume, generating real-time alerts for unusual market activity.', tickers:['BTC','ETH','SOL','DOGE','AVAX'], color:C.orange, stars:72, remixes:11 },
+    { id:'btc-macd', title:'BTC MACD 1h Crossover', creator:'Macro Scope X', desc:'Trade BTC using MACD(12,26,9) line crossing its signal on 1-hour candles; enter long on bullish cross, exit on bearish cross.', tickers:['BTC'], color:C.deepBlue, stars:34, remixes:5 },
+];
+
+/* ══════ SVG HELPERS ══════ */
+function smoothLine(data, x0, y0, w, h) {
+    const min = Math.min(...data), max = Math.max(...data), range = max - min || 1;
+    const pts = data.map((v, i) => ({ x: x0 + (i / (data.length - 1)) * w, y: y0 + h - ((v - min) / range) * h * 0.85 - h * 0.06 }));
+    let d = `M ${pts[0].x},${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) { const cx = (pts[i-1].x + pts[i].x) / 2, cy = (pts[i-1].y + pts[i].y) / 2; d += ` Q ${pts[i-1].x},${pts[i-1].y} ${cx},${cy}`; }
+    return d;
+}
+function areaFromLine(lp, x0, y0, w, h) { return `${lp} L ${x0+w},${y0+h} L ${x0},${y0+h} Z`; }
+function barsMarkup(data, x0, y0, w, h, color, op=0.25) {
+    const max = Math.max(...data), bw = w/data.length*0.6, gap = w/data.length;
+    return data.map((v,i) => { const bh = (v/max)*h*0.85; return `<rect x="${x0+i*gap+gap*0.2}" y="${y0+h-bh}" width="${bw}" height="${bh}" rx="0.5" fill="${color}" opacity="${op}"/>`; }).join('');
+}
+function textLinesMarkup(x, y, w, count, gap=6) {
+    return Array.from({length:count},(_,i) => `<rect x="${x}" y="${y+i*gap}" width="${w*(i===count-1?0.6:0.88)}" height="3" rx="1" fill="rgba(0,0,0,0.08)"/>`).join('');
+}
+function kpiCellMarkup(x, y, w, h, vc) {
+    return `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1" fill="#fafafa"/><rect x="${x+4}" y="${y+4}" width="${w*0.4}" height="2.5" rx="1" fill="rgba(0,0,0,0.10)"/><rect x="${x+4}" y="${y+10}" width="${w*0.55}" height="4" rx="1" fill="${vc}" opacity="0.7"/><rect x="${x+4}" y="${y+17}" width="${w*0.3}" height="2" rx="1" fill="rgba(0,0,0,0.06)"/></g>`;
+}
+
+/* ══════ THUMBNAILS ══════ */
+const TW=320, TH=180;
+
+function thumbBTC() {
+    const ld=[100,108,103,115,112,128,135,140,132,148,155,162,158,172,180,195,210,225,238];
+    const rd=[45,52,48,62,58,70,65,72,68,55,48,42,50,58,65,60,55,48,52];
+    const l=smoothLine(ld,8,8,304,72), a=areaFromLine(l,8,8,304,72);
+    return `<svg viewBox="0 0 ${TW} ${TH}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.primary}" stop-opacity="0.25"/><stop offset="100%" stop-color="${C.primary}" stop-opacity="0"/></linearGradient></defs><rect x="6" y="6" width="308" height="78" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${a}" fill="url(#g1)"/><path d="${l}" fill="none" stroke="${C.primary}" stroke-width="1.2"/>${kpiCellMarkup(6,88,74,24,C.primary)}${kpiCellMarkup(82,88,74,24,'#2a9b7d')}${kpiCellMarkup(6,114,74,24,C.red)}${kpiCellMarkup(82,114,74,24,C.blue)}<rect x="160" y="88" width="152" height="24" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${smoothLine(rd,162,89,148,22)}" fill="none" stroke="${C.orange}" stroke-width="0.8"/><line x1="162" y1="97" x2="308" y2="97" stroke="rgba(0,0,0,0.06)" stroke-width="0.3" stroke-dasharray="2 2"/><rect x="160" y="114" width="152" height="24" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/>${textLinesMarkup(166,119,140,3,5)}<rect x="6" y="142" width="152" height="32" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/>${textLinesMarkup(12,148,140,4,5)}<rect x="160" y="142" width="152" height="32" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="M 200,170 A 28,28 0 0,1 256,170" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="3"/><path d="M 200,170 A 28,28 0 0,1 238,150" fill="none" stroke="${C.green}" stroke-width="3" stroke-linecap="round"/><circle cx="238" cy="150" r="2" fill="${C.green}"/>${textLinesMarkup(270,152,36,3,5)}</svg>`;
+}
+
+function thumbMAG7() {
+    const pd=[100,105,110,108,116,122,118,125,132,128,138,145,142,150,158,162,168,175,180,190];
+    const rv=[40,45,42,50,55,52,60,65,58,62], sp=[30,35,32,38,42,40,45,48,44,50];
+    const pl=smoothLine(pd,8,40,304,68);
+    const colors=[C.primary,C.blue,C.green,C.orange,C.red,C.deepBlue];
+    let kpis=''; for(let i=0;i<6;i++){const cx=6+i*52; kpis+=`<g><rect x="${cx}" y="6" width="50" height="28" rx="2" fill="#fafafa"/><rect x="${cx+4}" y="10" width="20" height="2" rx="1" fill="rgba(0,0,0,0.10)"/><rect x="${cx+4}" y="15" width="30" height="3.5" rx="1" fill="${colors[i]}" opacity="0.6"/><rect x="${cx+4}" y="22" width="16" height="2" rx="1" fill="rgba(0,0,0,0.06)"/></g>`;}
+    return `<svg viewBox="0 0 ${TW} ${TH}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.blue}" stop-opacity="0.2"/><stop offset="100%" stop-color="${C.blue}" stop-opacity="0"/></linearGradient></defs>${kpis}<rect x="6" y="38" width="308" height="74" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${areaFromLine(pl,8,40,304,68)}" fill="url(#g2)"/><path d="${pl}" fill="none" stroke="${C.blue}" stroke-width="1.2"/><rect x="6" y="116" width="152" height="58" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="12" y="120" width="40" height="2.5" rx="1" fill="rgba(0,0,0,0.10)"/>${barsMarkup(rv,12,128,140,42,C.primary,0.3)}<rect x="160" y="116" width="152" height="58" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="166" y="120" width="40" height="2.5" rx="1" fill="rgba(0,0,0,0.10)"/><path d="${smoothLine(sp,166,128,140,42)}" fill="none" stroke="${C.green}" stroke-width="0.9"/><path d="${smoothLine(rv,166,128,140,42)}" fill="none" stroke="${C.orange}" stroke-width="0.9" opacity="0.6"/></svg>`;
+}
+
+function thumbNVDA() {
+    const pd=[100,104,108,106,112,110,116,114,120,118,124,122,128,125,130];
+    let kpis=''; for(let i=0;i<5;i++){const cx=6+i*62; kpis+=`<g><rect x="${cx}" y="42" width="58" height="22" rx="2" fill="#fafafa"/><rect x="${cx+4}" y="46" width="16" height="2" rx="1" fill="rgba(0,0,0,0.10)"/><rect x="${cx+4}" y="52" width="28" height="3" rx="1" fill="${i<3?C.green:C.red}" opacity="0.5"/></g>`;}
+    const l=smoothLine(pd,210,80,98,60);
+    return `<svg viewBox="0 0 ${TW} ${TH}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.red}" stop-opacity="0.18"/><stop offset="100%" stop-color="${C.red}" stop-opacity="0"/></linearGradient></defs><rect x="6" y="6" width="308" height="32" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="12" y="11" width="22" height="22" rx="4" fill="${C.red}" opacity="0.15"/><text x="18" y="26" fill="${C.red}" font-size="10" font-weight="600" font-family="'Delight',sans-serif">N</text><rect x="38" y="14" width="40" height="3.5" rx="1" fill="rgba(0,0,0,0.14)"/><rect x="38" y="21" width="24" height="2.5" rx="1" fill="rgba(0,0,0,0.07)"/><rect x="240" y="13" width="36" height="5" rx="1" fill="${C.green}" opacity="0.5"/><rect x="280" y="14" width="24" height="3" rx="1" fill="${C.green}" opacity="0.3"/>${kpis}<rect x="6" y="68" width="196" height="106" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="12" y="74" width="60" height="3" rx="1" fill="${C.primary}" opacity="0.4"/>${textLinesMarkup(12,82,180,3,6)}<rect x="12" y="104" width="50" height="3" rx="1" fill="${C.green}" opacity="0.3"/>${textLinesMarkup(12,112,180,3,6)}<rect x="206" y="68" width="108" height="106" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="212" y="72" width="36" height="2.5" rx="1" fill="rgba(0,0,0,0.10)"/><path d="${areaFromLine(l,210,80,98,60)}" fill="url(#g3)"/><path d="${l}" fill="none" stroke="${C.red}" stroke-width="0.9"/>${kpiCellMarkup(212,148,44,20,C.primary)}${kpiCellMarkup(260,148,44,20,C.orange)}</svg>`;
+}
+
+function thumbWidget() {
+    const la=[40,45,42,55,52,60,58,65,70,68,75,72,80], lb=[20,25,22,30,28,35,32,38,42,40,48,45,52], vd=[50,70,40,80,60,90,55,75,65,85];
+    const colors=[C.primary,C.orange,C.green,C.blue];
+    let kpis=''; for(let i=0;i<4;i++){const cx=6+i*78; kpis+=`<g><rect x="${cx}" y="6" width="74" height="28" rx="2" fill="#fafafa"/><rect x="${cx+4}" y="10" width="24" height="2" rx="1" fill="rgba(0,0,0,0.10)"/><rect x="${cx+4}" y="15" width="36" height="3.5" rx="1" fill="${colors[i]}" opacity="0.6"/><rect x="${cx+4}" y="22" width="18" height="2" rx="1" fill="rgba(0,0,0,0.06)"/></g>`;}
+    return `<svg viewBox="0 0 ${TW} ${TH}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.orange}" stop-opacity="0.2"/><stop offset="100%" stop-color="${C.orange}" stop-opacity="0"/></linearGradient></defs>${kpis}<rect x="6" y="38" width="204" height="136" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${smoothLine(la,12,44,192,60)}" fill="none" stroke="${C.orange}" stroke-width="1"/><path d="${smoothLine(lb,12,44,192,60)}" fill="none" stroke="${C.primary}" stroke-width="1" opacity="0.6"/>${barsMarkup(vd,12,120,192,48,C.orange,0.2)}<rect x="214" y="38" width="100" height="66" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/>${textLinesMarkup(220,46,88,4,7)}<rect x="220" y="80" width="60" height="3" rx="1" fill="${C.green}" opacity="0.4"/>${textLinesMarkup(220,88,88,1,6)}<rect x="214" y="108" width="100" height="66" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${smoothLine([10,15,12,20,18,25],220,114,88,28)}" fill="none" stroke="${C.deepBlue}" stroke-width="0.8"/>${kpiCellMarkup(220,148,40,18,C.primary)}${kpiCellMarkup(266,148,40,18,C.red)}</svg>`;
+}
+
+function thumbMACD() {
+    const pd=[100,102,98,105,103,108,106,110,107,112,109,114,111,116,113,118];
+    const md=[0,2,-1,4,2,6,3,7,4,8,5,9,6,10,7,11];
+    const l=smoothLine(pd,8,8,304,80);
+    return `<svg viewBox="0 0 ${TW} ${TH}" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><defs><linearGradient id="g5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.deepBlue}" stop-opacity="0.18"/><stop offset="100%" stop-color="${C.deepBlue}" stop-opacity="0"/></linearGradient></defs><rect x="6" y="6" width="308" height="90" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><path d="${areaFromLine(l,8,8,304,80)}" fill="url(#g5)"/><path d="${l}" fill="none" stroke="${C.deepBlue}" stroke-width="1.2"/><rect x="6" y="100" width="308" height="74" rx="3" fill="white" stroke="rgba(0,0,0,0.05)" stroke-width="0.5"/><rect x="12" y="104" width="32" height="2.5" rx="1" fill="rgba(0,0,0,0.10)"/><line x1="8" y1="136" x2="312" y2="136" stroke="rgba(0,0,0,0.06)" stroke-width="0.3" stroke-dasharray="2 2"/>${barsMarkup(md.map(Math.abs),12,112,296,56,C.deepBlue,0.2)}<path d="${smoothLine(md,12,112,296,56)}" fill="none" stroke="${C.red}" stroke-width="0.8"/></svg>`;
+}
+
+const THUMB_MAP = { 'btc-ultimate':thumbBTC, 'mag7-rebalance':thumbMAG7, 'nvda-tsm':thumbNVDA, 'attribution':thumbWidget, 'btc-macd':thumbMACD };
+
+function avatarHTML(name, size) {
+    const src = AVATARS[name];
+    if (src) return `<img class="avatar-img" src="${src}" width="${size}" height="${size}" alt="${name}">`;
+    const initial = name.trim().charAt(0).toUpperCase();
+    const sum = [...name].reduce((s,c)=>s+c.charCodeAt(0),0);
+    const color = AVATAR_COLORS[sum % AVATAR_COLORS.length];
+    return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:${size*0.44}px;color:#fff;line-height:1">${initial}</span></div>`;
+}
+
+/* ══════ RENDER ══════ */
+// Build preview thumb
+document.getElementById('build-preview-thumb').innerHTML = thumbBTC();
+
+// Featured cards
+const grid = document.getElementById('featured-grid');
+PLAYBOOKS.forEach(p => {
+    const thumb = THUMB_MAP[p.id] ? THUMB_MAP[p.id]() : '';
+    grid.innerHTML += `
+    <div class="featured-card">
+        <div class="card-thumb">${thumb}</div>
+        <div class="card-info">
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <div class="card-meta">
+                ${avatarHTML(p.creator, 20)}
+                <span class="name">${p.creator}</span>
+                <div class="card-stat">
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.09 6.26H18.18l-4.93 3.58L15.34 18 10 14.27 4.66 18l2.09-6.16L1.82 8.26h6.09L10 2z" stroke="rgba(0,0,0,0.3)" stroke-width="1.2" fill="none"/></svg>
+                    <span>${p.stars}</span>
+                </div>
+                <div class="card-stat">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M5 3v4.5c0 .83.67 1.5 1.5 1.5h3c.83 0 1.5.67 1.5 1.5V13M5 3L3 5M5 3l2 2M11 13l-2-2M11 13l2-2" stroke="rgba(0,0,0,0.3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>${p.remixes}</span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+});
+</script>
+</body>
+</html>
