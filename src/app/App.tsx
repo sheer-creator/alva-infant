@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 
-const VALID_PAGES = ['home'] as const;
+const VALID_PAGES = ['home', 'trends'] as const;
 export type Page = (typeof VALID_PAGES)[number];
 
 const Home = lazy(() => import('../pages/Home'));
+const Trends = lazy(() => import('../pages/Trends'));
 
 function getPageFromHash(): Page {
   const hash = window.location.hash.slice(1);
@@ -26,6 +27,7 @@ export default function App() {
   return (
     <Suspense fallback={null}>
       {page === 'home' && <Home onNavigate={navigate} />}
+      {page === 'trends' && <Trends onNavigate={navigate} />}
     </Suspense>
   );
 }

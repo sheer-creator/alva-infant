@@ -1,6 +1,7 @@
 @import 'tailwindcss' source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
 @import './theme.css';
+@import './widgets.css';
 
 * { scrollbar-width: none; }
 *::-webkit-scrollbar { display: none; }

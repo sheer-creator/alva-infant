@@ -15,7 +15,7 @@ const NAV_ITEMS: { label: string; page?: Page }[] = [
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Trading Strategy Playbook' },
-  { label: 'Google / X Trends Tracker' },
+  { label: 'Google / X Trends Tracker', page: 'trends' },
 ];
 
 export function Sidebar({ activePage, onNavigate }: SidebarProps) {

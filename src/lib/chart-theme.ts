@@ -32,3 +32,121 @@ export const CREATOR_AVATARS: Record<string, string> = {
 };
 
 export const FONT = "'Delight', -apple-system, BlinkMacSystemFont, sans-serif";
+
+/** 点阵背景：图表卡片通用底纹 */
+export const CHART_DOT_BG = {
+  backgroundColor: '#ffffff',
+  backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.18) 0.6px, transparent 0.6px)',
+  backgroundSize: '3px 3px',
+} as const;
+
+/* ========== Tooltip ========== */
+
+export function tooltipConfig(overrides?: Record<string, unknown>) {
+  return {
+    trigger: 'axis' as const,
+    backgroundColor: 'rgba(255,255,255,0.96)',
+    borderColor: 'rgba(0,0,0,0.08)',
+    borderWidth: 1,
+    padding: [12, 12, 12, 12],
+    extraCssText: 'border-radius:6px;box-shadow:none;',
+    textStyle: { fontFamily: FONT, fontSize: 12, fontWeight: 400 },
+    axisPointer: {
+      type: 'line' as const,
+      lineStyle: { color: 'rgba(0,0,0,0.12)', type: 'solid' as const, width: 1 },
+    },
+    ...overrides,
+  };
+}
+
+export function tooltipFormatter(
+  params: { color: string; seriesName: string; data: [string, number] }[],
+  valueSuffix = '',
+  formatValue?: (val: number) => string,
+) {
+  if (!params.length) return '';
+  const d = new Date(params[0].data[0]);
+  const title = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  let html = `<div style="font-family:${FONT};font-size:12px;color:rgba(0,0,0,0.7);margin-bottom:6px">${title}</div>`;
+  params.forEach((p) => {
+    const dot = `<span style="display:inline-block;margin-right:4px;border-radius:50%;width:8px;height:8px;background:${p.color};vertical-align:middle"></span>`;
+    const val = formatValue ? formatValue(p.data[1]) : p.data[1];
+    html += `<div style="font-family:${FONT};font-size:12px;color:rgba(0,0,0,0.9);line-height:20px">${dot}${p.seriesName}: ${valueSuffix}${val}</div>`;
+  });
+  return html;
+}
+
+/* ========== Axes ========== */
+
+export function timeXAxisConfig(overrides?: Record<string, unknown>) {
+  return {
+    type: 'time' as const,
+    boundaryGap: false,
+    axisLine: { show: false },
+    axisTick: { show: false },
+    splitLine: { show: false },
+    axisLabel: { color: 'rgba(0,0,0,0.7)', fontFamily: FONT, fontSize: 10 },
+    ...overrides,
+  };
+}
+
+export function valueYAxisConfig(name: string, overrides?: Record<string, unknown>) {
+  return {
+    type: 'value' as const,
+    name,
+    nameTextStyle: {
+      color: 'rgba(0,0,0,0.5)',
+      fontFamily: FONT,
+      fontSize: 10,
+      align: 'left' as const,
+      padding: [0, 0, 8, -24],
+    },
+    nameLocation: 'end' as const,
+    axisLine: { show: false },
+    axisTick: { show: false },
+    splitLine: { show: false },
+    axisLabel: {
+      color: 'rgba(0,0,0,0.7)',
+      fontFamily: FONT,
+      fontSize: 10,
+      padding: [0, 8, 0, 0],
+    },
+    ...overrides,
+  };
+}
+
+export const GRID_DEFAULT = { left: 36, right: 0, top: 30, bottom: 20, containLabel: false };
+
+/* ========== Series ========== */
+
+export function lineSeriesConfig(name: string, color: string, overrides?: Record<string, unknown>) {
+  return {
+    name,
+    type: 'line' as const,
+    symbol: 'circle',
+    symbolSize: 10,
+    showSymbol: false,
+    smooth: 0.1,
+    lineStyle: { width: 1, color },
+    itemStyle: { color },
+    emphasis: { itemStyle: { borderColor: '#ffffff', borderWidth: 1, color } },
+    ...overrides,
+  };
+}
+
+export const ZERO_MARK_LINE = {
+  silent: true,
+  symbol: 'none',
+  data: [{ yAxis: 0 }],
+  lineStyle: { color: 'rgba(0,0,0,0.3)', type: [3, 2] as unknown as string, width: 1 },
+  label: { show: false },
+};
+
+/* ========== Time Formatters ========== */
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+export function monthYearFormatter(value: number) {
+  const d = new Date(value);
+  return MONTHS[d.getMonth()] + ' ' + String(d.getFullYear()).slice(2);
+}
