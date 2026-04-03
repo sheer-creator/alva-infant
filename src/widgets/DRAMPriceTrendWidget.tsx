@@ -3,22 +3,9 @@ import { ddr4Data, ddr5Data } from '@/data/dramPriceData';
 import {
   CHART_COLORS, FONT, tooltipConfig, tooltipFormatter,
   timeXAxisConfig, lineSeriesConfig, monthYearFormatter,
+  AXIS_CLEAN, GRID_TIGHT,
 } from '@/lib/chart-theme';
 import { WidgetTitle, AlvaWatermark } from './WidgetTitle';
-
-const AX = {
-  axisLine: { show: false },
-  axisTick: { show: false },
-  splitLine: { show: false },
-  axisLabel: {
-    fontSize: 10,
-    color: 'rgba(0,0,0,0.7)',
-    fontFamily: FONT,
-    margin: 8,
-  },
-};
-
-const GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
 
 export function DRAMPriceTrendWidget() {
   const option = {
@@ -28,12 +15,12 @@ export function DRAMPriceTrendWidget() {
         tooltipFormatter(params, '$'),
     },
     legend: { show: false },
-    grid: GRID,
+    grid: GRID_TIGHT,
     xAxis: {
       ...timeXAxisConfig(),
       boundaryGap: false,
-      ...AX,
-      axisLabel: { ...AX.axisLabel, formatter: monthYearFormatter },
+      ...AXIS_CLEAN,
+      axisLabel: { ...AXIS_CLEAN.axisLabel, formatter: monthYearFormatter },
     },
     yAxis: {
       type: 'value' as const,
@@ -47,9 +34,9 @@ export function DRAMPriceTrendWidget() {
       },
       nameLocation: 'end' as const,
       min: 0, max: 80, interval: 20,
-      ...AX,
+      ...AXIS_CLEAN,
       axisLabel: {
-        ...AX.axisLabel,
+        ...AXIS_CLEAN.axisLabel,
         formatter: '${value}',
       },
     },

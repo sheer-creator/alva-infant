@@ -1,5 +1,5 @@
 import ReactECharts from 'echarts-for-react';
-import { CHART_COLORS, FONT, tooltipConfig } from '@/lib/chart-theme';
+import { CHART_COLORS, FONT, tooltipConfig, AXIS_CLEAN } from '@/lib/chart-theme';
 import { WidgetTitle, AlvaWatermark } from './WidgetTitle';
 
 const keywordData = [
@@ -13,11 +13,6 @@ const keywordData = [
   { keyword: 'PCIe 5.0', value: 48 },
 ];
 
-const AX = {
-  axisLine: { show: false },
-  axisTick: { show: false },
-  splitLine: { show: false },
-};
 
 export function AIStorageKeyWordTrendsWidget() {
   const option = {
@@ -39,13 +34,13 @@ export function AIStorageKeyWordTrendsWidget() {
       },
       nameLocation: 'end' as const,
       min: 0, max: 100, interval: 25,
-      ...AX,
+      ...AXIS_CLEAN,
       axisLabel: { color: 'rgba(0,0,0,0.7)', fontFamily: FONT, fontSize: 10, margin: 8 },
     },
     yAxis: {
       type: 'category' as const,
       data: keywordData.map(d => d.keyword),
-      ...AX,
+      ...AXIS_CLEAN,
       axisLabel: { color: 'rgba(0,0,0,0.7)', fontFamily: FONT, fontSize: 10, margin: 8 },
     },
     series: [{

@@ -3,22 +3,9 @@ import {
   CHART_COLORS, FONT, tooltipConfig, tooltipFormatter,
   timeXAxisConfig, valueYAxisConfig,
   lineSeriesConfig, monthYearFormatter,
+  AXIS_CLEAN, GRID_TIGHT,
 } from '@/lib/chart-theme';
 import { WidgetTitle, AlvaWatermark } from './WidgetTitle';
-
-const AX = {
-  axisLine: { show: false },
-  axisTick: { show: false },
-  splitLine: { show: false },
-  axisLabel: {
-    fontSize: 10,
-    color: 'rgba(0,0,0,0.7)',
-    fontFamily: FONT,
-    margin: 8,
-  },
-};
-
-const GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
 
 export function NVDAGoogleTrendWidget() {
   const mockData: [string, number][] = [
@@ -32,20 +19,20 @@ export function NVDAGoogleTrendWidget() {
   const option = {
     tooltip: { ...tooltipConfig(), formatter: tooltipFormatter },
     legend: { show: false },
-    grid: GRID,
+    grid: GRID_TIGHT,
     xAxis: {
       ...timeXAxisConfig({
         min: '2025-02-01',
         max: '2026-02-01',
       }),
       boundaryGap: false,
-      ...AX,
-      axisLabel: { ...AX.axisLabel, formatter: monthYearFormatter },
+      ...AXIS_CLEAN,
+      axisLabel: { ...AXIS_CLEAN.axisLabel, formatter: monthYearFormatter },
     },
     yAxis: {
       ...valueYAxisConfig('Trend Index', { min: 0, max: 100, interval: 25 }),
-      ...AX,
-      axisLabel: { ...AX.axisLabel },
+      ...AXIS_CLEAN,
+      axisLabel: { ...AXIS_CLEAN.axisLabel },
       name: 'Trend Index',
       nameTextStyle: {
         color: 'rgba(0,0,0,0.5)',

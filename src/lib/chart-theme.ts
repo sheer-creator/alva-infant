@@ -33,6 +33,22 @@ export const CREATOR_AVATARS: Record<string, string> = {
 
 export const FONT = "'Delight', -apple-system, BlinkMacSystemFont, sans-serif";
 
+/** 通用坐标轴样式：隐藏轴线/刻度/分割线 */
+export const AXIS_CLEAN = {
+  axisLine: { show: false },
+  axisTick: { show: false },
+  splitLine: { show: false },
+  axisLabel: {
+    fontSize: 10,
+    color: 'rgba(0,0,0,0.7)',
+    fontFamily: FONT,
+    margin: 8,
+  },
+} as const;
+
+/** 通用紧凑 grid 配置 */
+export const GRID_TIGHT = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true } as const;
+
 /** 点阵背景：图表卡片通用底纹 */
 export const CHART_DOT_BG = {
   backgroundColor: '#ffffff',

@@ -1,6 +1,5 @@
-import { AVATAR_COLOR_PALETTE } from '@/lib/chart-theme';
-
-const CDN = 'https://alva-ai-static.b-cdn.net/icons';
+import { CdnIcon } from '../shared/CdnIcon';
+import { Avatar } from '../shared/Avatar';
 
 interface TopbarProps {
   title: string;
@@ -8,25 +7,6 @@ interface TopbarProps {
   starCount?: number;
   remixCount?: number;
   commentCount?: number;
-  onChatToggle?: () => void;
-}
-
-function UserAvatar({ name, size = 20 }: { name: string; size?: number }) {
-  const initial = name.trim().charAt(0).toUpperCase();
-  const color = AVATAR_COLOR_PALETTE[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR_COLOR_PALETTE.length];
-  return (
-    <div
-      style={{
-        width: size, height: size, borderRadius: '50%',
-        background: color, flexShrink: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}
-    >
-      <span style={{ fontSize: size * 0.44, color: '#fff', lineHeight: 1, fontFamily: "'Delight', sans-serif" }}>
-        {initial}
-      </span>
-    </div>
-  );
 }
 
 function StatusDot() {
@@ -63,46 +43,13 @@ function IconButton({ children, label }: { children: React.ReactNode; label?: st
   );
 }
 
-function CdnIcon({ name, size = 16, color }: { name: string; size?: number; color?: string }) {
-  const url = `${CDN}/${name}.svg`;
-  if (color) {
-    return (
-      <div
-        className="block"
-        style={{
-          width: size, height: size,
-          backgroundColor: color,
-          WebkitMaskImage: `url(${url})`,
-          WebkitMaskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'center',
-          maskImage: `url(${url})`,
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center',
-        }}
-      />
-    );
-  }
-  return (
-    <img
-      src={url}
-      alt={name}
-      width={size}
-      height={size}
-      className="block"
-      style={{ width: size, height: size }}
-    />
-  );
-}
-
-export function Topbar({ title, author = 'YGGYLL', starCount, remixCount, commentCount, onChatToggle: _onChatToggle }: TopbarProps) {
+export function Topbar({ title, author = 'YGGYLL', starCount, remixCount, commentCount }: TopbarProps) {
   return (
     <div className="flex gap-[12px] h-[56px] items-center py-[10px] sticky top-0 shrink-0 w-full z-10 bg-[var(--b0-page)] text-[var(--text-n9)]">
       {/* Left: avatar + author + dot + title + status */}
       <div className="flex flex-1 gap-[4px] items-center min-h-px min-w-px">
         <div className="shrink-0 size-[20px]">
-          <UserAvatar name={author} size={20} />
+          <Avatar name={author} size={20} />
         </div>
         <div className="flex flex-1 gap-[4px] items-center min-h-px min-w-px overflow-hidden">
           <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n9)] tracking-[0.14px] whitespace-nowrap overflow-hidden text-ellipsis shrink-0">

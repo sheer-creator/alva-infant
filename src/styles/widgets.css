@@ -35,13 +35,6 @@
   line-height: 20px;
 }
 
-.widget-body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 6px;
-}
-
 .alva-watermark {
   position: absolute;
   bottom: 16px;
@@ -87,22 +80,10 @@
   color: var(--text-n5);
 }
 
-.legend-line {
-  width: 12px;
-  height: 2px;
-  border-radius: 0.5px;
-}
-
 .legend-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-}
-
-.legend-rect {
-  width: 8px;
-  height: 8px;
-  border-radius: 0.5px;
 }
 
 /* ── Chat Input ── */
