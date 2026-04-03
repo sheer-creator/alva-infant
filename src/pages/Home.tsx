@@ -161,7 +161,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
             style={{
               maxWidth: 1600,
               margin: '0 auto',
-              padding: '28px 20px',
+              padding: '28px 24px',
               borderLeft: '0.5px solid rgba(0,0,0,0.15)',
               borderRight: '0.5px solid rgba(0,0,0,0.15)',
             }}
@@ -352,7 +352,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
 
         {/* ══════ FEATURED PLAYBOOKS ══════ */}
         <section style={{ width: '100%', padding: '0 50px' }}>
-          <div style={{ maxWidth: 1600, margin: '0 auto', padding: '28px 20px', borderLeft: '0.5px solid rgba(0,0,0,0.15)', borderRight: '0.5px solid rgba(0,0,0,0.15)' }}>
+          <div style={{ maxWidth: 1600, margin: '0 auto', padding: '28px 24px', borderLeft: '0.5px solid rgba(0,0,0,0.15)', borderRight: '0.5px solid rgba(0,0,0,0.15)' }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: 24 }}>
             <h2
               style={{
