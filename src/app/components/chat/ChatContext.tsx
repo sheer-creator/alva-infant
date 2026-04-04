@@ -24,7 +24,7 @@ const MOCK_STEPS: StreamStep[] = [
   { type: 'read', label: 'Read', meta: '/src/styles/theme.css', lines: ['Read 48 lines'] },
 ];
 
-const MOCK_TODOS: StreamingState['todos'] = {
+const MOCK_TODOS: NonNullable<StreamingState['todos']> = {
   title: 'Building NVDA Earnings Dashboard',
   progress: '2/5',
   items: [
