@@ -3,6 +3,7 @@ import { ChatInput } from '../shared/ChatInput';
 import { Dropdown } from '../shared/Dropdown';
 import { useChatContext } from './ChatContext';
 import { ChatMessages } from './ChatMessages';
+import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
 import type { ContextTagData } from '@/lib/chat-config';
 import { CONVERSATIONS } from '@/lib/chat-config';
 
@@ -12,7 +13,7 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
-  const { hasInitialInput, activeConversationId, setActiveConversation } = useChatContext();
+  const { hasInitialInput, activeConversationId, setActiveConversation, sendPrompt, overlay, dismissOverlay } = useChatContext();
 
   const handleFullscreen = () => {
     onClose();
@@ -64,11 +65,36 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
         </div>
 
         {/* ── Chat Body ── */}
-        <div className="flex flex-col flex-1 items-center min-h-0 pb-[8px] px-[8px]" style={{ zIndex: 1 }}>
+        <div className="flex flex-col flex-1 items-center min-h-0 pb-[8px] px-[8px] relative" style={{ zIndex: 1 }}>
           <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full pb-[64px] px-[16px]">
             <ChatMessages conversationId={activeConversationId} hasContent={hasInitialInput} />
           </div>
-          <ChatInput contextTag={contextTag} />
+
+          {/* ── Bottom area: plan replaces input; others float above input ── */}
+          {overlay && overlay.type === 'plan' && overlay.plan ? (
+            <div className="w-full shrink-0">
+              <ReviewPlanCard data={overlay.plan} onApprove={dismissOverlay} />
+            </div>
+          ) : (
+            <>
+              {/* Todo list / Answer float above input */}
+              {overlay && overlay.type === 'todos' && overlay.todos && (
+                <div className="w-full px-[8px] pb-[8px] shrink-0">
+                  <TodoListCard data={overlay.todos} />
+                </div>
+              )}
+              {overlay && overlay.type === 'answer' && overlay.answer && (
+                <div className="w-full px-[8px] pb-[8px] shrink-0">
+                  <AnswerQuestionCard
+                    data={overlay.answer}
+                    onSelect={() => dismissOverlay()}
+                    onSkip={dismissOverlay}
+                  />
+                </div>
+              )}
+              <ChatInput contextTag={contextTag} onSend={sendPrompt} />
+            </>
+          )}
         </div>
       </div>
     </div>

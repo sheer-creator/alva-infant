@@ -1,23 +1,35 @@
 import { useState } from 'react';
 import { CdnIcon } from '../shared/CdnIcon';
+import { AlvaLoading } from '../shared/AlvaLoading';
 import { useChatContext } from './ChatContext';
+import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
 
 const ANIM_CSS = `
 @keyframes slideBottom {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(200%); }
 }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
 `;
 
 export function FloatingChatBar() {
-  const { openChat, contextTag } = useChatContext();
+  const { openChat, reopenChat, contextTag, sendPrompt, streamingState, chatOpen, overlay, dismissOverlay } = useChatContext();
   const [input, setInput] = useState('');
   const [focused, setFocused] = useState(false);
   if (!contextTag) return null;
 
+  const statusText = streamingState?.statusText;
+  const hasActiveStream = streamingState !== null && !!statusText;
+  const showCollapsedStatus = !chatOpen && hasActiveStream;
+
   const handleSend = () => {
-    if (input.trim()) {
-      openChat(true);
+    const text = input.trim();
+    if (text) {
+      sendPrompt(text);
+      setInput('');
     }
   };
 
@@ -27,6 +39,98 @@ export function FloatingChatBar() {
       handleSend();
     }
   };
+
+  // When chat is closed and AI is streaming, show mini status bar
+  if (showCollapsedStatus) {
+    // Plan replaces the entire status bar
+    if (overlay && overlay.type === 'plan' && overlay.plan) {
+      return (
+        <div
+          className="fixed z-30"
+          style={{
+            bottom: 24,
+            left: '50%',
+            marginLeft: 114,
+            transform: 'translateX(-50%)',
+            width: 560,
+            maxWidth: 'calc(100vw - 228px - 48px)',
+          }}
+        >
+          <ReviewPlanCard data={overlay.plan} onApprove={dismissOverlay} />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className="fixed z-30 flex flex-col gap-[8px]"
+        style={{
+          bottom: 24,
+          left: '50%',
+          marginLeft: 114,
+          transform: 'translateX(-50%)',
+          width: 560,
+          maxWidth: 'calc(100vw - 228px - 48px)',
+        }}
+      >
+        <style>{ANIM_CSS}</style>
+
+        {/* Todo list / Answer float above status bar */}
+        {overlay && overlay.type === 'todos' && overlay.todos && (
+          <div className="w-full" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+            <TodoListCard data={overlay.todos} />
+          </div>
+        )}
+        {overlay && overlay.type === 'answer' && overlay.answer && (
+          <div className="w-full" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+            <AnswerQuestionCard
+              data={overlay.answer}
+              onSelect={() => dismissOverlay()}
+              onSkip={dismissOverlay}
+            />
+          </div>
+        )}
+
+        <div
+          className="relative flex gap-[12px] items-center p-[16px] w-full rounded-[12px] overflow-hidden cursor-pointer transition-all hover:shadow-lg"
+          style={{
+            background: 'white',
+            border: '0.5px solid rgba(73,163,166,0.3)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          }}
+          onClick={reopenChat}
+        >
+          {/* Bottom sliding light - teal when streaming */}
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] overflow-hidden">
+            <div
+              className="h-full w-[40%]"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(73,163,166,0.4) 30%, #49A3A6 100%)',
+                animation: 'slideBottom 2s ease-in-out infinite',
+              }}
+            />
+          </div>
+
+          {/* Alva lottie logo */}
+          <AlvaLoading size={12} />
+
+          {/* Status text */}
+          <span className="font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)] flex-1 truncate">
+            {statusText}
+          </span>
+
+          {/* Expand to open */}
+          <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
+            onClick={(e) => { e.stopPropagation(); reopenChat(); }}>
+            <CdnIcon name="unfoldd-l" size={16} color="rgba(0,0,0,0.5)" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // When chat is open, hide the bar completely
+  if (chatOpen) return null;
 
   return (
     <div

@@ -13,9 +13,10 @@ interface ChatInputProps {
   placeholder?: string;
   contextTag?: ContextTagData | null;
   shadow?: boolean;
+  onSend?: (text: string) => void;
 }
 
-export function ChatInput({ placeholder = 'Build an investing playbook from your ideas', contextTag, shadow }: ChatInputProps) {
+export function ChatInput({ placeholder = 'Build an investing playbook from your ideas', contextTag, shadow, onSend }: ChatInputProps) {
   const [hasText, setHasText] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
@@ -63,8 +64,27 @@ export function ChatInput({ placeholder = 'Build an investing playbook from your
     requestAnimationFrame(() => placeCursorAtEnd());
   }, [placeCursorAtEnd]);
 
+  const handleSendClick = useCallback(() => {
+    const text = getTextContent();
+    if (text && onSend) {
+      onSend(text);
+      const el = editorRef.current;
+      if (el && contextTag) {
+        el.innerHTML = buildTagHTML(contextTag) + '\u200B';
+      } else if (el) {
+        el.innerHTML = '';
+      }
+      setHasText(false);
+    }
+  }, [getTextContent, onSend, contextTag]);
+
   // Prevent deleting the tag with backspace when cursor is right after it
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendClick();
+      return;
+    }
     if (e.key === 'Backspace') {
       const el = editorRef.current;
       if (!el) return;
@@ -78,7 +98,7 @@ export function ChatInput({ placeholder = 'Build an investing playbook from your
         }
       }
     }
-  }, []);
+  }, [handleSendClick]);
 
   const showPlaceholder = !hasText && !contextTag;
 
@@ -122,6 +142,7 @@ export function ChatInput({ placeholder = 'Build an investing playbook from your
           style={{
             background: hasText ? '#49A3A6' : 'rgba(0,0,0,0.05)',
           }}
+          onClick={handleSendClick}
         >
           <CdnIcon
             name="arrow-up-l1"

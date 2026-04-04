@@ -1,5 +1,7 @@
 import { CdnIcon } from '../shared/CdnIcon';
 import DotMatrixWave from '../shared/DotMatrixWave';
+import { useChatContext } from './ChatContext';
+import { StreamingMessages } from './StreamingMessages';
 
 /* ── Mock conversation data ── */
 const MOCK_USER_MSG = `Build me an NVDA earnings dashboard — I want to see quarterly revenue, gross margin trends, and a forward P/E comparison with AMD and INTC.`;
@@ -161,9 +163,27 @@ interface ChatMessagesProps {
 }
 
 export function ChatMessages({ conversationId, hasContent }: ChatMessagesProps) {
+  const { streamingState, pendingPrompt } = useChatContext();
   const showContent = hasContent ?? (conversationId !== 'new');
 
   if (!showContent) return <EmptyState />;
+
+  // Show streaming conversation
+  if (conversationId === 'streaming' && streamingState) {
+    return (
+      <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">
+        {/* User prompt bubble */}
+        {pendingPrompt && (
+          <div className="flex flex-col items-end w-full">
+            <div className="w-full max-w-[560px] px-[16px] py-[12px]" style={{ background: 'rgba(73,163,166,0.1)', borderRadius: 8 }}>
+              <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">{pendingPrompt}</p>
+            </div>
+          </div>
+        )}
+        <StreamingMessages state={streamingState} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">

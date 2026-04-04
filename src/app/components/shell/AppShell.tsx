@@ -115,7 +115,7 @@ function AppShellInner({ activePage, onNavigate, children, triggerMode }: AppShe
         )}
       </main>
 
-      {contextTag !== null && !chatOpen && triggerMode === 'floating-bar' && (
+      {contextTag !== null && triggerMode === 'floating-bar' && (
         <FloatingChatBar />
       )}
       {contextTag !== null && triggerMode === 'fab' && (
