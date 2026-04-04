@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
 
 const VALID_PAGES = ['home', 'explore', 'trends'] as const;
 export type Page = (typeof VALID_PAGES)[number] | `thread/${string}`;
@@ -21,9 +21,10 @@ export function getThreadId(page: Page): string | null {
 
 export default function App() {
   const [page, setPage] = useState<Page>(getPageFromHash);
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    const onHash = () => setPage(getPageFromHash());
+    const onHash = () => startTransition(() => setPage(getPageFromHash()));
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
