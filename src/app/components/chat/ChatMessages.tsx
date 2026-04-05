@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CdnIcon } from '../shared/CdnIcon';
 import DotMatrixWave from '../shared/DotMatrixWave';
 import { useChatContext } from './ChatContext';
@@ -20,6 +21,37 @@ const MOCK_TABLE = {
     ['Forward P/E', '32.4x', 'vs AMD 28.1x, INTC 18.7x'],
   ],
 };
+
+const MOCK_REASON_STEPS: { label: string; meta?: string; lines?: string[] }[] = [
+  {
+    label: 'Plan',
+    meta: 'NVDA Earnings Dashboard',
+    lines: [
+      '1. Thoroughly explore the codebase to understand existing architecture',
+      '2. Identify similar features and architectural approaches',
+      '3. Consider multiple approaches and their trade-offs',
+      '4. Use AskUserQuestion if you need to clarify the approach',
+    ],
+  },
+  { label: 'Read', meta: '/src/app/components/shell/AppShell.tsx', lines: ['Read 112 lines'] },
+  {
+    label: 'Bash',
+    meta: 'ls /Users/sheer/Downloads/Test/.claude/launch.json',
+    lines: [
+      '7:<<<<<<< Updated upstream',
+      '9:========',
+      '11:>>>>>>> Stashed changes',
+      '29:<<<<<<< Updated upstream',
+    ],
+  },
+  { label: 'Read', meta: '/src/styles/theme.css', lines: ['Read 48 lines'] },
+  { label: 'Read', meta: '/src/lib/chart-config.ts', lines: ['Read 76 lines'] },
+  { label: 'Bash', meta: 'npm run build', lines: ['Build completed in 3.2s'] },
+  { label: 'Read', meta: '/src/app/components/widgets/KpiCard.tsx', lines: ['Read 94 lines'] },
+  { label: 'Answer', meta: 'Generating NVDA earnings dashboard layout' },
+];
+
+const MONO = "font-['JetBrains_Mono',monospace]";
 
 const DASHBOARD_COVER_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 472 266" fill="none">
 <rect width="472" height="266" fill="#fafafa"/>
@@ -79,6 +111,67 @@ function PlaybookCard({ sourceThreadId }: { sourceThreadId?: string }) {
   );
 }
 
+function ReasonedStepsDivider() {
+  const [expanded, setExpanded] = useState(false);
+  const FONT = "font-['Delight',sans-serif]";
+
+  return (
+    <div className="w-full flex flex-col">
+      <div
+        className="flex items-center gap-[8px] w-full cursor-pointer"
+        onClick={() => setExpanded(v => !v)}
+      >
+        <div className="flex-1 h-0" style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }} />
+        <div className="flex items-center gap-[4px]">
+          <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
+            Reasoned · {MOCK_REASON_STEPS.length} steps
+          </span>
+          <CdnIcon
+            name={expanded ? 'arrow-down-l2' : 'arrow-right-l2'}
+            size={12}
+            color="rgba(0,0,0,0.5)"
+          />
+        </div>
+        <div className="flex-1 h-0" style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }} />
+      </div>
+      {expanded && (
+        <div className="flex flex-col gap-[16px] w-full mt-[12px]">
+          {MOCK_REASON_STEPS.map((step, i) => (
+            <div key={i} className="flex gap-[8px] items-start w-full">
+              <div className="relative shrink-0 w-[12px] self-stretch">
+                <div className="absolute left-1/2 top-[2px] bottom-[2px] w-0 -translate-x-1/2"
+                  style={{ borderLeft: '1px dashed rgba(0,0,0,0.12)' }} />
+              </div>
+              <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0">
+                <div className="flex items-center gap-[8px] w-full">
+                  <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n9)] shrink-0`}>
+                    {step.label}
+                  </span>
+                  {step.meta && (
+                    <div className="flex items-center justify-center max-w-[640px] px-[6px] py-[1px] rounded-[2px] min-w-0"
+                      style={{ background: 'rgba(0,0,0,0.03)' }}>
+                      <span className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] truncate`}>
+                        {step.meta}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                {step.lines && step.lines.length > 0 && (
+                  <div className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] flex-1 min-w-0`}>
+                    {step.lines.map((line, li) => (
+                      <p key={li} className="leading-[16px] mb-0">{line}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MockConversation({ sourceThreadId }: { sourceThreadId?: string }) {
   return (
     <>
@@ -87,14 +180,7 @@ function MockConversation({ sourceThreadId }: { sourceThreadId?: string }) {
           <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">{MOCK_USER_MSG}</p>
         </div>
       </div>
-      <div className="flex items-center gap-[8px] w-full">
-        <div className="flex-1 h-0" style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }} />
-        <div className="flex items-center gap-[4px]">
-          <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">Reasoned · 8 steps</span>
-          <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />
-        </div>
-        <div className="flex-1 h-0" style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }} />
-      </div>
+      <ReasonedStepsDivider />
       <div className="flex items-center gap-[4px] shrink-0">
         <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" style={{ height: 14 }} />
         <span className="font-['Delight',sans-serif] text-[10px] leading-[14px] px-[4px] py-[1px]" style={{ background: 'rgba(73,163,166,0.1)', color: 'var(--main-m1)', borderRadius: 3 }}>Beta</span>
