@@ -1,7 +1,7 @@
-export type ChatTriggerMode = 'floating-bar' | 'sidebar' | 'fab';
+export type ChatTriggerMode = 'floating-bar' | 'sidebar' | 'fab' | 'inline-composer';
 
-/** Change this to switch between the three approaches */
-export const CHAT_TRIGGER_MODE: ChatTriggerMode = 'floating-bar';
+/** Change this to switch between the four approaches */
+export const CHAT_TRIGGER_MODE: ChatTriggerMode = 'inline-composer';
 
 export interface ContextTagData {
   label: string;

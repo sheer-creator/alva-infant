@@ -6,6 +6,7 @@ import { ChatPanel } from '../chat/ChatPanel';
 import { CHAT_TRIGGER_MODE, type ChatTriggerMode } from '@/lib/chat-config';
 import { FloatingChatBar } from '../chat/FloatingChatBar';
 import { FloatingChatFAB } from '../chat/FloatingChatFAB';
+import { FloatingChatBarD } from '../chat/FloatingChatBarD';
 
 interface AppShellProps {
   activePage: Page;
@@ -17,6 +18,7 @@ const MODES: { value: ChatTriggerMode; label: string }[] = [
   { value: 'floating-bar', label: 'A' },
   { value: 'sidebar', label: 'B' },
   { value: 'fab', label: 'C' },
+  { value: 'inline-composer', label: 'D' },
 ];
 
 function ModeSwitcher({ mode, onChange }: { mode: ChatTriggerMode; onChange: (m: ChatTriggerMode) => void }) {
@@ -120,6 +122,9 @@ function AppShellInner({ activePage, onNavigate, children, triggerMode }: AppShe
       )}
       {contextTag !== null && triggerMode === 'fab' && (
         <FloatingChatFAB />
+      )}
+      {contextTag !== null && triggerMode === 'inline-composer' && (
+        <FloatingChatBarD />
       )}
     </div>
   );
