@@ -28,8 +28,6 @@ const ANIM_CSS = `
 }
 `;
 
-/* Pill width when collapsed */
-const PILL_W = 240;
 /* Full composer width */
 const FULL_W = 560;
 
