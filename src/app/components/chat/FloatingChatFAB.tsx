@@ -23,8 +23,8 @@ export function FloatingChatFAB() {
       <button
         className="fixed z-30 flex items-center gap-[8px] cursor-pointer"
         style={{
-          bottom: 24,
-          right: 24,
+          bottom: 28,
+          right: 28,
           height: 40,
           padding: '0 12px 0 6px',
           borderRadius: 8,
