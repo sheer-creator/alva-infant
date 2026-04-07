@@ -61,7 +61,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
               <CdnIcon name="full-screen-l" size={16} />
             </button>
             <Dropdown
-              items={[{ id: 'delete', label: 'Delete', icon: 'delete-l' }]}
+              items={[{ id: 'rename', label: 'Rename', icon: 'edit-l1' }, { id: 'delete', label: 'Delete', icon: 'delete-l' }]}
               onSelect={(id) => { if (id === 'delete') { /* handle delete */ } }}
               width={180}
               align="right"
