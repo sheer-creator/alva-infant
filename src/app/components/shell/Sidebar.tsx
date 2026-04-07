@@ -21,7 +21,7 @@ const PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Google / X Trends Tracker', page: 'trends' },
 ];
 
-export function Sidebar({ activePage, onNavigate, chatOpen, onChatToggle, activeConversationId, onSelectConversation }: SidebarProps) {
+export function Sidebar({ activePage, onNavigate, onChatToggle, onSelectConversation }: SidebarProps) {
   return (
     <aside
       className="fixed left-0 top-0 w-[228px] h-screen flex flex-col p-[8px] overflow-y-auto z-20"
