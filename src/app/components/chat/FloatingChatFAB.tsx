@@ -26,7 +26,7 @@ export function FloatingChatFAB() {
           bottom: 24,
           right: 24,
           height: 40,
-          padding: '0 16px 0 6px',
+          padding: '0 12px 0 6px',
           borderRadius: 8,
           background: '#49A3A6',
           border: '0.5px solid rgba(0,0,0,0.7)',
@@ -42,7 +42,7 @@ export function FloatingChatFAB() {
           <img src={symbolLogo} width={14} height={14} alt="Alva" />
         </div>
         <span className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] font-medium text-white whitespace-nowrap">
-          Ask Alva
+          Alva Agent
         </span>
       </button>
     </>

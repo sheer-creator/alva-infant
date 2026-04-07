@@ -215,7 +215,7 @@ export function FloatingChatBarD() {
           className="relative flex items-center gap-[8px] overflow-hidden hover:scale-105 active:scale-95"
           style={{
             height: 40,
-            padding: '0 16px 0 6px',
+            padding: '0 12px 0 6px',
             borderRadius: 8,
             background: '#49A3A6',
             border: '0.5px solid rgba(0,0,0,0.7)',
@@ -231,7 +231,7 @@ export function FloatingChatBarD() {
             <img src={symbolLogo} width={14} height={14} alt="Alva" />
           </div>
           <span className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] font-medium text-white whitespace-nowrap select-none">
-            Ask Alva
+            Alva Agent
           </span>
         </div>
       </div>
@@ -249,9 +249,9 @@ export function FloatingChatBarD() {
           willChange: 'opacity, transform',
         }}
       >
-        <div className="relative w-full overflow-hidden" style={{ background: '#ffffff' }}>
+        <div className="relative w-full overflow-hidden" style={{ background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.2)', borderRadius: 12, boxShadow: 'var(--shadow-s)' }}>
           {/* Header bar */}
-          <div className="flex items-center px-[16px] pt-[12px] pb-[4px]">
+          <div className="flex items-center px-[16px] py-[8px]">
             <div className="flex items-center flex-1">
               <img src={logoGreenBlack} height={12} alt="Alva" style={{ height: 12, width: 'auto' }} />
             </div>
@@ -273,11 +273,11 @@ export function FloatingChatBarD() {
             </div>
           </div>
 
-          {/* Input card — matches ChatInput style */}
-          <div
-            className="mx-[8px] mb-[8px] flex flex-col gap-[12px] p-[16px]"
-            style={{ background: 'white', border: '0.5px solid rgba(0,0,0,0.2)', borderRadius: 12, boxShadow: 'var(--shadow-s)' }}
-          >
+          {/* Divider */}
+          <div className="mx-[16px]" style={{ height: '0.5px', background: 'rgba(0,0,0,0.1)' }} />
+
+          {/* Input area */}
+          <div className="flex flex-col gap-[12px] p-[16px]">
             {/* Editor area */}
             <div className="relative min-h-[44px]" style={{ maxHeight: 240, overflowY: 'auto' }}>
               {!hasText && !contextTag && (
