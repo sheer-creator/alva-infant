@@ -212,7 +212,7 @@ export function FloatingChatBarD() {
         onClick={doExpand}
       >
         <div
-          className="relative flex items-center gap-[8px] overflow-hidden hover:scale-105 active:scale-95"
+          className="relative flex items-center gap-[8px] overflow-hidden"
           style={{
             height: 40,
             padding: '0 12px 0 6px',
@@ -220,8 +220,10 @@ export function FloatingChatBarD() {
             background: '#49A3A6',
             border: '0.5px solid rgba(0,0,0,0.7)',
             animation: 'barGlow 3s ease-in-out infinite',
-            transition: 'transform 0.2s',
+            transition: 'background 0.2s ease',
           }}
+          onMouseEnter={e => e.currentTarget.style.background = 'linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.05)),#49A3A6'}
+          onMouseLeave={e => e.currentTarget.style.background = '#49A3A6'}
         >
           {/* Logo badge */}
           <div

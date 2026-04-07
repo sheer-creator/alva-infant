@@ -21,7 +21,7 @@ export function FloatingChatFAB() {
     <>
       <style>{ANIM_CSS}</style>
       <button
-        className="fixed z-30 flex items-center gap-[8px] cursor-pointer hover:scale-105 active:scale-95"
+        className="fixed z-30 flex items-center gap-[8px] cursor-pointer"
         style={{
           bottom: 24,
           right: 24,
@@ -31,8 +31,10 @@ export function FloatingChatFAB() {
           background: '#49A3A6',
           border: '0.5px solid rgba(0,0,0,0.7)',
           animation: 'fabBreathe 3s ease-in-out infinite',
-          transition: 'transform 0.2s',
+          transition: 'background 0.2s ease',
         }}
+        onMouseEnter={e => e.currentTarget.style.background = 'linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.05)),#49A3A6'}
+        onMouseLeave={e => e.currentTarget.style.background = '#49A3A6'}
         onClick={() => openChat(false)}
       >
         <div
