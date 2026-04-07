@@ -35,9 +35,14 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
         <div className="flex items-center gap-[16px] h-[48px] px-[24px] py-[16px] shrink-0" style={{ zIndex: 2 }}>
           <div className="flex-1 min-w-0">
             <Dropdown
-              items={CONVERSATIONS}
+              sections={[{
+                title: 'Recent Threads',
+                items: CONVERSATIONS.map(c => ({ ...c, icon: 'sidebar-thread-normal' })),
+              }]}
               activeId={activeConversationId}
               onSelect={setActiveConversation}
+              width={400}
+              maxHeight={640}
               trigger={
                 <div className="flex gap-[4px] items-center min-w-0">
                   <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
@@ -55,9 +60,17 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
             <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity" onClick={handleFullscreen}>
               <CdnIcon name="full-screen-l" size={16} />
             </button>
-            <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity" onClick={() => {}}>
-              <CdnIcon name="more-l1" size={16} />
-            </button>
+            <Dropdown
+              items={[{ id: 'delete', label: 'Delete', icon: 'delete-l' }]}
+              onSelect={(id) => { if (id === 'delete') { /* handle delete */ } }}
+              width={180}
+              align="right"
+              trigger={
+                <div className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity">
+                  <CdnIcon name="more-l1" size={16} />
+                </div>
+              }
+            />
             <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity" onClick={onClose}>
               <CdnIcon name="collapse-right-l" size={16} />
             </button>

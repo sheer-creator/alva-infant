@@ -1,6 +1,5 @@
 import type { Page } from '../../App';
 import { CdnIcon } from '../shared/CdnIcon';
-import { CONVERSATIONS } from '@/lib/chat-config';
 
 interface SidebarProps {
   activePage: Page;
@@ -107,28 +106,8 @@ export function Sidebar({ activePage, onNavigate, chatOpen, onChatToggle, active
         ))}
       </div>
 
-      {/* Threads */}
-      <div className="flex-1 flex flex-col min-h-0">
-        <div className="py-[4px]">
-          <div className="h-[36px] flex items-center px-[8px] text-[12px] text-white/50 tracking-[0.12px] shrink-0">
-            Threads
-          </div>
-          {CONVERSATIONS.map(conv => {
-            const isActive = activePage === `thread/${conv.id}` || (chatOpen && activeConversationId === conv.id);
-            return (
-              <div
-                key={conv.id}
-                className={`h-[36px] leading-[36px] rounded-[4px] px-[8px] text-[13px] tracking-[0.13px] cursor-pointer transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
-                  isActive ? 'text-[#49A3A6] bg-white/5' : 'text-white hover:bg-white/5'
-                }`}
-                onClick={() => onNavigate(`thread/${conv.id}`)}
-              >
-                {conv.label}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      {/* Spacer */}
+      <div className="flex-1" />
 
       {/* User */}
       <div className="rounded-[4px] p-[8px] flex items-center gap-[8px] shrink-0 mt-auto">

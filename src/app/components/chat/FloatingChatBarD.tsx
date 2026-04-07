@@ -3,7 +3,9 @@ import { CdnIcon } from '../shared/CdnIcon';
 import { AlvaLoading } from '../shared/AlvaLoading';
 import { useChatContext } from './ChatContext';
 import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
-import alvaLogo from './alva-logo.svg';
+import symbolLogo from './symbol-green-white.svg';
+
+import logoGreenBlack from './logo-green-black.svg';
 import type { ContextTagData } from '@/lib/chat-config';
 
 const CDN = 'https://alva-ai-static.b-cdn.net/icons';
@@ -19,12 +21,8 @@ const ANIM_CSS = `
   100% { transform: translateX(200%); }
 }
 @keyframes barGlow {
-  0%, 100% { box-shadow: 0 2px 16px rgba(73,163,166,0.10), 0 0 0 0 rgba(73,163,166,0); }
-  50% { box-shadow: 0 2px 24px rgba(73,163,166,0.18), 0 0 24px 2px rgba(73,163,166,0.06); }
-}
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(73,163,166,0.5), 0 4px 16px rgba(0,0,0,0.15); }
+  50% { box-shadow: 0 0 12px 4px rgba(73,163,166,0.35), 0 4px 16px rgba(0,0,0,0.15); }
 }
 `;
 
@@ -214,48 +212,27 @@ export function FloatingChatBarD() {
         onClick={doExpand}
       >
         <div
-          className="relative flex items-center gap-[12px] overflow-hidden"
+          className="relative flex items-center gap-[8px] overflow-hidden hover:scale-105 active:scale-95"
           style={{
-            padding: '8px 12px 8px 8px',
+            height: 40,
+            padding: '0 16px 0 6px',
             borderRadius: 8,
-            background: 'linear-gradient(135deg, #1e1e2a 0%, #2a2a38 50%, #1e1e2a 100%)',
-            border: '0.5px solid rgba(255,255,255,0.08)',
-            animation: 'barGlow 4s ease-in-out infinite',
+            background: '#49A3A6',
+            border: '0.5px solid rgba(0,0,0,0.7)',
+            animation: 'barGlow 3s ease-in-out infinite',
+            transition: 'transform 0.2s',
           }}
         >
-          {/* Shimmer on hover */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-            style={{
-              background: 'linear-gradient(90deg, transparent 30%, rgba(73,163,166,0.06) 50%, transparent 70%)',
-              backgroundSize: '200% 100%',
-              animation: 'shimmer 2s linear infinite',
-              transition: 'opacity 0.3s',
-            }}
-          />
-          {/* Bottom accent */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] overflow-hidden">
-            <div className="h-full w-[30%]" style={{ background: 'linear-gradient(90deg, transparent, rgba(73,163,166,0.6), #49A3A6)', animation: 'slideBottom 5s ease-in-out infinite' }} />
-          </div>
           {/* Logo badge */}
           <div
-            className="shrink-0 flex items-center justify-center size-[28px] rounded-[4px]"
-            style={{ background: 'linear-gradient(135deg, #49A3A6, #3d8a8d)', boxShadow: '0 0 12px rgba(73,163,166,0.3)' }}
+            className="shrink-0 flex items-center justify-center size-[28px] rounded-[6px]"
+            style={{ background: '#2a2a38' }}
           >
-            <img src={alvaLogo} width={14} height={14} alt="Alva" style={{ filter: 'brightness(10)' }} />
+            <img src={symbolLogo} width={14} height={14} alt="Alva" />
           </div>
-          <span className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-white/40 select-none group-hover:text-white/60 transition-colors whitespace-nowrap">
+          <span className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] font-medium text-white whitespace-nowrap select-none">
             Ask Alva
           </span>
-          {/* Keyboard shortcut hint */}
-          <div className="shrink-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <kbd
-              className="font-['Delight',sans-serif] text-[11px] leading-[16px] text-white/30 px-[6px] py-[2px] rounded-[4px]"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(255,255,255,0.1)' }}
-            >
-              /
-            </kbd>
-          </div>
         </div>
       </div>
 
@@ -272,32 +249,11 @@ export function FloatingChatBarD() {
           willChange: 'opacity, transform',
         }}
       >
-        <div
-          className="relative w-full overflow-hidden"
-          style={{
-            borderRadius: 8,
-            background: '#ffffff',
-            border: '0.5px solid rgba(0,0,0,0.12)',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.06)',
-          }}
-        >
-          {/* Bottom accent */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] overflow-hidden z-10">
-            <div className="h-full w-[30%]" style={{ background: 'linear-gradient(90deg, transparent, rgba(73,163,166,0.4), #49A3A6)', animation: 'slideBottom 4s ease-in-out infinite' }} />
-          </div>
-
+        <div className="relative w-full overflow-hidden" style={{ background: '#ffffff' }}>
           {/* Header bar */}
           <div className="flex items-center px-[16px] pt-[12px] pb-[4px]">
-            <div className="flex items-center gap-[8px] flex-1">
-              <div
-                className="shrink-0 flex items-center justify-center size-[22px] rounded-[4px]"
-                style={{ background: 'linear-gradient(135deg, #49A3A6, #3d8a8d)' }}
-              >
-                <img src={alvaLogo} width={11} height={11} alt="Alva" style={{ filter: 'brightness(10)' }} />
-              </div>
-              <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)] font-medium">
-                Alva
-              </span>
+            <div className="flex items-center flex-1">
+              <img src={logoGreenBlack} height={12} alt="Alva" style={{ height: 12, width: 'auto' }} />
             </div>
             <div className="flex items-center gap-[2px]">
               <button
@@ -317,11 +273,12 @@ export function FloatingChatBarD() {
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="mx-[16px] h-[0.5px] bg-black/[0.06]" />
-
-          {/* Editor area */}
-          <div className="px-[16px] pt-[12px] pb-[4px]">
+          {/* Input card — matches ChatInput style */}
+          <div
+            className="mx-[8px] mb-[8px] flex flex-col gap-[12px] p-[16px]"
+            style={{ background: 'white', border: '0.5px solid rgba(0,0,0,0.2)', borderRadius: 12, boxShadow: 'var(--shadow-s)' }}
+          >
+            {/* Editor area */}
             <div className="relative min-h-[44px]" style={{ maxHeight: 240, overflowY: 'auto' }}>
               {!hasText && !contextTag && (
                 <div className="absolute inset-0 pointer-events-none font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n3)]">
@@ -338,33 +295,28 @@ export function FloatingChatBarD() {
                 onKeyDown={handleKeyDown}
               />
             </div>
-          </div>
-
-          {/* Toolbar */}
-          <div className="flex items-center gap-[8px] h-[44px] px-[16px] pb-[12px]">
-            <button className="flex items-center justify-center size-[28px] rounded-[6px] shrink-0 cursor-pointer hover:bg-black/[0.04] transition-colors">
-              <CdnIcon name="at-l" size={16} color="rgba(0,0,0,0.4)" />
-            </button>
-            <button className="flex items-center justify-center size-[28px] rounded-[6px] shrink-0 cursor-pointer hover:bg-black/[0.04] transition-colors">
-              <CdnIcon name="photo-l" size={16} color="rgba(0,0,0,0.4)" />
-            </button>
-            <div className="flex-1" />
-            <div className="flex items-center gap-[4px] cursor-pointer hover:opacity-70 transition-opacity">
-              <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">
-                Sonnet 4.6
-              </span>
-              <CdnIcon name="arrow-down-f2" size={12} color="rgba(0,0,0,0.2)" />
+            {/* Toolbar — matches ChatInput */}
+            <div className="flex items-center gap-[12px] h-[28px]">
+              <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity">
+                <CdnIcon name="at-l" size={16} />
+              </button>
+              <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity">
+                <CdnIcon name="photo-l" size={16} />
+              </button>
+              <div className="flex-1 flex items-center justify-end gap-[4px]">
+                <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">
+                  Sonnet 4.6
+                </span>
+                <CdnIcon name="arrow-down-f2" size={12} color="rgba(0,0,0,0.2)" />
+              </div>
+              <button
+                className="flex items-center justify-center shrink-0 size-[28px] rounded-[6px] cursor-pointer transition-colors"
+                style={{ background: hasText ? '#49A3A6' : 'rgba(0,0,0,0.05)' }}
+                onClick={handleSend}
+              >
+                <CdnIcon name="arrow-up-l1" size={14} color={hasText ? '#ffffff' : 'rgba(0,0,0,0.3)'} />
+              </button>
             </div>
-            <button
-              className="flex items-center justify-center shrink-0 size-[28px] rounded-[8px] cursor-pointer transition-all"
-              style={{
-                background: hasText ? 'linear-gradient(135deg, #49A3A6, #3d8a8d)' : 'rgba(0,0,0,0.04)',
-                boxShadow: hasText ? '0 2px 8px rgba(73,163,166,0.3)' : 'none',
-              }}
-              onClick={handleSend}
-            >
-              <CdnIcon name="arrow-up-l1" size={14} color={hasText ? '#ffffff' : 'rgba(0,0,0,0.25)'} />
-            </button>
           </div>
         </div>
       </div>
