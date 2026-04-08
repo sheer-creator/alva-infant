@@ -1,6 +1,13 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import type { Page } from '@/app/App';
-import { PAGE_CONTEXT_MAP, PAGE_DEFAULT_THREAD, type ContextTagData } from '@/lib/chat-config';
+import {
+  HOME_CHAT_CONTEXT,
+  PAGE_CONTEXT_MAP,
+  PAGE_DEFAULT_THREAD,
+  type ChatTriggerMode,
+  type ContextTagData,
+  type ThreadsEntryMode,
+} from '@/lib/chat-config';
 import type { StreamingState, StreamStep } from './StreamingMessages';
 
 /* ── Mock streaming scenario ── */
@@ -213,7 +220,18 @@ const INITIAL_STREAMING: StreamingState = {
 
 const ChatCtx = createContext<ChatContextValue | null>(null);
 
-export function ChatProvider({ activePage, children }: { activePage: Page; children: React.ReactNode }) {
+export function ChatProvider({
+  activePage,
+  children,
+  threadsEntryMode = '1',
+  chatTriggerMode = 'fab',
+}: {
+  activePage: Page;
+  children: React.ReactNode;
+  threadsEntryMode?: ThreadsEntryMode;
+  /** 方案 1 仅在 FAB（方案 C）下为 Home 注入上下文 */
+  chatTriggerMode?: ChatTriggerMode;
+}) {
   const [chatOpen, setChatOpen] = useState(false);
   const [hasInitialInput, setHasInitialInput] = useState(false);
   const [activeConversationId, setActiveConversationId] = useState('new');
@@ -276,7 +294,14 @@ export function ChatProvider({ activePage, children }: { activePage: Page; child
 
   useEffect(() => () => { simRef.current?.cancel(); }, []);
 
-  const contextTag = PAGE_CONTEXT_MAP[activePage] ?? null;
+  const contextTag = useMemo((): ContextTagData | null => {
+    const base = PAGE_CONTEXT_MAP[activePage] ?? null;
+    if (base) return base;
+    if (activePage === 'home' && threadsEntryMode === '1' && chatTriggerMode === 'fab') {
+      return HOME_CHAT_CONTEXT;
+    }
+    return null;
+  }, [activePage, threadsEntryMode, chatTriggerMode]);
 
   const value = useMemo(
     () => ({
