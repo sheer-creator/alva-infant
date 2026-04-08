@@ -9,7 +9,10 @@ function TrendsContent() {
   return (
     <div className="h-screen flex flex-col" style={{ background: 'var(--b0-page)' }}>
       <div className="sticky top-0 z-10 bg-white px-[24px] shrink-0">
-        <Topbar title="Google / X Trends Tracker" />
+        <Topbar
+          title="Google / X Trends Tracker"
+          playbookRef="@yggy/google-x-trends-tracker"
+        />
       </div>
       <div className="flex-1 overflow-y-auto">
         <div style={{ width: '100%', maxWidth: 2048, margin: '0 auto', padding: '8px 24px 56px' }}>

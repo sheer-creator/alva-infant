@@ -75,6 +75,7 @@
   --radius-ct-s: 4px;
   --radius-ct-m: 8px;
   --radius-ct-l: 8px;
+  --radius-pop-popover: 8px;
 
   /* ── Text (Light) ── */
   --text-n9: rgba(0, 0, 0, 0.9);
@@ -92,6 +93,7 @@
   --grey-g03: #f0f0f0;
   --grey-g05: #eaeaea;
   --grey-g1:  #dedede;
+  --b-r02: rgba(0, 0, 0, 0.02);
   --b-r03: rgba(0, 0, 0, 0.03);
 
   /* ── Line & Border ── */
@@ -148,6 +150,7 @@
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: var(--radius-card);
+  --shadow-s: var(--shadow-s);
   --shadow-l: var(--shadow-l);
 }
 
