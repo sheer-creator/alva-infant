@@ -185,14 +185,13 @@ function AppShellInner({
   const startX = useRef(0);
   const startW = useRef(DEFAULT_PANEL_W);
   const [threadsRailOpen, setThreadsRailOpen] = useState(false);
-  const [sidebarCompact, setSidebarCompact] = useState(false);
+  const sidebarCompact = false;
 
   useEffect(() => {
     if (threadsEntryMode !== '2' && threadsEntryMode !== '4') setThreadsRailOpen(false);
   }, [threadsEntryMode]);
 
   const primaryW = sidebarCompact ? PRIMARY_COMPACT_W : PRIMARY_W;
-  const threadsW = (threadsEntryMode === '2' || threadsEntryMode === '4') && threadsRailOpen ? THREADS_RAIL_W : 0;
   const sidebarTotalW = primaryW;
 
   const handleSelectConversation = (id: string) => {
