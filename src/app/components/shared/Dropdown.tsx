@@ -6,6 +6,7 @@ export interface DropdownItem {
   label: string;
   icon?: string;
   iconColor?: string;
+  badge?: number;
 }
 
 export interface DropdownSection {
@@ -69,10 +70,20 @@ export function Dropdown({ items, sections, activeId, onSelect, trigger, width, 
           {item.icon && (
             <CdnIcon name={item.icon} size={20} color={item.iconColor ?? 'var(--text-n9)'} />
           )}
-          <span
-            className="flex-1 min-w-0 font-['Delight',-apple-system,BlinkMacSystemFont,sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate"
-          >
-            {item.label}
+          <span className="flex-1 min-w-0 flex items-center gap-[8px]">
+            <span
+              className="min-w-0 font-['Delight',-apple-system,BlinkMacSystemFont,sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate"
+            >
+              {item.label}
+            </span>
+            {item.badge != null && item.badge > 0 && (
+              <span
+                className="shrink-0 font-['Delight',sans-serif] text-[10px] leading-[16px] font-medium text-white"
+                style={{ background: 'var(--main-m1, #49A3A6)', borderRadius: 999, padding: '0 6px' }}
+              >
+                {item.badge}
+              </span>
+            )}
           </span>
           {selected && (
             <CdnIcon name="check-l1" size={16} color="var(--main-m1)" />

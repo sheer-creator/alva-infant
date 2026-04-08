@@ -4,6 +4,7 @@ import { AppShell } from '@/app/components/shell/AppShell';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { ChatInput } from '@/app/components/shared/ChatInput';
 import { AlvaLoading } from '@/app/components/shared/AlvaLoading';
+import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDropdown';
 import DotMatrixWave from '@/app/components/shared/DotMatrixWave';
 
 type AgentState = 'empty' | 'connecting' | 'connected';
@@ -80,7 +81,7 @@ function EmptyState({ onConnect }: { onConnect: () => void }) {
       <div className="relative z-10 flex flex-col items-center gap-[32px] w-full max-w-[960px] px-[24px]">
         {/* Hero illustration */}
         <div className="flex flex-col items-center gap-[20px]">
-          <TelegramIcon size={48} />
+          <img src={`${import.meta.env.BASE_URL}logo-portrait.svg`} alt="Alva Agent" className="rounded-full" style={{ width: 48, height: 48 }} />
           <h1 className={`${FONT} text-[28px] leading-[38px] tracking-[0.28px] text-center text-[var(--text-n9)] font-normal`}>
             Deploy your Alva Agent
           </h1>
@@ -90,7 +91,7 @@ function EmptyState({ onConnect }: { onConnect: () => void }) {
         </div>
 
         {/* Feature cards */}
-        <div className="grid grid-cols-2 gap-[12px] w-full">
+        <div className="grid grid-cols-2 gap-[16px] w-full">
           {FEATURES.map(f => (
             <div
               key={f.title}
@@ -98,7 +99,7 @@ function EmptyState({ onConnect }: { onConnect: () => void }) {
               style={{ background: 'var(--b0-container, #ffffff)', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}
             >
               <CdnIcon name={f.icon} size={20} color="var(--text-n9, rgba(0,0,0,0.9))" />
-              <p className={`${FONT} text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n9)] font-medium`}>
+              <p className={`${FONT} text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]`}>
                 {f.title}
               </p>
               <p className={`${FONT} text-[12px] leading-[18px] tracking-[0.12px] text-[var(--text-n5)]`}>
@@ -110,14 +111,38 @@ function EmptyState({ onConnect }: { onConnect: () => void }) {
 
         {/* Connect button */}
         <button
-          className="flex items-center justify-center px-[24px] py-[10px] rounded-[10px] cursor-pointer transition-opacity hover:opacity-90"
-          style={{ background: '#26A5E4', border: 'none' }}
+          className={`${FONT} flex items-center justify-center gap-[8px] text-[14px] leading-[22px] tracking-[0.14px] font-medium text-white cursor-pointer transition-opacity hover:opacity-90`}
+          style={{ height: 48, padding: '11px 20px', borderRadius: 8, background: '#26A5E4', border: 'none' }}
           onClick={onConnect}
         >
-          <span className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-white font-medium`}>
-            Connect Telegram
-          </span>
+          <CdnIcon name={`${import.meta.env.BASE_URL}logo-telegram.svg`} size={18} color="#ffffff" />
+          Connect Telegram
         </button>
+
+        {/* Coming Soon */}
+        <div className="flex flex-col items-center gap-[12px]">
+          <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n3)]`}>
+            Coming Soon
+          </span>
+          <div className="flex items-center gap-[8px]">
+            {[
+              { name: 'Discord', file: 'logo-social-discord.svg' },
+              { name: 'Slack', file: 'logo-social-slack.svg' },
+              { name: 'WhatsApp', file: 'logo-social-whatsapp.svg' },
+            ].map(p => (
+              <div
+                key={p.name}
+                className="flex items-center gap-[6px] rounded-full"
+                style={{ background: 'var(--grey-g03, #f0f0f0)', padding: '4px 12px 4px 6px' }}
+              >
+                <img src={`${import.meta.env.BASE_URL}${p.file}`} alt={p.name} style={{ width: 18, height: 18 }} />
+                <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
+                  {p.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -168,7 +193,7 @@ function AgentSettingsModal({ onClose, onDisconnect }: { onClose: () => void; on
       </div>
 
       <div
-        className="flex flex-col w-full max-w-[720px] flex-1 rounded-[12px]"
+        className="flex flex-col w-full max-w-[720px] max-h-[840px] flex-1 rounded-[12px]"
         style={{ background: 'var(--b0-container, #ffffff)', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))', padding: 28, gap: 20 }}
         onClick={e => e.stopPropagation()}
       >
@@ -247,7 +272,7 @@ function AgentSettingsModal({ onClose, onDisconnect }: { onClose: () => void; on
 }
 
 /* ── Connected chat UI ── */
-function AgentChat({ onDisconnect }: { onDisconnect: () => void }) {
+function AgentChat({ onNavigate, onDisconnect }: { onNavigate: (page: Page) => void; onDisconnect: () => void }) {
   const [messages, setMessages] = useState([INITIAL_AGENT_MESSAGE]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -274,17 +299,28 @@ function AgentChat({ onDisconnect }: { onDisconnect: () => void }) {
     <div className="flex flex-col h-full bg-white">
       {/* Topbar — matches Thread */}
       <div className="flex items-center gap-[16px] h-[56px] px-[28px] shrink-0">
-        <div className="flex items-center gap-[8px] flex-1 min-w-0">
-          <div className="relative shrink-0">
-            <TelegramIcon size={24} />
-            <div
-              className="absolute -bottom-[1px] right-[-3px] size-[10px] rounded-full border-[1.5px] border-white"
-              style={{ background: 'var(--main-m1, #49A3A6)' }}
-            />
-          </div>
-          <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate`}>
-            Alva Agent
-          </p>
+        <div className="flex-1 min-w-0">
+          <ThreadSwitcherDropdown
+            activeId="__agent__"
+            onSelect={(id) => onNavigate(`thread/${id}` as Page)}
+            trigger={
+              <div className="flex items-center gap-[8px] min-w-0 cursor-pointer">
+                <div className="relative shrink-0">
+                  <img src={`${import.meta.env.BASE_URL}logo-portrait.svg`} alt="Alva Agent" className="rounded-full" style={{ width: 24, height: 24 }} />
+                  <div
+                    className="absolute -bottom-[1px] right-[-3px] size-[10px] rounded-full border-[1.5px] border-white"
+                    style={{ background: 'var(--main-m1, #49A3A6)' }}
+                  />
+                </div>
+                <div className="flex gap-[4px] items-center min-w-0">
+                  <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate`}>
+                    Alva Agent
+                  </p>
+                  <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
+                </div>
+              </div>
+            }
+          />
         </div>
         <div className="flex items-center gap-[16px] shrink-0">
           <button
@@ -359,7 +395,7 @@ export default function Agent({ onNavigate }: { onNavigate: (page: Page) => void
       <div className="h-screen flex flex-col bg-white">
         {state === 'empty' && <EmptyState onConnect={handleConnect} />}
         {state === 'connecting' && <ConnectingState />}
-        {state === 'connected' && <AgentChat onDisconnect={handleDisconnect} />}
+        {state === 'connected' && <AgentChat onNavigate={onNavigate} onDisconnect={handleDisconnect} />}
       </div>
     </AppShell>
   );
