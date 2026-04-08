@@ -1,6 +1,7 @@
 import { CdnIcon } from '../shared/CdnIcon';
 import { ChatInput } from '../shared/ChatInput';
 import { Dropdown } from '../shared/Dropdown';
+import { ThreadSwitcherDropdown } from '../shared/ThreadSwitcherDropdown';
 import { useChatContext } from './ChatContext';
 import { ChatMessages } from './ChatMessages';
 import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
@@ -34,15 +35,9 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
         {/* ── Topbar ── */}
         <div className="flex items-center gap-[16px] h-[48px] px-[24px] py-[16px] shrink-0" style={{ zIndex: 2 }}>
           <div className="flex-1 min-w-0">
-            <Dropdown
-              sections={[{
-                title: 'Recent Threads',
-                items: CONVERSATIONS.map(c => ({ ...c, icon: 'sidebar-thread-normal' })),
-              }]}
+            <ThreadSwitcherDropdown
               activeId={activeConversationId}
               onSelect={setActiveConversation}
-              width={400}
-              maxHeight={640}
               trigger={
                 <div className="flex gap-[4px] items-center min-w-0">
                   <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
