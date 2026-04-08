@@ -31,7 +31,6 @@ const MODES: { value: ChatTriggerMode; label: string }[] = [
 
 const PRIMARY_W = 228;
 const PRIMARY_COMPACT_W = 80;
-const THREADS_RAIL_W = 256;
 
 function DevSwitcher({
   triggerMode,
