@@ -1,9 +1,14 @@
 import { Dropdown } from './Dropdown';
 import { CONVERSATIONS } from '@/lib/chat-config';
 
+const AGENT_ICON = `${import.meta.env.BASE_URL}sidebar-skills-normal.svg`;
+
 const THREAD_SECTION = {
   title: 'Recent Threads',
-  items: CONVERSATIONS.map(c => ({ ...c, icon: 'sidebar-thread-normal' })),
+  items: CONVERSATIONS.map(c => ({
+    ...c,
+    icon: c.isAgent ? AGENT_ICON : 'sidebar-thread-normal',
+  })),
 };
 
 export function ThreadSwitcherDropdown({

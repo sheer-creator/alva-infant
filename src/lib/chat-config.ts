@@ -36,15 +36,18 @@ export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
   trends: { label: 'Google / X Trends Tracker', icon: 'sidebar-discover-normal' },
+  agent: null,
 };
 
 export interface ConversationItem {
   id: string;
   label: string;
+  isAgent?: boolean;
 }
 
-/** Thread / conversation list shown in sidebar and ChatPanel dropdown */
+/** Thread / conversation list shown in sidebar and ChatPanel dropdown (sorted by most recent) */
 export const CONVERSATIONS: ConversationItem[] = [
+  { id: 'agent-btc-alert', label: 'BTC 5% Drop Alert & NVDA Earnings Watch', isAgent: true },
   { id: 'demo', label: 'Animated Demo Playbook with Mock Data' },
   { id: 'cpi', label: 'US CPI Impact on Fed Rate Cut Odds' },
   { id: 'treasury', label: 'US Treasury Yield and Bitcoin Correlation Analysis' },

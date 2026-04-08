@@ -30,6 +30,7 @@ const NAV_ITEMS: { label: string; page?: Page }[] = [
   { label: 'Home', page: 'home' },
   { label: 'Explore', page: 'explore' },
   { label: 'Portfolio' },
+  { label: 'Agent', page: 'agent' },
   { label: 'Alva Skill' },
 ];
 
@@ -88,15 +89,21 @@ export function Sidebar({
           </div>
         ) : (
           !sidebarCompact && (
-            <div className="flex h-[48px] shrink-0 items-center px-[8px] py-[16px]">
+            <div className="flex h-[48px] shrink-0 items-center justify-between px-[8px] py-[16px]">
               <img src={logoSrc} alt="Alva" className="h-[14px] w-auto max-w-[160px] object-contain object-left" />
+              <div className="flex items-center justify-center rounded-[6px] p-[2px] opacity-90">
+                <img src={`${import.meta.env.BASE_URL}sidebar-onoff.svg`} alt="" width={16} height={16} />
+              </div>
             </div>
           )
         )}
 
         {sidebarCompact && (
-          <div className="flex justify-center pb-[8px] pt-[4px]">
+          <div className="flex items-center justify-between px-[8px] pb-[8px] pt-[4px]">
             <img src={logoSrc} alt="" className="h-[12px] w-auto opacity-90" />
+            <div className="flex items-center justify-center rounded-[6px] p-[2px] opacity-90">
+              <img src={`${import.meta.env.BASE_URL}sidebar-onoff.svg`} alt="" width={16} height={16} />
+            </div>
           </div>
         )}
 

@@ -131,7 +131,7 @@ function DevSwitcher({
 function HomeThreadsCorner({ onNavigate }: { onNavigate: (page: Page) => void }) {
   const { activeConversationId } = useChatContext();
   return (
-    <div className="pointer-events-auto fixed z-[45]" style={{ top: 28, right: 28 }}>
+    <div className="pointer-events-auto fixed z-[45]" style={{ top: 18, right: 18 }}>
       <ThreadSwitcherDropdown
         activeId={activeConversationId}
         onSelect={(id) => onNavigate(`thread/${id}` as Page)}
@@ -152,7 +152,7 @@ function HomeThreadsCorner({ onNavigate }: { onNavigate: (page: Page) => void })
 
 function HomeThreadsLeft({ onToggle }: { onToggle: () => void }) {
   return (
-    <div className="pointer-events-auto absolute z-[45]" style={{ top: 20, left: 20 }}>
+    <div className="pointer-events-auto absolute z-[45]" style={{ top: 18, left: 18 }}>
       <button
         type="button"
         className="cursor-pointer rounded-[8px] p-[6px] transition-colors hover:bg-black/[0.06]"
