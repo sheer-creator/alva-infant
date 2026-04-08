@@ -1,4 +1,4 @@
-import{a as e,i as t,n,r,t as i}from"./index-BeyQqClL.js";import{c as a,t as o}from"./AppShell-CINRYIs6.js";import{a as s,c,d as l,i as u,l as d,n as f,o as p,r as m,s as h,t as g,u as _}from"./Avatar-BC9-2kI3.js";var v=e(n(),1),y=i(),b=2e3;function x(e){return`Remix Playbook(${e}):
+import{a as e,i as t,n,r,t as i}from"./index-c-HKYFd-.js";import{l as a,t as o}from"./AppShell-BtI29HhV.js";import{a as s,c,d as l,i as u,l as d,n as f,o as p,r as m,s as h,t as g,u as _}from"./Avatar-CYO6j8rm.js";var v=e(n(),1),y=i(),b=2e3;function x(e){return`Remix Playbook(${e}):
 
 If you have the Alva skill → use it to build my own version.
 If not → install it first: npx skills add https://github.com/alva-ai/skills
