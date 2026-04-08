@@ -236,9 +236,7 @@ function AppShellInner({
         threadsRailOpen={threadsRailOpen}
         onToggleThreadsRail={() => setThreadsRailOpen(o => !o)}
         sidebarCompact={sidebarCompact}
-        onToggleSidebarCompact={() => setSidebarCompact(o => !o)}
         primaryWidth={primaryW}
-        threadsRailWidth={threadsW}
       />
       <main
         className="relative flex min-w-0 flex-1 overflow-hidden rounded-bl-[8px] rounded-tl-[8px] bg-white"

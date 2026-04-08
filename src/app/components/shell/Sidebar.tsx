@@ -23,9 +23,7 @@ interface SidebarProps {
   threadsRailOpen?: boolean;
   onToggleThreadsRail?: () => void;
   sidebarCompact?: boolean;
-  onToggleSidebarCompact?: () => void;
   primaryWidth: number;
-  threadsRailWidth: number;
 }
 
 const NAV_ITEMS: { label: string; page?: Page }[] = [
@@ -48,9 +46,7 @@ export function Sidebar({
   threadsRailOpen = false,
   onToggleThreadsRail,
   sidebarCompact = false,
-  onToggleSidebarCompact,
   primaryWidth,
-  threadsRailWidth,
   activeConversationId,
 }: SidebarProps) {
   const logoSrc = `${import.meta.env.BASE_URL}logo-alva-beta.svg`;
