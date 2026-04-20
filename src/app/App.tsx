@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
 
-const VALID_PAGES = ['home', 'explore', 'trends', 'agent'] as const;
+const VALID_PAGES = ['home', 'explore', 'trends', 'screener', 'agent'] as const;
 export type Page = (typeof VALID_PAGES)[number] | `thread/${string}`;
 
 const Home = lazy(() => import('../pages/Home'));
 const Explore = lazy(() => import('../pages/Explore'));
 const Trends = lazy(() => import('../pages/Trends'));
+const Screener = lazy(() => import('../pages/Screener'));
 const Thread = lazy(() => import('../pages/Thread'));
 const Agent = lazy(() => import('../pages/Agent'));
 
@@ -41,6 +42,7 @@ export default function App() {
       {page === 'home' && <Home onNavigate={navigate} />}
       {page === 'explore' && <Explore onNavigate={navigate} />}
       {page === 'trends' && <Trends onNavigate={navigate} />}
+      {page === 'screener' && <Screener onNavigate={navigate} />}
       {page === 'agent' && <Agent onNavigate={navigate} />}
       {threadId && <Thread threadId={threadId} onNavigate={navigate} />}
     </Suspense>
