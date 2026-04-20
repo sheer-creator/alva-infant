@@ -84,7 +84,7 @@ function PlaybookCard({ sourceThreadId }: { sourceThreadId?: string }) {
     if (sourceThreadId) {
       sessionStorage.setItem('openChatWithThread', sourceThreadId);
     }
-    window.location.hash = 'trends';
+    window.location.hash = 'screener';
   };
   return (
     <div
@@ -100,10 +100,10 @@ function PlaybookCard({ sourceThreadId }: { sourceThreadId?: string }) {
       <div className="flex flex-col gap-[12px] pt-[16px] pb-[12px] px-[16px] w-full">
         <div className="flex flex-col gap-[4px] w-full">
           <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] overflow-hidden whitespace-nowrap text-ellipsis h-[28px]">
-            Google / X Trends Tracker
+            Quality Value Stock Screener
           </p>
           <p className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)] overflow-hidden h-[44px]" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}>
-            Track NVDA Google trends, AI storage keyword popularity, and DRAM pricing across DDR4/DDR5 with real-time data from multiple sources.
+            Screens US large caps by P/E, ROE, D/E then ranks the top 40 on a Value + Quality + Safety composite score.
           </p>
         </div>
       </div>
@@ -217,7 +217,7 @@ function MockConversation({ sourceThreadId }: { sourceThreadId?: string }) {
       </div>
       <div className="flex items-center gap-[4px]">
         <span className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">Source:</span>
-        <span className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n7)] underline decoration-dotted cursor-pointer" onClick={() => { if (sourceThreadId) sessionStorage.setItem('openChatWithThread', sourceThreadId); window.location.hash = 'trends'; }}>BTC Ultimate AI Trader</span>
+        <span className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n7)] underline decoration-dotted cursor-pointer" onClick={() => { if (sourceThreadId) sessionStorage.setItem('openChatWithThread', sourceThreadId); window.location.hash = 'screener'; }}>BTC Ultimate AI Trader</span>
         <CdnIcon name="go-l" size={16} />
       </div>
       <PlaybookCard sourceThreadId={sourceThreadId} />

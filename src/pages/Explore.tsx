@@ -75,13 +75,6 @@ const PLAYBOOK_CARDS = [
     remixes: 3,
   },
   {
-    title: 'Google / X Trends Tracker',
-    desc: 'Monitor selected tokens on a 4-hour timeframe to detect abnormal changes in Open Interest (OI) and trading volume in order to capture unusual market activity and generate alerts.',
-    author: 'Sheer YLL YGG',
-    stars: '12.8K',
-    remixes: 3,
-  },
-  {
     title: 'QQQ +2% Day Triggers NVDA Take-Profit',
     desc: 'Aggregates real-time data across multiple DEX platforms to identify high-potential Golden Dog meme tokens. Alerts are triggered on sudden volume spikes, KOL mentions, or on-chain activity.',
     author: 'Smart Jing',

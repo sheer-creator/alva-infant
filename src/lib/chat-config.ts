@@ -35,7 +35,7 @@ export const HOME_CHAT_CONTEXT: ContextTagData = {
 export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
-  trends: { label: 'Google / X Trends Tracker', icon: 'sidebar-discover-normal' },
+  screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
   agent: null,
 };
 
@@ -61,5 +61,5 @@ export const CONVERSATIONS: ConversationItem[] = [
 
 /** Default thread to load when opening chat on a specific page */
 export const PAGE_DEFAULT_THREAD: Record<string, string> = {
-  trends: 'demo',
+  screener: 'demo',
 };

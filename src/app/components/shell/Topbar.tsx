@@ -261,15 +261,6 @@ export function Topbar({
           )}
         </div>
         <IconButton label={commentCount ?? 6}><CdnIcon name="chat-l1" /></IconButton>
-
-        {/* Action buttons */}
-        <div className="flex gap-[8px] items-center pl-[8px]">
-          <button className="flex gap-[6px] h-[32px] items-center justify-center px-[10px] py-[6px] rounded-[6px] cursor-pointer hover:bg-black/[0.04] transition-colors" style={{ border: '0.5px solid var(--text-n3)' }}>
-            <span className="font-['Delight',sans-serif] font-medium leading-[20px] text-[12px] text-[var(--text-n9)] tracking-[0.12px] whitespace-nowrap">
-              Trade
-            </span>
-          </button>
-        </div>
       </div>
     </div>
   );
