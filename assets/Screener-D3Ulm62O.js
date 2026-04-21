@@ -1,4 +1,4 @@
-import{t as e}from"./index-ImEnvYkS.js";import{n as t}from"./Agent-Db--yUyI.js";import{t as n}from"./Topbar-CQIgv_be.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-Dcv144o0.js";import{t as n}from"./Topbar-xIgAxspj.js";var r=`<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -1924,4 +1924,4 @@ window.__ALVA_OFFLINE_DATA__ = {
 <\/script>
 </body>
 </html>
-`,i=e();function a(){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Quality Value Stock Screener`,playbookRef:`@harryzz/quality-value-screener`})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Quality Value Stock Screener`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(a,{})})}export{o as default};
+`,i=e();function a({onNavigate:e}){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Quality Value Stock Screener`,playbookRef:`@harryzz/quality-value-screener`,onNavigate:e})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Quality Value Stock Screener`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(a,{onNavigate:e})})}export{o as default};

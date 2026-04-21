@@ -1,4 +1,4 @@
-import{t as e}from"./index-ImEnvYkS.js";import{n as t}from"./Agent-Db--yUyI.js";import{t as n}from"./Topbar-CQIgv_be.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-Dcv144o0.js";import{t as n}from"./Topbar-xIgAxspj.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -2547,4 +2547,4 @@ async function renderAnnouncements() {
 <\/script>
 </body>
 </html>
-`,i=e();function a(){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Defense Thesis Tracker`,playbookRef:`@harryzz/defense-thesis-tracker`})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Defense Thesis Tracker`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`thesis`,onNavigate:e,children:(0,i.jsx)(a,{})})}export{o as default};
+`,i=e();function a({onNavigate:e}){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Defense Thesis Tracker`,playbookRef:`@harryzz/defense-thesis-tracker`,onNavigate:e})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Defense Thesis Tracker`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`thesis`,onNavigate:e,children:(0,i.jsx)(a,{onNavigate:e})})}export{o as default};
