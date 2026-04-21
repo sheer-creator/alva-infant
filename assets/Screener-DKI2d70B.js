@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-Dcv144o0.js";import{t as n}from"./Topbar-xIgAxspj.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CxAwfxYQ.js";import{t as n}from"./Topbar-C4f-OFw5.js";var r=`<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -291,19 +291,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-Dcv144o0.
     position: sticky; right: 0; z-index: 2;
     background: var(--b0-page);
   }
-  /* Freeze # (48px) and Ticker (88px) columns to the left edge on horizontal scroll.
-     Sticky \`left\` matches each cell's natural position so the cells don't shift
-     during the initial scroll. A 16px box-shadow extends the cell's background
-     leftward to cover the row's padding-left (for col 1) and the flex gap
-     between col 1 and col 2 (for col 2), hiding scrolled content. */
-  #rankings-table .table-row .table-cell:nth-child(1),
-  #rankings-table .table-row .table-cell:nth-child(2) {
-    position: sticky; z-index: 2;
-    background: var(--b0-page);
-    box-shadow: calc(-1 * var(--spacing-m)) 0 0 var(--b0-page);
-  }
-  #rankings-table .table-row .table-cell:nth-child(1) { left: var(--spacing-m); }
-  #rankings-table .table-row .table-cell:nth-child(2) { left: calc(var(--spacing-m) + 48px + var(--spacing-m)); }
   /* Hover overlay sits above all cells so tint is uniform across sticky and
      non-sticky cells (avoids double-stacking of semi-transparent var(--b-r02)). */
   #rankings-table .table-row.expandable::after {
