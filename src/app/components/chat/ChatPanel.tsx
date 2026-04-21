@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CdnIcon } from '../shared/CdnIcon';
 import { ChatInput } from '../shared/ChatInput';
 import { Dropdown } from '../shared/Dropdown';
@@ -5,8 +6,11 @@ import { ThreadSwitcherDropdown, AGENT_CONVERSATION_ID } from '../shared/ThreadS
 import { useChatContext } from './ChatContext';
 import { ChatMessages } from './ChatMessages';
 import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
+import { AlvaLoading } from '../shared/AlvaLoading';
+import DotMatrixWave from '../shared/DotMatrixWave';
 import type { ContextTagData } from '@/lib/chat-config';
 import { CONVERSATIONS } from '@/lib/chat-config';
+import { useAgentConnected } from '@/lib/agent-connected';
 
 interface ChatPanelProps {
   onClose: () => void;
@@ -15,10 +19,17 @@ interface ChatPanelProps {
 
 export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
   const { hasInitialInput, activeConversationId, setActiveConversation, sendPrompt, overlay, dismissOverlay } = useChatContext();
+  const [agentConnected, setAgentConnected] = useAgentConnected();
+  const [connecting, setConnecting] = useState(false);
 
   const handleFullscreen = () => {
     onClose();
     window.location.hash = `thread/${activeConversationId}`;
+  };
+
+  const handleConnect = () => {
+    setConnecting(true);
+    setTimeout(() => { setAgentConnected(true); setConnecting(false); }, 2000);
   };
 
   return (
@@ -33,7 +44,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
         }}
       >
         {/* ── Topbar ── */}
-        <div className="flex items-center gap-[16px] h-[48px] px-[24px] py-[16px] shrink-0" style={{ zIndex: 2 }}>
+        <div className="relative flex items-center gap-[16px] h-[48px] px-[24px] py-[16px] shrink-0" style={{ zIndex: 20 }}>
           <div className="flex-1 min-w-0">
             <ThreadSwitcherDropdown
               activeId={activeConversationId}
@@ -50,7 +61,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
                       />
                       <div
                         className="absolute -bottom-[1px] right-[-3px] size-[10px] rounded-full border-[1.5px] border-white"
-                        style={{ background: 'var(--main-m1, #49A3A6)' }}
+                        style={{ background: agentConnected ? 'var(--main-m1, #49A3A6)' : 'rgba(0,0,0,0.3)' }}
                       />
                     </div>
                     <div className="flex gap-[4px] items-center min-w-0">
@@ -96,37 +107,78 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
         </div>
 
         {/* ── Chat Body ── */}
-        <div className="flex flex-col flex-1 items-center min-h-0 pb-[8px] px-[8px] relative" style={{ zIndex: 1 }}>
-          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full pt-[12px] pb-[64px] px-[16px]">
-            <ChatMessages conversationId={activeConversationId} hasContent={hasInitialInput} />
-          </div>
-
-          {/* ── Bottom area: plan replaces input; others float above input ── */}
-          {overlay && overlay.type === 'plan' && overlay.plan ? (
-            <div className="w-full shrink-0">
-              <ReviewPlanCard data={overlay.plan} onApprove={dismissOverlay} />
+        {agentConnected || activeConversationId !== AGENT_CONVERSATION_ID ? (
+          <div className="flex flex-col flex-1 items-center min-h-0 pb-[8px] px-[8px] relative" style={{ zIndex: 1 }}>
+            <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full pt-[12px] pb-[64px] px-[16px]">
+              <ChatMessages conversationId={activeConversationId} hasContent={hasInitialInput} />
             </div>
-          ) : (
-            <>
-              {/* Todo list / Answer float above input */}
-              {overlay && overlay.type === 'todos' && overlay.todos && (
-                <div className="w-full px-[8px] pb-[8px] shrink-0">
-                  <TodoListCard data={overlay.todos} />
+
+            {/* ── Bottom area: plan replaces input; others float above input ── */}
+            {overlay && overlay.type === 'plan' && overlay.plan ? (
+              <div className="w-full shrink-0">
+                <ReviewPlanCard data={overlay.plan} onApprove={dismissOverlay} />
+              </div>
+            ) : (
+              <>
+                {overlay && overlay.type === 'todos' && overlay.todos && (
+                  <div className="w-full px-[8px] pb-[8px] shrink-0">
+                    <TodoListCard data={overlay.todos} />
+                  </div>
+                )}
+                {overlay && overlay.type === 'answer' && overlay.answer && (
+                  <div className="w-full px-[8px] pb-[8px] shrink-0">
+                    <AnswerQuestionCard
+                      data={overlay.answer}
+                      onSelect={() => dismissOverlay()}
+                      onSkip={dismissOverlay}
+                    />
+                  </div>
+                )}
+                <ChatInput contextTag={contextTag} onSend={sendPrompt} />
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="relative flex flex-1 min-h-0 overflow-hidden" style={{ background: '#ffffff', zIndex: 0 }}>
+            <DotMatrixWave
+              enableHover={false}
+              bgColor="#ffffff"
+              dotColor="#d1e0e0"
+              waveSpeed={0.6}
+              className="absolute inset-0 pointer-events-none w-full h-full"
+            />
+            <div className="relative flex-1 flex flex-col items-center justify-center px-[24px]">
+              {connecting ? (
+                <div className="flex flex-col items-center gap-[20px]">
+                  <AlvaLoading size={36} />
+                  <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n5)]">
+                    Connecting to Telegram...
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-[20px]">
+                  <img src={`${import.meta.env.BASE_URL}logo-portrait.svg`} alt="Alva Agent" className="rounded-full" style={{ width: 48, height: 48 }} />
+                  <div className="flex flex-col items-center gap-[8px] text-center">
+                    <p className="font-['Delight',sans-serif] text-[20px] leading-[30px] tracking-[0.2px] text-[var(--text-n9)]">
+                      Connect Alva Agent
+                    </p>
+                    <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n5)]">
+                      Connect Telegram to start chatting with your agent.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleConnect}
+                    className="flex items-center justify-center gap-[8px] h-[48px] px-[20px] font-['Delight',sans-serif] font-medium text-[14px] leading-[22px] tracking-[0.14px] text-white cursor-pointer transition-opacity hover:opacity-90"
+                    style={{ background: '#26A5E4', borderRadius: 8, border: 'none' }}
+                  >
+                    Connect Telegram
+                  </button>
                 </div>
               )}
-              {overlay && overlay.type === 'answer' && overlay.answer && (
-                <div className="w-full px-[8px] pb-[8px] shrink-0">
-                  <AnswerQuestionCard
-                    data={overlay.answer}
-                    onSelect={() => dismissOverlay()}
-                    onSkip={dismissOverlay}
-                  />
-                </div>
-              )}
-              <ChatInput contextTag={contextTag} onSend={sendPrompt} />
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

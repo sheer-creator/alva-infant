@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import type { Page } from '@/app/App';
 import { SettingsLayout } from '@/app/components/shell/SettingsLayout';
+import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
 
 const FONT = "'Delight', sans-serif";
 
@@ -19,8 +20,13 @@ function TelegramMark({ size = 40 }: { size?: number }) {
   );
 }
 
+const PLATFORMS: { id: AgentPlatform; name: string; handle: string; render: () => React.ReactNode }[] = [
+  { id: 'telegram', name: 'Telegram', handle: 'Sheerruan', render: () => <TelegramMark size={40} /> },
+  { id: 'discord', name: 'Discord', handle: 'sheerruan', render: () => <img src={`${import.meta.env.BASE_URL}logo-social-discord.svg`} alt="Discord" style={{ width: 40, height: 40, borderRadius: '50%' }} /> },
+];
+
 export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const [connected, setConnected] = useState(() => localStorage.getItem('agentConnected') === '1');
+  const { has, toggle } = useAgentPlatforms();
   const [prompt, setPrompt] = useState('');
   const dirty = prompt.trim().length > 0;
 
@@ -33,25 +39,34 @@ export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: P
       <div className="flex flex-col gap-[12px]">
         <div>
           <p className="text-[16px] leading-[26px] tracking-[0.16px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>Connected App</p>
-          <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>Choose the messaging app for your Alva Agent (single platform).</p>
+          <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>Connect one or more messaging apps to chat with your Alva Agent anywhere.</p>
         </div>
-        <div className="flex items-center gap-[16px] px-[20px] py-[16px] rounded-[8px]" style={{ background: 'rgba(0,0,0,0.02)' }}>
-          <TelegramMark size={52} />
-          <div className="flex-1 min-w-0">
-            <p className="text-[16px] leading-[26px] font-regular" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>Telegram</p>
-            <p className="text-[14px] leading-[22px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>Sheerruan</p>
-          </div>
-          <button
-            onClick={() => setConnected(v => {
-              if (v) localStorage.removeItem('agentConnected');
-              else localStorage.setItem('agentConnected', '1');
-              return !v;
-            })}
-            className="text-[14px] leading-[22px] cursor-pointer"
-            style={{ color: connected ? 'rgba(0,0,0,0.5)' : '#49a3a6', background: 'none', border: 'none', fontFamily: FONT, fontWeight: 400 }}
-          >
-            {connected ? 'Disconnect' : 'Connect'}
-          </button>
+        <div className="flex flex-col gap-[var(--spacing-m)]">
+          {PLATFORMS.map(p => {
+            const isActive = has(p.id);
+            return (
+              <div
+                key={p.id}
+                className="flex items-center gap-[16px] px-[20px] py-[16px] rounded-[8px]"
+                style={{ background: 'rgba(0,0,0,0.02)' }}
+              >
+                {p.render()}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[16px] leading-[26px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{p.name}</p>
+                  {isActive && (
+                    <p className="text-[14px] leading-[22px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>{p.handle}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => toggle(p.id)}
+                  className="text-[14px] leading-[22px] cursor-pointer"
+                  style={{ color: isActive ? 'rgba(0,0,0,0.5)' : '#49a3a6', background: 'none', border: 'none', fontFamily: FONT, fontWeight: 400 }}
+                >
+                  {isActive ? 'Disconnect' : 'Connect'}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
 

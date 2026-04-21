@@ -3,6 +3,7 @@ import type { Page } from '@/app/App';
 import { CdnIcon } from '../shared/CdnIcon';
 import { Avatar } from '../shared/Avatar';
 import { PlaybookInfoPopup } from '../community/PlaybookInfoPopup';
+import { useAgentConnected } from '@/lib/agent-connected';
 
 interface TopbarProps {
   title: string;
@@ -141,6 +142,8 @@ export function Topbar({
   const [headerOpen, setHeaderOpen] = useState(false);
   const [starred, setStarred] = useState(false);
   const [starPopupOpen, setStarPopupOpen] = useState(false);
+  const [agentConnected] = useAgentConnected();
+  const [notifyEnabled, setNotifyEnabled] = useState(true);
   const remixWrapRef = useRef<HTMLDivElement>(null);
   const starWrapRef = useRef<HTMLDivElement>(null);
   const headerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -288,28 +291,48 @@ export function Topbar({
               role="dialog"
               aria-label="Starred"
             >
-              {/* Telegram CTA card */}
-              <div
-                className="flex flex-col gap-[12px] items-center justify-center w-full px-[20px] py-[24px] rounded-[var(--radius-ct-l)]"
-                style={{ backgroundColor: 'var(--b-r02)' }}
-              >
-                <img
-                  src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg"
-                  alt="Telegram"
-                  className="size-[40px] shrink-0"
-                />
-                <p className="w-full text-center font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">
-                  Connect Telegram to Get Notified
-                </p>
-                <button
-                  type="button"
-                  className="flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[var(--radius-btn-m)] px-[20px] py-[9px] font-['Delight',sans-serif] font-medium text-[14px] leading-[22px] tracking-[0.14px] text-white whitespace-nowrap transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: '#24A1DE', border: 'none' }}
+              {agentConnected ? (
+                <div className="flex items-center gap-[8px] w-full">
+                  <p className="flex-1 min-w-0 font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">
+                    Playbook Notification
+                  </p>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={notifyEnabled}
+                    onClick={() => setNotifyEnabled(v => !v)}
+                    className="relative shrink-0 h-[16px] w-[32px] rounded-full overflow-clip transition-colors cursor-pointer"
+                    style={{ backgroundColor: notifyEnabled ? 'var(--main-m1)' : 'rgba(0,0,0,0.2)' }}
+                  >
+                    <span
+                      className="absolute top-1/2 -translate-y-1/2 size-[10.667px] rounded-full bg-white transition-[left] duration-200 ease-out"
+                      style={{ left: notifyEnabled ? 'calc(100% - 10.667px - 2.67px)' : '2.67px' }}
+                    />
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="flex flex-col gap-[12px] items-center justify-center w-full px-[20px] py-[24px] rounded-[var(--radius-ct-l)]"
+                  style={{ backgroundColor: 'var(--b-r02)' }}
                 >
-                  Connect Telegram
-                </button>
-              </div>
-              {/* Starred (click → unstar) */}
+                  <img
+                    src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg"
+                    alt="Telegram"
+                    className="size-[40px] shrink-0"
+                  />
+                  <p className="w-full text-center font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">
+                    Connect Telegram to Get Notified
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => { setStarPopupOpen(false); onNavigate?.('agent'); }}
+                    className="flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[var(--radius-btn-m)] px-[20px] py-[9px] font-['Delight',sans-serif] font-medium text-[14px] leading-[22px] tracking-[0.14px] text-white whitespace-nowrap transition-opacity hover:opacity-90"
+                    style={{ backgroundColor: '#24A1DE', border: 'none' }}
+                  >
+                    Connect Telegram
+                  </button>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={onUnstar}

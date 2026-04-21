@@ -9,6 +9,8 @@ import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDr
 import { Dropdown } from '@/app/components/shared/Dropdown';
 import { CONVERSATIONS } from '@/lib/chat-config';
 import DotMatrixWave from '@/app/components/shared/DotMatrixWave';
+import { Tooltip } from '@/app/components/shared/Tooltip';
+import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
 
 type AgentState = 'empty' | 'connecting' | 'connected';
 
@@ -28,18 +30,8 @@ export const INITIAL_AGENT_MESSAGE: { role: 'agent' | 'user'; text: string } = {
   text: 'Hey! I\'m your Alva Agent, connected via Telegram. I\'m always-on and ready to help with market analysis, portfolio tracking, and playbook execution. What would you like to work on?',
 };
 
-/* ── Telegram SVG icon ── */
-function TelegramIcon({ size = 40 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 240 240" fill="none" style={{ display: 'block' }}>
-      <circle cx="120" cy="120" r="120" fill="#26A5E4" />
-      <path d="M100 144.4l48.4 35.7c5.5 3 9.5 1.5 10.9-5.1l19.7-93c2-8.1-3.1-11.7-8.4-9.3L55.6 113c-7.9 3.2-7.8 7.6-1.4 9.5l36.3 11.4 84.2-53c4-2.4 7.6-1.1 4.6 1.5L100 144.4z" fill="#FFFFFF" />
-    </svg>
-  );
-}
-
 /* ── Empty state ── */
-export function AgentEmptyState({ onConnect }: { onConnect: () => void }) {
+export function AgentEmptyState({ onConnect }: { onConnect: (platform: AgentPlatform) => void }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center min-h-0 relative overflow-hidden" style={{ background: '#F6F6F6' }}>
       <DotMatrixWave
@@ -81,38 +73,56 @@ export function AgentEmptyState({ onConnect }: { onConnect: () => void }) {
           ))}
         </div>
 
-        {/* Connect button */}
+        {/* Connect button — Telegram primary */}
         <button
           className={`${FONT} flex items-center justify-center gap-[8px] text-[14px] leading-[22px] tracking-[0.14px] font-medium text-white cursor-pointer transition-opacity hover:opacity-90`}
           style={{ height: 48, padding: '11px 20px', borderRadius: 8, background: '#26A5E4', border: 'none' }}
-          onClick={onConnect}
+          onClick={() => onConnect('telegram')}
         >
-          <CdnIcon name={`${import.meta.env.BASE_URL}logo-telegram.svg`} size={18} color="#ffffff" />
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.8693 2.23048C17.8693 2.23048 19.6246 1.54575 19.4783 3.20864C19.4295 3.89337 18.9907 6.28986 18.6494 8.88202L17.4793 16.5606C17.4793 16.5606 17.3818 17.6855 16.5042 17.8812C15.6266 18.0768 14.3102 17.1964 14.0664 17.0008C13.8713 16.8541 10.4097 14.6532 9.19079 13.5772C8.84948 13.2838 8.45944 12.6968 9.23954 12.0121L14.3589 7.12132C14.944 6.53442 15.5291 5.16499 13.0913 6.82788L6.26545 11.4742C6.26545 11.4742 5.48535 11.9632 4.02269 11.5231L0.85355 10.5449C0.85355 10.5449 -0.316596 9.81129 1.68238 9.07762C6.558 6.77892 12.5549 4.43132 17.8693 2.23048Z" fill="#ffffff"/>
+          </svg>
           Connect Telegram
         </button>
 
-        {/* Coming Soon */}
+        {/* More channels — Discord active, Slack/WhatsApp coming soon */}
         <div className="flex flex-col items-center gap-[12px]">
           <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
             Same agent, more channels
           </span>
           <div className="flex items-center gap-[8px]">
             {[
-              { name: 'Discord', file: 'logo-social-discord.svg' },
-              { name: 'Slack', file: 'logo-social-slack.svg' },
-              { name: 'WhatsApp', file: 'logo-social-whatsapp.svg' },
-            ].map(p => (
-              <div
-                key={p.name}
-                className="flex items-center gap-[6px] rounded-full"
-                style={{ background: 'var(--grey-g05)', padding: '4px 12px 4px 6px' }}
-              >
-                <img src={`${import.meta.env.BASE_URL}${p.file}`} alt={p.name} style={{ width: 18, height: 18 }} />
-                <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
-                  {p.name}
-                </span>
-              </div>
-            ))}
+              { name: 'Discord', file: 'logo-social-discord.svg', active: true, platform: 'discord' as const, brand: '#5865F2', bg: 'rgba(88, 101, 242, 0.08)', bgHover: 'rgba(88, 101, 242, 0.16)' },
+              { name: 'Slack', file: 'logo-social-slack.svg', active: false },
+              { name: 'WhatsApp', file: 'logo-social-whatsapp.svg', active: false },
+            ].map(p => {
+              const chip = (
+                <button
+                  type="button"
+                  onClick={p.active ? () => onConnect(p.platform!) : undefined}
+                  aria-disabled={!p.active}
+                  onMouseEnter={p.active ? e => { (e.currentTarget as HTMLButtonElement).style.background = p.bgHover!; } : undefined}
+                  onMouseLeave={p.active ? e => { (e.currentTarget as HTMLButtonElement).style.background = p.bg!; } : undefined}
+                  className={`flex items-center gap-[6px] rounded-full border-none transition-colors ${p.active ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                  style={{
+                    background: p.active ? p.bg : 'var(--b-r05)',
+                    padding: '4px 12px 4px 6px',
+                    opacity: p.active ? 1 : 0.5,
+                  }}
+                >
+                  <img src={`${import.meta.env.BASE_URL}${p.file}`} alt={p.name} style={{ width: 18, height: 18 }} />
+                  <span
+                    className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px]`}
+                    style={{ color: p.active ? p.brand : 'var(--text-n5)' }}
+                  >
+                    {p.name}
+                  </span>
+                </button>
+              );
+              return p.active
+                ? <span key={p.name}>{chip}</span>
+                : <Tooltip key={p.name} text="Coming Soon">{chip}</Tooltip>;
+            })}
           </div>
         </div>
       </div>
@@ -132,122 +142,10 @@ function ConnectingState() {
   );
 }
 
-/* ── Settings modal (alva-design Modal spec) ── */
-function AgentSettingsModal({ onClose, onDisconnect }: { onClose: () => void; onDisconnect: () => void }) {
-  const [persona, setPersona] = useState('');
-  const [textareaFocused, setTextareaFocused] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const dirtyRef = useRef(false);
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
-      style={{ background: 'var(--main-m7, rgba(0,0,0,0.6))', padding: '48px 16px' }}
-    >
-      {/* Toast */}
-      <div
-        className="absolute left-1/2 flex items-center gap-[8px] px-[16px] py-[12px] transition-all duration-300"
-        style={{
-          top: 28,
-          transform: `translateX(-50%) translateY(${showToast ? '0' : '-8px'})`,
-          opacity: showToast ? 1 : 0,
-          pointerEvents: 'none',
-          background: 'var(--b0-container, #ffffff)',
-          border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))',
-          borderRadius: 8,
-          boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
-        }}
-      >
-        <CdnIcon name="check-f2" size={20} color="var(--main-m3, #2a9b7d)" />
-        <span className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>
-          Updated successfully
-        </span>
-      </div>
-
-      <div
-        className="flex flex-col w-full max-w-[720px] max-h-[840px] flex-1 rounded-[12px]"
-        style={{ background: 'var(--b0-container, #ffffff)', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))', padding: 28, gap: 20 }}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Modal Title */}
-        <div className="flex items-center justify-between shrink-0" style={{ gap: 12 }}>
-          <p className={`${FONT} text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)] font-medium`}>
-            Agent Settings
-          </p>
-          <div className="shrink-0 cursor-pointer transition-opacity hover:opacity-60" onClick={onClose}>
-            <CdnIcon name="close-l1" size={18} color="var(--text-n9, rgba(0,0,0,0.9))" />
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-h-0 overflow-y-auto flex flex-col" style={{ gap: 20 }}>
-          {/* Connected app */}
-          <div className="flex flex-col" style={{ gap: 12 }}>
-            <div className="flex flex-col" style={{ gap: 4 }}>
-              <p className={`${FONT} text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]`}>
-                Connected App
-              </p>
-              <p className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
-                Choose the messaging app for your Alva Agent (single platform).
-              </p>
-            </div>
-            <div
-              className="flex items-center justify-between rounded-[8px] p-[16px]"
-              style={{ background: 'var(--b-r02, rgba(0,0,0,0.02))' }}
-            >
-              <div className="flex items-center gap-[8px]">
-                <TelegramIcon size={24} />
-                <span className={`${FONT} text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]`}>
-                  Telegram
-                </span>
-              </div>
-              <span
-                className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)] cursor-pointer transition-colors hover:text-[var(--text-n9)]`}
-                onClick={onDisconnect}
-              >
-                Disconnect
-              </span>
-            </div>
-          </div>
-
-          {/* Customize persona */}
-          <div className="flex flex-col flex-1 min-h-0" style={{ gap: 12 }}>
-            <div className="flex flex-col" style={{ gap: 4 }}>
-              <p className={`${FONT} text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]`}>
-                Customize Your Assistant
-              </p>
-              <p className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]`}>
-                Define the personality, tone, and response style.
-              </p>
-            </div>
-            <textarea
-              className={`${FONT} text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] w-full rounded-[8px] p-[16px] outline-none resize-none flex-1`}
-              style={{ background: 'var(--b0-container, #ffffff)', border: `0.5px solid ${textareaFocused ? 'var(--text-n9, rgba(0,0,0,0.9))' : 'var(--line-l2, rgba(0,0,0,0.2))'}`, minHeight: 160, transition: 'border-color 0.15s ease' }}
-              onFocus={() => setTextareaFocused(true)}
-              onBlur={() => {
-                setTextareaFocused(false);
-                if (dirtyRef.current) {
-                  dirtyRef.current = false;
-                  setShowToast(true);
-                  setTimeout(() => setShowToast(false), 2000);
-                }
-              }}
-              placeholder="Define your assistant's identity: name, tone, and response style"
-              value={persona}
-              onChange={e => { setPersona(e.target.value); dirtyRef.current = true; }}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Connected chat UI (supports agent view + inline thread view) ── */
-function AgentChat({ onNavigate, onDisconnect }: { onNavigate: (page: Page) => void; onDisconnect: () => void }) {
+function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
   const [activeView, setActiveView] = useState<'__agent__' | string>('__agent__');
   const [messages, setMessages] = useState([INITIAL_AGENT_MESSAGE]);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const isAgent = activeView === '__agent__';
@@ -317,7 +215,7 @@ function AgentChat({ onNavigate, onDisconnect }: { onNavigate: (page: Page) => v
           {isAgent ? (
             <button
               className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
-              onClick={() => setSettingsOpen(true)}
+              onClick={() => onNavigate('alva-agent')}
             >
               <CdnIcon name="settings-l" size={16} />
             </button>
@@ -389,38 +287,31 @@ function AgentChat({ onNavigate, onDisconnect }: { onNavigate: (page: Page) => v
           )}
         </div>
       </div>
-      {settingsOpen && <AgentSettingsModal onClose={() => setSettingsOpen(false)} onDisconnect={() => { onDisconnect(); setSettingsOpen(false); }} />}
     </div>
   );
 }
 
-const AGENT_CONNECTED_KEY = 'agentConnected';
-
 /* ── Main Agent page ── */
 export default function Agent({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const [state, setState] = useState<AgentState>(() =>
-    localStorage.getItem(AGENT_CONNECTED_KEY) === '1' ? 'connected' : 'empty',
-  );
+  const { platforms, toggle } = useAgentPlatforms();
+  const [connecting, setConnecting] = useState(false);
+  const connected = platforms.length > 0;
+  const state: AgentState = connecting ? 'connecting' : connected ? 'connected' : 'empty';
 
-  const handleConnect = useCallback(() => {
-    setState('connecting');
+  const handleConnect = useCallback((next: AgentPlatform) => {
+    setConnecting(true);
     setTimeout(() => {
-      localStorage.setItem(AGENT_CONNECTED_KEY, '1');
-      setState('connected');
+      toggle(next);
+      setConnecting(false);
     }, 2000);
-  }, []);
-
-  const handleDisconnect = useCallback(() => {
-    localStorage.removeItem(AGENT_CONNECTED_KEY);
-    setState('empty');
-  }, []);
+  }, [toggle]);
 
   return (
     <AppShell activePage="agent" onNavigate={onNavigate}>
       <div className="h-screen flex flex-col bg-white">
         {state === 'empty' && <AgentEmptyState onConnect={handleConnect} />}
         {state === 'connecting' && <ConnectingState />}
-        {state === 'connected' && <AgentChat onNavigate={onNavigate} onDisconnect={handleDisconnect} />}
+        {state === 'connected' && <AgentChat onNavigate={onNavigate} />}
       </div>
     </AppShell>
   );
