@@ -1,0 +1,1112 @@
+import{t as e}from"./index-CmlSaqTJ.js";import{t}from"./AppShell-CdTXvCFK.js";import{t as n}from"./Topbar-DtFEYyfV.js";var r=`<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quality Value 40 — US Large Cap Screener</title>
+<style>
+@layer tokens.static {
+  :root {
+    --b-common-white: #ffffff;
+    --b-common-black: #000000;
+    --main-m1: #49a3a6;
+    --main-m1-10: rgba(73, 163, 166, 0.1);
+    --main-m2: #2196f3;
+    --main-m2-10: rgba(33, 150, 243, 0.1);
+    --main-m3: #2a9b7d;
+    --main-m3-10: rgba(42, 155, 125, 0.1);
+    --main-m4: #e05357;
+    --main-m4-10: rgba(224, 83, 87, 0.1);
+    --main-m5: #e6a91a;
+    --main-m5-10: rgba(230, 169, 26, 0.1);
+    --main-m6: #ff9800;
+    --main-m6-10: rgba(255, 152, 0, 0.1);
+    --main-m7: rgba(0, 0, 0, 0.6);
+    --chart-orange1-main: #ff9800;
+    --chart-orange1-1: #ffbb1c;
+    --chart-orange1-2: #f8cb86;
+    --chart-green1-main: #40a544;
+    --chart-green1-1: #007949;
+    --chart-green1-2: #78c26d;
+    --chart-green2-main: #8fc13a;
+    --chart-blue1-main: #3d8bd1;
+    --chart-blue1-1: #005daf;
+    --chart-blue1-2: #88b7e0;
+    --chart-purple1-main: #5f75c9;
+    --chart-purple1-1: #3a52be;
+    --chart-purple1-2: #9ab1d7;
+    --chart-purple2-main: #7474d8;
+    --chart-violet1-main: #a878dc;
+    --chart-red1-main: #c76466;
+    --chart-pink1-main: #dc7aa5;
+    --chart-cyan1-1: #117a7d;
+    --chart-cyan2-main: #7cafad;
+    --chart-grey-main: #838383;
+    --spacing-xxxs: 2px;
+    --spacing-xxs: 4px;
+    --spacing-xs: 8px;
+    --spacing-s: 12px;
+    --spacing-m: 16px;
+    --spacing-l: 20px;
+    --spacing-xl: 24px;
+    --spacing-xxl: 28px;
+    --spacing-xxxl: 32px;
+    --spacing-xxxxl: 40px;
+    --spacing-xxxxxl: 48px;
+    --spacing-xxxxxxl: 56px;
+    --radius-ct-xs: 2px;
+    --radius-ct-s: 4px;
+    --radius-ct-m: 6px;
+    --radius-ct-l: 8px;
+    --radius-pop-dropdown: 8px;
+    --shadow-xs: 0 4px 15px 0 rgba(0,0,0,0.05);
+    --shadow-s: 0 6px 20px 0 rgba(0,0,0,0.04);
+    --shadow-l: 0 10px 20px 0 rgba(0,0,0,0.08);
+  }
+}
+@layer tokens.theme {
+  [data-theme="light"], :root {
+    --text-n9: rgba(0,0,0,0.9);
+    --text-n7: rgba(0,0,0,0.7);
+    --text-n5: rgba(0,0,0,0.5);
+    --text-n3: rgba(0,0,0,0.3);
+    --text-n2: rgba(0,0,0,0.2);
+    --b0-page: #ffffff;
+    --b0-container: #ffffff;
+    --grey-g01: #fafafa;
+    --grey-g02: #f5f5f5;
+    --grey-g03: #f0f0f0;
+    --grey-g05: #eaeaea;
+    --grey-g1: #dedede;
+    --b-r02: rgba(0,0,0,0.02);
+    --b-r03: rgba(0,0,0,0.03);
+    --b-r05: rgba(0,0,0,0.05);
+    --b-r07: rgba(0,0,0,0.07);
+    --b-r1: rgba(0,0,0,0.1);
+    --line-l07: rgba(0,0,0,0.07);
+    --line-l05: rgba(0,0,0,0.05);
+    --line-l12: rgba(0,0,0,0.12);
+    --line-l2: rgba(0,0,0,0.2);
+    --line-l3: rgba(0,0,0,0.3);
+    --shadow-xs: 0 4px 15px 0 rgba(0,0,0,0.05);
+    --shadow-s: 0 6px 20px 0 rgba(0,0,0,0.04);
+    --shadow-l: 0 10px 20px 0 rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --text-n9: rgba(255,255,255,0.9);
+    --text-n7: rgba(255,255,255,0.7);
+    --text-n5: rgba(255,255,255,0.5);
+    --text-n3: rgba(255,255,255,0.3);
+    --text-n2: rgba(255,255,255,0.2);
+    --b0-page: #15161a;
+    --b0-container: #15161a;
+    --grey-g01: #1a1b1f;
+    --grey-g02: #1c1d21;
+    --grey-g03: #212225;
+    --grey-g05: #25262a;
+    --grey-g1: #2c2d31;
+    --b-r02: rgba(255,255,255,0.02);
+    --b-r03: rgba(255,255,255,0.03);
+    --b-r05: rgba(255,255,255,0.05);
+    --b-r07: rgba(255,255,255,0.07);
+    --b-r1: rgba(255,255,255,0.1);
+    --line-l07: rgba(255,255,255,0.08);
+    --line-l05: rgba(255,255,255,0.05);
+    --line-l12: rgba(255,255,255,0.1);
+    --line-l2: rgba(255,255,255,0.15);
+    --line-l3: rgba(255,255,255,0.25);
+    --shadow-xs: 0 4px 15px 0 rgba(0,0,0,0.25);
+    --shadow-s: 0 6px 20px 0 rgba(0,0,0,0.24);
+    --shadow-l: 0 10px 20px 0 rgba(0,0,0,0.2);
+  }
+}
+
+@font-face { font-family: 'Delight'; src: url('https://alva-ai-static.b-cdn.net/fonts/Delight-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Delight'; src: url('https://alva-ai-static.b-cdn.net/fonts/Delight-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+
+body {
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background: var(--b0-page);
+  color: var(--text-n9);
+}
+
+/* ── Playbook Container ── */
+.playbook-container {
+  width: 100%; max-width: 2048px; margin: 0 auto;
+  padding: var(--spacing-m) var(--spacing-xxl) var(--spacing-xxxxl);
+}
+@media (max-width: 768px) { .playbook-container { padding: var(--spacing-m); } }
+
+/* ── Header ── */
+.playbook-header { display:flex; align-items:center; flex-wrap:wrap; row-gap: var(--spacing-xs); }
+.playbook-title { font-size:24px; font-weight:400; line-height:34px; color:var(--text-n9); margin:0; white-space:nowrap; }
+.header-meta { margin-left:auto; display:flex; align-items:center; gap: var(--spacing-xs); flex-wrap:wrap; font-size:12px; color:var(--text-n5); }
+.header-meta .refresh-badge { display:inline-flex; align-items:center; gap:6px; background: var(--main-m1-10); color:var(--main-m1); padding:0 10px; border-radius: var(--radius-ct-s); height:28px; font-size:12px; }
+.header-meta .refresh-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--main-m3); animation:pulse 2s ease-in-out infinite; }
+.header-meta .last-updated { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line-l07); color:var(--text-n5); padding:0 10px; border-radius: var(--radius-ct-s); height:28px; font-size:12px; }
+.header-meta .last-updated::before { content:''; display:inline-block; width:6px; height:6px; background:var(--main-m3); border-radius:50%; }
+.playbook-desc { margin-top: var(--spacing-xs); font-size:14px; line-height:22px; letter-spacing:0.14px; color:var(--text-n5); }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* ── Tab Bar ── */
+.main-wrapper { display: flex; flex-direction: column; flex: 1; padding: 0; }
+.tab-bar-wrapper { position: sticky; top: 0; z-index: 100; background: var(--b0-page); padding-top: var(--spacing-xl); border-bottom: 1px solid var(--line-l07); }
+@media (max-width: 768px) { .tab-bar-wrapper { padding-top: var(--spacing-m); } .main-wrapper { padding: 0; } }
+.tab { display: flex; align-items: center; }
+.tab-item { font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif; cursor: pointer; transition: all 0.15s ease; }
+.tab-item::after { content: attr(data-text); font-weight: 500; visibility: hidden; height: 0; display: block; overflow: hidden; }
+.tab-underline { gap: 16px; }
+.tab-underline .tab-item { padding-bottom: 6px; font-size: 14px; line-height: 22px; letter-spacing: 0.14px; color: var(--text-n7); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab-underline .tab-item.active { color: var(--text-n9); font-weight: 500; border-bottom-color: var(--main-m1); }
+
+.tab-panel { display: flex; flex-direction: column; gap: var(--spacing-xl); padding-top: var(--spacing-xl); }
+
+/* ── Snapshot Picker ── */
+.tab-bar-row { display: flex; align-items: flex-end; justify-content: space-between; }
+@media (max-width: 768px) { .tab-bar-row { flex-wrap: wrap; gap: var(--spacing-xs); } }
+
+.filter-dropdown { position:relative; display:inline-flex; align-items:center; }
+.filter-dropdown-trigger { background:transparent; border:none; border-radius:0; padding:0 0 6px 0; margin-bottom: var(--spacing-xxxs); font-size:12px; color:var(--text-n9); line-height:20px; cursor:pointer; display:inline-flex; align-items:center; gap: var(--spacing-xs); transition:color .15s; }
+.filter-dropdown-trigger:hover, .filter-dropdown.open .filter-dropdown-trigger { color:var(--main-m1); }
+.filter-dropdown-label { color:var(--text-n5); font-size:12px; }
+.filter-dropdown-value { color:var(--text-n9); flex:1; display:inline-flex; align-items:baseline; gap:6px; }
+.filter-dropdown-value-sub { font-size:11px; color:var(--text-n5); }
+.filter-dropdown-caret { display:inline-block; width:12px; height:12px; background-color:var(--text-n2); -webkit-mask:url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') no-repeat center / contain; mask:url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') no-repeat center / contain; transition:transform .15s, background-color .15s; }
+.filter-dropdown.open .filter-dropdown-caret { transform:rotate(180deg); background-color:var(--main-m1); }
+.filter-dropdown-menu { position:absolute; top:calc(100% + 6px); right:0; min-width:220px; background:var(--b0-container); border:0.5px solid var(--line-l2); border-radius:var(--radius-pop-dropdown); box-shadow:var(--shadow-s); padding: var(--spacing-xxs); z-index:100; display:none; }
+.filter-dropdown.open .filter-dropdown-menu { display:block; }
+.filter-dropdown-item { display:flex; align-items:baseline; justify-content:space-between; padding: var(--spacing-xs) var(--spacing-s); font-size:14px; color:var(--text-n9); line-height:22px; background:transparent; border:none; cursor:pointer; width:100%; border-radius: var(--radius-ct-s); text-align:left; }
+.filter-dropdown-item:hover { background:var(--grey-g01); }
+.filter-dropdown-item.active { background: var(--main-m1-10); color:var(--main-m1); }
+.filter-dropdown-item-sub { font-size:11px; color:var(--text-n5); margin-left: var(--spacing-s); }
+
+/* ── Widget Base ── */
+.widget-card { background: transparent; display: flex; flex-direction: column; position: relative; overflow: visible; }
+.widget-card:has(.chart-body) { overflow: hidden; }
+.widget-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-m); }
+.widget-title-text { font-size: 16px; font-weight: 400; color: var(--text-n9); letter-spacing: 0.16px; line-height: 26px; }
+.widget-timestamp { display: flex; align-items: center; gap: var(--spacing-xxs); font-size: 12px; color: var(--text-n5); line-height: 20px; }
+.widget-body { display: flex; align-items: center; justify-content: space-between; border-radius: var(--radius-ct-s); }
+.alva-watermark { position: absolute; bottom: var(--spacing-m); right: var(--spacing-m); opacity: 0.2; line-height: 0; }
+.chart-dotted-background { background-image: radial-gradient(circle, rgba(0,0,0,0.18) 0.6px, transparent 0.6px); background-size: 3px 3px; }
+[data-theme="dark"] .chart-dotted-background { background-image: radial-gradient(circle, rgba(255,255,255,0.12) 0.6px, transparent 0.6px); }
+.chart-body { flex: 1; padding: var(--spacing-m); position: relative; }
+.chart-legend { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-xs); height: 16px; margin-bottom: var(--spacing-xxs); }
+.legend-item { display: flex; align-items: center; gap: var(--spacing-xxs); font-size: 10px; color: var(--text-n5); }
+.legend-line { width: 12px; height: 2px; border-radius: 0.5px; }
+.legend-rect { width: 8px; height: 8px; border-radius: 0.5px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── Table Card (per Alva spec) ── */
+.table-card { display: flex; flex-direction: column; width: 100%; isolation: isolate; overflow-x: auto; }
+.table-row { display: flex; width: 100%; gap: var(--spacing-m); border-bottom: 1px solid var(--line-l07); }
+.table-row:last-child { border-bottom: none; }
+.table-cell { font-size: 14px; line-height: 22px; letter-spacing: 0.14px; font-weight: 400; white-space: nowrap; display: flex; align-items: center; }
+.table-header .table-cell { color: var(--text-n7); padding: 0 0 12px 0; }
+.table-body-row .table-cell { color: var(--text-n9); padding: 12px 0; max-height: 180px; }
+
+/* ── Widget Grid ── */
+.widget-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--spacing-xl); align-items: stretch; }
+.col-4 { grid-column: span 4; }
+.col-8 { grid-column: span 8; }
+@media (max-width: 768px) { .widget-grid { grid-template-columns: repeat(4, 1fr); gap: var(--spacing-l); } .col-4, .col-8 { grid-column: span 4; } }
+
+/* ── Ranked Table expand behavior (spec-compliant table + expand feature) ── */
+#rankings-table .table-row.expandable { cursor: pointer; position: relative; }
+#rankings-table .table-row.expandable::after { content: ''; position: absolute; inset: 0; background: transparent; pointer-events: none; transition: background .15s; }
+#rankings-table .table-row.expandable:hover::after { background: var(--b-r02); }
+#rankings-table .table-row.expandable.open { border-bottom-color: transparent; }
+#rankings-table .expand-panel { padding: var(--spacing-xl) 0 var(--spacing-xxl); border-bottom: 1px solid var(--line-l07); }
+#rankings-table > .table-body > .table-row:last-child,
+#rankings-table > .table-body > .expand-panel:last-child { border-bottom: none; }
+
+/* Per-column cell modifiers (use classes, not inline, so alignment JS can reset cleanly) */
+#rankings-table .cell-rank { color: var(--text-n5); }
+#rankings-table .cell-ticker { font-weight: 500; color: var(--main-m1); }
+#rankings-table .cell-caret { justify-content: center; }
+.expand-caret { display:inline-block; width:12px; height:12px; background-color: var(--text-n3); -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') no-repeat center / contain; mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') no-repeat center / contain; transition: transform .2s, background-color .15s; }
+.table-row.expandable.open .expand-caret { transform: rotate(180deg); }
+.expand-panel .widget-title-text { font-size: 14px; letter-spacing: 0.14px; }
+.expand-panel { display: none; }
+.expand-panel.open { display: block; }
+
+/* ── Score Bar ── */
+.score-cell { display:flex; align-items:center; gap: var(--spacing-xxs); }
+.score-bar-track { width: 64px; height: 4px; background: var(--line-l07); border-radius: var(--radius-ct-xs); overflow: hidden; flex-shrink: 0; }
+.score-bar-fill { height: 100%; border-radius: var(--radius-ct-xs); transition: width .4s; }
+.score-value { font-size: 14px; min-width: 24px; letter-spacing: 0.14px; }
+
+/* ── Band Pill / Delta Tag / Flag Pill ── */
+.band-pill, .flag-pill, .delta-tag { display:inline-flex; align-items:center; justify-content:center; font-weight:400; white-space:nowrap; min-width:40px; padding:1px 6px; font-size:12px; line-height:20px; letter-spacing:0.12px; border-radius: var(--radius-ct-s); }
+.band-pill.elite   { background: var(--main-m3-10); color: var(--main-m3); }
+.band-pill.strong  { background: var(--main-m1-10); color: var(--main-m1); }
+.band-pill.average { background: var(--main-m5-10); color: var(--main-m5); }
+.band-pill.weak    { background: var(--main-m4-10); color: var(--main-m4); }
+.delta-tag { gap: var(--spacing-xxxs); }
+.delta-up   { background: var(--main-m3-10); color: var(--main-m3); }
+.delta-down { background: var(--main-m4-10); color: var(--main-m4); }
+.delta-flat { background: var(--b-r05);      color: var(--text-n5); }
+.delta-new  { background: var(--main-m1-10); color: var(--main-m1); }
+.flag-pill { gap: var(--spacing-xxs); }
+.flag-pill.clean { background: var(--b-r05);      color: var(--text-n5); }
+.flag-pill.soft  { background: var(--main-m5-10); color: var(--main-m5); }
+.flag-pill.hard  { background: var(--main-m4-10); color: var(--main-m4); }
+
+/* ── Factor Breakdown ── */
+.breakdown-title { font-size:12px; color:var(--text-n5); margin-bottom: var(--spacing-s); }
+.breakdown-row { display:flex; align-items:center; padding: var(--spacing-xs) 0; font-size:14px; gap: var(--spacing-s); border-bottom:1px solid var(--line-l05); }
+.breakdown-row:last-child { border-bottom:none; }
+.breakdown-name { width:110px; color:var(--text-n9); }
+.breakdown-bar  { flex:1; height:6px; background:var(--line-l07); border-radius:3px; overflow:hidden; min-width:60px; }
+.breakdown-bar-fill { height:100%; border-radius:3px; transition: width .5s; }
+.breakdown-raw { width:72px; text-align:right; color:var(--text-n7); font-size:12px; font-variant-numeric:tabular-nums; }
+.breakdown-pts { width:68px; text-align:right; color:var(--text-n9); font-size:12px; font-variant-numeric:tabular-nums; }
+
+/* ── Gauge Ring (expand panel) ── */
+.expand-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--spacing-xl); }
+.expand-col-4 { grid-column: span 4; }
+.expand-col-8 { grid-column: span 8; }
+@media (max-width: 768px) { .expand-grid { grid-template-columns: 1fr; } .expand-col-4, .expand-col-8 { grid-column: span 1; } }
+
+/* ── Flag Card ── */
+.flag-cards { margin-top: var(--spacing-xl); display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacing-xs); }
+.flag-card { background: var(--grey-g01); border-radius: var(--radius-ct-l); padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) calc(var(--spacing-m) + 3px); font-size:12px; line-height:20px; position: relative; overflow: hidden; }
+.flag-card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:3px; }
+.flag-card.hard::before { background: var(--main-m4); }
+.flag-card.soft::before { background: var(--main-m5); }
+.flag-card-title { font-size:12px; margin-bottom: var(--spacing-xxs); display:flex; align-items:center; gap: var(--spacing-xxs); }
+.flag-card.hard .flag-card-title { color: var(--main-m4); }
+.flag-card.soft .flag-card-title { color: var(--main-m5); }
+.flag-card-body { color: var(--text-n7); margin-top: var(--spacing-xxs); }
+
+/* ── Methodology ── */
+.method-section { margin-bottom: var(--spacing-xl); }
+.method-section:last-child { margin-bottom: 0; }
+.method-section h3 { font-size:16px; font-weight:400; color: var(--text-n9); line-height:22px; letter-spacing:0.16px; margin-bottom: var(--spacing-m); }
+.method-body { background: var(--grey-g01); border-radius: var(--radius-ct-l); padding: var(--spacing-l); }
+.method-body > *:first-child { margin-top: 0; }
+.method-body > *:last-child  { margin-bottom: 0; }
+.method-section p { font-size:14px; color: var(--text-n9); line-height:22px; margin-bottom: var(--spacing-xs); letter-spacing: 0.14px; }
+.factor-row { display:flex; align-items:center; gap: var(--spacing-m); padding: var(--spacing-s) 0; border-bottom:1px solid var(--line-l05); width:100%; box-sizing:border-box; }
+.factor-row:first-child { padding-top: 0; }
+.factor-row:last-child  { border-bottom: none; padding-bottom: 0; }
+.factor-name { width:160px; font-size:14px; color: var(--text-n9); flex-shrink:0; }
+.factor-weight-label { width:40px; font-size:14px; color: var(--text-n7); text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; }
+.factor-bar-track { flex:1; height:6px; background: var(--line-l07); border-radius:3px; overflow:hidden; }
+.factor-bar-fill  { height:100%; border-radius:3px; }
+.factor-desc { font-size:13px; color: var(--text-n5); line-height:22px; }
+.band-row .factor-name { width:72px; }
+.band-row .factor-weight-label { width:60px; text-align:left; color: var(--text-n9); }
+.band-row .factor-desc { flex:1; }
+.method-label { font-size:14px; font-weight:500; line-height:22px; margin-bottom: var(--spacing-xs); color: var(--text-n9); }
+.method-label.hard { color: var(--main-m4); }
+.method-block { margin-bottom: var(--spacing-m); }
+.method-block:last-child { margin-bottom: 0; }
+.method-code { font-family:'JetBrains Mono', monospace; font-size:12px; line-height:20px; color: var(--text-n7); margin-top: var(--spacing-m); }
+.method-limit-list { list-style:none; padding:0; margin:0; }
+.method-limit-list li { font-size:13px; color: var(--text-n7); line-height:20px; padding: var(--spacing-xs) 0 var(--spacing-xs) var(--spacing-l); border-bottom:1px solid var(--line-l05); position:relative; }
+.method-limit-list li:first-child { padding-top: 0; }
+.method-limit-list li:last-child  { border-bottom: none; padding-bottom: 0; }
+.method-limit-list li::before { content:'\\2014'; position:absolute; left:0; color: var(--text-n5); }
+
+/* ── Worked Example ── */
+.worked-example { background: var(--b0-container); padding: var(--spacing-m); border-radius: var(--radius-ct-l); margin-top: var(--spacing-s); }
+.worked-example-header { display:flex; align-items:baseline; gap: var(--spacing-xs); margin-bottom: var(--spacing-s); flex-wrap: wrap; }
+.worked-example-ticker { font-size:18px; color: var(--main-m1); line-height:28px; }
+.worked-example-score { font-size:13px; color: var(--text-n7); }
+.worked-example-rows { font-family:'JetBrains Mono', monospace; font-size:12px; line-height:20px; color: var(--text-n7); }
+.worked-example-total { font-family:'JetBrains Mono', monospace; font-size:13px; color: var(--text-n9); padding-top: var(--spacing-s); margin-top: var(--spacing-s); border-top: 1px solid var(--line-l05); }
+.worked-example-verify { font-size:12px; margin-top: var(--spacing-s); padding: var(--spacing-xs) var(--spacing-s); border-radius: var(--radius-ct-s); background: var(--main-m3-10); color: var(--main-m3); display:inline-flex; align-items:center; gap: var(--spacing-xxs); line-height:20px; }
+
+/* ── Analysis ── */
+.analysis-caption { font-size:12px; color: var(--text-n5); line-height:20px; margin-bottom: var(--spacing-m); letter-spacing: 0.12px; }
+.analysis-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-xl); }
+@media (max-width: 1280px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+/* ── Markdown ── */
+.markdown-container { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+.markdown-container * { box-sizing: border-box; }
+.markdown-container h4, .markdown-container h5, .markdown-container h6 { font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 500; font-style: normal; color: var(--text-n9); margin: 0; width: 100%; font-size: 16px; line-height: 26px; letter-spacing: 0.16px; }
+.markdown-container p { font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; line-height: 26px; letter-spacing: 0.16px; color: var(--text-n9); margin: 0; white-space: pre-wrap; }
+.markdown-container ul, .markdown-container ol { display: flex; flex-direction: column; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.markdown-container li { font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; line-height: 26px; letter-spacing: 0.16px; color: var(--text-n9); position: relative; padding-left: 24px; }
+.markdown-container ul > li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--text-n9); position: absolute; left: 0; top: 10.5px; }
+.markdown-container code { display: inline-block; vertical-align: middle; background: var(--b-r02); border-radius: 2px; font-family: 'JetBrains Mono', monospace; color: var(--text-n7); box-shadow: inset 0 0 0 1px var(--line-l07); font-size: 12px; line-height: 20px; letter-spacing: 0.12px; padding: 2px 8px; margin: 0 4px; }
+
+/* ── Free Text Card ── */
+.free-text-body { padding: var(--spacing-l); }
+
+</style>
+</head>
+<body>
+<div class="playbook-container">
+  <!-- ── Header ── -->
+  <div class="playbook-header">
+    <h1 class="playbook-title">Quality Value 40</h1>
+    <div class="header-meta">
+      <span class="last-updated">Apr 20, 2026 EST</span>
+      <span class="refresh-badge">Refreshes Weekly EST</span>
+    </div>
+  </div>
+  <div class="playbook-desc">
+    Screens the top 500 US large-cap stocks (market cap &gt; $5B) through three hard filters — P/E between 3 and 25, ROE &gt; 0%, and D/E ≤ 2 — then ranks survivors by a Value 40% + Quality 40% + Safety 20% composite score. The final list holds the top 40 names. Data sourced from fundamental providers; refreshed weekly.
+  </div>
+
+  <!-- ── Main Wrapper ── -->
+  <div class="main-wrapper">
+    <!-- Tab Bar -->
+    <div class="tab-bar-wrapper">
+      <div class="tab-bar-row">
+        <div class="tab tab-underline" data-tab-group="main">
+          <div class="tab-item active" data-tab="overview" data-text="Overview">Overview</div>
+          <div class="tab-item" data-tab="analysis" data-text="Analysis">Analysis</div>
+          <div class="tab-item" data-tab="methodology" data-text="Methodology">Methodology</div>
+        </div>
+        <div class="filter-dropdown" id="snapshot-picker">
+          <button class="filter-dropdown-trigger" onclick="this.parentElement.classList.toggle('open')">
+            <span class="filter-dropdown-label">Date</span>
+            <span class="filter-dropdown-value">Today, Apr 20 EST</span>
+            <span class="filter-dropdown-caret"></span>
+          </button>
+          <div class="filter-dropdown-menu">
+            <button class="filter-dropdown-item active" onclick="selectSnapshot(this)">Today, Apr 20 EST</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ Tab 1: Overview ══════════ -->
+    <div class="tab-panel" data-tab-panel="overview" data-tab-group="main">
+
+      <!-- Ranked Table -->
+      <div class="widget-card">
+        <div class="widget-title">
+          <span class="widget-title-text">Ranked List — Top 40</span>
+          <span class="widget-timestamp">40 stocks · 3 hard filters · composite score</span>
+        </div>
+        <div class="table-card" id="rankings-table">
+          <!-- Header -->
+          <div class="table-row table-header">
+            <div class="table-cell">#</div>
+            <div class="table-cell">Ticker</div>
+            <div class="table-cell">Score</div>
+            <div class="table-cell">Band</div>
+            <div class="table-cell">Sector</div>
+            <div class="table-cell">P/E</div>
+            <div class="table-cell">ROE</div>
+            <div class="table-cell">D/E</div>
+            <div class="table-cell">Mkt Cap</div>
+            <div class="table-cell">Flag</div>
+            <div class="table-cell"></div>
+          </div>
+          <!-- Body (generated by JS) -->
+          <div class="table-body" id="rankings-body"></div>
+        </div>
+      </div>
+
+    </div><!-- /overview -->
+
+    <!-- ══════════ Tab 2: Analysis ══════════ -->
+    <div class="tab-panel" data-tab-panel="analysis" data-tab-group="main" style="display:none;">
+
+      <div class="analysis-grid">
+        <!-- Sector Distribution -->
+        <div class="widget-card">
+          <div class="widget-title">
+            <span class="widget-title-text">Average Score by Sector</span>
+          </div>
+          <div class="analysis-caption">Horizontal bars show the mean composite score of stocks in each sector that passed all hard filters. Bar color reflects the score band.</div>
+          <div class="chart-body chart-dotted-background" style="border-radius:var(--radius-ct-l);">
+            <div id="chart-sector" style="width:100%;height:320px;"></div>
+            <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
+          </div>
+        </div>
+
+        <!-- Score Distribution -->
+        <div class="widget-card">
+          <div class="widget-title">
+            <span class="widget-title-text">Score Distribution</span>
+          </div>
+          <div class="analysis-caption">Histogram of composite scores across the top 40. A right-skewed distribution indicates most stocks are strong or elite quality.</div>
+          <div class="chart-body chart-dotted-background" style="border-radius:var(--radius-ct-l);">
+            <div id="chart-dist" style="width:100%;height:320px;"></div>
+            <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
+          </div>
+        </div>
+
+        <!-- Value vs Quality Scatter -->
+        <div class="widget-card" style="grid-column: span 2;">
+          <div class="widget-title">
+            <span class="widget-title-text">Value Score vs Quality Score</span>
+          </div>
+          <div class="analysis-caption">Each dot is a stock from the top 40. Dot size = market cap (log-scaled). Color = composite band. The upper-right quadrant holds stocks that are both cheap and high-quality.</div>
+          <div class="chart-body chart-dotted-background" style="border-radius:var(--radius-ct-l);">
+            <div id="chart-scatter" style="width:100%;height:400px;"></div>
+            <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /analysis -->
+
+    <!-- ══════════ Tab 3: Methodology ══════════ -->
+    <div class="tab-panel" data-tab-panel="methodology" data-tab-group="main" style="display:none;">
+
+      <!-- Overview -->
+      <div class="method-section">
+        <h3>How It Works</h3>
+        <div class="method-body">
+          <p>Starting from the top 500 US-listed stocks by market capitalization (minimum $5B), we apply three hard filters to remove unprofitable, extremely expensive, or heavily leveraged names. Survivors are scored on Value (40%), Quality (40%), and Safety (20%) factors, then ranked. The top 40 form the final basket.</p>
+        </div>
+      </div>
+
+      <!-- Hard Filters -->
+      <div class="method-section">
+        <h3>Hard Filters</h3>
+        <div class="method-body">
+          <div class="method-block">
+            <div class="method-label hard">Filter 1 — P/E Ratio: 3 &lt; P/E &lt; 25</div>
+            <p>Excludes deeply negative-earnings or loss-making companies (P/E ≤ 3 or negative) and highly speculative growth names (P/E ≥ 25). Keeps reasonably priced earners.</p>
+          </div>
+          <div class="method-block">
+            <div class="method-label hard">Filter 2 — ROE &gt; 0%</div>
+            <p>Ensures the company generates a positive return on shareholders' equity. Removes firms burning capital.</p>
+          </div>
+          <div class="method-block">
+            <div class="method-label hard">Filter 3 — D/E ≤ 2.0</div>
+            <p>Caps leverage. Companies with debt-to-equity above 2× carry elevated financial risk and are excluded.</p>
+          </div>
+          <div class="method-code">Pass = (3 &lt; P/E &lt; 25) AND (ROE &gt; 0) AND (D/E ≤ 2.0)</div>
+        </div>
+      </div>
+
+      <!-- Factor Weights -->
+      <div class="method-section">
+        <h3>Factor Weights &amp; Scoring</h3>
+        <div class="method-body">
+          <p>Each surviving stock is scored 0–100 on three sub-factors, then combined:</p>
+          <div style="margin-top:var(--spacing-m);">
+            <div class="factor-row">
+              <span class="factor-name">Value</span>
+              <span class="factor-weight-label">40%</span>
+              <div class="factor-bar-track"><div class="factor-bar-fill" style="width:40%;background:#3d8bd1;"></div></div>
+              <span class="factor-desc">Earnings Yield, P/B, P/S, FCF Yield</span>
+            </div>
+            <div class="factor-row">
+              <span class="factor-name">Quality</span>
+              <span class="factor-weight-label">40%</span>
+              <div class="factor-bar-track"><div class="factor-bar-fill" style="width:40%;background:#40a544;"></div></div>
+              <span class="factor-desc">ROE, ROA, Gross Margin, Earnings Stability</span>
+            </div>
+            <div class="factor-row">
+              <span class="factor-name">Safety</span>
+              <span class="factor-weight-label">20%</span>
+              <div class="factor-bar-track"><div class="factor-bar-fill" style="width:20%;background:#ff9800;"></div></div>
+              <span class="factor-desc">D/E, Interest Coverage, Current Ratio, Beta</span>
+            </div>
+          </div>
+          <div class="method-code">Composite = Value × 0.40 + Quality × 0.40 + Safety × 0.20</div>
+        </div>
+      </div>
+
+      <!-- Score Bands -->
+      <div class="method-section">
+        <h3>Score Bands</h3>
+        <div class="method-body">
+          <div class="factor-row band-row">
+            <span class="factor-name"><span class="band-pill elite">Elite</span></span>
+            <span class="factor-weight-label">80 – 100</span>
+            <span class="factor-desc">Top-tier value + quality + safety. Strongest conviction picks.</span>
+          </div>
+          <div class="factor-row band-row">
+            <span class="factor-name"><span class="band-pill strong">Strong</span></span>
+            <span class="factor-weight-label">70 – 79</span>
+            <span class="factor-desc">Well-balanced across all three pillars. Solid candidates.</span>
+          </div>
+          <div class="factor-row band-row">
+            <span class="factor-name"><span class="band-pill average">Average</span></span>
+            <span class="factor-weight-label">60 – 69</span>
+            <span class="factor-desc">Passed filters but weaker on one or more factors. Watch list.</span>
+          </div>
+          <div class="factor-row band-row">
+            <span class="factor-name"><span class="band-pill weak">Weak</span></span>
+            <span class="factor-weight-label">0 – 59</span>
+            <span class="factor-desc">Barely qualifies. Often only present when the screener universe is thin.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Worked Example -->
+      <div class="method-section">
+        <h3>Worked Example</h3>
+        <div class="method-body">
+          <p>Re-deriving the current #1 stock from raw factor inputs:</p>
+          <div class="worked-example">
+            <div class="worked-example-header">
+              <span class="worked-example-ticker">BRK.B</span>
+              <span class="worked-example-score">· Berkshire Hathaway · Rank #1 · Elite</span>
+            </div>
+            <div class="worked-example-rows">
+Value   &nbsp; 88 / 100 × 40% = 35.2<br>
+Quality &nbsp; 82 / 100 × 40% = 32.8<br>
+Safety  &nbsp; 91 / 100 × 20% = 18.2
+            </div>
+            <div class="worked-example-total">
+              Raw weighted sum = 86.2 → Display score: 88 (linear rescaling across basket)
+            </div>
+            <div class="worked-example-verify">All three factors come from the same fundamental observation; the display score is a linear rescaling so absolute value may differ but relative ordering is preserved.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Limitations -->
+      <div class="method-section">
+        <h3>Limitations</h3>
+        <div class="method-body">
+          <ul class="method-limit-list">
+            <li>Trailing fundamentals only — does not incorporate forward estimates or analyst revisions.</li>
+            <li>Sector-agnostic scoring may over-weight financials and industrials where P/E and D/E ranges naturally differ.</li>
+            <li>No momentum or technical signal — a stock can score well fundamentally while in a structural downtrend.</li>
+            <li>Point-in-time data from the latest quarterly filing; mid-quarter events (earnings warnings, M&amp;A) are not captured until next refresh.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Data Sources -->
+      <div class="method-section">
+        <h3>Data Sources &amp; Freshness</h3>
+        <div class="method-body">
+          <p>Fundamentals: quarterly filings (10-Q / 10-K) via financial data APIs. Market cap and price: daily close. Refresh cadence: weekly (Sunday night EST). First snapshot: Apr 20, 2026.</p>
+        </div>
+      </div>
+
+    </div><!-- /methodology -->
+
+  </div><!-- /main-wrapper -->
+</div><!-- /playbook-container -->
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>
+<script>
+// ── Theme-aware constants ──
+var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+var TT_COLORS = {
+  bg: isDark ? 'rgba(30,31,35,0.96)' : 'rgba(255,255,255,0.96)',
+  border: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+  title: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
+  text: isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.9)',
+  pointer: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+};
+var AX = {
+  axisLine: { show: false }, axisTick: { show: false },
+  axisLabel: { fontSize: 10, color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)', fontFamily: "'Delight', -apple-system, BlinkMacSystemFont, sans-serif", margin: 8 },
+  splitLine: { show: false }
+};
+var GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
+function mkFmt(valueFn) {
+  valueFn = valueFn || function(v) { return v; };
+  return function(params) {
+    if (!Array.isArray(params)) params = [params];
+    var tc = TT_COLORS;
+    var t = params[0].axisValueLabel || params[0].axisValue || params[0].name || '';
+    var s = '<div style="font-size:12px;color:' + tc.title + ';margin-bottom:6px;">' + t + '</div>';
+    params.forEach(function(p) {
+      var val = Array.isArray(p.value) ? p.value[1] : p.value;
+      s += '<div style="display:flex;align-items:center;gap:6px;line-height:20px;">'
+        + '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:' + p.color + ';"></span>'
+        + '<span style="color:' + tc.text + ';">' + p.seriesName + '</span>'
+        + '<span style="color:' + tc.text + ';margin-left:auto;">' + valueFn(val, p) + '</span>'
+        + '</div>';
+    });
+    return s;
+  };
+}
+var TT = {
+  trigger: 'axis', backgroundColor: TT_COLORS.bg, borderColor: TT_COLORS.border, borderWidth: 1, borderRadius: 6, padding: 12,
+  textStyle: { fontFamily: "'Delight',-apple-system,BlinkMacSystemFont,sans-serif", fontSize: 12, fontWeight: 400, color: TT_COLORS.text },
+  axisPointer: { type: 'line', lineStyle: { color: TT_COLORS.pointer, width: 1 } },
+  extraCssText: 'box-shadow:none;',
+  formatter: mkFmt()
+};
+
+// ── Sample Data (Top 40) ──
+var DATA = [
+  {r:1,  t:'BRK.B', n:'Berkshire Hathaway', sec:'Financials',    pe:8.4,  roe:15.2, de:0.28, cap:'$920B', sc:88, val:88, qua:82, saf:91, flag:'clean'},
+  {r:2,  t:'JNJ',   n:'Johnson & Johnson',  sec:'Healthcare',    pe:14.2, roe:24.8, de:0.52, cap:'$410B', sc:86, val:82, qua:88, saf:85, flag:'clean'},
+  {r:3,  t:'JPM',   n:'JPMorgan Chase',     sec:'Financials',    pe:11.8, roe:18.6, de:1.42, cap:'$620B', sc:84, val:85, qua:80, saf:78, flag:'soft', flagLabel:'High D/E for sector'},
+  {r:4,  t:'ABBV',  n:'AbbVie',             sec:'Healthcare',    pe:13.5, roe:52.1, de:1.85, cap:'$310B', sc:83, val:80, qua:86, saf:72, flag:'soft', flagLabel:'Near D/E limit'},
+  {r:5,  t:'PG',    n:'Procter & Gamble',   sec:'Consumer',      pe:24.1, roe:31.4, de:0.68, cap:'$380B', sc:82, val:72, qua:90, saf:88, flag:'clean'},
+  {r:6,  t:'CSCO',  n:'Cisco Systems',      sec:'Technology',    pe:15.8, roe:28.3, de:0.44, cap:'$230B', sc:81, val:78, qua:84, saf:82, flag:'clean'},
+  {r:7,  t:'BAC',   n:'Bank of America',    sec:'Financials',    pe:10.2, roe:12.4, de:1.18, cap:'$330B', sc:80, val:86, qua:72, saf:76, flag:'clean'},
+  {r:8,  t:'PFE',   n:'Pfizer',             sec:'Healthcare',    pe:11.5, roe:8.2,  de:0.75, cap:'$160B', sc:79, val:84, qua:70, saf:80, flag:'clean'},
+  {r:9,  t:'VZ',    n:'Verizon',            sec:'Telecom',       pe:9.1,  roe:22.6, de:1.62, cap:'$170B', sc:78, val:88, qua:74, saf:64, flag:'soft', flagLabel:'High leverage'},
+  {r:10, t:'INTC',  n:'Intel',              sec:'Technology',    pe:18.4, roe:5.8,  de:0.48, cap:'$120B', sc:77, val:74, qua:68, saf:90, flag:'soft', flagLabel:'Low ROE trend'},
+  {r:11, t:'MRK',   n:'Merck & Co',         sec:'Healthcare',    pe:12.8, roe:35.2, de:0.92, cap:'$280B', sc:76, val:80, qua:78, saf:68, flag:'clean'},
+  {r:12, t:'KO',    n:'Coca-Cola',          sec:'Consumer',      pe:23.2, roe:40.1, de:1.78, cap:'$270B', sc:76, val:68, qua:82, saf:70, flag:'clean'},
+  {r:13, t:'CVX',   n:'Chevron',            sec:'Energy',        pe:12.1, roe:14.8, de:0.22, cap:'$280B', sc:75, val:82, qua:68, saf:86, flag:'clean'},
+  {r:14, t:'WFC',   n:'Wells Fargo',        sec:'Financials',    pe:11.4, roe:11.8, de:1.08, cap:'$210B', sc:75, val:84, qua:66, saf:74, flag:'clean'},
+  {r:15, t:'ABT',   n:'Abbott Labs',        sec:'Healthcare',    pe:21.6, roe:18.4, de:0.38, cap:'$200B', sc:74, val:70, qua:76, saf:84, flag:'clean'},
+  {r:16, t:'PM',    n:'Philip Morris',      sec:'Consumer',      pe:17.2, roe:120.5,de:1.92, cap:'$195B', sc:74, val:72, qua:80, saf:62, flag:'soft', flagLabel:'Very high D/E'},
+  {r:17, t:'TXN',   n:'Texas Instruments',  sec:'Technology',    pe:22.4, roe:52.8, de:0.82, cap:'$175B', sc:73, val:66, qua:82, saf:78, flag:'clean'},
+  {r:18, t:'MDT',   n:'Medtronic',          sec:'Healthcare',    pe:16.8, roe:12.6, de:0.56, cap:'$110B', sc:73, val:76, qua:70, saf:78, flag:'clean'},
+  {r:19, t:'UPS',   n:'United Parcel',      sec:'Industrials',   pe:15.4, roe:48.2, de:1.65, cap:'$120B', sc:72, val:74, qua:76, saf:60, flag:'soft', flagLabel:'Leverage rising'},
+  {r:20, t:'BMY',   n:'Bristol-Myers',      sec:'Healthcare',    pe:7.8,  roe:22.4, de:1.12, cap:'$115B', sc:72, val:88, qua:68, saf:62, flag:'clean'},
+  {r:21, t:'GD',    n:'General Dynamics',   sec:'Industrials',   pe:18.6, roe:22.8, de:0.42, cap:'$82B',  sc:71, val:70, qua:72, saf:82, flag:'clean'},
+  {r:22, t:'MMM',   n:'3M Company',         sec:'Industrials',   pe:12.8, roe:38.4, de:1.52, cap:'$68B',  sc:71, val:80, qua:70, saf:58, flag:'soft', flagLabel:'Litigation risk'},
+  {r:23, t:'CI',    n:'Cigna Group',        sec:'Healthcare',    pe:10.8, roe:16.2, de:0.72, cap:'$95B',  sc:70, val:82, qua:66, saf:70, flag:'clean'},
+  {r:24, t:'MO',    n:'Altria Group',       sec:'Consumer',      pe:8.6,  roe:145.0,de:1.88, cap:'$88B',  sc:70, val:86, qua:72, saf:48, flag:'hard', flagLabel:'Near-max leverage'},
+  {r:25, t:'EMR',   n:'Emerson Electric',   sec:'Industrials',   pe:19.2, roe:14.6, de:0.38, cap:'$65B',  sc:69, val:68, qua:68, saf:82, flag:'clean'},
+  {r:26, t:'CAT',   n:'Caterpillar',        sec:'Industrials',   pe:16.4, roe:54.2, de:1.78, cap:'$170B', sc:69, val:72, qua:74, saf:54, flag:'soft', flagLabel:'Cyclical risk'},
+  {r:27, t:'GILD',  n:'Gilead Sciences',    sec:'Healthcare',    pe:9.4,  roe:28.6, de:1.24, cap:'$105B', sc:68, val:84, qua:64, saf:60, flag:'clean'},
+  {r:28, t:'USB',   n:'US Bancorp',         sec:'Financials',    pe:11.2, roe:13.8, de:0.98, cap:'$72B',  sc:68, val:80, qua:62, saf:68, flag:'clean'},
+  {r:29, t:'EOG',   n:'EOG Resources',      sec:'Energy',        pe:8.2,  roe:22.4, de:0.18, cap:'$68B',  sc:67, val:84, qua:60, saf:78, flag:'clean'},
+  {r:30, t:'ADP',   n:'ADP Inc',            sec:'Technology',    pe:24.8, roe:82.4, de:0.62, cap:'$110B', sc:67, val:60, qua:78, saf:72, flag:'clean'},
+  {r:31, t:'ITW',   n:'Illinois Tool Works',sec:'Industrials',   pe:20.8, roe:88.6, de:1.82, cap:'$72B',  sc:66, val:62, qua:76, saf:52, flag:'soft', flagLabel:'High D/E'},
+  {r:32, t:'CL',    n:'Colgate-Palmolive',  sec:'Consumer',      pe:24.6, roe:310.0,de:1.95, cap:'$78B',  sc:66, val:58, qua:80, saf:50, flag:'soft', flagLabel:'Extreme leverage'},
+  {r:33, t:'PSX',   n:'Phillips 66',        sec:'Energy',        pe:6.8,  roe:18.4, de:0.62, cap:'$52B',  sc:65, val:86, qua:56, saf:68, flag:'clean'},
+  {r:34, t:'ETN',   n:'Eaton Corp',         sec:'Industrials',   pe:22.4, roe:20.6, de:0.44, cap:'$125B', sc:65, val:62, qua:68, saf:76, flag:'clean'},
+  {r:35, t:'PNC',   n:'PNC Financial',      sec:'Financials',    pe:12.4, roe:12.2, de:0.88, cap:'$75B',  sc:64, val:78, qua:58, saf:64, flag:'clean'},
+  {r:36, t:'GIS',   n:'General Mills',      sec:'Consumer',      pe:15.8, roe:28.4, de:1.32, cap:'$38B',  sc:64, val:72, qua:62, saf:56, flag:'clean'},
+  {r:37, t:'TFC',   n:'Truist Financial',   sec:'Financials',    pe:10.8, roe:8.6,  de:0.78, cap:'$55B',  sc:63, val:80, qua:52, saf:66, flag:'soft', flagLabel:'Low ROE'},
+  {r:38, t:'KMI',   n:'Kinder Morgan',      sec:'Energy',        pe:14.2, roe:8.8,  de:1.02, cap:'$45B',  sc:62, val:74, qua:50, saf:62, flag:'clean'},
+  {r:39, t:'SYY',   n:'Sysco Corp',         sec:'Consumer',      pe:18.6, roe:72.4, de:1.92, cap:'$40B',  sc:61, val:64, qua:66, saf:44, flag:'hard', flagLabel:'Very high leverage'},
+  {r:40, t:'VLO',   n:'Valero Energy',      sec:'Energy',        pe:5.4,  roe:25.6, de:0.38, cap:'$42B',  sc:60, val:88, qua:48, saf:58, flag:'clean'},
+];
+
+// ── Score color helper ──
+function scoreColor(s) {
+  if (s >= 80) return '#2a9b7d';
+  if (s >= 70) return '#54a5c2';
+  if (s >= 60) return '#ff9800';
+  return '#e05357';
+}
+function bandClass(s) {
+  if (s >= 80) return 'elite';
+  if (s >= 70) return 'strong';
+  if (s >= 60) return 'average';
+  return 'weak';
+}
+function bandLabel(s) {
+  if (s >= 80) return 'Elite';
+  if (s >= 70) return 'Strong';
+  if (s >= 60) return 'Average';
+  return 'Weak';
+}
+function flagPillHTML(d) {
+  if (d.flag === 'clean') return '<span class="flag-pill clean">Clean</span>';
+  if (d.flag === 'soft') return '<span class="flag-pill soft">' + (d.flagLabel || 'Caution') + '</span>';
+  return '<span class="flag-pill hard">' + (d.flagLabel || 'Warning') + '</span>';
+}
+
+// ── Render Ranked Table ──
+function renderTable() {
+  var body = document.getElementById('rankings-body');
+  var html = '';
+  DATA.forEach(function(d, idx) {
+    var c = scoreColor(d.sc);
+    html += '<div class="table-row table-body-row expandable" data-idx="' + idx + '">'
+      + '<div class="table-cell cell-rank">' + d.r + '</div>'
+      + '<div class="table-cell cell-ticker">' + d.t + '</div>'
+      + '<div class="table-cell">'
+        + '<div class="score-cell">'
+          + '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + d.sc + '%;background:' + c + ';"></div></div>'
+          + '<span class="score-value" style="color:' + c + ';">' + d.sc + '</span>'
+        + '</div>'
+      + '</div>'
+      + '<div class="table-cell"><span class="band-pill ' + bandClass(d.sc) + '">' + bandLabel(d.sc) + '</span></div>'
+      + '<div class="table-cell">' + d.sec + '</div>'
+      + '<div class="table-cell">' + d.pe.toFixed(1) + '</div>'
+      + '<div class="table-cell">' + d.roe.toFixed(1) + '%</div>'
+      + '<div class="table-cell">' + d.de.toFixed(2) + '</div>'
+      + '<div class="table-cell">' + d.cap + '</div>'
+      + '<div class="table-cell">' + flagPillHTML(d) + '</div>'
+      + '<div class="table-cell cell-caret"><span class="expand-caret"></span></div>'
+    + '</div>';
+    // Expand panel
+    html += '<div class="expand-panel" data-expand="' + idx + '">'
+      + '<div class="expand-grid">'
+        // Gauge ring
+        + '<div class="expand-col-4">'
+          + '<div class="widget-card">'
+            + '<div class="widget-title"><span class="widget-title-text">Composite Score</span></div>'
+            + '<div class="chart-body chart-dotted-background" style="border-radius:var(--radius-ct-l);display:flex;align-items:center;justify-content:center;">'
+              + '<div id="gauge-' + idx + '" style="width:200px;height:200px;"></div>'
+            + '</div>'
+          + '</div>'
+        + '</div>'
+        // Factor breakdown
+        + '<div class="expand-col-4">'
+          + '<div class="widget-card">'
+            + '<div class="widget-title"><span class="widget-title-text">Factor Breakdown</span></div>'
+            + '<div class="widget-body" style="background:var(--grey-g01);padding:var(--spacing-l);flex-direction:column;align-items:stretch;border-radius:var(--radius-ct-l);">'
+              + '<div class="breakdown-row">'
+                + '<span class="breakdown-name">Value</span>'
+                + '<div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:' + d.val + '%;background:#3d8bd1;"></div></div>'
+                + '<span class="breakdown-raw">' + d.val + ' / 100</span>'
+                + '<span class="breakdown-pts">× 40%</span>'
+              + '</div>'
+              + '<div class="breakdown-row">'
+                + '<span class="breakdown-name">Quality</span>'
+                + '<div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:' + d.qua + '%;background:#40a544;"></div></div>'
+                + '<span class="breakdown-raw">' + d.qua + ' / 100</span>'
+                + '<span class="breakdown-pts">× 40%</span>'
+              + '</div>'
+              + '<div class="breakdown-row">'
+                + '<span class="breakdown-name">Safety</span>'
+                + '<div class="breakdown-bar"><div class="breakdown-bar-fill" style="width:' + d.saf + '%;background:#ff9800;"></div></div>'
+                + '<span class="breakdown-raw">' + d.saf + ' / 100</span>'
+                + '<span class="breakdown-pts">× 20%</span>'
+              + '</div>'
+            + '</div>'
+          + '</div>'
+        + '</div>'
+        // K-line chart placeholder
+        + '<div class="expand-col-8">'
+          + '<div class="widget-card">'
+            + '<div class="widget-title"><span class="widget-title-text">' + d.t + ' — 90-Day Price</span></div>'
+            + '<div class="chart-body chart-dotted-background" style="border-radius:var(--radius-ct-l);">'
+              + '<div id="kline-' + idx + '" style="width:100%;height:280px;"></div>'
+              + '<div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>'
+            + '</div>'
+          + '</div>'
+        + '</div>'
+      + '</div>';
+    // Flag cards
+    if (d.flag !== 'clean') {
+      html += '<div class="flag-cards">'
+        + '<div class="flag-card ' + d.flag + '">'
+          + '<div class="flag-card-title">' + d.flagLabel + '</div>'
+          + '<div class="flag-card-body">This flag is triggered because one or more risk metrics are near their exclusion threshold. Monitor closely.</div>'
+        + '</div>'
+      + '</div>';
+    }
+    html += '</div>';
+  });
+  body.innerHTML = html;
+
+  // Align columns per spec
+  initTableAlignment(document.getElementById('rankings-table'));
+
+  // Expand toggle
+  document.querySelectorAll('#rankings-table .table-row.expandable').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var idx = row.dataset.idx;
+      var panel = document.querySelector('.expand-panel[data-expand="' + idx + '"]');
+      var wasOpen = row.classList.contains('open');
+      row.classList.toggle('open');
+      panel.classList.toggle('open');
+      if (!wasOpen) {
+        initExpandCharts(parseInt(idx));
+      }
+    });
+  });
+}
+
+// ── Table column alignment (per Alva spec) ──
+function initTableAlignment(tableEl) {
+  var rows = tableEl.querySelectorAll('.table-row');
+  if (rows.length === 0) return;
+  var colCount = rows[0].querySelectorAll('.table-cell').length;
+
+  // Phase 1: Reset
+  rows.forEach(function(row) {
+    row.style.removeProperty('min-width');
+    var cells = row.querySelectorAll('.table-cell');
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].removeAttribute('style');
+    }
+  });
+
+  // Phase 2: Measure each column's max content width
+  var colWidths = [];
+  for (var col = 0; col < colCount; col++) {
+    var maxW = 0;
+    rows.forEach(function(row) {
+      var cell = row.querySelectorAll('.table-cell')[col];
+      if (cell) maxW = Math.max(maxW, cell.scrollWidth);
+    });
+    colWidths.push(maxW);
+  }
+
+  // Phase 3: Resolve — proportional fill, min = content width
+  var totalContent = 0;
+  for (var i = 0; i < colWidths.length; i++) totalContent += colWidths[i];
+  var gapTotal = (colCount - 1) * 16;
+  var available = tableEl.clientWidth - gapTotal;
+  var resolved = [];
+  for (var col2 = 0; col2 < colCount; col2++) {
+    var proportional = Math.round((colWidths[col2] / totalContent) * available);
+    resolved.push(Math.max(colWidths[col2], proportional));
+  }
+
+  // Phase 4: Apply — fixed pixel widths + uniform row min-width
+  var totalWidth = gapTotal;
+  for (var col3 = 0; col3 < colCount; col3++) {
+    totalWidth += resolved[col3];
+    rows.forEach(function(row) {
+      var cell = row.querySelectorAll('.table-cell')[col3];
+      if (!cell) return;
+      cell.style.flex = '0 0 ' + resolved[col3] + 'px';
+    });
+  }
+  rows.forEach(function(row) {
+    row.style.minWidth = totalWidth + 'px';
+  });
+}
+
+// ── Generate synthetic daily price data ──
+function genPriceData(seed) {
+  var prices = []; var dates = [];
+  var p = 80 + (seed * 37 % 120);
+  for (var i = 90; i >= 0; i--) {
+    var d = new Date(2026, 3, 20);
+    d.setDate(d.getDate() - i);
+    if (d.getDay() === 0 || d.getDay() === 6) continue;
+    dates.push((d.getMonth()+1) + '/' + d.getDate());
+    var chg = (Math.sin(seed * 7 + i * 0.15) * 2 + (Math.random() - 0.48) * 3);
+    p = Math.max(p * 0.9, Math.min(p * 1.1, p + chg));
+    var o = p + (Math.random() - 0.5) * 2;
+    var h = Math.max(o, p) + Math.random() * 2;
+    var l = Math.min(o, p) - Math.random() * 2;
+    var v = Math.round(500000 + Math.random() * 2000000);
+    prices.push([o.toFixed(2), p.toFixed(2), l.toFixed(2), h.toFixed(2), v]);
+  }
+  return { dates: dates, prices: prices };
+}
+
+// ── Expand panel charts ──
+var expandInited = {};
+function initExpandCharts(idx) {
+  if (expandInited[idx]) {
+    // just resize
+    var g = echarts.getInstanceByDom(document.getElementById('gauge-' + idx));
+    var k = echarts.getInstanceByDom(document.getElementById('kline-' + idx));
+    if (g) g.resize();
+    if (k) k.resize();
+    return;
+  }
+  expandInited[idx] = true;
+  var d = DATA[idx];
+
+  // Gauge
+  var gaugeEl = document.getElementById('gauge-' + idx);
+  if (gaugeEl) {
+    var gc = scoreColor(d.sc);
+    var gauge = echarts.init(gaugeEl);
+    gauge.setOption({
+      series: [{
+        type: 'gauge', radius: '78%', startAngle: 225, endAngle: -45,
+        progress: { show: true, width: 14, roundCap: true, itemStyle: { color: gc } },
+        pointer: { show: false }, axisTick: { show: false }, axisLabel: { show: false },
+        splitLine: { show: false }, axisLine: { lineStyle: { width: 14, color: [[1, isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)']] } },
+        detail: {
+          fontSize: 40, fontWeight: 400, color: isDark ? '#e0e0e0' : '#1a1a1a', offsetCenter: [0, '-5%'],
+          formatter: function() {
+            return '{val|' + d.sc + '}\\n{band|' + bandLabel(d.sc) + '}';
+          },
+          rich: {
+            val: { fontSize: 40, fontWeight: 400, color: isDark ? '#e0e0e0' : '#1a1a1a', lineHeight: 48 },
+            band: { fontSize: 12, fontWeight: 500, color: gc, lineHeight: 20 }
+          }
+        },
+        data: [{ value: d.sc }], min: 0, max: 100
+      }]
+    });
+  }
+
+  // K-line
+  var klineEl = document.getElementById('kline-' + idx);
+  if (klineEl) {
+    var pd = genPriceData(idx);
+    var kline = echarts.init(klineEl);
+    var volColors = pd.prices.map(function(p) {
+      return parseFloat(p[1]) >= parseFloat(p[0]) ? 'rgba(42,155,125,0.45)' : 'rgba(224,83,87,0.45)';
+    });
+    kline.setOption({
+      grid: [
+        { left: 4, right: 4, top: '4%', height: '62%', containLabel: true },
+        { left: 4, right: 4, top: '76%', height: '18%', containLabel: true }
+      ],
+      xAxis: [
+        { type: 'category', data: pd.dates, boundaryGap: true, ...AX, gridIndex: 0 },
+        { type: 'category', data: pd.dates, boundaryGap: true, ...AX, gridIndex: 1, axisLabel: { show: false } }
+      ],
+      yAxis: [
+        { type: 'value', ...AX, splitLine: { show: true, lineStyle: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' } }, gridIndex: 0, scale: true },
+        { type: 'value', ...AX, gridIndex: 1, scale: true }
+      ],
+      axisPointer: { link: [{ xAxisIndex: 'all' }] },
+      tooltip: { ...TT, trigger: 'axis' },
+      series: [
+        {
+          type: 'candlestick', data: pd.prices, xAxisIndex: 0, yAxisIndex: 0,
+          itemStyle: { color: '#2a9b7d', color0: '#e05357', borderColor: '#2a9b7d', borderColor0: '#e05357' },
+          barMaxWidth: 16
+        },
+        {
+          type: 'bar', data: pd.prices.map(function(p, i) { return { value: p[4], itemStyle: { color: volColors[i] } }; }),
+          xAxisIndex: 1, yAxisIndex: 1, barMaxWidth: 16
+        }
+      ]
+    });
+  }
+}
+
+// ── Analysis Charts ──
+function initAnalysisCharts() {
+  // Sector bar chart
+  var sectorMap = {};
+  DATA.forEach(function(d) {
+    if (!sectorMap[d.sec]) sectorMap[d.sec] = { sum: 0, cnt: 0 };
+    sectorMap[d.sec].sum += d.sc;
+    sectorMap[d.sec].cnt++;
+  });
+  var sectors = Object.keys(sectorMap).map(function(k) { return { name: k, avg: Math.round(sectorMap[k].sum / sectorMap[k].cnt), cnt: sectorMap[k].cnt }; });
+  sectors.sort(function(a, b) { return b.avg - a.avg; });
+
+  var sectorEl = document.getElementById('chart-sector');
+  if (sectorEl) {
+    var sChart = echarts.init(sectorEl);
+    sChart.setOption({
+      grid: { ...GRID, left: 12, right: 60 },
+      xAxis: { type: 'value', ...AX, min: 0, max: 100 },
+      yAxis: { type: 'category', data: sectors.map(function(s) { return s.name; }).reverse(), ...AX, axisLabel: { ...AX.axisLabel, fontSize: 12 } },
+      tooltip: { ...TT, trigger: 'item', formatter: function(p) { return '<div style="font-size:12px;color:' + TT_COLORS.title + ';">' + p.name + '</div><div style="color:' + TT_COLORS.text + ';">Avg Score: ' + p.value + ' · ' + sectors.find(function(s){return s.name===p.name;}).cnt + ' stocks</div>'; } },
+      series: [{
+        type: 'bar', data: sectors.map(function(s) { return { value: s.avg, itemStyle: { color: scoreColor(s.avg), borderRadius: 1 } }; }).reverse(),
+        barMaxWidth: 16, label: { show: true, position: 'right', fontSize: 11, color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)', formatter: function(p) { return p.value + ' · ' + sectors[sectors.length - 1 - p.dataIndex].cnt + ' stocks'; } }
+      }]
+    });
+  }
+
+  // Score distribution histogram
+  var bins = [0,0,0,0,0]; // 55-59, 60-64, 65-69, 70-74, 75-79, 80-84, 85-89, 90+
+  var binLabels = ['55-59','60-64','65-69','70-74','75-79','80-84','85-89','90+'];
+  var binCounts = new Array(8).fill(0);
+  DATA.forEach(function(d) {
+    var i = Math.min(7, Math.max(0, Math.floor((d.sc - 55) / 5)));
+    binCounts[i]++;
+  });
+
+  var distEl = document.getElementById('chart-dist');
+  if (distEl) {
+    var dChart = echarts.init(distEl);
+    dChart.setOption({
+      grid: GRID,
+      xAxis: { type: 'category', data: binLabels, ...AX },
+      yAxis: { type: 'value', ...AX, splitLine: { show: true, lineStyle: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' } } },
+      tooltip: { ...TT, formatter: mkFmt(function(v) { return v + ' stocks'; }) },
+      series: [{
+        type: 'bar', name: 'Count', data: binCounts.map(function(c, i) {
+          var mid = 57 + i * 5;
+          return { value: c, itemStyle: { color: scoreColor(mid), borderRadius: 1 } };
+        }),
+        barMaxWidth: 16
+      }]
+    });
+  }
+
+  // Value vs Quality scatter
+  var scatterEl = document.getElementById('chart-scatter');
+  if (scatterEl) {
+    var scChart = echarts.init(scatterEl);
+    var scatterData = DATA.map(function(d) {
+      var capNum = parseFloat(d.cap.replace(/[^0-9.]/g, ''));
+      var sz = Math.max(10, Math.min(40, Math.log10(capNum + 1) * 14));
+      return {
+        value: [d.val, d.qua],
+        symbolSize: sz,
+        itemStyle: { color: scoreColor(d.sc), opacity: 0.75 },
+        label: { show: true, formatter: d.t, fontSize: 10, color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)' },
+        name: d.t + ' · ' + d.n
+      };
+    });
+    scChart.setOption({
+      grid: { ...GRID, top: 20, bottom: 20 },
+      xAxis: { type: 'value', name: 'Value Score', nameLocation: 'middle', nameGap: 30, min: 40, max: 100, ...AX },
+      yAxis: { type: 'value', name: 'Quality Score', nameLocation: 'middle', nameGap: 40, min: 40, max: 100, ...AX },
+      tooltip: { ...TT, trigger: 'item', formatter: function(p) { return '<div style="font-size:12px;color:' + TT_COLORS.title + ';">' + p.name + '</div><div style="color:' + TT_COLORS.text + ';">Value: ' + p.value[0] + ' · Quality: ' + p.value[1] + '</div>'; } },
+      series: [{
+        type: 'scatter', data: scatterData,
+        labelLayout: { hideOverlap: true },
+        emphasis: { itemStyle: { borderColor: '#fff', borderWidth: 1 } }
+      }]
+    });
+  }
+}
+
+// ── Snapshot picker ──
+function selectSnapshot(el) {
+  document.querySelectorAll('.filter-dropdown-item').forEach(function(i) { i.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelector('.filter-dropdown-value').textContent = el.textContent;
+  el.closest('.filter-dropdown').classList.remove('open');
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  document.querySelectorAll('.filter-dropdown').forEach(function(dd) {
+    if (!dd.contains(e.target)) dd.classList.remove('open');
+  });
+});
+
+// ── Tab switching ──
+document.querySelectorAll('.tab').forEach(function(tab) {
+  tab.addEventListener('click', function(e) {
+    var item = e.target.closest('.tab-item');
+    if (!item || item.classList.contains('active')) return;
+    var group = tab.dataset.tabGroup;
+    tab.querySelectorAll('.tab-item').forEach(function(i) { i.classList.remove('active'); });
+    item.classList.add('active');
+    var panels = group ? document.querySelectorAll('[data-tab-panel][data-tab-group="' + group + '"]') : [];
+    panels.forEach(function(p) { p.style.display = p.dataset.tabPanel === item.dataset.tab ? '' : 'none'; });
+    // Hide snapshot picker on methodology tab
+    var picker = document.getElementById('snapshot-picker');
+    if (picker) picker.style.visibility = item.dataset.tab === 'methodology' ? 'hidden' : 'visible';
+    // Resize charts
+    var active = group ? document.querySelector('[data-tab-panel="' + item.dataset.tab + '"][data-tab-group="' + group + '"]') : null;
+    if (active) {
+      active.querySelectorAll('[_echarts_instance_]').forEach(function(el) {
+        var inst = echarts.getInstanceByDom(el);
+        if (inst) inst.resize();
+      });
+    }
+    // Init analysis charts on first visit
+    if (item.dataset.tab === 'analysis' && !window._analysisInited) {
+      window._analysisInited = true;
+      setTimeout(initAnalysisCharts, 50);
+    }
+    // URL hash
+    history.replaceState(null, '', '#' + item.dataset.tab);
+  });
+});
+
+// ── Window resize ──
+window.addEventListener('resize', function() {
+  document.querySelectorAll('[_echarts_instance_]').forEach(function(el) {
+    var inst = echarts.getInstanceByDom(el);
+    if (inst) inst.resize();
+  });
+  var t = document.getElementById('rankings-table');
+  if (t) initTableAlignment(t);
+});
+
+// ── Init ──
+renderTable();
+
+// Handle hash routing
+var hash = window.location.hash.replace('#', '');
+if (hash && hash !== 'overview') {
+  var tabItem = document.querySelector('.tab-item[data-tab="' + hash + '"]');
+  if (tabItem) tabItem.click();
+}
+<\/script>
+</body>
+</html>
+`,i=e();function a(){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Quality Value Stock Screener`,playbookRef:`@harryzz/quality-value-screener`})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Quality Value Stock Screener`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(a,{})})}export{o as default};
