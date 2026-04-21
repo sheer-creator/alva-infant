@@ -87,14 +87,7 @@ export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: P
 
       <button
         disabled={!dirty}
-        className="h-[48px] w-[120px] px-[16px] rounded-[8px] flex items-center justify-center text-[16px] font-medium leading-[26px] tracking-[0.16px]"
-        style={{
-          background: dirty ? '#49A3A6' : 'rgba(0,0,0,0.05)',
-          border: 'none',
-          color: dirty ? '#fff' : 'rgba(0,0,0,0.2)',
-          fontFamily: FONT,
-          cursor: dirty ? 'pointer' : 'not-allowed',
-        }}
+        className={`btn btn-large w-[120px] ${dirty ? 'btn-primary' : 'btn-primary btn-disabled'}`}
       >
         Save
       </button>

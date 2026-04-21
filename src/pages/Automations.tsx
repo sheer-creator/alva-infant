@@ -78,17 +78,25 @@ Sends real-time alerts via Telegram and Slack when a new signal is generated, wh
 
 /* ========== Mock ========== */
 
+const SIDEBAR_PLAYBOOKS: UsedByPlaybook[] = [
+  { author: 'YGGYLL', name: 'quality-value-screener',  target: 'screener' as Page },
+  { author: 'YGGYLL', name: 'defense-thesis-tracker',  target: 'thesis'   as Page },
+];
+
+const pickPlaybook = () => SIDEBAR_PLAYBOOKS[Math.floor(Math.random() * SIDEBAR_PLAYBOOKS.length)];
+const randomUsedBy = (n: number): UsedByPlaybook[] => Array.from({ length: n }, pickPlaybook);
+
 const FEEDS: AutomationFeed[] = [
   { id: '1', name: 'Capacity-Monitor', status: 'active', lastRun: '15m', runEvery: 'Every 5 minutes', totalRuns: 142,
     description: BTC_MACD_DESCRIPTION,
-    usedBy: [{ author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }, { author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }] },
+    usedBy: randomUsedBy(2) },
   { id: '2', name: 'Capacity-Monitor', status: 'active', lastRun: '15m', runEvery: 'Every 5 minutes', totalRuns: 142,
-    usedBy: [{ author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }, { author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }] },
+    usedBy: randomUsedBy(2) },
   { id: '3', name: 'Capacity-Monitor', status: 'active', lastRun: '15m', runEvery: 'Every 5 minutes', totalRuns: 142,
-    usedBy: [{ author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }, { author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }] },
+    usedBy: randomUsedBy(2) },
   { id: '4', name: 'Whale Alert Monitor', status: 'active', lastRun: '15m', runEvery: 'Every 5 minutes', totalRuns: 142 },
   { id: '5', name: 'Capacity-Monitor', status: 'paused', totalRuns: 142,
-    usedBy: [{ author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }, { author: 'YGGYLL', name: 'BTC Ultimate AI Trader', target: 'workspace' as Page }] },
+    usedBy: randomUsedBy(2) },
 ];
 
 /* ========== Used-By 芯片 ========== */
