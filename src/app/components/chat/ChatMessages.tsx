@@ -3,6 +3,23 @@ import { CdnIcon } from '../shared/CdnIcon';
 import DotMatrixWave from '../shared/DotMatrixWave';
 import { useChatContext } from './ChatContext';
 import { StreamingMessages } from './StreamingMessages';
+import { AGENT_CONVERSATION_ID } from '../shared/ThreadSwitcherDropdown';
+import { INITIAL_AGENT_MESSAGE } from '@/pages/Agent';
+
+function AgentConnectedConversation() {
+  return (
+    <div className="flex flex-col gap-[16px] items-start w-full">
+      <img
+        src={`${import.meta.env.BASE_URL}logo-alva-beta-green-black.svg`}
+        alt="Alva"
+        style={{ height: 12, width: 70 }}
+      />
+      <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full">
+        {INITIAL_AGENT_MESSAGE.text}
+      </p>
+    </div>
+  );
+}
 
 /* ── Mock conversation data ── */
 const MOCK_USER_MSG = `Build me an NVDA earnings dashboard — I want to see quarterly revenue, gross margin trends, and a forward P/E comparison with AMD and INTC.`;
@@ -251,6 +268,14 @@ interface ChatMessagesProps {
 export function ChatMessages({ conversationId, hasContent }: ChatMessagesProps) {
   const { streamingState, pendingPrompt } = useChatContext();
   const showContent = hasContent ?? (conversationId !== 'new');
+
+  if (conversationId === AGENT_CONVERSATION_ID) {
+    return (
+      <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">
+        <AgentConnectedConversation />
+      </div>
+    );
+  }
 
   if (!showContent) return <EmptyState />;
 

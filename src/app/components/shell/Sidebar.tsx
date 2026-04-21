@@ -24,6 +24,7 @@ interface SidebarProps {
   onToggleThreadsRail?: () => void;
   sidebarCompact?: boolean;
   primaryWidth: number;
+  onUserMouseEnter?: () => void;
 }
 
 const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
@@ -50,6 +51,7 @@ export function Sidebar({
   sidebarCompact = false,
   primaryWidth,
   activeConversationId,
+  onUserMouseEnter,
 }: SidebarProps) {
   const logoSrc = `${import.meta.env.BASE_URL}logo-alva-beta.svg`;
   const showThreadsOverlay = threadsEntryMode === '2' || threadsEntryMode === '4';
@@ -189,7 +191,10 @@ export function Sidebar({
 
         <div className="min-h-0 flex-1" />
 
-        <div className="flex shrink-0 items-center gap-[8px] rounded-[4px] p-[8px]">
+        <div
+          className="flex shrink-0 items-center gap-[8px] rounded-[4px] p-[8px] cursor-pointer transition-colors hover:bg-white/5"
+          onMouseEnter={onUserMouseEnter}
+        >
           <div className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-[#49A3A6] text-[11px] font-medium text-white">
             A
           </div>

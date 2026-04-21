@@ -1,7 +1,7 @@
 import type { Page } from '@/app/App';
 import { AppShell } from '@/app/components/shell/AppShell';
 import { Topbar } from '@/app/components/shell/Topbar';
-import screenerHtml from './quality-value-screener.html?raw';
+import screenerHtml from './playbook-screener.html?raw';
 
 function ScreenerContent() {
   return (

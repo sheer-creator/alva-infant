@@ -1,7 +1,7 @@
 export type ChatTriggerMode = 'floating-bar' | 'sidebar' | 'fab' | 'inline-composer';
 
 /** Change this to switch between the four approaches */
-export const CHAT_TRIGGER_MODE: ChatTriggerMode = 'inline-composer';
+export const CHAT_TRIGGER_MODE: ChatTriggerMode = 'fab';
 
 /** Threads 入口方案：1=Home 右下角 FAB；2=侧栏 history 展开列表；3=Home 右上角 history 下拉；4=侧栏 history 按钮+覆盖浮层 */
 export type ThreadsEntryMode = '1' | '2' | '3' | '4';
@@ -36,6 +36,7 @@ export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
   screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
+  thesis: { label: 'Defense Thesis Tracker', icon: 'sidebar-discover-normal' },
   agent: null,
 };
 
@@ -62,4 +63,5 @@ export const CONVERSATIONS: ConversationItem[] = [
 /** Default thread to load when opening chat on a specific page */
 export const PAGE_DEFAULT_THREAD: Record<string, string> = {
   screener: 'demo',
+  thesis: 'demo',
 };

@@ -1,11 +1,12 @@
 import { Dropdown } from './Dropdown';
 import { CONVERSATIONS } from '@/lib/chat-config';
 
-const AGENT_ICON = `${import.meta.env.BASE_URL}sidebar-skills-normal.svg`;
+export const AGENT_CONVERSATION_ID = '__agent__';
+export const AGENT_ICON = `${import.meta.env.BASE_URL}sidebar-skills-normal.svg`;
 
 const AGENT_SECTION = {
   title: 'Alva Agent',
-  items: [{ id: '__agent__', label: 'Alva Agent', icon: AGENT_ICON, badge: 3 }],
+  items: [{ id: AGENT_CONVERSATION_ID, label: 'Alva Agent', icon: AGENT_ICON, badge: 3 }],
 };
 
 const THREAD_SECTION = {
@@ -24,19 +25,11 @@ export function ThreadSwitcherDropdown({
   trigger: React.ReactNode;
   align?: 'left' | 'right';
 }) {
-  const handleSelect = (id: string) => {
-    if (id === '__agent__') {
-      window.location.hash = 'agent';
-    } else {
-      onSelect(id);
-    }
-  };
-
   return (
     <Dropdown
       sections={[AGENT_SECTION, THREAD_SECTION]}
-      activeId={activeId === '__agent__' ? '__agent__' : activeId}
-      onSelect={handleSelect}
+      activeId={activeId}
+      onSelect={onSelect}
       width={400}
       maxHeight={640}
       align={align}

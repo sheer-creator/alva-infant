@@ -1,7 +1,7 @@
 import { CdnIcon } from '../shared/CdnIcon';
 import { ChatInput } from '../shared/ChatInput';
 import { Dropdown } from '../shared/Dropdown';
-import { ThreadSwitcherDropdown } from '../shared/ThreadSwitcherDropdown';
+import { ThreadSwitcherDropdown, AGENT_CONVERSATION_ID } from '../shared/ThreadSwitcherDropdown';
 import { useChatContext } from './ChatContext';
 import { ChatMessages } from './ChatMessages';
 import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
@@ -39,12 +39,35 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
               activeId={activeConversationId}
               onSelect={setActiveConversation}
               trigger={
-                <div className="flex gap-[4px] items-center min-w-0">
-                  <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
-                    {CONVERSATIONS.find(c => c.id === activeConversationId)?.label ?? 'New Thread'}
-                  </p>
-                  <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
-                </div>
+                activeConversationId === AGENT_CONVERSATION_ID ? (
+                  <div className="flex items-center gap-[8px] min-w-0">
+                    <div className="relative shrink-0">
+                      <img
+                        src={`${import.meta.env.BASE_URL}logo-portrait.svg`}
+                        alt="Alva Agent"
+                        className="rounded-full"
+                        style={{ width: 24, height: 24 }}
+                      />
+                      <div
+                        className="absolute -bottom-[1px] right-[-3px] size-[10px] rounded-full border-[1.5px] border-white"
+                        style={{ background: 'var(--main-m1, #49A3A6)' }}
+                      />
+                    </div>
+                    <div className="flex gap-[4px] items-center min-w-0">
+                      <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
+                        Alva Agent
+                      </p>
+                      <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-[4px] items-center min-w-0">
+                    <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
+                      {CONVERSATIONS.find(c => c.id === activeConversationId)?.label ?? 'New Thread'}
+                    </p>
+                    <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
+                  </div>
+                )
               }
             />
           </div>
@@ -74,7 +97,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
 
         {/* ── Chat Body ── */}
         <div className="flex flex-col flex-1 items-center min-h-0 pb-[8px] px-[8px] relative" style={{ zIndex: 1 }}>
-          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full pb-[64px] px-[16px]">
+          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full pt-[12px] pb-[64px] px-[16px]">
             <ChatMessages conversationId={activeConversationId} hasContent={hasInitialInput} />
           </div>
 
