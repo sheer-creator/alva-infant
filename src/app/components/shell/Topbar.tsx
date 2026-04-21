@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Page } from '@/app/App';
 import { CdnIcon } from '../shared/CdnIcon';
 import { Avatar } from '../shared/Avatar';
+import { PlaybookInfoPopup } from '../community/PlaybookInfoPopup';
 
 interface TopbarProps {
   title: string;
@@ -12,6 +14,14 @@ interface TopbarProps {
   playbookRef?: string;
   /** 「Start Remixing」跳转的云端 Agent 地址 */
   remixAgentUrl?: string;
+  /** Info popup 里显示的 Playbook 说明 */
+  description?: string;
+  /** 运行间隔标签，例如 '15m' */
+  intervalLabel?: string;
+  /** Info popup 的 onNavigate(传入时才显示 "View all feeds in Settings" 入口) */
+  onNavigate?: (page: Page) => void;
+  /** 作者头像/名称点击 */
+  onAuthorClick?: () => void;
 }
 
 const COPY_FEEDBACK_MS = 2000;
@@ -44,9 +54,9 @@ function RemixPromptBody({ playbookRef }: { playbookRef: string }) {
   );
 }
 
-function StatusDot() {
+function StatusDot({ size = 12 }: { size?: number }) {
   return (
-    <div className="flex items-center shrink-0 size-[12px]">
+    <div className="flex items-center shrink-0" style={{ width: size, height: size }}>
       <div className="flex-1 h-full min-h-px min-w-px overflow-clip relative">
         <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2">
           <svg className="block size-full" fill="none" viewBox="0 0 12 12">
@@ -63,18 +73,35 @@ function StatusDot() {
   );
 }
 
+function StatusPill({ text = '15m' }: { text?: string }) {
+  return (
+    <div
+      className="flex items-center justify-center gap-[2px] px-[6px] py-px rounded-full shrink-0"
+      style={{ border: '1px solid rgba(0,0,0,0.07)' }}
+    >
+      <StatusDot size={12} />
+      <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] whitespace-nowrap">
+        {text}
+      </p>
+    </div>
+  );
+}
+
 function IconButton({
   children,
   label,
   active,
+  onClick,
 }: {
   children: React.ReactNode;
   label?: string | number;
   /** 选中 / 菜单展开等激活态：底 m1-10，由子级图标自行着色 */
   active?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <div
+      onClick={onClick}
       className={`flex gap-[4px] h-[32px] items-center justify-center overflow-clip px-[8px] py-[6px] rounded-[6px] shrink-0 cursor-pointer transition-colors ${
         active ? 'bg-[var(--main-m1-10)]' : 'hover:bg-black/[0.04]'
       }`}
@@ -103,12 +130,30 @@ export function Topbar({
   commentCount,
   playbookRef = '@ivan/geopolitical-risk',
   remixAgentUrl = 'https://app.alva.xyz',
+  description = 'Auto-generated playbook summary — hover for details.',
+  intervalLabel = '15m',
+  onNavigate,
+  onAuthorClick,
 }: TopbarProps) {
   const [remixOpen, setRemixOpen] = useState(false);
   const [ownAgentOpen, setOwnAgentOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [headerOpen, setHeaderOpen] = useState(false);
+  const [starred, setStarred] = useState(false);
+  const [starPopupOpen, setStarPopupOpen] = useState(false);
   const remixWrapRef = useRef<HTMLDivElement>(null);
+  const starWrapRef = useRef<HTMLDivElement>(null);
+  const headerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const remixPrompt = buildRemixPrompt(playbookRef);
+
+  const openHeader = useCallback(() => {
+    if (headerTimer.current) clearTimeout(headerTimer.current);
+    setHeaderOpen(true);
+  }, []);
+  const closeHeader = useCallback(() => {
+    headerTimer.current = setTimeout(() => setHeaderOpen(false), 150);
+  }, []);
+  useEffect(() => () => { if (headerTimer.current) clearTimeout(headerTimer.current); }, []);
 
   const closeRemix = useCallback(() => {
     setRemixOpen(false);
@@ -127,6 +172,28 @@ export function Topbar({
     return () => document.removeEventListener('mousedown', onDown);
   }, [remixOpen, closeRemix]);
 
+  useEffect(() => {
+    if (!starPopupOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (starWrapRef.current && !starWrapRef.current.contains(e.target as Node)) {
+        setStarPopupOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [starPopupOpen]);
+
+  const onStarClick = () => {
+    setStarPopupOpen(o => {
+      if (!o) setStarred(true);
+      return !o;
+    });
+  };
+  const onUnstar = () => {
+    setStarred(false);
+    setStarPopupOpen(false);
+  };
+
   const copyPrompt = async () => {
     try {
       await navigator.clipboard.writeText(remixPrompt);
@@ -139,29 +206,122 @@ export function Topbar({
 
   return (
     <div className="flex gap-[12px] h-[56px] items-center py-[10px] sticky top-0 shrink-0 w-full z-10 bg-[var(--b0-page)] text-[var(--text-n9)]">
-      {/* Left: avatar + author + dot + title + status */}
+      {/* Left: avatar + author (click → profile) + title (hover → popup) + status */}
       <div className="flex flex-1 gap-[4px] items-center min-h-px min-w-px">
-        <div className="shrink-0 size-[20px]">
-          <Avatar name={author} size={20} />
-        </div>
-        <div className="flex flex-1 gap-[4px] items-center min-h-px min-w-px overflow-hidden">
-          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n9)] tracking-[0.14px] whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
+        {/* Author unit */}
+        <div
+          className={`flex gap-[4px] items-center shrink-0 ${onAuthorClick ? 'cursor-pointer' : ''}`}
+          onClick={onAuthorClick}
+          role={onAuthorClick ? 'button' : undefined}
+          tabIndex={onAuthorClick ? 0 : undefined}
+          onKeyDown={(e) => { if (onAuthorClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onAuthorClick(); } }}
+        >
+          <div className="shrink-0 size-[20px]">
+            <Avatar name={author} size={20} />
+          </div>
+          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n9)] tracking-[0.14px] whitespace-nowrap shrink-0">
             {author}
           </p>
-          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n5)] tracking-[0.14px] shrink-0">
-            &bull;
-          </p>
-          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n9)] tracking-[0.14px] whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
+        </div>
+        <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n5)] tracking-[0.14px] shrink-0">
+          &bull;
+        </p>
+        {/* Title + status — 整块作为 hover 触发区(icon + title + pill) */}
+        <div
+          className="group relative flex gap-[4px] items-center min-w-0 overflow-visible cursor-pointer"
+          onMouseEnter={openHeader}
+          onMouseLeave={closeHeader}
+        >
+          <div className="shrink-0 size-[18px] flex items-center justify-center">
+            <CdnIcon name="sidebar-dashboard-normal" size={18} color="rgba(0,0,0,0.9)" />
+          </div>
+          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[var(--text-n9)] tracking-[0.14px] whitespace-nowrap overflow-hidden text-ellipsis shrink-0 group-hover:underline group-hover:decoration-dotted group-hover:decoration-[rgba(0,0,0,0.5)] group-hover:underline-offset-[3px]">
             {title}
           </p>
-          <StatusDot />
+          <StatusPill text={intervalLabel} />
+          {/* Hover 浮层：Playbook Info — 标题左对齐，下方 8px，带淡入上浮动画 */}
+          <div
+            className={`absolute left-0 top-full mt-[8px] z-30 w-[520px] origin-top transition-all duration-200 ease-out ${
+              headerOpen
+                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+                : 'opacity-0 -translate-y-1 scale-[0.98] pointer-events-none'
+            }`}
+          >
+            <PlaybookInfoPopup
+              title={title}
+              intervalLabel={intervalLabel}
+              description={description}
+              authorName={author}
+              onNavigate={onNavigate}
+            />
+          </div>
         </div>
       </div>
 
       {/* Right: actions */}
       <div className="flex items-center shrink-0">
         <IconButton><CdnIcon name="share-l" /></IconButton>
-        <IconButton label={starCount ?? 12}><CdnIcon name="star-l" /></IconButton>
+        <div ref={starWrapRef} className="relative shrink-0">
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={onStarClick}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStarClick(); } }}
+            aria-pressed={starred}
+            aria-expanded={starPopupOpen}
+            aria-haspopup="dialog"
+          >
+            <IconButton label={starCount ?? 12} active={starPopupOpen}>
+              <CdnIcon
+                name={starred ? 'star-f' : 'star-l'}
+                color={starred ? 'var(--main-m1)' : undefined}
+              />
+            </IconButton>
+          </div>
+          {starPopupOpen && (
+            <div
+              className="absolute right-0 top-full mt-[6px] z-50 flex w-[428px] flex-col gap-[16px] p-[20px] rounded-[var(--radius-pop-popover)] shadow-s"
+              style={{
+                backgroundColor: 'var(--b0-container)',
+                border: '0.5px solid var(--line-l2)',
+              }}
+              role="dialog"
+              aria-label="Starred"
+            >
+              {/* Telegram CTA card */}
+              <div
+                className="flex flex-col gap-[12px] items-center justify-center w-full px-[20px] py-[24px] rounded-[var(--radius-ct-l)]"
+                style={{ backgroundColor: 'var(--b-r02)' }}
+              >
+                <img
+                  src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg"
+                  alt="Telegram"
+                  className="size-[40px] shrink-0"
+                />
+                <p className="w-full text-center font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">
+                  Connect Telegram to Get Notified
+                </p>
+                <button
+                  type="button"
+                  className="flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[var(--radius-btn-m)] px-[20px] py-[9px] font-['Delight',sans-serif] font-medium text-[14px] leading-[22px] tracking-[0.14px] text-white whitespace-nowrap transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: '#24A1DE', border: 'none' }}
+                >
+                  Connect Telegram
+                </button>
+              </div>
+              {/* Starred (click → unstar) */}
+              <button
+                type="button"
+                onClick={onUnstar}
+                className="flex h-[40px] w-full shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[var(--radius-btn-m)] bg-transparent px-[20px] py-[9px] font-['Delight',sans-serif] font-medium text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] transition-colors hover:bg-[var(--b-r02)]"
+                style={{ border: '0.5px solid var(--line-l3)' }}
+              >
+                <CdnIcon name="star-f" size={18} color="var(--main-m1)" />
+                Starred
+              </button>
+            </div>
+          )}
+        </div>
         <div ref={remixWrapRef} className="relative shrink-0">
           <div
             role="button"
@@ -206,7 +366,7 @@ export function Topbar({
                 onClick={() => setRemixOpen(false)}
               >
                 <CdnIcon name="remix-l" size={18} color="#ffffff" />
-                Start Remixing
+                Remix
               </a>
               <div className="relative flex w-full flex-col">
                 <div className="relative flex w-full items-center gap-[8px]">

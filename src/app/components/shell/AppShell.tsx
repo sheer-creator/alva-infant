@@ -206,9 +206,9 @@ function AppShellInner({
       {isUserInfoOpen && (
         <div
           ref={popupRef}
-          className="fixed bottom-[56px] left-[8px] z-[9999] w-[320px]"
+          className="fixed bottom-[56px] left-[8px] z-[9999] w-[360px]"
         >
-          <UserInfo />
+          <UserInfo onNavigate={onNavigate} />
         </div>
       )}
     </div>

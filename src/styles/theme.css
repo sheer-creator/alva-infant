@@ -76,6 +76,8 @@
   --radius-ct-m: 8px;
   --radius-ct-l: 8px;
   --radius-pop-popover: 8px;
+  --radius-btn-s: 6px;
+  --radius-btn-m: 8px;
 
   /* ── Text (Light) ── */
   --text-n9: rgba(0, 0, 0, 0.9);
@@ -95,6 +97,8 @@
   --grey-g1:  #dedede;
   --b-r02: rgba(0, 0, 0, 0.02);
   --b-r03: rgba(0, 0, 0, 0.03);
+  --b-r1:  rgba(0, 0, 0, 0.1);
+  --b-common-white: #ffffff;
 
   /* ── Line & Border ── */
   --line-l05: rgba(0, 0, 0, 0.05);
