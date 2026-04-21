@@ -36,6 +36,7 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Quality Value Stock Screener', page: 'screener' },
+  { label: 'Defense Thesis Tracker', page: 'thesis' },
 ];
 
 export function Sidebar({
