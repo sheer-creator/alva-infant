@@ -742,11 +742,90 @@
   .modal-close:hover { opacity: 0.6; }
   .modal-body { flex:1 1 auto; width:100%; overflow-y:auto; }
 
+  /* ── Alva Tag (from design-components.md) ── */
+  .tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400; white-space: nowrap;
+    border-radius: var(--radius-ct-s);
+    height: 22px; padding: 1px 6px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    background-color: var(--b-r05); color: var(--text-n9);
+  }
+  .tag-xs {
+    height: 18px; padding: 1px 6px;
+    font-size: 10px; line-height: 16px; letter-spacing: 0.1px;
+    border-radius: var(--radius-ct-xs);
+  }
+
+  /* ── Alva Select (from design-components.md) ── */
+  .select {
+    display: flex; align-items: center; position: relative;
+    background: var(--b0-container); cursor: pointer;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    transition: border-color 0.12s ease;
+  }
+  .select-border {
+    position: absolute; inset: 0;
+    border: 0.5px solid var(--line-l3);
+    border-radius: inherit; pointer-events: none;
+    transition: border-color 0.12s ease;
+  }
+  .select:hover .select-border { border-color: var(--line-l9); }
+  .select-text {
+    flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: var(--text-n3);
+  }
+  .select.filled .select-text { color: var(--text-n9); }
+  .select:hover .select-text { color: var(--text-n9); }
+  .select.filled .select-icon { opacity: 0.2; }
+  .select-sm {
+    height: 28px;
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    gap: var(--spacing-xxs);
+    border-radius: var(--radius-btn-s);
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+  }
+  .select-icon {
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.22;
+    transition: opacity 0.12s ease;
+  }
+  .select:hover .select-icon, .select.open .select-icon { opacity: 1; }
+  .select-icon img { display: block; width: 100%; height: 100%; }
+
+  /* ── Alva Button (secondary + extra-small, from design-components.md) ── */
+  .btn {
+    border: none; outline: none; background: none; margin: 0;
+    cursor: pointer; user-select: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500; white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+  }
+  .btn-secondary {
+    background: transparent; color: var(--text-n9);
+    border: 0.5px solid var(--line-l3);
+  }
+  .btn-secondary:hover { border-color: var(--line-l9); }
+  .btn-secondary:active { border-color: var(--line-l3); background: var(--b-r02); }
+  .btn-extra-small {
+    height: 28px; padding: var(--spacing-xxs) var(--spacing-s);
+    gap: var(--spacing-xxs);
+    border-radius: var(--radius-btn-s);
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+  }
+
   /* ── Daily Push Card ── */
+  #overview-content {
+    flex-direction: column;
+    gap: var(--spacing-xl);
+  }
   .daily-push-card {
     display: flex; flex-direction: column;
     gap: var(--spacing-l);
-    padding: var(--spacing-l) 0;
   }
   .dp-header {
     display: flex; align-items: center; gap: var(--spacing-s);
@@ -755,61 +834,23 @@
     width: 16px; height: 16px;
     background: var(--main-m1);
     transform: rotate(45deg);
-    border-radius: 2px;
+    border-radius: var(--radius-ct-xs);
     flex-shrink: 0;
   }
-  .dp-status {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 2px 10px; height: 22px;
-    background: rgba(228, 157, 27, 0.12);
-    color: #B27808;
-    border-radius: 999px;
-    font-size: 12px; letter-spacing: 0.12px; font-weight: 500;
-    white-space: nowrap;
-  }
-  .dp-status::before {
-    content: '';
+  .dp-status-dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: #E49D1B;
+    background: var(--main-m5);
+    margin-right: var(--spacing-xxs);
     flex-shrink: 0;
   }
   .dp-title {
     font-size: 16px; color: var(--text-n9);
-    font-weight: 500; letter-spacing: 0.16px; line-height: 22px;
+    font-weight: 400; letter-spacing: 0.16px; line-height: 22px;
   }
-  .dp-date-nav {
-    margin-left: auto;
-    display: inline-flex; align-items: center; gap: 4px;
-  }
-  .dp-nav-btn {
-    width: 28px; height: 28px;
-    border: none; background: transparent;
-    cursor: pointer;
-    color: var(--text-n5);
-    font-size: 16px; line-height: 1;
-    display: inline-flex; align-items: center; justify-content: center;
-    border-radius: 4px;
-  }
-  .dp-nav-btn:hover { background: var(--grey-g01); color: var(--text-n9); }
-  .dp-date-picker {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 4px 10px; height: 32px;
-    border: 1px solid var(--line-l07);
-    border-radius: 6px;
-    font-size: 13px; color: var(--text-n9);
-    cursor: pointer;
-    letter-spacing: 0.13px;
-  }
-  .dp-date-picker:hover { background: var(--grey-g01); }
-  .dp-date-caret {
-    width: 12px; height: 12px;
-    background-color: var(--text-n5);
-    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-l2.svg') center / contain no-repeat;
-            mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-l2.svg') center / contain no-repeat;
-  }
+  .dp-date-select { margin-left: auto; min-width: 140px; }
 
   .dp-timeline {
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: var(--spacing-s);
   }
   .dp-date-label {
     font-size: 11px; color: var(--text-n5);
@@ -820,20 +861,20 @@
   }
   .dp-bar {
     flex: 1; height: 16px;
-    background: var(--grey-g02, rgba(0,0,0,0.06));
-    border-radius: 3px;
+    background: var(--grey-g02);
+    border-radius: var(--radius-ct-s);
   }
-  .dp-bar.active { background: #E49D1B; }
+  .dp-bar.active { background: var(--main-m5); }
   .dp-bar.current { box-shadow: 0 0 0 1.5px var(--text-n9); }
 
   .dp-hero {
-    border-left: 3px solid #E49D1B;
+    border-left: 3px solid var(--main-m5);
     padding-left: var(--spacing-m);
     display: flex; flex-direction: column; gap: var(--spacing-xs);
   }
   .dp-hero-title {
     font-size: 18px; line-height: 28px; letter-spacing: 0.18px;
-    font-weight: 500; color: var(--text-n9);
+    font-weight: 400; color: var(--text-n9);
     margin: 0;
   }
   .dp-hero-desc {
@@ -846,10 +887,10 @@
     display: flex; flex-direction: column; gap: var(--spacing-s);
   }
   .dp-change-row {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: var(--spacing-xs);
+    padding: var(--spacing-s) var(--spacing-m);
     border: 1px solid var(--line-l07);
-    border-radius: var(--radius-ct-s, 8px);
+    border-radius: var(--radius-ct-l);
   }
   .dp-change-dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -864,38 +905,21 @@
     color: var(--text-n7);
     margin: 0;
   }
-  .dp-change-tag {
-    display: inline-flex; align-items: center;
-    font-size: 10px; font-weight: 500;
-    padding: 2px 6px;
-    background: rgba(0,0,0,0.04);
-    color: var(--text-n7);
-    border-radius: 4px;
-    letter-spacing: 0.5px;
-    margin-right: 8px;
-    vertical-align: 2px;
-  }
-  .dp-change-label {
-    font-weight: 500; color: var(--text-n9);
-  }
-  .dp-change-sep { color: var(--text-n5); margin: 0 4px; }
+  .dp-change-body .tag { vertical-align: 2px; margin-right: var(--spacing-xs); }
+  .dp-change-label { font-weight: 500; color: var(--text-n9); }
+  .dp-change-sep { color: var(--text-n5); margin: 0 var(--spacing-xxs); }
 
   .dp-more-btn {
-    display: inline-flex; align-items: center; gap: 4px;
     align-self: flex-start;
-    padding: 6px 12px; height: 30px;
-    background: transparent;
     border: 1px solid var(--line-l07);
-    border-radius: 999px;
-    font-family: inherit;
-    font-size: 12px; color: var(--text-n7);
-    cursor: pointer;
-    letter-spacing: 0.12px;
+    border-radius: var(--radius-ct-l);
+    color: var(--text-n7);
+    font-weight: 400;
   }
   .dp-more-btn:hover { background: var(--grey-g01); }
-  .dp-more-count { color: var(--text-n5); margin-left: 2px; }
+  .dp-more-count { color: var(--text-n5); }
   .dp-more-chev {
-    width: 12px; height: 12px; margin-left: 2px;
+    width: 12px; height: 12px;
     background-color: currentColor;
     -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
             mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
@@ -938,16 +962,16 @@
     <div id="overview-content" style="display:none;">
       <div class="daily-push-card">
         <div class="dp-header">
-          <span class="dp-diamond" aria-hidden="true"></span>
-          <span class="dp-status">Stabilizing</span>
+          <span class="tag" style="background:var(--main-m5-10);color:var(--main-m5);">
+            <span class="dp-status-dot" aria-hidden="true"></span>Stabilizing
+          </span>
           <span class="dp-title">Scarcity with Scars</span>
-          <div class="dp-date-nav">
-            <button class="dp-nav-btn" type="button" aria-label="Previous day">&lsaquo;</button>
-            <div class="dp-date-picker" role="button" tabindex="0">
-              <span>Apr 22 &middot; 1d ago</span>
-              <span class="dp-date-caret" aria-hidden="true"></span>
+          <div class="select select-sm filled dp-date-select" role="button" tabindex="0">
+            <div class="select-border"></div>
+            <span class="select-text">Apr 22 &middot; 1d ago</span>
+            <div class="select-icon" style="width:12px;height:12px;">
+              <img src="https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg" alt="" />
             </div>
-            <button class="dp-nav-btn" type="button" aria-label="Next day">&rsaquo;</button>
           </div>
         </div>
 
@@ -977,22 +1001,21 @@
           <div class="dp-change-row">
             <span class="dp-change-dot up" aria-hidden="true"></span>
             <p class="dp-change-body">
-              <span class="dp-change-tag">SUPPLY</span><span class="dp-change-label">Scarcity with Scars still sets the pace</span><span class="dp-change-sep">&mdash;</span>Scarcity with Scars remains the strongest layer on both a 1m and YTD basis in the basket data. That keeps the thesis anchored in sectors where supply behavior still looks restrained by memory of the last collapse, not just by good demand.
+              <span class="tag tag-xs">SUPPLY</span><span class="dp-change-label">Scarcity with Scars still sets the pace</span><span class="dp-change-sep">&mdash;</span>Scarcity with Scars remains the strongest layer on both a 1m and YTD basis in the basket data. That keeps the thesis anchored in sectors where supply behavior still looks restrained by memory of the last collapse, not just by good demand.
             </p>
           </div>
           <div class="dp-change-row">
             <span class="dp-change-dot down" aria-hidden="true"></span>
             <p class="dp-change-body">
-              <span class="dp-change-tag">CROWDING</span><span class="dp-change-label">Healing / Relapse Risk is sending an uncomfortable message</span><span class="dp-change-sep">&mdash;</span>Healing / Relapse Risk is the strongest 1m layer, which is bad for basket construction because it is the short sleeve. FCX, CLF and HAL all posting positive 1m returns suggests investors are becoming more willing to underwrite healing and fresh activity.
+              <span class="tag tag-xs">CROWDING</span><span class="dp-change-label">Healing / Relapse Risk is sending an uncomfortable message</span><span class="dp-change-sep">&mdash;</span>Healing / Relapse Risk is the strongest 1m layer, which is bad for basket construction because it is the short sleeve. FCX, CLF and HAL all posting positive 1m returns suggests investors are becoming more willing to underwrite healing and fresh activity.
             </p>
           </div>
+          <button class="btn btn-secondary btn-extra-small dp-more-btn" type="button">
+            <span>More changes</span>
+            <span class="dp-more-count">(3)</span>
+            <span class="dp-more-chev" aria-hidden="true"></span>
+          </button>
         </div>
-
-        <button class="dp-more-btn" type="button">
-          <span>More changes</span>
-          <span class="dp-more-count">(3)</span>
-          <span class="dp-more-chev" aria-hidden="true"></span>
-        </button>
       </div>
 
       <div class="widget-card">
@@ -2201,7 +2224,7 @@ window.__ALVA_OFFLINE_DATA__ = {
 
         TAB_RENDERERS.overview = function(){
           document.getElementById('overview-loading').style.display='none';
-          document.getElementById('overview-content').style.display='block';
+          document.getElementById('overview-content').style.display='flex';
           renderOverview(curr.stocks, priorMap);
         };
         TAB_RENDERERS.trends = function(){
