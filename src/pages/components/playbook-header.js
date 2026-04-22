@@ -136,6 +136,15 @@
         '</div><span class="pb-meta-sep">|</span>'
       : '';
 
+    var readmeModal = host.getAttribute('readme-modal') || '';
+    var readmeBlock = readmeModal
+      ? '<button class="pb-meta-link" type="button" data-readme-trigger>' +
+          '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
+          '<span>Readme</span>' +
+          '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
+        '</button><span class="pb-meta-sep">|</span>'
+      : '';
+
     var feedsCount = feeds.length;
     var feedsBlock = feedsCount
       ? '<span class="pb-meta-sep">|</span>' +
@@ -205,11 +214,24 @@
         '<div class="pb-meta">' +
           authorBlock +
           updateBlock +
+          readmeBlock +
           '<button class="pb-meta-link" type="button"><span>History</span><span class="pb-meta-link-chev" aria-hidden="true"></span></button>' +
           feedsBlock +
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupReadmeTrigger(host) {
+    var btn = host.querySelector('[data-readme-trigger]');
+    if (!btn) return;
+    var modalId = host.getAttribute('readme-modal') || '';
+    btn.addEventListener('click', function () {
+      host.dispatchEvent(new CustomEvent('playbook-readme-click', {
+        bubbles: true,
+        detail: { modalId: modalId }
+      }));
+    });
   }
 
   function setupDescToggle(host) {
@@ -394,6 +416,7 @@
         setupDescToggle(self);
         setupFeedsPopover(self);
         setupRemixPopover(self);
+        setupReadmeTrigger(self);
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mount, { once: true });

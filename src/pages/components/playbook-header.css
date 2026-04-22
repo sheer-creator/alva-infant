@@ -128,6 +128,11 @@ playbook-header { display: block; }
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
 }
+.pb-meta-icon.ic-readme {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+}
+.pb-meta-link .pb-meta-icon { background-color: currentColor; margin-right: 2px; }
 .pb-meta-link {
     display: inline-flex; align-items: center; gap: 2px;
     background: transparent; border: none; padding: 0;
