@@ -11,9 +11,6 @@ playbook-header { display: block; }
     padding: var(--sp-xl) var(--sp-xxl);
     display: flex; flex-direction: column; gap: var(--sp-xs);
 }
-@media (max-width: 768px) {
-    .playbook-info { padding: var(--sp-m) var(--sp-m) 0; }
-}
 
 /* title row */
 .pb-top { display: flex; align-items: center; gap: var(--sp-xs); width: 100%; }
@@ -208,6 +205,133 @@ playbook-header { display: block; }
     -webkit-mask-size: contain; mask-size: contain;
 }
 
+/* remix popover */
+.remix-menu { position: relative; display: inline-flex; }
+.remix-popover {
+    position: absolute;
+    top: calc(100% + 6px); right: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    width: 480px;
+    padding: 20px;
+    background: #fff;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+}
+.remix-popover.open { display: flex; }
+.remix-popover-title {
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px; font-weight: 500;
+    line-height: 26px; letter-spacing: 0.16px;
+    color: rgba(0,0,0,0.9);
+    margin: 0;
+}
+.remix-popover-desc {
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.9);
+    margin: 0;
+}
+.remix-popover-cta {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 9px 20px;
+    background: var(--main-m1); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    line-height: 22px; letter-spacing: 0.14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity .15s;
+}
+.remix-popover-cta:hover { opacity: 0.9; }
+.remix-popover-cta-icon {
+    width: 18px; height: 18px; display: inline-block;
+    background-color: #fff;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    flex-shrink: 0;
+}
+.remix-popover-agent { display: flex; flex-direction: column; }
+.remix-popover-divider { display: flex; align-items: center; gap: 8px; }
+.remix-popover-divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.05); }
+.remix-popover-agent-toggle {
+    display: flex; align-items: center; gap: 4px;
+    background: transparent; border: none; padding: 0;
+    cursor: pointer; font-family: inherit;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: rgba(0,0,0,0.5);
+    white-space: nowrap;
+    transition: opacity .15s;
+}
+.remix-popover-agent-toggle:hover { opacity: 0.8; }
+.remix-popover-agent-arrow {
+    width: 12px; height: 12px; display: inline-block;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-out;
+    flex-shrink: 0;
+}
+.remix-popover.agent-open .remix-popover-agent-arrow { transform: rotate(90deg); }
+.remix-popover-agent-body {
+    display: none;
+    flex-direction: column; gap: 16px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 6px;
+}
+.remix-popover.agent-open .remix-popover-agent-body { display: flex; }
+.remix-popover-prompt {
+    margin: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    white-space: pre-wrap; word-break: break-word;
+    font-family: inherit;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.7);
+}
+.remix-popover-copy {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 9px 20px;
+    background: transparent;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.9);
+    cursor: pointer;
+    transition: border-color .15s;
+}
+.remix-popover-copy:hover { border-color: rgba(0,0,0,0.9); }
+.remix-popover-copy-icon {
+    width: 18px; height: 18px; display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/copy-l.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/copy-l.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    flex-shrink: 0;
+}
+.remix-popover-copy-icon.copied {
+    background-color: var(--main-m1);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+}
+
 /* description */
 .pb-desc {
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
@@ -229,9 +353,9 @@ playbook-header { display: block; }
     color: var(--text-n7);
     cursor: pointer;
     display: none;
-    transition: opacity .15s;
+    transition: color .15s ease;
 }
-.pb-desc-toggle:hover { opacity: 0.6; }
+.pb-desc-toggle:hover { color: var(--text-n9); }
 .pb-desc.has-overflow .pb-desc-toggle { display: inline-block; }
 `,t=`/* ══════════════════════════════════════════════════════════════
    <playbook-header> — Playbook info header custom element
@@ -312,16 +436,33 @@ playbook-header { display: block; }
     }).join('');
     return (
       '<div class="feeds-popover-header">' +
-        '<div class="feeds-popover-cell-name">Feed</div>' +
+        '<div class="feeds-popover-cell-name">Automation</div>' +
         '<div class="feeds-popover-cell-interval">Interval</div>' +
         '<div class="feeds-popover-cell-last">Last Run</div>' +
       '</div>' +
       rows +
       '<div class="feeds-popover-viewall" role="button" tabindex="0">' +
-        '<span class="feeds-popover-viewall-label">View all feeds in Settings</span>' +
+        '<span class="feeds-popover-viewall-label">View all automations in Settings</span>' +
         '<span class="feeds-popover-viewall-chev" aria-hidden="true"></span>' +
       '</div>'
     );
+  }
+
+  function slugify(s) {
+    return String(s || '').toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  function buildRemixPrompt(title) {
+    var ref = '@alva/' + (slugify(title) || 'playbook');
+    return 'Remix Playbook(' + ref + '):\\n\\n' +
+      'If you have the Alva skill → use it to build my own version.\\n' +
+      'If not → install it first: npx skills add https://github.com/alva-ai/skills\\n\\n' +
+      'Then:\\n' +
+      '1. Customize it based on my preferences\\n' +
+      '2. Deploy as a new playbook under my account\\n' +
+      '3. If I don\\'t specify what to change, ask me what I\\'d like to customize.';
   }
 
   function render(host) {
@@ -359,7 +500,7 @@ playbook-header { display: block; }
       ? '<span class="pb-meta-sep">|</span>' +
         '<div class="feeds-menu">' +
           '<button class="pb-meta-link" type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false">' +
-            '<span>' + feedsCount + ' Feed' + (feedsCount > 1 ? 's' : '') + '</span>' +
+            '<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>' +
             '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
           '</button>' +
           '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
@@ -385,7 +526,37 @@ playbook-header { display: block; }
           '<div class="pb-actions">' +
             '<button class="pb-action" type="button" aria-label="Share"><span class="pb-action-icon ic-share"></span></button>' +
             '<button class="pb-action" type="button" aria-label="Star"><span class="pb-action-icon ic-star"></span>' + (star ? '<span class="pb-action-count">' + esc(star) + '</span>' : '') + '</button>' +
-            '<button class="pb-action" type="button" aria-label="Remix"><span class="pb-action-icon ic-remix"></span>' + (remix ? '<span class="pb-action-count">' + esc(remix) + '</span>' : '') + '</button>' +
+            '<div class="remix-menu">' +
+              '<button class="pb-action" type="button" aria-label="Remix" data-remix-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                '<span class="pb-action-icon ic-remix"></span>' +
+                (remix ? '<span class="pb-action-count">' + esc(remix) + '</span>' : '') +
+              '</button>' +
+              '<div class="remix-popover" data-remix-popover role="dialog" aria-label="Remix this Playbook" aria-hidden="true">' +
+                '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
+                '<p class="remix-popover-desc">Create your own version — customize the data, layout, and style to fit your needs. Your remix will be published under your account.</p>' +
+                '<a href="https://app.alva.xyz" target="_blank" rel="noopener" class="remix-popover-cta" data-remix-cta>' +
+                  '<span class="remix-popover-cta-icon"></span>' +
+                  '<span>Remix</span>' +
+                '</a>' +
+                '<div class="remix-popover-agent">' +
+                  '<div class="remix-popover-divider">' +
+                    '<div class="remix-popover-divider-line"></div>' +
+                    '<button class="remix-popover-agent-toggle" type="button" data-remix-agent-toggle aria-expanded="false">' +
+                      '<span>Or use your own agent</span>' +
+                      '<span class="remix-popover-agent-arrow"></span>' +
+                    '</button>' +
+                    '<div class="remix-popover-divider-line"></div>' +
+                  '</div>' +
+                  '<div class="remix-popover-agent-body">' +
+                    '<pre class="remix-popover-prompt" data-remix-prompt>' + esc(buildRemixPrompt(title)) + '</pre>' +
+                    '<button class="remix-popover-copy" type="button" data-remix-copy>' +
+                      '<span class="remix-popover-copy-icon" data-remix-copy-icon></span>' +
+                      '<span data-remix-copy-label>Copy</span>' +
+                    '</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
             '<button class="pb-action" type="button" aria-label="Comments"><span class="pb-action-icon ic-chat"></span>' + (comments ? '<span class="pb-action-count">' + esc(comments) + '</span>' : '') + '</button>' +
             '<button class="pb-trade-btn" type="button">Trade</button>' +
           '</div>' +
@@ -492,6 +663,82 @@ playbook-header { display: block; }
     }
   }
 
+  function setupRemixPopover(host) {
+    var trigger = host.querySelector('[data-remix-trigger]');
+    var popover = host.querySelector('[data-remix-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.classList.remove('agent-open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      var agentToggleEl = popover.querySelector('[data-remix-agent-toggle]');
+      if (agentToggleEl) agentToggleEl.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+
+    var agentToggle = popover.querySelector('[data-remix-agent-toggle]');
+    if (agentToggle) {
+      agentToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var opened = popover.classList.toggle('agent-open');
+        agentToggle.setAttribute('aria-expanded', String(opened));
+      });
+    }
+
+    var cta = popover.querySelector('[data-remix-cta]');
+    if (cta) cta.addEventListener('click', close);
+
+    var copyBtn = popover.querySelector('[data-remix-copy]');
+    var promptEl = popover.querySelector('[data-remix-prompt]');
+    if (copyBtn && promptEl) {
+      copyBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var text = promptEl.textContent || '';
+        var icon = copyBtn.querySelector('[data-remix-copy-icon]');
+        var label = copyBtn.querySelector('[data-remix-copy-label]');
+        var ok = function () {
+          if (icon) icon.classList.add('copied');
+          if (label) label.textContent = 'Copied';
+          setTimeout(function () {
+            if (icon) icon.classList.remove('copied');
+            if (label) label.textContent = 'Copy';
+          }, 2000);
+        };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(ok).catch(function () {});
+          }
+        } catch (_) {}
+      });
+    }
+  }
+
   class PlaybookHeader extends HTMLElement {
     connectedCallback() {
       if (this._pbHeaderMounted) return;
@@ -505,6 +752,7 @@ playbook-header { display: block; }
         render(self);
         setupDescToggle(self);
         setupFeedsPopover(self);
+        setupRemixPopover(self);
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mount, { once: true });
@@ -625,7 +873,7 @@ playbook-header { display: block; }
   /* ── Background ── */
   --b0-page:           #ffffff;
   --b0-container:      #ffffff;
-  --b0-sidebar:        #2A2A38;
+  --b0-sidebar:        #1D1D1D;
   --b0-sidebar-select: rgba(255, 255, 255, 0.03);
   --grey-g01: #fafafa;
   --grey-g02: #f5f5f5;
@@ -698,7 +946,7 @@ playbook-header { display: block; }
   /* Background */
   --b0-page: #15161a;
   --b0-container: #15161a;
-  --b0-sidebar: #1d1e24;
+  --b0-sidebar: #1D1D1D;
   --b0-sidebar-select: rgba(255, 255, 255, 0.03);
   --grey-g01: #1a1b1f;
   --grey-g02: #1c1d21;
