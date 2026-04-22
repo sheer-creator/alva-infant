@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.js";var n=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.js";var n=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />

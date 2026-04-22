@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.js";import{t as n}from"./Topbar-DsLPPpRl.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.js";import{t as n}from"./Topbar-BmeTVljj.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -204,6 +204,14 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
   .hero-delta-label { color: var(--text-n9); font-weight: 500; }
   .hero-delta-body  { color: var(--text-n7); }
   .hero-delta-empty { font-size: 13px; color: var(--text-n5); padding: 8px 0; }
+  .hero-delta.is-hidden { display: none; }
+  .hero-deltas-toggle {
+    display: inline-flex; align-items: center;
+    margin-top: var(--spacing-s);
+    padding: 0; background: none; border: none; cursor: pointer;
+    font-size: 12px; color: var(--text-n7); letter-spacing: 0.12px;
+  }
+  .hero-deltas-toggle:hover { text-decoration: underline; }
 
   /* Tabs — Alva Underline (aligned with Screener redesign) */
   .tab-wrapper-row {
@@ -676,9 +684,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
       </button>
       <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
     </div>
+    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Readme</div>
     <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
-    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Methodology</div>
-    <div class="info-chip"><span class="info-chip-icon ic-changelog"></span>Change Log</div>
   </div>
 
   <!-- Tabs -->
@@ -700,9 +707,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
 
     <!-- HERO — daily thesis + deltas -->
     <div class="hero-card" id="hero-card">
-      <div class="hero-head">
-        <span class="hero-head-meta">Today's Thesis · Narrative refresh 6:30 PM ET</span>
-      </div>
       <p class="hero-text" id="hero-text"><span class="loading">Loading thesis…</span></p>
       <div id="hero-deltas-block" style="display:none;">
         <div class="hero-deltas-title">What changed since yesterday</div>
@@ -928,7 +932,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
   <div class="modal-overlay" id="methodology-modal" aria-hidden="true">
     <div class="modal-panel" role="dialog" aria-labelledby="methodology-modal-title">
       <div class="modal-title">
-        <span id="methodology-modal-title">Methodology</span>
+        <span id="methodology-modal-title">Readme</span>
         <div class="modal-close" data-modal-close="methodology-modal" aria-label="Close"></div>
       </div>
       <div class="modal-body">
@@ -1004,12 +1008,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
         </div>
       </div>
 
-      <div class="method-cell">
-        <h3 class="section-h">Change Log</h3>
-        <div class="ft-card" id="changelog-card">
-          <div class="loading">Loading change log...</div>
-        </div>
-      </div>
     </div>
       </div>
     </div>
@@ -1337,6 +1335,7 @@ function renderHeroAt(idx) {
   const deltas = safeParseJson(rec.deltas) || [];
   const block = document.getElementById("hero-deltas-block");
   const list = document.getElementById("hero-deltas-list");
+  const DELTA_VISIBLE_COUNT = 2;
   if (deltas.length === 0) {
     block.style.display = "none";
     list.innerHTML = "";
@@ -1345,11 +1344,12 @@ function renderHeroAt(idx) {
     const validCats = new Set(["valuation","catalyst","risk","macro","news"]);
     const validSent = new Set(["bull","bear","neutral"]);
     const escapeHtml = s => (s||"").toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    list.innerHTML = deltas.map(d => {
+    list.innerHTML = deltas.map((d, i) => {
       const cat = validCats.has(d.category) ? d.category : "news";
       const sent = validSent.has(d.sentiment) ? d.sentiment : "neutral";
+      const hiddenCls = i >= DELTA_VISIBLE_COUNT ? " is-hidden" : "";
       return \`
-        <li class="hero-delta">
+        <li class="hero-delta\${hiddenCls}">
           <span class="hero-delta-dot \${sent}"></span>
           <div class="hero-delta-body-wrap">
             <span class="hero-delta-cat cat-\${cat}">\${cat}</span>
@@ -1358,6 +1358,25 @@ function renderHeroAt(idx) {
           </div>
         </li>\`;
     }).join("");
+
+    const existingToggle = block.querySelector(".hero-deltas-toggle");
+    if (existingToggle) existingToggle.remove();
+    if (deltas.length > DELTA_VISIBLE_COUNT) {
+      const hiddenCount = deltas.length - DELTA_VISIBLE_COUNT;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hero-deltas-toggle";
+      btn.innerHTML = \`<span class="hero-deltas-toggle-label">Show \${hiddenCount} more</span>\`;
+      btn.addEventListener("click", () => {
+        const isOpen = btn.classList.toggle("is-open");
+        list.querySelectorAll(".hero-delta").forEach((li, i) => {
+          if (i >= DELTA_VISIBLE_COUNT) li.classList.toggle("is-hidden", !isOpen);
+        });
+        btn.querySelector(".hero-deltas-toggle-label").textContent = isOpen ? "Show less" : \`Show \${hiddenCount} more\`;
+        btn.classList.toggle("is-open", isOpen);
+      });
+      block.appendChild(btn);
+    }
   }
 
   // ---- Update URL hash for deep-linking (preserves tab + sub hash params)
@@ -1396,10 +1415,9 @@ document.addEventListener("click", () => {
 });
 
 async function loadNarrativeSections() {
-  const [catalysts, risks, changelog] = await Promise.all([
+  const [catalysts, risks] = await Promise.all([
     fetchNarrative("catalysts"),
     fetchNarrative("risks"),
-    fetchNarrative("changelog"),
   ]);
 
   // --- Catalysts ---
@@ -1412,24 +1430,6 @@ async function loadNarrativeSections() {
   if (risks) {
     const items = safeParseJson(risks.items) || [];
     renderRiskTable(items);
-  }
-
-  // --- Changelog ---
-  if (changelog) {
-    const entries = safeParseJson(changelog.entries) || [];
-    const card = document.getElementById("changelog-card");
-    if (entries.length) {
-      card.innerHTML = entries.map(e => \`
-        <div class="changelog-entry">
-          <span class="changelog-date">\${e.date || ""}</span>
-          \${e.section ? \`<span class="changelog-section"> \${e.section}</span>\` : ""}
-          <span style="color: var(--text-n7);"> \${e.change || ""}</span>
-          \${e.trigger ? \`<span class="small"> (\${e.trigger})</span>\` : ""}
-        </div>
-      \`).join("");
-    } else {
-      card.innerHTML = \`<p class="small">No changes recorded yet.</p>\`;
-    }
   }
 }
 
