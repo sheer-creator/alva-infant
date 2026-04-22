@@ -123,6 +123,11 @@ function AppShellInner({
     };
   }, [isUserInfoOpen]);
 
+  const closeUserInfo = useCallback(() => {
+    if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
+    setIsUserInfoOpen(false);
+  }, []);
+
   const primaryW = sidebarCompact ? PRIMARY_COMPACT_W : PRIMARY_W;
   const sidebarTotalW = primaryW;
 
@@ -155,7 +160,7 @@ function AppShellInner({
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#2a2a38]">
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--b0-sidebar)' }}>
       <Sidebar
         activePage={activePage}
         onNavigate={onNavigate}
@@ -171,7 +176,7 @@ function AppShellInner({
         onUserMouseEnter={handleUserEnter}
       />
       <main
-        className="relative flex min-w-0 flex-1 overflow-hidden rounded-bl-[8px] rounded-tl-[8px] bg-white"
+        className="relative flex min-w-0 flex-1 overflow-hidden bg-white"
         style={{ marginLeft: sidebarTotalW }}
       >
         <div className="min-w-0 flex-1 overflow-hidden">{children}</div>
@@ -204,12 +209,15 @@ function AppShellInner({
       {contextTag !== null && triggerMode === 'inline-composer' && <FloatingChatBarD />}
 
       {isUserInfoOpen && (
-        <div
-          ref={popupRef}
-          className="fixed bottom-[56px] left-[8px] z-[9999] w-[360px]"
-        >
-          <UserInfo onNavigate={onNavigate} />
-        </div>
+        <>
+          <div className="fixed inset-0 z-[9998]" onMouseDown={closeUserInfo} />
+          <div
+            ref={popupRef}
+            className="fixed bottom-[56px] left-[8px] z-[9999] w-[360px]"
+          >
+            <UserInfo onNavigate={onNavigate} />
+          </div>
+        </>
       )}
     </div>
   );

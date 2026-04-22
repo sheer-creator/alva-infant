@@ -23,12 +23,12 @@
   }
   * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
   *::-webkit-scrollbar { display: none; }
+  button, input, select, textarea { font-family: inherit; }
   .playbook-container {
     width: 100%; max-width: 2048px; margin: 0 auto;
     padding: 0 var(--spacing-xxl) var(--spacing-xxxxl);
     display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
-  @media (max-width: 768px) { .playbook-container { padding: var(--spacing-m); } }
   a { color: var(--main-m1); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
@@ -212,8 +212,9 @@
     margin-top: var(--spacing-s);
     padding: 0; background: none; border: none; cursor: pointer;
     font-size: 12px; color: var(--text-n7); letter-spacing: 0.12px;
+    transition: color .15s ease;
   }
-  .hero-deltas-toggle:hover { text-decoration: underline; }
+  .hero-deltas-toggle:hover { color: var(--text-n9); }
 
   /* Tabs — Alva Underline (aligned with Screener redesign) */
   .tab-wrapper-row {
@@ -293,7 +294,7 @@
   .legend-item { display:flex; align-items:center; gap: var(--spacing-xxs); font-size:10px; letter-spacing:0.1px; color: var(--text-n5); }
   .legend-line { width:12px; height:2px; border-radius:0.5px; }
   .chart-container { width:100%; height:100%; min-height:180px; }
-  .alva-watermark { position:absolute; bottom: var(--spacing-m); right: var(--spacing-m); opacity:0.2; line-height:0; }
+  .alva-watermark { position:absolute; bottom: var(--spacing-m); right: var(--spacing-m); opacity:0.2; line-height:0; pointer-events:none; }
 
   /* Grid */
   .grid { display:grid; gap: var(--spacing-l); }
@@ -1682,7 +1683,7 @@ async function loadBenchmark() {
           s += `<div style="display:flex;align-items:center;gap:6px;line-height:20px;">` +
             `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${p.color};"></span>` +
             `<span style="color:${TT_COLORS.text};">${p.seriesName}</span>` +
-            `<span style="color:${TT_COLORS.text};margin-left:auto;">${(p.value != null ? p.value.toFixed(2) : "—")}</span>` +
+            `<span style="color:${TT_COLORS.text};margin-left:auto;">${(() => { const v = Array.isArray(p.value) ? p.value[1] : p.value; return (v == null || !isFinite(v)) ? "—" : v.toFixed(2); })()}</span>` +
             `</div>`;
         });
         return s;

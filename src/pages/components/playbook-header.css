@@ -11,9 +11,6 @@ playbook-header { display: block; }
     padding: var(--sp-xl) var(--sp-xxl);
     display: flex; flex-direction: column; gap: var(--sp-xs);
 }
-@media (max-width: 768px) {
-    .playbook-info { padding: var(--sp-m) var(--sp-m) 0; }
-}
 
 /* title row */
 .pb-top { display: flex; align-items: center; gap: var(--sp-xs); width: 100%; }
@@ -208,6 +205,133 @@ playbook-header { display: block; }
     -webkit-mask-size: contain; mask-size: contain;
 }
 
+/* remix popover */
+.remix-menu { position: relative; display: inline-flex; }
+.remix-popover {
+    position: absolute;
+    top: calc(100% + 6px); right: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    width: 480px;
+    padding: 20px;
+    background: #fff;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+}
+.remix-popover.open { display: flex; }
+.remix-popover-title {
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px; font-weight: 500;
+    line-height: 26px; letter-spacing: 0.16px;
+    color: rgba(0,0,0,0.9);
+    margin: 0;
+}
+.remix-popover-desc {
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.9);
+    margin: 0;
+}
+.remix-popover-cta {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 9px 20px;
+    background: var(--main-m1); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    line-height: 22px; letter-spacing: 0.14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity .15s;
+}
+.remix-popover-cta:hover { opacity: 0.9; }
+.remix-popover-cta-icon {
+    width: 18px; height: 18px; display: inline-block;
+    background-color: #fff;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    flex-shrink: 0;
+}
+.remix-popover-agent { display: flex; flex-direction: column; }
+.remix-popover-divider { display: flex; align-items: center; gap: 8px; }
+.remix-popover-divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.05); }
+.remix-popover-agent-toggle {
+    display: flex; align-items: center; gap: 4px;
+    background: transparent; border: none; padding: 0;
+    cursor: pointer; font-family: inherit;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: rgba(0,0,0,0.5);
+    white-space: nowrap;
+    transition: opacity .15s;
+}
+.remix-popover-agent-toggle:hover { opacity: 0.8; }
+.remix-popover-agent-arrow {
+    width: 12px; height: 12px; display: inline-block;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-out;
+    flex-shrink: 0;
+}
+.remix-popover.agent-open .remix-popover-agent-arrow { transform: rotate(90deg); }
+.remix-popover-agent-body {
+    display: none;
+    flex-direction: column; gap: 16px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 6px;
+}
+.remix-popover.agent-open .remix-popover-agent-body { display: flex; }
+.remix-popover-prompt {
+    margin: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    white-space: pre-wrap; word-break: break-word;
+    font-family: inherit;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.7);
+}
+.remix-popover-copy {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 9px 20px;
+    background: transparent;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    line-height: 22px; letter-spacing: 0.14px;
+    color: rgba(0,0,0,0.9);
+    cursor: pointer;
+    transition: border-color .15s;
+}
+.remix-popover-copy:hover { border-color: rgba(0,0,0,0.9); }
+.remix-popover-copy-icon {
+    width: 18px; height: 18px; display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/copy-l.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/copy-l.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    flex-shrink: 0;
+}
+.remix-popover-copy-icon.copied {
+    background-color: var(--main-m1);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+}
+
 /* description */
 .pb-desc {
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
@@ -229,7 +353,7 @@ playbook-header { display: block; }
     color: var(--text-n7);
     cursor: pointer;
     display: none;
-    transition: opacity .15s;
+    transition: color .15s ease;
 }
-.pb-desc-toggle:hover { opacity: 0.6; }
+.pb-desc-toggle:hover { color: var(--text-n9); }
 .pb-desc.has-overflow .pb-desc-toggle { display: inline-block; }

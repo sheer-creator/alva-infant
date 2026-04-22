@@ -8,7 +8,7 @@ import { CONVERSATIONS } from '@/lib/chat-config';
 const THREADS_RAIL_W = 256;
 
 const SIDEBAR_DOT_BG: CSSProperties = {
-  background: '#2a2a38',
+  background: 'var(--b0-sidebar)',
   backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.4) 0.6px, transparent 0.6px)',
   backgroundSize: '3px 3px',
 };
@@ -193,6 +193,7 @@ export function Sidebar({
         <div className="min-h-0 flex-1" />
 
         <div
+          data-userinfo-trigger
           className="flex shrink-0 items-center gap-[8px] rounded-[4px] p-[8px] cursor-pointer transition-colors hover:bg-white/5"
           onMouseEnter={onUserMouseEnter}
         >

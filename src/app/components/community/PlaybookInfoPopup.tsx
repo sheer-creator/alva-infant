@@ -175,7 +175,7 @@ export function PlaybookInfoPopup({
           <div className="flex gap-[8px] items-start font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] w-full whitespace-nowrap">
             <p>{runEvery}</p>
             <p style={{ color: 'var(--text-n2)' }}>|</p>
-            <p>{feeds.length} Feeds</p>
+            <p>{feeds.length} Automation{feeds.length === 1 ? '' : 's'}</p>
           </div>
           <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.7)] tracking-[0.12px] w-full">
             {description}
@@ -192,7 +192,7 @@ export function PlaybookInfoPopup({
               style={{ borderTop: '1px solid rgba(0,0,0,0.07)', borderBottom: '1px solid rgba(0,0,0,0.07)' }}
             >
               <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-                Feed
+                Automation
               </p>
               <p className="w-[100px] font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
                 Interval
@@ -230,7 +230,7 @@ export function PlaybookInfoPopup({
                 style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
               >
                 <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-                  View all feeds in Settings
+                  View all automations in Settings
                 </p>
                 <div className="size-[12px] shrink-0 flex items-center justify-center">
                   <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />

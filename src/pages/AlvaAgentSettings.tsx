@@ -21,8 +21,8 @@ function TelegramMark({ size = 40 }: { size?: number }) {
 }
 
 const PLATFORMS: { id: AgentPlatform; name: string; handle: string; render: () => React.ReactNode }[] = [
-  { id: 'telegram', name: 'Telegram', handle: 'Sheerruan', render: () => <TelegramMark size={40} /> },
-  { id: 'discord', name: 'Discord', handle: 'sheerruan', render: () => <img src={`${import.meta.env.BASE_URL}logo-social-discord.svg`} alt="Discord" style={{ width: 40, height: 40, borderRadius: '50%' }} /> },
+  { id: 'telegram', name: 'Telegram', handle: 'Sheerruan', render: () => <TelegramMark size={52} /> },
+  { id: 'discord', name: 'Discord', handle: 'sheerruan', render: () => <img src={`${import.meta.env.BASE_URL}logo-social-discord.svg`} alt="Discord" style={{ width: 52, height: 52, borderRadius: '50%' }} /> },
 ];
 
 export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: Page) => void }) {
@@ -47,7 +47,7 @@ export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: P
             return (
               <div
                 key={p.id}
-                className="flex items-center gap-[16px] px-[20px] py-[16px] rounded-[8px]"
+                className="flex items-center gap-[var(--spacing-m)] px-[20px] py-[16px] rounded-[8px]"
                 style={{ background: 'rgba(0,0,0,0.02)' }}
               >
                 {p.render()}

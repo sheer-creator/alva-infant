@@ -35,9 +35,6 @@
         width: 100%; max-width: 2048px; margin: 0 auto;
         padding: 0 var(--sp-xxl) var(--sp-xxxl);
     }
-    @media (max-width: 768px) {
-        .playbook-container { padding: 0 var(--sp-m) var(--sp-m); }
-    }
 
     /* ── PLAYBOOK HEADER styles moved to ./components/playbook-header.css ── */
 
@@ -53,7 +50,7 @@
         height: 40px; padding: 0 12px 0 6px;
         background: #49A3A6;
         color: #fff;
-        border: 0.5px solid rgba(0,0,0,0.7); border-radius: 8px;
+        border: 0.5px solid rgba(0,0,0,0.7); border-radius: var(--radius-btn-m);
         font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
         cursor: pointer;
         z-index: 1000;
@@ -327,14 +324,12 @@
     -moz-osx-font-smoothing:grayscale;
     text-rendering:optimizeLegibility;
   }
+  button, input, select, textarea { font-family: inherit; }
 
   .playbook-container {
     width:100%; max-width:2048px; margin:0 auto;
     padding: 0 var(--spacing-xxl) var(--spacing-xxxxl);
     display:flex; flex-direction:column; gap: var(--spacing-xl);
-  }
-  @media (max-width:768px) {
-    .playbook-container { padding: var(--spacing-m); }
   }
 
   .playbook-header {

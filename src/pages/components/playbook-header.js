@@ -77,16 +77,33 @@
     }).join('');
     return (
       '<div class="feeds-popover-header">' +
-        '<div class="feeds-popover-cell-name">Feed</div>' +
+        '<div class="feeds-popover-cell-name">Automation</div>' +
         '<div class="feeds-popover-cell-interval">Interval</div>' +
         '<div class="feeds-popover-cell-last">Last Run</div>' +
       '</div>' +
       rows +
       '<div class="feeds-popover-viewall" role="button" tabindex="0">' +
-        '<span class="feeds-popover-viewall-label">View all feeds in Settings</span>' +
+        '<span class="feeds-popover-viewall-label">View all automations in Settings</span>' +
         '<span class="feeds-popover-viewall-chev" aria-hidden="true"></span>' +
       '</div>'
     );
+  }
+
+  function slugify(s) {
+    return String(s || '').toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  function buildRemixPrompt(title) {
+    var ref = '@alva/' + (slugify(title) || 'playbook');
+    return 'Remix Playbook(' + ref + '):\n\n' +
+      'If you have the Alva skill → use it to build my own version.\n' +
+      'If not → install it first: npx skills add https://github.com/alva-ai/skills\n\n' +
+      'Then:\n' +
+      '1. Customize it based on my preferences\n' +
+      '2. Deploy as a new playbook under my account\n' +
+      '3. If I don\'t specify what to change, ask me what I\'d like to customize.';
   }
 
   function render(host) {
@@ -124,7 +141,7 @@
       ? '<span class="pb-meta-sep">|</span>' +
         '<div class="feeds-menu">' +
           '<button class="pb-meta-link" type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false">' +
-            '<span>' + feedsCount + ' Feed' + (feedsCount > 1 ? 's' : '') + '</span>' +
+            '<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>' +
             '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
           '</button>' +
           '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
@@ -150,7 +167,37 @@
           '<div class="pb-actions">' +
             '<button class="pb-action" type="button" aria-label="Share"><span class="pb-action-icon ic-share"></span></button>' +
             '<button class="pb-action" type="button" aria-label="Star"><span class="pb-action-icon ic-star"></span>' + (star ? '<span class="pb-action-count">' + esc(star) + '</span>' : '') + '</button>' +
-            '<button class="pb-action" type="button" aria-label="Remix"><span class="pb-action-icon ic-remix"></span>' + (remix ? '<span class="pb-action-count">' + esc(remix) + '</span>' : '') + '</button>' +
+            '<div class="remix-menu">' +
+              '<button class="pb-action" type="button" aria-label="Remix" data-remix-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                '<span class="pb-action-icon ic-remix"></span>' +
+                (remix ? '<span class="pb-action-count">' + esc(remix) + '</span>' : '') +
+              '</button>' +
+              '<div class="remix-popover" data-remix-popover role="dialog" aria-label="Remix this Playbook" aria-hidden="true">' +
+                '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
+                '<p class="remix-popover-desc">Create your own version — customize the data, layout, and style to fit your needs. Your remix will be published under your account.</p>' +
+                '<a href="https://app.alva.xyz" target="_blank" rel="noopener" class="remix-popover-cta" data-remix-cta>' +
+                  '<span class="remix-popover-cta-icon"></span>' +
+                  '<span>Remix</span>' +
+                '</a>' +
+                '<div class="remix-popover-agent">' +
+                  '<div class="remix-popover-divider">' +
+                    '<div class="remix-popover-divider-line"></div>' +
+                    '<button class="remix-popover-agent-toggle" type="button" data-remix-agent-toggle aria-expanded="false">' +
+                      '<span>Or use your own agent</span>' +
+                      '<span class="remix-popover-agent-arrow"></span>' +
+                    '</button>' +
+                    '<div class="remix-popover-divider-line"></div>' +
+                  '</div>' +
+                  '<div class="remix-popover-agent-body">' +
+                    '<pre class="remix-popover-prompt" data-remix-prompt>' + esc(buildRemixPrompt(title)) + '</pre>' +
+                    '<button class="remix-popover-copy" type="button" data-remix-copy>' +
+                      '<span class="remix-popover-copy-icon" data-remix-copy-icon></span>' +
+                      '<span data-remix-copy-label>Copy</span>' +
+                    '</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
             '<button class="pb-action" type="button" aria-label="Comments"><span class="pb-action-icon ic-chat"></span>' + (comments ? '<span class="pb-action-count">' + esc(comments) + '</span>' : '') + '</button>' +
             '<button class="pb-trade-btn" type="button">Trade</button>' +
           '</div>' +
@@ -257,6 +304,82 @@
     }
   }
 
+  function setupRemixPopover(host) {
+    var trigger = host.querySelector('[data-remix-trigger]');
+    var popover = host.querySelector('[data-remix-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.classList.remove('agent-open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      var agentToggleEl = popover.querySelector('[data-remix-agent-toggle]');
+      if (agentToggleEl) agentToggleEl.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+
+    var agentToggle = popover.querySelector('[data-remix-agent-toggle]');
+    if (agentToggle) {
+      agentToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var opened = popover.classList.toggle('agent-open');
+        agentToggle.setAttribute('aria-expanded', String(opened));
+      });
+    }
+
+    var cta = popover.querySelector('[data-remix-cta]');
+    if (cta) cta.addEventListener('click', close);
+
+    var copyBtn = popover.querySelector('[data-remix-copy]');
+    var promptEl = popover.querySelector('[data-remix-prompt]');
+    if (copyBtn && promptEl) {
+      copyBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var text = promptEl.textContent || '';
+        var icon = copyBtn.querySelector('[data-remix-copy-icon]');
+        var label = copyBtn.querySelector('[data-remix-copy-label]');
+        var ok = function () {
+          if (icon) icon.classList.add('copied');
+          if (label) label.textContent = 'Copied';
+          setTimeout(function () {
+            if (icon) icon.classList.remove('copied');
+            if (label) label.textContent = 'Copy';
+          }, 2000);
+        };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(ok).catch(function () {});
+          }
+        } catch (_) {}
+      });
+    }
+  }
+
   class PlaybookHeader extends HTMLElement {
     connectedCallback() {
       if (this._pbHeaderMounted) return;
@@ -270,6 +393,7 @@
         render(self);
         setupDescToggle(self);
         setupFeedsPopover(self);
+        setupRemixPopover(self);
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mount, { once: true });
