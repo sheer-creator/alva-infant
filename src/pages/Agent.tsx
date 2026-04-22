@@ -92,7 +92,7 @@ export function AgentEmptyState({ onConnect }: { onConnect: (platform: AgentPlat
           </span>
           <div className="flex items-center gap-[8px]">
             {[
-              { name: 'Discord', file: 'logo-social-discord.svg', active: true, platform: 'discord' as const, brand: '#5865F2', bg: 'rgba(88, 101, 242, 0.08)', bgHover: 'rgba(88, 101, 242, 0.16)' },
+              { name: 'Discord', file: 'logo-social-discord.svg', active: true, platform: 'discord' as const, brand: 'var(--text-n9)', brandHover: '#5865F2', bg: 'var(--b-r05)', bgHover: 'rgba(88, 101, 242, 0.08)' },
               { name: 'Slack', file: 'logo-social-slack.svg', active: false },
               { name: 'WhatsApp', file: 'logo-social-whatsapp.svg', active: false },
             ].map(p => {
@@ -101,8 +101,18 @@ export function AgentEmptyState({ onConnect }: { onConnect: (platform: AgentPlat
                   type="button"
                   onClick={p.active ? () => onConnect(p.platform!) : undefined}
                   aria-disabled={!p.active}
-                  onMouseEnter={p.active ? e => { (e.currentTarget as HTMLButtonElement).style.background = p.bgHover!; } : undefined}
-                  onMouseLeave={p.active ? e => { (e.currentTarget as HTMLButtonElement).style.background = p.bg!; } : undefined}
+                  onMouseEnter={p.active ? e => {
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.background = p.bgHover!;
+                    const label = btn.querySelector('span') as HTMLSpanElement | null;
+                    if (label) label.style.color = p.brandHover!;
+                  } : undefined}
+                  onMouseLeave={p.active ? e => {
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.background = p.bg!;
+                    const label = btn.querySelector('span') as HTMLSpanElement | null;
+                    if (label) label.style.color = p.brand!;
+                  } : undefined}
                   className={`flex items-center gap-[6px] rounded-full border-none transition-colors ${p.active ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                   style={{
                     background: p.active ? p.bg : 'var(--b-r05)',

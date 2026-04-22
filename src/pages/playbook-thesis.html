@@ -23,55 +23,65 @@
   *::-webkit-scrollbar { display: none; }
   .playbook-container {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: var(--spacing-m) var(--spacing-xxl) var(--spacing-xxxxl);
+    padding: var(--spacing-xs) var(--spacing-xxl) var(--spacing-xxxxl);
+    display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
   @media (max-width: 768px) { .playbook-container { padding: var(--spacing-m); } }
   a { color: var(--main-m1); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  /* Header (aligned with Screener redesign) */
-  .playbook-header {
-    display:flex; align-items:center; flex-wrap:wrap;
-    row-gap:8px; margin-bottom: var(--spacing-l);
+  /* Info chips (aligned with Screener redesign) */
+  .info-chips {
+    display:flex; align-items:center; gap: var(--spacing-xs);
+    flex-wrap: wrap;
   }
-  .playbook-title {
-    font-size:24px; font-weight:400; color:var(--text-n9);
-    line-height:34px; margin:0; white-space:nowrap;
-    margin-right:auto;
+  .info-chip {
+    display:inline-flex; align-items:center; justify-content:center;
+    gap: var(--spacing-xxs);
+    padding: var(--spacing-xxs) 10px;
+    background: var(--content-br03, rgba(0,0,0,0.03));
+    border-radius: 4px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+    cursor: pointer; user-select: none; white-space: nowrap;
+    transition: background 0.15s ease;
   }
-
-  .header-meta {
-    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-    font-size:12px; color:var(--text-n5);
-    margin-bottom: 0;
+  .info-chip:hover { background: rgba(0,0,0,0.05); }
+  .info-chip-icon {
+    width:14px; height:14px; flex-shrink:0;
+    background-color: var(--text-n7, rgba(0,0,0,0.7));
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
   }
-  .header-meta .refresh-badge {
-    display:inline-flex; align-items:center; gap:6px;
-    background:rgba(73,163,166,0.10); color:var(--main-m1);
-    padding:0 10px; border-radius:4px; height:28px;
-    font-size:12px; font-weight:400;
+  .info-chip-icon.ic-framing {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
   }
-  .header-meta .refresh-badge::before {
-    content:''; width:6px; height:6px; border-radius:50%;
-    background:var(--main-m3); animation:pulse 2s ease-in-out infinite;
+  .info-chip-icon.ic-methodology {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
   }
-  .header-meta .last-updated {
-    display:inline-flex; align-items:center; gap:6px;
-    border:1px solid var(--line-l07); color:var(--text-n5);
-    padding:0 10px; border-radius:4px; height:28px;
-    font-size:12px;
+  .info-chip-icon.ic-changelog {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
   }
-  .header-meta .last-updated::before {
-    content:''; display:inline-block; width:6px; height:6px;
-    background:var(--main-m3); border-radius:50%;
-    flex-shrink:0;
+  /* Snapshot trigger adopts chip appearance when in .info-chips row */
+  .info-chips .filter-dropdown-trigger {
+    background: var(--content-br03, rgba(0,0,0,0.03));
+    padding: var(--spacing-xxs) 10px;
+    border-radius: 4px;
+    margin: 0;
+    line-height: 20px;
+    gap: var(--spacing-xxs);
   }
-  .header-meta .stale-pill {
-    background:rgba(212,133,0,0.12); color:#d48500;
-    padding:1px 6px; border-radius:3px;
-    font-size:10px; font-weight:500; letter-spacing:0.3px;
+  .info-chips .filter-dropdown-trigger:hover { background: rgba(0,0,0,0.05); }
+  .info-chips .filter-dropdown-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
+  .info-chips .filter-dropdown-value { color: var(--text-n9, rgba(0,0,0,0.9)); }
+  .info-chips .filter-dropdown.open .filter-dropdown-caret {
+    transform: none;
+    background-color: var(--text-n7, rgba(0,0,0,0.7));
   }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 
   .meta-sep { color: var(--text-n3); }
   .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:2px 8px; border-radius: var(--radius-ct-xs); line-height:18px; }
@@ -132,7 +142,7 @@
   }
   .filter-dropdown.open .filter-dropdown-caret { transform:rotate(180deg); background-color:var(--main-m1); }
   .filter-dropdown-menu {
-    position:absolute; top:calc(100% + 6px); right:0;
+    position:absolute; top:calc(100% + 6px); left:0;
     min-width:220px; max-height:280px; overflow-y:auto;
     background:var(--b0-container);
     border:0.5px solid var(--line-l2); border-radius:var(--radius-pop-dropdown);
@@ -196,7 +206,6 @@
   .hero-delta-empty { font-size: 13px; color: var(--text-n5); padding: 8px 0; }
 
   /* Tabs — Alva Underline (aligned with Screener redesign) */
-  .tab-wrapper { padding-top: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
   .tab-wrapper-row {
     display:flex; align-items:flex-end; justify-content:space-between;
     gap: var(--spacing-m); flex-wrap:wrap;
@@ -237,7 +246,7 @@
     height: 0; display: block; overflow: hidden;
   }
   .tab-panel { display:none; }
-  .tab-panel.active { display:block; }
+  .tab-panel.active { display:flex; flex-direction:column; gap: var(--spacing-xl); }
 
   @media (max-width: 768px) {
     .tab-wrapper-row {
@@ -613,54 +622,75 @@
   .changelog-entry:last-child { border-bottom: none; }
   .changelog-date { color: var(--text-n5); font-size:11px; }
   .changelog-section { color: var(--main-m1); font-size:11px; text-transform:uppercase; }
+
+  /* ── Modal (Alva) ── */
+  .modal-overlay {
+    display:none;
+    position:fixed; inset:0; z-index:1000;
+    background: var(--main-m7, rgba(0,0,0,0.4));
+    padding: var(--spacing-xxxxxl) var(--spacing-m);
+    align-items:center; justify-content:center;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal-panel {
+    background: var(--b0-container, #fff);
+    width: 100%; max-width: 896px;
+    max-height: 100%;
+    border-radius: var(--radius-pop-dialog, 12px);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.1));
+    padding: var(--spacing-xxl);
+    display:flex; flex-direction:column; gap: var(--spacing-m);
+    box-shadow: var(--shadow-s, 0 8px 32px rgba(0,0,0,0.12));
+  }
+  .modal-title {
+    display:flex; align-items:center; justify-content:space-between;
+    gap: var(--spacing-s);
+    font-family: 'Delight', sans-serif; font-weight:500;
+    font-size:18px; line-height:28px; letter-spacing:0.18px;
+    color: var(--text-n9);
+  }
+  .modal-close {
+    width:18px; height:18px; flex-shrink:0; cursor:pointer;
+    background-color: var(--text-n9, rgba(0,0,0,0.9));
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+    transition: opacity 0.15s ease;
+  }
+  .modal-close:hover { opacity: 0.6; }
+  .modal-body { flex:1 1 auto; width:100%; overflow-y:auto; }
 </style>
 </head>
 <body>
 <div class="playbook-container">
 
-  <!-- Header -->
-  <div class="playbook-header">
-    <h1 class="playbook-title">US Defense Thesis Tracker</h1>
-    <div class="header-meta">
-      <span class="last-updated" id="last-updated">Loading…</span>
-      <span class="refresh-badge" title="Auto-refresh cadence">Quant 6 PM ET &middot; Narrative 6:30 PM ET</span>
+  <!-- Info chips -->
+  <div class="info-chips">
+    <div class="filter-dropdown" id="hero-date-filter">
+      <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
+        <span class="filter-dropdown-label">Snapshot</span>
+        <span class="filter-dropdown-value">
+          <span id="hero-date-label">—</span>
+          <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
+        </span>
+        <span class="filter-dropdown-caret"></span>
+      </button>
+      <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
     </div>
-  </div>
-
-  <!-- ================== HERO — daily thesis + deltas ================== -->
-  <div class="hero-card" id="hero-card">
-    <div class="hero-head">
-      <span class="hero-head-meta">Today's Thesis · Narrative refresh 6:30 PM ET</span>
-      <div class="filter-dropdown" id="hero-date-filter">
-        <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
-          <span class="filter-dropdown-label">Snapshot</span>
-          <span class="filter-dropdown-value">
-            <span id="hero-date-label">—</span>
-            <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
-          </span>
-          <span class="filter-dropdown-caret"></span>
-        </button>
-        <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
-      </div>
-    </div>
-    <p class="hero-text" id="hero-text"><span class="loading">Loading thesis…</span></p>
-    <div id="hero-deltas-block" style="display:none;">
-      <div class="hero-deltas-title">What changed since yesterday</div>
-      <ul class="hero-deltas-list" id="hero-deltas-list"></ul>
-    </div>
+    <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
+    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Methodology</div>
+    <div class="info-chip"><span class="info-chip-icon ic-changelog"></span>Change Log</div>
   </div>
 
   <!-- Tabs -->
   <div class="tab-wrapper">
     <div class="tab-wrapper-row">
       <div class="tab tab-underline tab-l" data-tab-group="main">
-        <div class="tab-item active" data-tab="overview" data-text="Overview">Overview</div>
+        <div class="tab-item active" data-tab="overview" data-text="Thesis">Thesis</div>
         <div class="tab-item" data-tab="basket" data-text="Basket">Basket</div>
         <div class="tab-item" data-tab="catalysts" data-text="Catalysts">Catalysts</div>
         <div class="tab-item" data-tab="risks" data-text="Risks">Risks</div>
         <div class="tab-item" data-tab="macro" data-text="Macro &amp; Industry">Macro &amp; Industry</div>
         <div class="tab-item" data-tab="news" data-text="News &amp; Social">News &amp; Social</div>
-        <div class="tab-item" data-tab="methodology" data-text="Methodology">Methodology</div>
       </div>
     </div>
   </div>
@@ -668,11 +698,23 @@
   <!-- ================== OVERVIEW ================== -->
   <div class="tab-panel active" id="panel-overview">
 
+    <!-- HERO — daily thesis + deltas -->
+    <div class="hero-card" id="hero-card">
+      <div class="hero-head">
+        <span class="hero-head-meta">Today's Thesis · Narrative refresh 6:30 PM ET</span>
+      </div>
+      <p class="hero-text" id="hero-text"><span class="loading">Loading thesis…</span></p>
+      <div id="hero-deltas-block" style="display:none;">
+        <div class="hero-deltas-title">What changed since yesterday</div>
+        <ul class="hero-deltas-list" id="hero-deltas-list"></ul>
+      </div>
+    </div>
+
     <!-- Returns by Horizon — KPI-Sparkline cards (Basket value + SPY delta + dual sparkline) -->
     <div class="horizon-grid" id="horizon-grid"></div>
 
     <!-- Basket vs SPY: Equity Curve + Attribution -->
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">Equity Curve — Basket vs SPY <span class="widget-title-sub">· 1-year normalized (base = 100)</span></span>
         <span class="small" id="attribution-row" style="color: var(--text-n7);">
@@ -725,7 +767,7 @@
       </div>
     </div>
 
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">Valuation Screen</span>
         <span class="small">X-axis: P/E percentile of own 5-year history. Y-axis: 1-year total return. Dot size: market cap. Upper-left = cheap &amp; outperforming (sweet spot). Upper-right = expensive momentum. Lower-right = crowded, rolling over.</span>
@@ -803,7 +845,7 @@
       </div>
     </div>
 
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">NATO Members — Defense Spending % GDP</span>
         <span class="small">Latest reported year. Source: World Bank indicator MS.MIL.XPND.GD.ZS. Red = below NATO 2% target, green = at or above. The 2% line is NATO's long-standing floor; 2025 Hague summit raised the ambition toward 5% by 2035.</span>
@@ -816,7 +858,7 @@
       </div>
     </div>
 
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">US DoD Contract Awards — Quarterly by Contractor Family</span>
         <span class="small">Top 10 recipient families + Other, last 8 fully-reported quarters. Source: USAspending.gov (prime contract obligations, award types A/B/C/D). ~1-quarter reporting lag, so the most recent 2 calendar quarters are excluded until filings complete. Subsidiaries (Sikorsky → LMT, Electric Boat/Bath Iron Works → GD, Raytheon/Collins/P&amp;W → RTX) rolled up to parent. Ticker shown for public; blank = private (e.g. BAE Systems US, Bechtel, Sierra Nevada, Anduril, SpaceX, General Atomics).</span>
@@ -829,7 +871,7 @@
       </div>
     </div>
 
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">US DoD Contract Awards — Latest Quarter Breakdown</span>
         <span class="small">Horizontal bar — allocation share of latest fully-reported quarter. Value in $B; percent-of-quarter shown at bar end.</span>
@@ -842,7 +884,7 @@
       </div>
     </div>
 
-    <div class="widget-card" style="margin-top: var(--spacing-xxl);">
+    <div class="widget-card">
       <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
         <span class="widget-title-text">Latest DoD Contract Announcements (Flow View)</span>
         <span class="small">DoD contract announcements with action in the last 180 days — <strong>sorted by action date (newest first)</strong>. Filtered to awards ≥ $5M to strip Army Corps environmental / DISA telecom noise; a curated list of emerging-defense names (Anduril, Palantir, SpaceX, Kratos, AeroVironment, Sierra Nevada, General Atomics, SAIC) bypass the filter so their smaller awards still show. Source: USAspending.gov spending_by_award. "Amount" = total contract value (most big awards are modifications to long-running IDIQ contracts, so this is cumulative lifetime obligation, not fresh new money). Procurement-code noise (IGF::OT::IGF, contract-number prefixes, internal coding) stripped from descriptions; sub-agencies abbreviated (DISA, DCMA, MDA, USACE, etc.).</span>
@@ -883,8 +925,14 @@
   </div>
 
   <!-- ================== METHODOLOGY ================== -->
-  <div class="tab-panel" id="panel-methodology">
-    <div class="grid grid-2" style="gap: var(--spacing-xl);">
+  <div class="modal-overlay" id="methodology-modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-labelledby="methodology-modal-title">
+      <div class="modal-title">
+        <span id="methodology-modal-title">Methodology</span>
+        <div class="modal-close" data-modal-close="methodology-modal" aria-label="Close"></div>
+      </div>
+      <div class="modal-body">
+    <div style="display:flex; flex-direction:column; gap: var(--spacing-xl);">
       <div class="method-cell">
         <h3 class="section-h">How this playbook works</h3>
         <div class="ft-card">
@@ -961,6 +1009,8 @@
         <div class="ft-card" id="changelog-card">
           <div class="loading">Loading change log...</div>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -1155,10 +1205,42 @@ document.querySelectorAll('[data-tab-group="main"] .tab-item').forEach(t => {
     writeHash({ tab: t.dataset.tab, sub: null });
   });
 });
+// Modal helpers
+function openModal(id) {
+  const el = document.getElementById(id); if (!el) return;
+  el.classList.add('open');
+  el.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  const el = document.getElementById(id); if (!el) return;
+  el.classList.remove('open');
+  el.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('[data-modal-open]').forEach(btn => {
+  btn.addEventListener('click', () => openModal(btn.getAttribute('data-modal-open')));
+});
+document.querySelectorAll('[data-modal-close]').forEach(btn => {
+  btn.addEventListener('click', e => { e.stopPropagation(); closeModal(btn.getAttribute('data-modal-close')); });
+});
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+  }
+});
+
 // Activate tab + sub-tab from URL hash on load
 (function initFromHash() {
   var hm = hashMap();
-  if (hm.tab) activateTab(hm.tab);
+  if (hm.tab === 'methodology') {
+    openModal('methodology-modal');
+  } else if (hm.tab) {
+    activateTab(hm.tab);
+  }
   if (hm.tab === "catalysts" && hm.sub) {
     var subEl = document.querySelector('#catalyst-sub-tabs .tab-item[data-sub-tab="' + hm.sub + '"]');
     if (subEl) subEl.click();
