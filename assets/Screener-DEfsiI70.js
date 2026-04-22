@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.js";import{t as n}from"./Topbar-4ZduxZym.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.js";import{t as n}from"./Topbar-sQRmIopE.js";var r=`<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -29,7 +29,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
 
   .playbook-container {
     width:100%; max-width:2048px; margin:0 auto;
-    padding: var(--spacing-m) var(--spacing-xxl) var(--spacing-xxxxl);
+    padding: var(--spacing-xs) var(--spacing-xxl) var(--spacing-xxxxl);
+    display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
   @media (max-width:768px) {
     .playbook-container { padding: var(--spacing-m); }
@@ -84,8 +85,60 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
   @keyframes spin { to { transform:rotate(360deg); } }
 
+  /* ── Info chips (Framing / Methodology / Change Log) above tabs ── */
+  .info-chips {
+    display:flex; align-items:center; gap: var(--spacing-xs);
+    flex-wrap: wrap;
+  }
+  .info-chip {
+    display:inline-flex; align-items:center; justify-content:center;
+    gap: var(--spacing-xxs);
+    padding: var(--spacing-xxs) 10px;
+    background: var(--content-br03, rgba(0,0,0,0.03));
+    border-radius: 4px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+    cursor: pointer; user-select: none; white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+  .info-chip:hover { background: rgba(0,0,0,0.05); }
+  .info-chip-icon {
+    width:14px; height:14px; flex-shrink:0;
+    background-color: var(--text-n7, rgba(0,0,0,0.7));
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+  }
+  .info-chip-icon.ic-framing {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
+  }
+  .info-chip-icon.ic-methodology {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+  }
+  .info-chip-icon.ic-changelog {
+    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
+            mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
+  }
+  /* Snapshot trigger adopts chip appearance when in .info-chips row */
+  .info-chips .filter-dropdown-trigger {
+    background: var(--content-br03, rgba(0,0,0,0.03));
+    padding: var(--spacing-xxs) 10px;
+    border-radius: 4px;
+    margin: 0;
+    line-height: 20px;
+    gap: var(--spacing-xxs);
+  }
+  .info-chips .filter-dropdown-trigger:hover { background: rgba(0,0,0,0.05); }
+  .info-chips .filter-dropdown-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
+  .info-chips .filter-dropdown-value { color: var(--text-n9, rgba(0,0,0,0.9)); }
+  .info-chips .filter-dropdown.open .filter-dropdown-caret {
+    transform: none;
+    background-color: var(--text-n7, rgba(0,0,0,0.7));
+  }
+
   /* ── Tabs (Alva Underline; .tab-l keeps the original 16px size) ── */
-  .tab-wrapper { padding-top: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
   .tab-wrapper-row {
     display:flex; align-items:flex-end; justify-content:space-between;
     gap: var(--spacing-m); flex-wrap:wrap;
@@ -177,7 +230,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
   }
   .filter-dropdown.open .filter-dropdown-caret { transform:rotate(180deg); background-color:var(--main-m1); }
   .filter-dropdown-menu {
-    position:absolute; top:calc(100% + 6px); right:0;
+    position:absolute; top:calc(100% + 6px); left:0;
     min-width:220px; background:var(--b0-container);
     border:0.5px solid var(--line-l2); border-radius:var(--radius-pop-dropdown);
     box-shadow:var(--shadow-s);
@@ -652,20 +705,59 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
   .markdown-container--m ul,
   .markdown-container--m ol { gap: var(--spacing-xxs); }
   .markdown-container--m code { padding: 1px var(--spacing-xs); }
+
+  /* ── Modal (Alva) ── */
+  .modal-overlay {
+    display:none;
+    position:fixed; inset:0; z-index:1000;
+    background: var(--main-m7, rgba(0,0,0,0.4));
+    padding: var(--spacing-xxxxxl) var(--spacing-m);
+    align-items:center; justify-content:center;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal-panel {
+    background: var(--b0-container, #fff);
+    width: 100%; max-width: 896px;
+    max-height: 100%;
+    border-radius: var(--radius-pop-dialog, 12px);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.1));
+    padding: var(--spacing-xxl);
+    display:flex; flex-direction:column; gap: var(--spacing-m);
+    box-shadow: var(--shadow-s, 0 8px 32px rgba(0,0,0,0.12));
+  }
+  .modal-title {
+    display:flex; align-items:center; justify-content:space-between;
+    gap: var(--spacing-s);
+    font-family: 'Delight', sans-serif; font-weight:500;
+    font-size:18px; line-height:28px; letter-spacing:0.18px;
+    color: var(--text-n9);
+  }
+  .modal-close {
+    width:18px; height:18px; flex-shrink:0; cursor:pointer;
+    background-color: var(--text-n9, rgba(0,0,0,0.9));
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+    transition: opacity 0.15s ease;
+  }
+  .modal-close:hover { opacity: 0.6; }
+  .modal-body { flex:1 1 auto; width:100%; overflow-y:auto; }
 </style>
 </head>
 <body>
 <div class="playbook-container">
-  <div class="playbook-header">
-    <h1 class="playbook-title">Quality Value Stock Screener</h1>
-    <div class="header-meta">
-      <span class="last-updated" id="last-updated">Loading...</span>
-      <span class="refresh-badge" title="Auto-refresh cadence">Refreshes every 6 hours &middot; UTC</span>
+  <!-- Info chips -->
+  <div class="info-chips">
+    <div class="filter-dropdown" id="snap-filter" style="display:none;">
+      <button type="button" class="filter-dropdown-trigger" id="snap-filter-trigger" aria-haspopup="listbox" aria-expanded="false">
+        <span class="filter-dropdown-label">Snapshot</span>
+        <span class="filter-dropdown-value" id="snap-filter-value">&mdash;</span>
+        <span class="filter-dropdown-caret"></span>
+      </button>
+      <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
     </div>
-  </div>
-
-  <div class="playbook-desc">
-    From the US large-cap universe (market cap &gt; $5B, top 500), three hard filters (3&lt;P/E&lt;25 &middot; ROE&gt;0 &middot; D/E&le;2) select stocks that are cheap, profitable, and not over-leveraged. A composite score of Value 40% + Quality 40% + Safety 20% then ranks them, producing the Top 40 quality value stocks.
+    <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
+    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Methodology</div>
+    <div class="info-chip"><span class="info-chip-icon ic-changelog"></span>Change Log</div>
   </div>
 
   <!-- Tabs -->
@@ -675,15 +767,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
         <div class="tab-item active" data-tab="overview" data-text="Overview">Overview</div>
         <div class="tab-item" data-tab="trends" data-text="Movers &amp; Trends">Movers &amp; Trends</div>
         <div class="tab-item" data-tab="analysis" data-text="Analysis">Analysis</div>
-        <div class="tab-item" data-tab="methodology" data-text="Methodology">Methodology</div>
-      </div>
-      <div class="filter-dropdown" id="snap-filter" style="display:none;">
-        <button type="button" class="filter-dropdown-trigger" id="snap-filter-trigger" aria-haspopup="listbox" aria-expanded="false">
-          <span class="filter-dropdown-label">Snapshot</span>
-          <span class="filter-dropdown-value" id="snap-filter-value">&mdash;</span>
-          <span class="filter-dropdown-caret"></span>
-        </button>
-        <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
       </div>
     </div>
   </div>
@@ -823,7 +906,13 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
   </div>
 
   <!-- Tab 4: Methodology -->
-  <div class="tab-panel" id="panel-methodology">
+  <div class="modal-overlay" id="methodology-modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-labelledby="methodology-modal-title">
+      <div class="modal-title">
+        <span id="methodology-modal-title">Methodology</span>
+        <div class="modal-close" data-modal-close="methodology-modal" aria-label="Close"></div>
+      </div>
+      <div class="modal-body">
     <div class="method-section">
       <h3>Overview in Plain English</h3>
       <div class="method-body">
@@ -959,6 +1048,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGpwQ1IW.
 - The screening universe covers SDK-tracked US stocks with MC > $5B; small-caps and foreign cross-listings may not be fully covered.
           <\/script>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -1733,6 +1824,39 @@ window.__ALVA_OFFLINE_DATA__ = {
     });
   }
 
+  function openModal(id) {
+    var el = document.getElementById(id); if (!el) return;
+    el.classList.add('open');
+    el.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if (id === 'methodology-modal' && DATA_READY && !renderedTabs.methodology && TAB_RENDERERS.methodology) {
+      renderedTabs.methodology = true;
+      try { TAB_RENDERERS.methodology(); } catch(e){ console.error('methodology render', e); }
+    }
+  }
+  function closeModal(id) {
+    var el = document.getElementById(id); if (!el) return;
+    el.classList.remove('open');
+    el.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+  function setupModals() {
+    document.querySelectorAll('[data-modal-open]').forEach(function(btn){
+      btn.addEventListener('click', function(){ openModal(btn.getAttribute('data-modal-open')); });
+    });
+    document.querySelectorAll('[data-modal-close]').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); closeModal(btn.getAttribute('data-modal-close')); });
+    });
+    document.querySelectorAll('.modal-overlay').forEach(function(ov){
+      ov.addEventListener('click', function(e){ if (e.target === ov) closeModal(ov.id); });
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(function(m){ closeModal(m.id); });
+      }
+    });
+  }
+
   /* ── Snapshot bucket by timestamp (6h cadence → intraday naming) ── */
   function snapLabel(ms, todayKey) {
     var d = new Date(ms);
@@ -1805,6 +1929,7 @@ window.__ALVA_OFFLINE_DATA__ = {
   /* ── Init ── */
   function init() {
     setupTabs();
+    setupModals();
     var resizeTimer;
     window.addEventListener('resize', function(){
       clearTimeout(resizeTimer);
@@ -1838,10 +1963,12 @@ window.__ALVA_OFFLINE_DATA__ = {
       // Header timestamp — always latest
       var latest = buckets[buckets.length-1];
       var luEl = document.getElementById('last-updated');
-      if (latest && latest.summary && latest.summary.lastUpdated) {
-        luEl.textContent = 'Last updated: ' + fmtEST(new Date(latest.summary.lastUpdated).getTime());
-      } else {
-        luEl.textContent = 'Last updated: ' + fmtEST(latest.dateMs);
+      if (luEl) {
+        if (latest && latest.summary && latest.summary.lastUpdated) {
+          luEl.textContent = 'Last updated: ' + fmtEST(new Date(latest.summary.lastUpdated).getTime());
+        } else {
+          luEl.textContent = 'Last updated: ' + fmtEST(latest.dateMs);
+        }
       }
 
       window._STATE = { buckets:buckets, snapshotBuckets:buckets, klinesByTicker:klinesByTicker, flagDefs: flagDefsFromSummary(latest.summary) };
@@ -1891,8 +2018,14 @@ window.__ALVA_OFFLINE_DATA__ = {
       buildForIdx(selectedIdx);
       DATA_READY = true;
       var initial = (location.hash || '').replace(/^#/, '');
-      if (!TAB_RENDERERS.hasOwnProperty(initial) && initial !== 'overview') initial = 'overview';
-      activateTab(initial);
+      if (initial === 'methodology') {
+        activateTab('overview');
+        openModal('methodology-modal');
+      } else {
+        if (!TAB_RENDERERS.hasOwnProperty(initial) && initial !== 'overview') initial = 'overview';
+        if (initial === 'methodology') initial = 'overview';
+        activateTab(initial);
+      }
       setupSnapshotPicker(buckets, selectedIdx, function(idx){ buildForIdx(idx); });
     }).catch(function(err){
       console.error(err);
