@@ -3,7 +3,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Defense Thesis Tracker · Playbook Info Remix</title>
+<title>Defense Thesis Tracker · Quality Value Stock Screener 2</title>
 <link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\/script>
 <style>
@@ -51,11 +51,9 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
 
     .playbook-info {
         width: 100%; max-width: 2048px; margin: 0 auto;
-        padding: var(--sp-l) var(--sp-xxl);
-        display: flex; flex-direction: column; gap: var(--sp-s);
-        transition: gap 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: var(--sp-xl) var(--sp-xxl);
+        display: flex; flex-direction: column; gap: var(--sp-xs);
     }
-    .playbook-info.collapsed { gap: 0; }
     .playbook-container {
         width: 100%; max-width: 2048px; margin: 0 auto;
         padding: 0 var(--sp-xxl) var(--sp-xxxl);
@@ -159,12 +157,9 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
     }
     .pb-meta-avatar {
         width: 20px; height: 20px; border-radius: 50%;
-        display: inline-flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        background: var(--main-m1);
-        color: #fff;
-        font-family: inherit; font-size: 10px; font-weight: 500;
-        line-height: 1; letter-spacing: 0;
+        object-fit: cover;
+        background: #f0f0f0;
     }
     .pb-meta-sep {
         color: rgba(0,0,0,0.2);
@@ -203,79 +198,120 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
         -webkit-mask-size: contain; mask-size: contain;
     }
 
+    .feeds-menu { position: relative; display: inline-flex; }
+    .feeds-popover {
+        position: absolute;
+        top: calc(100% + 6px); left: 0;
+        z-index: 50;
+        display: none;
+        flex-direction: column;
+        width: 520px;
+        background: #fff;
+        border: 0.5px solid rgba(0,0,0,0.2);
+        border-radius: 8px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+    .feeds-popover.open { display: flex; }
+    .feeds-popover-header,
+    .feeds-popover-row {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 20px;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+        white-space: nowrap;
+    }
+    .feeds-popover-header {
+        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+        color: rgba(0,0,0,0.5);
+    }
+    .feeds-popover-row {
+        font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+        color: rgba(0,0,0,0.9);
+    }
+    .feeds-popover-row:last-child { border-bottom: none; }
+    .feeds-popover-cell-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .feeds-popover-cell-interval { width: 100px; flex-shrink: 0; }
+    .feeds-popover-cell-last { width: 120px; flex-shrink: 0; }
+    .feeds-popover-viewall {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 20px;
+        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+        color: rgba(0,0,0,0.5);
+        cursor: pointer;
+        transition: background .15s;
+        white-space: nowrap;
+    }
+    .feeds-popover-viewall:hover { background: rgba(0,0,0,0.02); }
+    .feeds-popover-viewall-label { flex: 1; min-width: 0; }
+    .feeds-popover-viewall-chev {
+        width: 12px; height: 12px; flex-shrink: 0;
+        background-color: rgba(0,0,0,0.5);
+        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+                mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+        -webkit-mask-position: center; mask-position: center;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-size: contain; mask-size: contain;
+    }
+
     .pb-desc {
         font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
         color: var(--text-n5);
         max-width: 840px; margin: 0;
+        display: flex; align-items: flex-start; gap: 6px;
     }
-
-    /* ── Expand / collapse wrapper (grid-rows trick, smooth auto-height) ── */
-    .pb-collapsible {
-        display: grid;
-        grid-template-rows: 1fr;
-        transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .pb-collapsible-inner {
-        min-height: 0;
+    .pb-desc-text { flex: 1 1 auto; min-width: 0; }
+    .pb-desc.collapsed .pb-desc-text {
         overflow: hidden;
-        display: flex; flex-direction: column; gap: var(--sp-s);
-        transition: opacity 0.18s ease;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
-    .playbook-info.collapsed .pb-collapsible { grid-template-rows: 0fr; }
-    .playbook-info.collapsed .pb-collapsible-inner { opacity: 0; }
-
-    /* ── Expand button (left of title) ── */
-    .pb-expand {
-        width: 22px; height: 22px;
-        display: inline-flex; align-items: center; justify-content: center;
-        padding: 0; background: transparent;
-        border: 1px solid rgba(0,0,0,0.07);
-        border-radius: 4px;
-        cursor: pointer; flex-shrink: 0;
+    .pb-desc-toggle {
+        flex-shrink: 0;
+        background: transparent; border: none; padding: 0;
+        font-family: inherit;
+        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+        color: var(--text-n7);
+        cursor: pointer;
+        display: none;
         transition: opacity .15s;
     }
-    .pb-expand:hover { opacity: 0.6; }
-    .pb-expand-arrows {
-        width: 22px; height: 22px; display: block;
-        background-color: rgba(0,0,0,0.25);
-        -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M14.887 9.60957L11.3123 6.74988C11.1297 6.60379 10.8703 6.60379 10.6877 6.74988L7.11304 9.60957C6.74397 9.90482 6.95275 10.5 7.42539 10.5H14.5746C15.0472 10.5 15.256 9.90482 14.887 9.60957Z'/><path d='M14.887 14.6096L11.3123 11.7499C11.1297 11.6038 10.8703 11.6038 10.6877 11.7499L7.11304 14.6096C6.74397 14.9048 6.95275 15.5 7.42539 15.5H14.5746C15.0472 15.5 15.256 14.9048 14.887 14.6096Z'/></svg>");
-                mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M14.887 9.60957L11.3123 6.74988C11.1297 6.60379 10.8703 6.60379 10.6877 6.74988L7.11304 9.60957C6.74397 9.90482 6.95275 10.5 7.42539 10.5H14.5746C15.0472 10.5 15.256 9.90482 14.887 9.60957Z'/><path d='M14.887 14.6096L11.3123 11.7499C11.1297 11.6038 10.8703 11.6038 10.6877 11.7499L7.11304 14.6096C6.74397 14.9048 6.95275 15.5 7.42539 15.5H14.5746C15.0472 15.5 15.256 14.9048 14.887 14.6096Z'/></svg>");
-        -webkit-mask-size: contain; mask-size: contain;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-position: center; mask-position: center;
-        transform: rotate(0deg);
-        transition: transform 0.25s ease;
-    }
-    .playbook-info.collapsed .pb-expand-arrows { transform: rotate(180deg); }
+    .pb-desc-toggle:hover { opacity: 0.6; }
+    .pb-desc.has-overflow .pb-desc-toggle { display: inline-block; }
 
     /* ── Chat FAB (always bottom-right on every playbook page) ── */
+    @keyframes fabBreathe {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(73,163,166,0.5), 0 4px 16px rgba(0,0,0,0.15); }
+        50%      { box-shadow: 0 0 12px 4px rgba(73,163,166,0.35), 0 4px 16px rgba(0,0,0,0.15); }
+    }
     .chat-fab {
         position: fixed;
-        right: var(--sp-xl); bottom: var(--sp-xl);
-        display: inline-flex; align-items: center; gap: 6px;
-        height: 44px; padding: 0 18px 0 14px;
-        background: var(--text-n9);
-        color: #fff; border: none; border-radius: 22px;
-        font-family: inherit;
-        font-size: 13px; font-weight: 500;
-        letter-spacing: 0.13px;
+        right: 28px; bottom: 28px;
+        display: inline-flex; align-items: center; gap: 8px;
+        height: 40px; padding: 0 12px 0 6px;
+        background: #49A3A6;
+        color: #fff;
+        border: 0.5px solid rgba(0,0,0,0.7); border-radius: 8px;
+        font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
         cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.08);
         z-index: 1000;
-        transition: transform .15s ease, box-shadow .15s ease;
+        animation: fabBreathe 3s ease-in-out infinite;
+        transition: background 0.2s ease;
     }
     .chat-fab:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.22), 0 2px 4px rgba(0,0,0,0.1);
+        background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.05)), #49A3A6;
     }
     .chat-fab-icon {
-        width: 18px; height: 18px; display: inline-block;
-        background-color: #fff;
-        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');
-                mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
+        flex-shrink: 0;
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 28px; height: 28px;
+        background: #2a2a38;
+        border-radius: 6px;
+    }
+    .chat-fab-icon svg { width: 14px; height: 14px; display: block; }
+    .chat-fab-label {
+        font-size: 14px; font-weight: 500;
+        line-height: 22px; letter-spacing: 0.14px;
+        color: #fff; white-space: nowrap;
     }
 
     /* ══════════════════════════════════════════
@@ -422,6 +458,44 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
         font-size: 12px; letter-spacing: 0.12px;
     }
 
+    /* Signal Feed (per Trading Strategy playbook spec §5) */
+    .signal-feed {
+        width: 100%;
+        display: flex; flex-direction: column;
+    }
+    .signal-feed-card {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--line-l07);
+    }
+    .signal-feed-card:first-child { padding-top: 0; }
+    .signal-feed-card:last-child { border-bottom: none; padding-bottom: 0; }
+    .feed-header {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: var(--sp-s);
+    }
+    .feed-strategy-name {
+        font-size: 16px; font-weight: 500;
+        color: var(--text-n9); line-height: 26px;
+        letter-spacing: 0.16px;
+    }
+    .feed-timestamp {
+        font-size: 12px; color: var(--text-n5);
+        line-height: 20px; letter-spacing: 0.12px;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .feed-description {
+        font-size: 16px; color: var(--text-n9);
+        line-height: 26px; letter-spacing: 0.16px;
+        margin-top: 12px;
+    }
+    .feed-indicators {
+        list-style: disc; padding-left: 20px;
+        font-size: 16px; color: var(--text-n9);
+        line-height: 26px; letter-spacing: 0.16px;
+        margin: 8px 0 0 0;
+    }
+    .feed-indicators li::marker { color: var(--text-n3); }
+
     .feed-list {
         display: flex; flex-direction: column;
         background: var(--grey-g01);
@@ -457,6 +531,19 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
         padding: 1px 6px; border-radius: 3px;
         letter-spacing: 0.2px; text-transform: uppercase;
         margin-right: 6px;
+    }
+    .feed-meta-body { line-height: 1.75; }
+    .feed-meta-body + .feed-meta-body { margin-top: 4px; }
+    .feed-link {
+        color: var(--theme-color);
+        text-decoration: none;
+        word-break: break-all;
+    }
+    .feed-link:hover { text-decoration: underline; }
+    .feed-push-body {
+        padding: 0 0 0 24px;
+        font-size: 13px; line-height: 1.75;
+        color: rgba(0,0,0,0.75); letter-spacing: 0.13px;
     }
   @font-face { font-family: 'Delight'; src: url('https://alva-ai-static.b-cdn.net/fonts/Delight-Regular.ttf') format('truetype'); font-weight: 400; }
   @font-face { font-family: 'Delight'; src: url('https://alva-ai-static.b-cdn.net/fonts/Delight-Medium.ttf') format('truetype'); font-weight: 500; }
@@ -1192,6 +1279,153 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
   }
   .modal-close:hover { opacity: 0.6; }
   .modal-body { flex:1 1 auto; width:100%; overflow-y:auto; }
+
+  /* ── Feed Detail Modal ────────────────────────────────────── */
+  #feed-detail-modal .modal-panel {
+    max-width: 600px; position: relative; padding: 28px; gap: 16px;
+  }
+  .feed-detail-close {
+    position: absolute; top: 27.5px; right: 27.5px; z-index: 1;
+    width: 18px; height: 18px; padding: 0; border: none; background: transparent;
+    cursor: pointer; flex-shrink: 0;
+    transition: opacity 0.15s ease;
+  }
+  .feed-detail-close::before {
+    content:''; display:block; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg') center / contain no-repeat;
+  }
+  .feed-detail-close:hover { opacity: 0.7; }
+
+  .feed-modal-header { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .feed-modal-header-top { display: flex; align-items: center; gap: 8px;
+    font-size: 20px; line-height: 30px; letter-spacing: 0.2px; color: rgba(0,0,0,0.9);
+    white-space: nowrap;
+  }
+  .feed-status-dot {
+    width: 14px; height: 14px; position: relative; display: inline-flex; flex-shrink: 0;
+  }
+  .feed-status-dot::before { content:''; position:absolute; inset:0; background:#DBEDED; border-radius:50%; }
+  .feed-status-dot::after  { content:''; position:absolute; inset:28.6%; background:#49A3A6; border-radius:50%; }
+  .feed-modal-meta {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px; color: rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+  .feed-modal-meta .sep { color: rgba(0,0,0,0.2); }
+
+  .feed-modal-desc {
+    background: #fafafa; border-radius: 8px; padding: 12px 16px; width: 100%;
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative; overflow: hidden;
+    max-height: 280px;
+    transition: max-height 0.3s ease-out;
+  }
+  .feed-modal-desc.overflows { padding-bottom: 31px; }
+  .feed-modal-desc-label {
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px; color: rgba(0,0,0,0.5);
+  }
+  .feed-modal-desc-block { display: flex; flex-direction: column; gap: 4px; }
+  .feed-desc-h {
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px; font-weight: 500;
+    color: rgba(0,0,0,0.9);
+  }
+  .feed-desc-p {
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px; color: rgba(0,0,0,0.9);
+    white-space: pre-line;
+  }
+  .feed-desc-toggle {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: none; flex-direction: column; align-items: stretch;
+  }
+  .feed-modal-desc.overflows .feed-desc-toggle { display: flex; }
+  .feed-desc-toggle-gradient {
+    height: 32px; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(250,250,250,0), #fafafa);
+  }
+  .feed-modal-desc.expanded .feed-desc-toggle-gradient { display: none; }
+  .feed-desc-toggle-btn {
+    width: 100%; height: 19px; background: #fafafa;
+    border: none; outline: none; padding: 0; cursor: pointer;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .feed-desc-toggle-icon {
+    width: 14px; height: 14px;
+    background-color: rgba(0,0,0,0.2);
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg') center / contain no-repeat;
+    transition: transform 0.2s ease-out;
+  }
+  .feed-modal-desc.expanded .feed-desc-toggle-icon { transform: rotate(180deg); }
+
+  .feed-modal-stats { display: flex; gap: 16px; width: 100%; }
+  .feed-stat-card {
+    flex: 1; min-width: 0; background: #fafafa; border-radius: 8px; padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .feed-stat-label { font-size: 12px; line-height: 20px; letter-spacing: 0.12px; color: rgba(0,0,0,0.5); }
+  .feed-stat-value { font-size: 20px; line-height: 30px; letter-spacing: 0.2px; color: rgba(0,0,0,0.9); }
+  .feed-stat-value.success { color: #2a9b7d; }
+  .feed-stat-value.failed  { color: #e6a91a; }
+
+  .feed-modal-history { width: 100%; display: flex; flex-direction: column; }
+  .feed-history-header {
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px; color: rgba(0,0,0,0.5);
+    padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .feed-run-row { display: flex; flex-direction: column; border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .feed-run-head {
+    display: flex; align-items: center; gap: 12px; padding: 10px 0;
+  }
+  .feed-run-head.clickable { cursor: pointer; }
+  .feed-run-caret {
+    width: 12px; height: 12px; flex-shrink: 0;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
+    transition: transform 0.2s ease;
+  }
+  .feed-run-row.open .feed-run-caret { transform: rotate(90deg); }
+  .feed-run-id {
+    flex: 1; min-width: 0;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px; color: rgba(0,0,0,0.9);
+  }
+  .feed-run-duration {
+    width: 120px; flex-shrink: 0;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px; color: rgba(0,0,0,0.9);
+  }
+  .feed-run-time {
+    width: 120px; flex-shrink: 0;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px; color: rgba(0,0,0,0.5);
+  }
+  .feed-run-status {
+    width: 16px; height: 16px; flex-shrink: 0;
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+  }
+  .feed-run-status.success {
+    background-color: #2a9b7d;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-f2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-f2.svg');
+  }
+  .feed-run-status.failed {
+    background-color: #e6a91a;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/alert-f2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/alert-f2.svg');
+  }
+  .feed-run-log { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+  .feed-run-row.open .feed-run-log { max-height: 800px; padding-bottom: 10px; }
+  .feed-run-log-pre {
+    background: rgba(0,0,0,0.02); border-radius: 8px; padding: 16px; margin: 0;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: rgba(0,0,0,0.5); white-space: pre-wrap;
+  }
+
+  .feeds-popover-row.clickable { cursor: pointer; transition: background 0.15s; }
+  .feeds-popover-row.clickable:hover { background: rgba(0,0,0,0.02); }
 </style>
 </head>
 <body>
@@ -1200,10 +1434,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
 <section class="playbook-info">
     <div class="pb-top">
         <div class="pb-top-left">
-            <button class="pb-expand" type="button" data-pb-toggle aria-label="Toggle info" aria-expanded="true">
-                <span class="pb-expand-arrows" aria-hidden="true"></span>
-            </button>
-            <h1 class="pb-title">Quality Value Stock Screener</h1>
+            <h1 class="pb-title">Quality Value Stock Screener 2</h1>
             <span class="pb-freq-chip">
                 <span class="pb-freq-dot" aria-hidden="true"></span>
                 15m
@@ -1228,33 +1459,67 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
             <button class="pb-trade-btn" type="button">Trade</button>
         </div>
     </div>
-    <div class="pb-collapsible">
-        <div class="pb-collapsible-inner">
-            <div class="pb-meta">
-                <div class="pb-meta-author">
-                    <span class="pb-meta-avatar" aria-hidden="true">Y</span>
-                    <span>YGGYLL</span>
-                </div>
-                <span class="pb-meta-sep">|</span>
-                <div class="pb-meta-item">
-                    <span class="pb-meta-icon ic-update" aria-hidden="true"></span>
-                    <span>Every 5 minutes</span>
-                </div>
-                <span class="pb-meta-sep">|</span>
-                <button class="pb-meta-link" type="button">
-                    <span>History</span>
-                    <span class="pb-meta-link-chev" aria-hidden="true"></span>
-                </button>
-                <span class="pb-meta-sep">|</span>
-                <button class="pb-meta-link" type="button">
-                    <span>3 Feeds</span>
-                    <span class="pb-meta-link-chev" aria-hidden="true"></span>
-                </button>
-            </div>
-            <p class="pb-desc">
-                Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.
-            </p>
+    <div class="pb-meta">
+        <div class="pb-meta-author">
+            <img class="pb-meta-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=YGGYLL&backgroundColor=fff3e0" alt="YGGYLL" />
+            <span>YGGYLL</span>
         </div>
+        <span class="pb-meta-sep">|</span>
+        <div class="pb-meta-item">
+            <span class="pb-meta-icon ic-update" aria-hidden="true"></span>
+            <span>Every 5 minutes</span>
+        </div>
+        <span class="pb-meta-sep">|</span>
+        <button class="pb-meta-link" type="button">
+            <span>History</span>
+            <span class="pb-meta-link-chev" aria-hidden="true"></span>
+        </button>
+        <span class="pb-meta-sep">|</span>
+        <div class="feeds-menu">
+            <button class="pb-meta-link" type="button" id="feeds-trigger" aria-haspopup="menu" aria-expanded="false">
+                <span>3 Feeds</span>
+                <span class="pb-meta-link-chev" aria-hidden="true"></span>
+            </button>
+            <div class="feeds-popover" id="feeds-popover" role="menu" aria-hidden="true">
+                <div class="feeds-popover-header">
+                    <div class="feeds-popover-cell-name">Feed</div>
+                    <div class="feeds-popover-cell-interval">Interval</div>
+                    <div class="feeds-popover-cell-last">Last Run</div>
+                </div>
+                <div class="feeds-popover-row clickable" data-feed="capacity-monitor" role="button" tabindex="0">
+                    <div class="feeds-popover-cell-name">
+                        <span class="pb-freq-dot" aria-hidden="true"></span>
+                        <span>Capacity-Monitor</span>
+                    </div>
+                    <div class="feeds-popover-cell-interval">5 minutes</div>
+                    <div class="feeds-popover-cell-last">15 minutes ago</div>
+                </div>
+                <div class="feeds-popover-row">
+                    <div class="feeds-popover-cell-name">
+                        <span class="pb-freq-dot" aria-hidden="true"></span>
+                        <span>OEM-Tracker</span>
+                    </div>
+                    <div class="feeds-popover-cell-interval">1 hour</div>
+                    <div class="feeds-popover-cell-last">2 hours ago</div>
+                </div>
+                <div class="feeds-popover-row">
+                    <div class="feeds-popover-cell-name">
+                        <span class="pb-freq-dot" aria-hidden="true"></span>
+                        <span>Supply-Chain</span>
+                    </div>
+                    <div class="feeds-popover-cell-interval">6 hours</div>
+                    <div class="feeds-popover-cell-last">2 hours ago</div>
+                </div>
+                <div class="feeds-popover-viewall" role="button" tabindex="0">
+                    <span class="feeds-popover-viewall-label">View all feeds in Settings</span>
+                    <span class="feeds-popover-viewall-chev" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pb-desc collapsed">
+        <span class="pb-desc-text">Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.</span>
+        <button class="pb-desc-toggle" type="button" aria-expanded="false">Show more</button>
     </div>
 </section>
 <div class="playbook-container">
@@ -1268,9 +1533,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
       </button>
       <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
     </div>
+    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Readme</div>
     <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
-    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Methodology</div>
-    <div class="info-chip"><span class="info-chip-icon ic-changelog"></span>Change Log</div>
   </div>
 
   <!-- Tabs -->
@@ -1280,6 +1544,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
         <div class="tab-item active" data-tab="overview" data-text="Overview">Overview</div>
         <div class="tab-item" data-tab="trends" data-text="Movers &amp; Trends">Movers &amp; Trends</div>
         <div class="tab-item" data-tab="analysis" data-text="Analysis">Analysis</div>
+        <div class="tab-item" data-tab="feed" data-text="Feed">Feed</div>
       </div>
     </div>
   </div>
@@ -1418,11 +1683,61 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
     <div id="analysis-error" class="error-state" style="display:none;"></div>
   </div>
 
-  <!-- Tab 4: Methodology -->
+  <!-- Tab 4: Feed -->
+  <div class="tab-panel" id="panel-feed">
+    <div class="signal-feed">
+      <div class="signal-feed-card">
+        <div class="feed-header">
+          <span class="feed-strategy-name">📊 Narrative Radar</span>
+          <span class="feed-timestamp">04/22/2026 18:19</span>
+        </div>
+        <ul class="feed-indicators">
+          <li>POL (L1/L2) &middot; vel +140% &middot; px +6.3%</li>
+          <li>ETH (Majors) &middot; vel +400% &middot; px &minus;3.7%</li>
+          <li>ZRO (Other) &middot; vel +1400% &middot; px +3.7%</li>
+        </ul>
+      </div>
+      <div class="signal-feed-card">
+        <div class="feed-header">
+          <span class="feed-strategy-name">PEAD Momentum</span>
+          <span class="feed-timestamp">04/21/2026</span>
+        </div>
+        <ul class="feed-indicators">
+          <li>🆕 New in Top 10: WAFD, ALLY &nbsp;|&nbsp; 👋 Dropped: TFC, SFNC</li>
+          <li>⭐ Top: WAFD &middot; Drift 1.85 &middot; Financial Services &middot; +16% EPS surprise</li>
+          <li>Full list → <a class="feed-link" href="https://alva.ai/u/stock-king/playbooks/post-earnings-drift-momentum">alva.ai/u/stock-king/playbooks/post-earnings-drift-momentum</a></li>
+        </ul>
+      </div>
+      <div class="signal-feed-card">
+        <div class="feed-header">
+          <span class="feed-strategy-name">🏆 Quality Value Screener</span>
+          <span class="feed-timestamp">04/22/2026 09:35</span>
+        </div>
+        <ul class="feed-indicators">
+          <li>🔺 Score breakout: MMM 72 → 85 (+13) &middot; ROE +240bps &middot; P/E &minus;1.4</li>
+          <li>🔻 Flag triggered: HAL at D/E ≥ 2.0 &middot; hard-flag &middot; exits basket</li>
+          <li>⏱ Refresh in 5m &middot; next snapshot 09:40 ET</li>
+        </ul>
+      </div>
+      <div class="signal-feed-card">
+        <div class="feed-header">
+          <span class="feed-strategy-name">📈 Macro Pulse</span>
+          <span class="feed-timestamp">04/22/2026 08:00</span>
+        </div>
+        <ul class="feed-indicators">
+          <li>🛢️ WTI &minus;2.1% intraday &middot; basket energy names (CVX, HAL) may drift</li>
+          <li>💵 DXY &minus;0.4% &middot; tailwind for multinational exporters in basket</li>
+          <li>🗓️ Watch: 14:30 UTC Core PCE print &middot; size-down if surprise &gt; 10bps</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Methodology -->
   <div class="modal-overlay" id="methodology-modal" aria-hidden="true">
     <div class="modal-panel" role="dialog" aria-labelledby="methodology-modal-title">
       <div class="modal-title">
-        <span id="methodology-modal-title">Methodology</span>
+        <span id="methodology-modal-title">Readme</span>
         <div class="modal-close" data-modal-close="methodology-modal" aria-label="Close"></div>
       </div>
       <div class="modal-body">
@@ -1566,20 +1881,73 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CU_iAnmF.
       </div>
     </div>
   </div>
+
+  <!-- Feed Detail Modal -->
+  <div class="modal-overlay" id="feed-detail-modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-labelledby="feed-detail-title">
+      <button type="button" class="feed-detail-close" data-modal-close="feed-detail-modal" aria-label="Close"></button>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="feed-modal-header">
+            <div class="feed-modal-header-top">
+              <span class="feed-status-dot" aria-hidden="true"></span>
+              <span id="feed-detail-title">Feed</span>
+            </div>
+            <div class="feed-modal-meta">
+              <span>Last Run: <span id="feed-detail-last-run">&mdash;</span></span>
+              <span class="sep">|</span>
+              <span id="feed-detail-every">&mdash;</span>
+              <span class="sep">|</span>
+              <span><span id="feed-detail-total-runs">0</span> Runs</span>
+            </div>
+          </div>
+          <div class="feed-modal-desc" id="feed-detail-desc-wrap">
+            <div class="feed-modal-desc-label">What This Feed Does</div>
+            <div id="feed-detail-desc"></div>
+            <div class="feed-desc-toggle">
+              <div class="feed-desc-toggle-gradient"></div>
+              <button type="button" class="feed-desc-toggle-btn" id="feed-desc-toggle-btn" aria-label="Expand description">
+                <span class="feed-desc-toggle-icon"></span>
+              </button>
+            </div>
+          </div>
+          <div class="feed-modal-stats">
+            <div class="feed-stat-card"><span class="feed-stat-label">Total Runs</span><span class="feed-stat-value" id="feed-stat-total">&mdash;</span></div>
+            <div class="feed-stat-card"><span class="feed-stat-label">Success</span><span class="feed-stat-value success" id="feed-stat-success">&mdash;</span></div>
+            <div class="feed-stat-card"><span class="feed-stat-label">Failed</span><span class="feed-stat-value failed" id="feed-stat-failed">&mdash;</span></div>
+          </div>
+          <div class="feed-modal-history">
+            <div class="feed-history-header">Recent 10 Runs</div>
+            <div id="feed-history-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- ═══════════════ CHAT FAB ═══════════════ -->
-<button class="chat-fab" type="button" aria-label="Ask Alva">
-    <span class="chat-fab-icon" aria-hidden="true"></span>
-    <span>Ask Alva</span>
-</button>
 
 <script>
     (function () {
-        document.querySelectorAll('[data-pb-toggle]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var section = btn.closest('.playbook-info');
-                var collapsed = section.classList.toggle('collapsed');
-                btn.setAttribute('aria-expanded', String(!collapsed));
+        document.querySelectorAll('.pb-desc').forEach(function (desc) {
+            var text = desc.querySelector('.pb-desc-text');
+            var toggle = desc.querySelector('.pb-desc-toggle');
+            if (!text || !toggle) return;
+
+            function checkOverflow() {
+                var wasCollapsed = desc.classList.contains('collapsed');
+                desc.classList.add('collapsed');
+                var overflows = text.scrollWidth - text.clientWidth > 1;
+                if (!wasCollapsed) desc.classList.remove('collapsed');
+                desc.classList.toggle('has-overflow', overflows);
+            }
+
+            checkOverflow();
+            window.addEventListener('resize', checkOverflow);
+
+            toggle.addEventListener('click', function () {
+                var collapsed = desc.classList.toggle('collapsed');
+                toggle.textContent = collapsed ? 'Show more' : 'Show less';
+                toggle.setAttribute('aria-expanded', String(!collapsed));
             });
         });
     })();
@@ -2314,7 +2682,7 @@ window.__ALVA_OFFLINE_DATA__ = {
   }
 
   /* ── Tabs ── */
-  var renderedTabs = { overview:false, trends:false, analysis:false, methodology:false };
+  var renderedTabs = { overview:false, trends:false, analysis:false, feed:true, methodology:false };
   var TAB_RENDERERS = {};
   var DATA_READY = false;
   function selectTab(name) {
@@ -2456,9 +2824,182 @@ window.__ALVA_OFFLINE_DATA__ = {
   }
 
   /* ── Init ── */
+  function setupFeedsPopover() {
+    var trigger = document.getElementById('feeds-trigger');
+    var popover = document.getElementById('feeds-popover');
+    if (!trigger || !popover) return;
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    trigger.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+    document.addEventListener('click', function(e){
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') close();
+    });
+    popover.querySelectorAll('[data-feed]').forEach(function(row){
+      row.addEventListener('click', function(){
+        close();
+        openFeedDetail(row.getAttribute('data-feed'));
+      });
+    });
+    var viewAll = popover.querySelector('.feeds-popover-viewall');
+    if (viewAll) {
+      var go = function(){
+        close();
+        try {
+          var top = window.top || window.parent;
+          if (top && top !== window.self) { top.location.hash = 'automations'; return; }
+        } catch(e) {}
+        window.location.hash = 'automations';
+      };
+      viewAll.addEventListener('click', go);
+      viewAll.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+      });
+    }
+  }
+
+  // ── Feed detail data (source: PlaybookInfoPopup.tsx DEFAULT_FEEDS) ──
+  var FEED_DETAILS = {
+    'capacity-monitor': {
+      name: 'Capacity-Monitor',
+      lastRun: '15m',
+      runEvery: 'Every 5 minutes',
+      totalRuns: 142,
+      description:
+        '**Signal Generation**\\nMonitors BTC/USDT on the 1-hour timeframe using MACD(12, 26, 9). A bullish crossover (MACD line crossing above signal line) triggers a long entry; a bearish crossover triggers an exit. Only one position is held at a time. The histogram slope is used as a secondary filter — flat or declining histograms after a crossover are treated as low-confidence and may be skipped.\\n\\n' +
+        '**Risk Management**\\nEach trade risks a maximum of 2% of portfolio equity. A trailing stop-loss is placed at 1.5× ATR(14) below the entry price and tightens as the position moves into profit. If the drawdown exceeds 5% from the local equity peak, the feed pauses new entries until the next confirmed crossover. Position sizing is dynamically adjusted based on 30-day realized volatility.\\n\\n' +
+        '**Data Sources & Frequency**\\nPulls 1-hour OHLCV candles from Binance and Coinbase every 60 seconds, cross-validates the close price, and recomputes the MACD histogram. Divergence between exchanges > 0.3% triggers a data-quality warning instead of a trade. Funding rate data from Binance Futures is also ingested to detect extreme sentiment.\\n\\n' +
+        '**Multi-Timeframe Confirmation**\\nBefore executing any entry, the feed checks the 4-hour and daily MACD alignment. A long signal on the 1-hour chart is only acted upon if the 4-hour MACD histogram is positive and the daily MACD line is above its signal line. This triple-timeframe filter reduces false signals by approximately 40% based on backtested data from Jan 2023 to Dec 2025.\\n\\n' +
+        '**Output Signals**\\nWrites a JSON signal to ~/feeds/btc-macd/signal.json containing: direction (long / flat), entry price, stop-loss level, current P&L, and a confidence score (0–1) derived from histogram momentum. Each signal includes a human-readable rationale string summarizing why the trade was taken or skipped.\\n\\n' +
+        '**Performance Tracking**\\nMaintains a rolling 90-day performance ledger at ~/feeds/btc-macd/perf.json. Tracked metrics include: win rate, average R-multiple, Sharpe ratio, max drawdown, and total P&L in both BTC and USD terms. A weekly summary is pushed to the connected Slack webhook every Sunday at 00:00 UTC.\\n\\n' +
+        '**Alert & Notification**\\nSends real-time alerts via Telegram and Slack when a new signal is generated, when a stop-loss is hit, or when the data-quality check fails. Alert messages include the current BTC price, signal direction, confidence score, and a link to the full signal JSON for manual review.',
+      stats: { total: '142', success: 140, failed: 2 },
+      history: (function(){
+        var log142 =
+          '[14:00:01.102Z] Starting feed execution...\\n' +
+          '[14:00:01.205Z] Fetching OEM capacity data from 4 sources...\\n' +
+          '[14:00:02.418Z] GE Vernova:        OK (38.2 GW)\\n' +
+          '[14:00:02.892Z] Siemens Energy:    OK (31.1 GW)\\n' +
+          '[14:00:03.105Z] MHPS:              OK (22.4 GW)\\n' +
+          '[14:00:03.401Z] Shanghai Electric: OK (12.8 GW)\\n' +
+          '[14:00:03.520Z] Computing delta: total=104.5 GW, YoY=+8.3%\\n' +
+          '[14:00:03.890Z] Signal written to ~/feeds/.../signal.json\\n' +
+          '[14:00:04.302Z] Completed successfully. 3.2s, 0.5 credits.';
+        var out = [];
+        for (var i = 0; i < 10; i++) {
+          out.push({
+            id: '#' + (142 - i),
+            duration: '3.2s',
+            timestamp: '04/01/2026 14:00',
+            status: i === 3 ? 'failed' : 'success',
+            log: i === 0 ? log142 : null
+          });
+        }
+        return out;
+      })()
+    }
+  };
+
+  function renderFeedDescription(desc) {
+    var host = document.getElementById('feed-detail-desc');
+    host.innerHTML = '';
+    desc.split('\\n\\n').forEach(function(block){
+      var m = block.match(/^\\*\\*(.+?)\\*\\*\\n?([\\s\\S]*)$/);
+      var wrap = document.createElement('div');
+      wrap.className = 'feed-modal-desc-block';
+      if (m) {
+        var h = document.createElement('div'); h.className = 'feed-desc-h'; h.textContent = m[1]; wrap.appendChild(h);
+        if (m[2]) { var p = document.createElement('div'); p.className = 'feed-desc-p'; p.textContent = m[2]; wrap.appendChild(p); }
+      } else {
+        var p2 = document.createElement('div'); p2.className = 'feed-desc-p'; p2.textContent = block; wrap.appendChild(p2);
+      }
+      host.appendChild(wrap);
+    });
+    var wrap = document.getElementById('feed-detail-desc-wrap');
+    if (!wrap) return;
+    wrap.classList.remove('expanded', 'overflows');
+    wrap.style.maxHeight = '';
+  }
+
+  function measureFeedDescOverflow() {
+    var wrap = document.getElementById('feed-detail-desc-wrap');
+    if (!wrap) return;
+    requestAnimationFrame(function(){
+      var overflows = wrap.scrollHeight > 280;
+      wrap.classList.toggle('overflows', overflows);
+    });
+  }
+
+  function setupFeedDescToggle() {
+    var btn = document.getElementById('feed-desc-toggle-btn');
+    var wrap = document.getElementById('feed-detail-desc-wrap');
+    if (!btn || !wrap) return;
+    btn.addEventListener('click', function(){
+      var expanded = wrap.classList.toggle('expanded');
+      wrap.style.maxHeight = expanded ? (wrap.scrollHeight + 'px') : '280px';
+      btn.setAttribute('aria-label', expanded ? 'Collapse description' : 'Expand description');
+    });
+  }
+
+  function renderFeedHistory(history) {
+    var host = document.getElementById('feed-history-list');
+    host.innerHTML = '';
+    history.forEach(function(run){
+      var row = document.createElement('div'); row.className = 'feed-run-row';
+      var head = document.createElement('div'); head.className = 'feed-run-head' + (run.log ? ' clickable' : '');
+      var caret = document.createElement('span'); caret.className = 'feed-run-caret';
+      if (!run.log) caret.style.visibility = 'hidden';
+      var id = document.createElement('span'); id.className = 'feed-run-id'; id.textContent = run.id;
+      var dur = document.createElement('span'); dur.className = 'feed-run-duration'; dur.textContent = run.duration;
+      var ts = document.createElement('span'); ts.className = 'feed-run-time'; ts.textContent = run.timestamp;
+      var st = document.createElement('span'); st.className = 'feed-run-status ' + (run.status === 'failed' ? 'failed' : 'success');
+      head.appendChild(caret); head.appendChild(id); head.appendChild(dur); head.appendChild(ts); head.appendChild(st);
+      row.appendChild(head);
+      if (run.log) {
+        var logWrap = document.createElement('div'); logWrap.className = 'feed-run-log';
+        var pre = document.createElement('pre'); pre.className = 'feed-run-log-pre'; pre.textContent = run.log;
+        logWrap.appendChild(pre); row.appendChild(logWrap);
+        head.addEventListener('click', function(){ row.classList.toggle('open'); });
+      }
+      host.appendChild(row);
+    });
+  }
+
+  function openFeedDetail(key) {
+    var d = FEED_DETAILS[key]; if (!d) return;
+    document.getElementById('feed-detail-title').textContent = d.name;
+    document.getElementById('feed-detail-last-run').textContent = d.lastRun;
+    document.getElementById('feed-detail-every').textContent = d.runEvery;
+    document.getElementById('feed-detail-total-runs').textContent = d.totalRuns;
+    document.getElementById('feed-stat-total').textContent = d.stats.total;
+    document.getElementById('feed-stat-success').textContent = d.stats.success;
+    document.getElementById('feed-stat-failed').textContent = d.stats.failed;
+    renderFeedDescription(d.description);
+    renderFeedHistory(d.history);
+    openModal('feed-detail-modal');
+    measureFeedDescOverflow();
+  }
+
   function init() {
     setupTabs();
     setupModals();
+    setupFeedsPopover();
+    setupFeedDescToggle();
     var resizeTimer;
     window.addEventListener('resize', function(){
       clearTimeout(resizeTimer);
