@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quality Value Stock Screener - Alva</title>
+<title>Quality Value Stock Screener 1 - Alva</title>
 <link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
@@ -741,6 +741,165 @@
   }
   .modal-close:hover { opacity: 0.6; }
   .modal-body { flex:1 1 auto; width:100%; overflow-y:auto; }
+
+  /* ── Daily Push Card ── */
+  .daily-push-card {
+    display: flex; flex-direction: column;
+    gap: var(--spacing-l);
+    padding: var(--spacing-l) 0;
+  }
+  .dp-header {
+    display: flex; align-items: center; gap: var(--spacing-s);
+  }
+  .dp-diamond {
+    width: 16px; height: 16px;
+    background: var(--main-m1);
+    transform: rotate(45deg);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .dp-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 10px; height: 22px;
+    background: rgba(228, 157, 27, 0.12);
+    color: #B27808;
+    border-radius: 999px;
+    font-size: 12px; letter-spacing: 0.12px; font-weight: 500;
+    white-space: nowrap;
+  }
+  .dp-status::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #E49D1B;
+    flex-shrink: 0;
+  }
+  .dp-title {
+    font-size: 16px; color: var(--text-n9);
+    font-weight: 500; letter-spacing: 0.16px; line-height: 22px;
+  }
+  .dp-date-nav {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .dp-nav-btn {
+    width: 28px; height: 28px;
+    border: none; background: transparent;
+    cursor: pointer;
+    color: var(--text-n5);
+    font-size: 16px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+  }
+  .dp-nav-btn:hover { background: var(--grey-g01); color: var(--text-n9); }
+  .dp-date-picker {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 10px; height: 32px;
+    border: 1px solid var(--line-l07);
+    border-radius: 6px;
+    font-size: 13px; color: var(--text-n9);
+    cursor: pointer;
+    letter-spacing: 0.13px;
+  }
+  .dp-date-picker:hover { background: var(--grey-g01); }
+  .dp-date-caret {
+    width: 12px; height: 12px;
+    background-color: var(--text-n5);
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-l2.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-l2.svg') center / contain no-repeat;
+  }
+
+  .dp-timeline {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dp-date-label {
+    font-size: 11px; color: var(--text-n5);
+    letter-spacing: 0.11px; white-space: nowrap; flex-shrink: 0;
+  }
+  .dp-bars {
+    flex: 1; display: flex; gap: 3px; min-width: 0;
+  }
+  .dp-bar {
+    flex: 1; height: 16px;
+    background: var(--grey-g02, rgba(0,0,0,0.06));
+    border-radius: 3px;
+  }
+  .dp-bar.active { background: #E49D1B; }
+  .dp-bar.current { box-shadow: 0 0 0 1.5px var(--text-n9); }
+
+  .dp-hero {
+    border-left: 3px solid #E49D1B;
+    padding-left: var(--spacing-m);
+    display: flex; flex-direction: column; gap: var(--spacing-xs);
+  }
+  .dp-hero-title {
+    font-size: 18px; line-height: 28px; letter-spacing: 0.18px;
+    font-weight: 500; color: var(--text-n9);
+    margin: 0;
+  }
+  .dp-hero-desc {
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7);
+    margin: 0;
+  }
+
+  .dp-changes {
+    display: flex; flex-direction: column; gap: var(--spacing-s);
+  }
+  .dp-change-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--line-l07);
+    border-radius: var(--radius-ct-s, 8px);
+  }
+  .dp-change-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+  .dp-change-dot.up { background: var(--main-m3); }
+  .dp-change-dot.down { background: var(--main-m4); }
+  .dp-change-body {
+    flex: 1; min-width: 0;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7);
+    margin: 0;
+  }
+  .dp-change-tag {
+    display: inline-flex; align-items: center;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 6px;
+    background: rgba(0,0,0,0.04);
+    color: var(--text-n7);
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+    vertical-align: 2px;
+  }
+  .dp-change-label {
+    font-weight: 500; color: var(--text-n9);
+  }
+  .dp-change-sep { color: var(--text-n5); margin: 0 4px; }
+
+  .dp-more-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    align-self: flex-start;
+    padding: 6px 12px; height: 30px;
+    background: transparent;
+    border: 1px solid var(--line-l07);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px; color: var(--text-n7);
+    cursor: pointer;
+    letter-spacing: 0.12px;
+  }
+  .dp-more-btn:hover { background: var(--grey-g01); }
+  .dp-more-count { color: var(--text-n5); margin-left: 2px; }
+  .dp-more-chev {
+    width: 12px; height: 12px; margin-left: 2px;
+    background-color: currentColor;
+    -webkit-mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
+            mask: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg') center / contain no-repeat;
+  }
 </style>
 </head>
 <body>
@@ -755,9 +914,8 @@
       </button>
       <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
     </div>
+    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Readme</div>
     <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
-    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Methodology</div>
-    <div class="info-chip"><span class="info-chip-icon ic-changelog"></span>Change Log</div>
   </div>
 
   <!-- Tabs -->
@@ -778,6 +936,65 @@
       <div class="loading-text">Loading rankings...</div>
     </div>
     <div id="overview-content" style="display:none;">
+      <div class="daily-push-card">
+        <div class="dp-header">
+          <span class="dp-diamond" aria-hidden="true"></span>
+          <span class="dp-status">Stabilizing</span>
+          <span class="dp-title">Scarcity with Scars</span>
+          <div class="dp-date-nav">
+            <button class="dp-nav-btn" type="button" aria-label="Previous day">&lsaquo;</button>
+            <div class="dp-date-picker" role="button" tabindex="0">
+              <span>Apr 22 &middot; 1d ago</span>
+              <span class="dp-date-caret" aria-hidden="true"></span>
+            </div>
+            <button class="dp-nav-btn" type="button" aria-label="Next day">&rsaquo;</button>
+          </div>
+        </div>
+
+        <div class="dp-timeline">
+          <span class="dp-date-label">Mar 24</span>
+          <div class="dp-bars">
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar"></span><span class="dp-bar"></span><span class="dp-bar"></span>
+            <span class="dp-bar active"></span><span class="dp-bar active current"></span>
+          </div>
+          <span class="dp-date-label">Apr 22</span>
+        </div>
+
+        <div class="dp-hero">
+          <h3 class="dp-hero-title">Scarcity still looks intact, but the tape is no longer getting tighter.</h3>
+          <p class="dp-hero-desc">The cleanest signal remains in Scarcity with Scars, where prior damage still appears to be restraining supply response, while strength in Healing / Relapse Risk and policy noise around crowded power names suggest the market is increasingly willing to price recovery and interference before the discipline regime has clearly broken.</p>
+        </div>
+
+        <div class="dp-changes">
+          <div class="dp-change-row">
+            <span class="dp-change-dot up" aria-hidden="true"></span>
+            <p class="dp-change-body">
+              <span class="dp-change-tag">SUPPLY</span><span class="dp-change-label">Scarcity with Scars still sets the pace</span><span class="dp-change-sep">&mdash;</span>Scarcity with Scars remains the strongest layer on both a 1m and YTD basis in the basket data. That keeps the thesis anchored in sectors where supply behavior still looks restrained by memory of the last collapse, not just by good demand.
+            </p>
+          </div>
+          <div class="dp-change-row">
+            <span class="dp-change-dot down" aria-hidden="true"></span>
+            <p class="dp-change-body">
+              <span class="dp-change-tag">CROWDING</span><span class="dp-change-label">Healing / Relapse Risk is sending an uncomfortable message</span><span class="dp-change-sep">&mdash;</span>Healing / Relapse Risk is the strongest 1m layer, which is bad for basket construction because it is the short sleeve. FCX, CLF and HAL all posting positive 1m returns suggests investors are becoming more willing to underwrite healing and fresh activity.
+            </p>
+          </div>
+        </div>
+
+        <button class="dp-more-btn" type="button">
+          <span>More changes</span>
+          <span class="dp-more-count">(3)</span>
+          <span class="dp-more-chev" aria-hidden="true"></span>
+        </button>
+      </div>
+
       <div class="widget-card">
         <div class="table-card" id="rankings-table"></div>
       </div>
@@ -909,7 +1126,7 @@
   <div class="modal-overlay" id="methodology-modal" aria-hidden="true">
     <div class="modal-panel" role="dialog" aria-labelledby="methodology-modal-title">
       <div class="modal-title">
-        <span id="methodology-modal-title">Methodology</span>
+        <span id="methodology-modal-title">Readme</span>
         <div class="modal-close" data-modal-close="methodology-modal" aria-label="Close"></div>
       </div>
       <div class="modal-body">

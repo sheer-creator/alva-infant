@@ -35,8 +35,9 @@ export const HOME_CHAT_CONTEXT: ContextTagData = {
 export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
-  screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
+  screener: { label: 'Quality Value Stock Screener 1', icon: 'sidebar-discover-normal' },
   thesis: { label: 'Defense Thesis Tracker', icon: 'sidebar-discover-normal' },
+  'thesis-remix': { label: 'Quality Value Stock Screener 2', icon: 'sidebar-discover-normal' },
   agent: null,
 };
 
@@ -64,4 +65,5 @@ export const CONVERSATIONS: ConversationItem[] = [
 export const PAGE_DEFAULT_THREAD: Record<string, string> = {
   screener: 'demo',
   thesis: 'demo',
+  'thesis-remix': 'demo',
 };

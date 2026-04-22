@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Page } from '../../App';
 import { CdnIcon } from '../shared/CdnIcon';
+import { Avatar } from '../shared/Avatar';
 import type { ThreadsEntryMode } from '@/lib/chat-config';
 import { CONVERSATIONS } from '@/lib/chat-config';
 
@@ -36,9 +37,9 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
 ];
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
-  { label: 'Quality Value Stock Screener', page: 'screener' },
+  { label: 'Quality Value Stock Screener 1', page: 'screener' },
+  { label: 'Quality Value Stock Screener 2', page: 'thesis-remix' },
   { label: 'Defense Thesis Tracker', page: 'thesis' },
-  { label: 'Playbook Info Remix', page: 'thesis-remix' },
 ];
 
 export function Sidebar({
@@ -196,11 +197,9 @@ export function Sidebar({
           className="flex shrink-0 items-center gap-[8px] rounded-[4px] p-[8px] cursor-pointer transition-colors hover:bg-white/5"
           onMouseEnter={onUserMouseEnter}
         >
-          <div className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-[#49A3A6] text-[11px] font-medium text-white">
-            A
-          </div>
+          <Avatar name="YGGYLL" size={24} />
           {!sidebarCompact && (
-            <span className="text-[13px] tracking-[0.13px] text-white">Alva Intern</span>
+            <span className="text-[13px] tracking-[0.13px] text-white">YGGYLL</span>
           )}
         </div>
       </aside>

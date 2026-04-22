@@ -8,7 +8,7 @@ function ScreenerContent({ onNavigate }: { onNavigate: (page: Page) => void }) {
     <div className="h-screen flex flex-col" style={{ background: 'var(--b0-page)' }}>
       <div className="sticky top-0 z-10 bg-white px-[24px] shrink-0">
         <Topbar
-          title="Quality Value Stock Screener"
+          title="Quality Value Stock Screener 1"
           playbookRef="@harryzz/quality-value-screener"
           onNavigate={onNavigate}
         />
@@ -16,7 +16,7 @@ function ScreenerContent({ onNavigate }: { onNavigate: (page: Page) => void }) {
       <div className="flex-1 overflow-hidden">
         <iframe
           srcDoc={screenerHtml}
-          title="Quality Value Stock Screener"
+          title="Quality Value Stock Screener 1"
           className="block h-full w-full border-0"
         />
       </div>

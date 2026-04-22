@@ -5,8 +5,8 @@
  */
 
 import svgPaths from '@/data/svg-guyqw4in5w';
-import { AVATAR_COLOR_PALETTE } from '@/lib/chart-theme';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
+import { Avatar } from '@/app/components/shared/Avatar';
 import type { Page } from '@/app/App';
 
 /* ========== Constants ========== */
@@ -61,8 +61,6 @@ function MenuItem({
 /* ========== Main ========== */
 
 export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => void }) {
-  const initial = USER.name.trim().charAt(0).toUpperCase();
-  const avatarColor = AVATAR_COLOR_PALETTE[[...USER.name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR_COLOR_PALETTE.length];
   const tiers = [CREDITS.daily, CREDITS.monthly, CREDITS.pack] as const;
 
   return (
@@ -73,9 +71,7 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
         <div
           className="flex gap-[12px] items-center py-[16px] -mx-[20px] px-[20px] w-[calc(100%+40px)] cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)]"
         >
-          <div className="w-[48px] h-[48px] rounded-full shrink-0 flex items-center justify-center overflow-hidden" style={{ background: avatarColor }}>
-            <span className="text-[21px] text-white leading-none" style={{ fontFamily: FONT }}>{initial}</span>
-          </div>
+          <Avatar name={USER.name} size={48} />
           <div className="flex flex-col min-w-0 flex-1 pb-[4px]">
             <div className="flex items-center gap-[8px] min-w-0">
               <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{USER.name}</span>
