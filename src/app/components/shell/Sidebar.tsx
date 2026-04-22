@@ -37,8 +37,7 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
 ];
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
-  { label: 'Quality Value Stock Screener 1', page: 'screener' },
-  { label: 'Quality Value Stock Screener 2', page: 'thesis-remix' },
+  { label: 'Quality Value Stock Screener', page: 'screener' },
   { label: 'Defense Thesis Tracker', page: 'thesis' },
 ];
 

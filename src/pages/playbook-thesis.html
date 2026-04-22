@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Defense Thesis Tracker Test (Static)</title>
-<link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
+<title>Defense Thesis Tracker - Alva</title>
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./components/playbook-header.css" />
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="./components/playbook-header.js" defer></script>
 <style>
   html { height:100%; overflow:hidden; }
   body {
@@ -23,7 +25,7 @@
   *::-webkit-scrollbar { display: none; }
   .playbook-container {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: var(--spacing-xs) var(--spacing-xxl) var(--spacing-xxxxl);
+    padding: 0 var(--spacing-xxl) var(--spacing-xxxxl);
     display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
   @media (max-width: 768px) { .playbook-container { padding: var(--spacing-m); } }
@@ -669,6 +671,22 @@
 </style>
 </head>
 <body>
+<playbook-header
+    title="Defense Thesis Tracker"
+    freq="15m"
+    owner="YGGYLL"
+    owner-seed="YGGYLL"
+    update-interval="Every 5 minutes"
+    star="12" remix="56" comments="6"
+    description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
+    <script type="application/json" class="pb-feeds-data">
+[
+  {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago"},
+  {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"},
+  {"id":"supply-chain","name":"Supply-Chain","interval":"6 hours","lastRun":"2 hours ago"}
+]
+    </script>
+</playbook-header>
 <div class="playbook-container">
 
   <!-- Info chips -->

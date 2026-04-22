@@ -1,21 +1,16 @@
 import type { Page } from '@/app/App';
 import { AppShell } from '@/app/components/shell/AppShell';
-import { Topbar } from '@/app/components/shell/Topbar';
 import thesisHtml from './playbook-thesis.html?raw';
+import { inlinePlaybookHeader } from './components/inlinePlaybookHeader';
 
-function ThesisContent({ onNavigate }: { onNavigate: (page: Page) => void }) {
+const html = inlinePlaybookHeader(thesisHtml);
+
+function ThesisContent() {
   return (
     <div className="h-screen flex flex-col" style={{ background: 'var(--b0-page)' }}>
-      <div className="sticky top-0 z-10 bg-white px-[24px] shrink-0">
-        <Topbar
-          title="Defense Thesis Tracker"
-          playbookRef="@harryzz/defense-thesis-tracker"
-          onNavigate={onNavigate}
-        />
-      </div>
       <div className="flex-1 overflow-hidden">
         <iframe
-          srcDoc={thesisHtml}
+          srcDoc={html}
           title="Defense Thesis Tracker"
           className="block h-full w-full border-0"
         />
@@ -27,7 +22,7 @@ function ThesisContent({ onNavigate }: { onNavigate: (page: Page) => void }) {
 export default function Thesis({ onNavigate }: { onNavigate: (page: Page) => void }) {
   return (
     <AppShell activePage="thesis" onNavigate={onNavigate}>
-      <ThesisContent onNavigate={onNavigate} />
+      <ThesisContent />
     </AppShell>
   );
 }
