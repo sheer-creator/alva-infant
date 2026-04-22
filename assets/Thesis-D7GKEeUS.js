@@ -1,11 +1,13 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.js";import{t as n}from"./Topbar-C-Gj1Yb3.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CIlNQVll.js";import{t as n}from"./inlinePlaybookHeader-DARQO0re.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Defense Thesis Tracker Test (Static)</title>
-<link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
+<title>Defense Thesis Tracker - Alva</title>
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./components/playbook-header.css" />
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>
+<script src="./components/playbook-header.js" defer><\/script>
 <style>
   html { height:100%; overflow:hidden; }
   body {
@@ -23,7 +25,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
   *::-webkit-scrollbar { display: none; }
   .playbook-container {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: var(--spacing-xs) var(--spacing-xxl) var(--spacing-xxxxl);
+    padding: 0 var(--spacing-xxl) var(--spacing-xxxxl);
     display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
   @media (max-width: 768px) { .playbook-container { padding: var(--spacing-m); } }
@@ -669,6 +671,22 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
 </style>
 </head>
 <body>
+<playbook-header
+    title="Defense Thesis Tracker"
+    freq="15m"
+    owner="YGGYLL"
+    owner-seed="YGGYLL"
+    update-interval="Every 5 minutes"
+    star="12" remix="56" comments="6"
+    description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
+    <script type="application/json" class="pb-feeds-data">
+[
+  {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago"},
+  {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"},
+  {"id":"supply-chain","name":"Supply-Chain","interval":"6 hours","lastRun":"2 hours ago"}
+]
+    <\/script>
+</playbook-header>
 <div class="playbook-container">
 
   <!-- Info chips -->
@@ -2629,4 +2647,4 @@ async function renderAnnouncements() {
 <\/script>
 </body>
 </html>
-`,i=e();function a({onNavigate:e}){return(0,i.jsxs)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:[(0,i.jsx)(`div`,{className:`sticky top-0 z-10 bg-white px-[24px] shrink-0`,children:(0,i.jsx)(n,{title:`Defense Thesis Tracker`,playbookRef:`@harryzz/defense-thesis-tracker`,onNavigate:e})}),(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:r,title:`Defense Thesis Tracker`,className:`block h-full w-full border-0`})})]})}function o({onNavigate:e}){return(0,i.jsx)(t,{activePage:`thesis`,onNavigate:e,children:(0,i.jsx)(a,{onNavigate:e})})}export{o as default};
+`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Defense Thesis Tracker`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`thesis`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};

@@ -1,37 +1,19 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.js";var n=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CIlNQVll.js";import{t as n}from"./inlinePlaybookHeader-DARQO0re.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Defense Thesis Tracker · Quality Value Stock Screener 2</title>
-<link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
+<title>Quality Value Stock Screener - Alva</title>
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./components/playbook-header.css" />
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\/script>
+<script src="./components/playbook-header.js" defer><\/script>
 <style>
-    /* ── Local vars on top of design-tokens.css ── */
+    /* ── Page-specific theme (everything else comes from tokens.css) ── */
     :root {
         --theme-color: #4A6B5A;
         --theme-color-soft: rgba(74,107,90,0.10);
         --theme-grad:  linear-gradient(135deg, #4A6B5A 0%, #2C3E33 100%);
-
-        /* Fallbacks if token file is missing */
-        --sp-xxs: 4px; --sp-xs: 8px; --sp-s: 12px; --sp-m: 16px;
-        --sp-l: 20px;  --sp-xl: 24px; --sp-xxl: 28px; --sp-xxxl: 32px;
-        --r-xs: 2px; --r-s: 4px; --r-m: 6px; --r-l: 8px;
-
-        --text-n9:  rgba(0,0,0,0.9);
-        --text-n7:  rgba(0,0,0,0.7);
-        --text-n5:  rgba(0,0,0,0.5);
-        --text-n3:  rgba(0,0,0,0.3);
-
-        --main-m1:  #49A3A6;
-        --main-m3:  #2a9b7d;
-        --main-m4:  #e05357;
-
-        --white:     #ffffff;
-        --grey-g01:  #fafafa;
-        --line-l05:  rgba(0,0,0,0.05);
-        --line-l07:  rgba(0,0,0,0.07);
-        --line-l12:  rgba(0,0,0,0.12);
     }
 
     html { height: 100%; overflow: hidden; }
@@ -49,234 +31,15 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
     * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
     *::-webkit-scrollbar { display: none; }
 
-    .playbook-info {
-        width: 100%; max-width: 2048px; margin: 0 auto;
-        padding: var(--sp-xl) var(--sp-xxl);
-        display: flex; flex-direction: column; gap: var(--sp-xs);
-    }
     .playbook-container {
         width: 100%; max-width: 2048px; margin: 0 auto;
         padding: 0 var(--sp-xxl) var(--sp-xxxl);
     }
     @media (max-width: 768px) {
-        .playbook-info { padding: var(--sp-m) var(--sp-m) 0; }
         .playbook-container { padding: 0 var(--sp-m) var(--sp-m); }
     }
 
-    /* ══════════════════════════════════════════
-       PLAYBOOK INFO — title row + meta row + description
-       ══════════════════════════════════════════ */
-    .pb-top { display: flex; align-items: center; gap: var(--sp-xs); width: 100%; }
-    .pb-top-left {
-        display: flex; flex: 1 1 0; min-width: 0;
-        align-items: center; gap: var(--sp-xs);
-    }
-    .pb-title {
-        font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 20px; font-weight: 400;
-        line-height: 30px; letter-spacing: 0.2px;
-        color: var(--text-n9);
-        margin: 0; white-space: nowrap;
-        overflow: hidden; text-overflow: ellipsis;
-    }
-    .pb-freq-chip {
-        display: inline-flex; align-items: center; gap: 2px;
-        padding: 1px 8px 1px 6px;
-        border: 1px solid var(--line-l07);
-        border-radius: 999px;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n5);
-        white-space: nowrap; flex-shrink: 0;
-    }
-    .pb-freq-dot {
-        width: 12px; height: 12px; position: relative;
-        display: inline-flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-    }
-    .pb-freq-dot::before {
-        content: ''; position: absolute; inset: 0;
-        background: #DBEDED; border-radius: 50%;
-    }
-    .pb-freq-dot::after {
-        content: ''; position: absolute; inset: 28.6%;
-        background: var(--main-m1); border-radius: 50%;
-    }
-
-    .pb-actions { display: flex; align-items: center; flex-shrink: 0; gap: 0; }
-    .pb-action {
-        display: inline-flex; align-items: center; gap: 4px;
-        height: 32px; padding: 6px 8px;
-        border: none; background: transparent; border-radius: var(--r-m);
-        cursor: pointer; font-family: inherit;
-        color: var(--text-n9);
-        transition: background .15s;
-    }
-    .pb-action:hover { background: rgba(0,0,0,0.04); }
-    .pb-action-icon {
-        width: 16px; height: 16px; display: inline-block;
-        background-color: var(--text-n9);
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
-        flex-shrink: 0;
-    }
-    .pb-action-icon.ic-share { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/share-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/share-l.svg'); }
-    .pb-action-icon.ic-star  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-l.svg');   mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-l.svg'); }
-    .pb-action-icon.ic-remix { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg'); }
-    .pb-action-icon.ic-chat  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg'); }
-    .pb-action-count {
-        font-family: inherit;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n9);
-        white-space: nowrap;
-    }
-    .pb-trade-btn {
-        display: inline-flex; align-items: center; justify-content: center;
-        height: 32px; padding: 6px 10px;
-        background: var(--main-m1);
-        color: #fff; border: none; border-radius: var(--r-m);
-        font-family: inherit;
-        font-size: 12px; font-weight: 500;
-        line-height: 20px; letter-spacing: 0.12px;
-        cursor: pointer; white-space: nowrap;
-        margin-left: var(--sp-xxs);
-        transition: opacity .15s;
-    }
-    .pb-trade-btn:hover { opacity: 0.9; }
-
-    .pb-meta {
-        display: flex; align-items: center; gap: var(--sp-xs);
-        flex-wrap: wrap;
-        font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n5);
-    }
-    .pb-meta-author {
-        display: flex; align-items: center; gap: 4px;
-        color: var(--text-n9);
-    }
-    .pb-meta-avatar {
-        width: 20px; height: 20px; border-radius: 50%;
-        flex-shrink: 0;
-        object-fit: cover;
-        background: #f0f0f0;
-    }
-    .pb-meta-sep {
-        color: rgba(0,0,0,0.2);
-        user-select: none;
-        font-size: 12px; line-height: 20px;
-    }
-    .pb-meta-item { display: flex; align-items: center; gap: 4px; }
-    .pb-meta-icon {
-        width: 14px; height: 14px; display: inline-block;
-        background-color: var(--text-n5);
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
-        flex-shrink: 0;
-    }
-    .pb-meta-icon.ic-update {
-        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
-                mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
-    }
-    .pb-meta-link {
-        display: inline-flex; align-items: center; gap: 2px;
-        background: transparent; border: none; padding: 0;
-        cursor: pointer; font-family: inherit;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n5);
-        transition: color .15s;
-    }
-    .pb-meta-link:hover { color: var(--text-n9); }
-    .pb-meta-link-chev {
-        width: 12px; height: 12px; display: inline-block; flex-shrink: 0;
-        background-color: currentColor;
-        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
-                mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
-    }
-
-    .feeds-menu { position: relative; display: inline-flex; }
-    .feeds-popover {
-        position: absolute;
-        top: calc(100% + 6px); left: 0;
-        z-index: 50;
-        display: none;
-        flex-direction: column;
-        width: 520px;
-        background: #fff;
-        border: 0.5px solid rgba(0,0,0,0.2);
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.04);
-        overflow: hidden;
-    }
-    .feeds-popover.open { display: flex; }
-    .feeds-popover-header,
-    .feeds-popover-row {
-        display: flex; align-items: center; gap: 8px;
-        padding: 10px 20px;
-        border-bottom: 1px solid rgba(0,0,0,0.07);
-        white-space: nowrap;
-    }
-    .feeds-popover-header {
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: rgba(0,0,0,0.5);
-    }
-    .feeds-popover-row {
-        font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
-        color: rgba(0,0,0,0.9);
-    }
-    .feeds-popover-row:last-child { border-bottom: none; }
-    .feeds-popover-cell-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .feeds-popover-cell-interval { width: 100px; flex-shrink: 0; }
-    .feeds-popover-cell-last { width: 120px; flex-shrink: 0; }
-    .feeds-popover-viewall {
-        display: flex; align-items: center; gap: 8px;
-        padding: 10px 20px;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: rgba(0,0,0,0.5);
-        cursor: pointer;
-        transition: background .15s;
-        white-space: nowrap;
-    }
-    .feeds-popover-viewall:hover { background: rgba(0,0,0,0.02); }
-    .feeds-popover-viewall-label { flex: 1; min-width: 0; }
-    .feeds-popover-viewall-chev {
-        width: 12px; height: 12px; flex-shrink: 0;
-        background-color: rgba(0,0,0,0.5);
-        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
-                mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
-    }
-
-    .pb-desc {
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n5);
-        max-width: 840px; margin: 0;
-        display: flex; align-items: flex-start; gap: 6px;
-    }
-    .pb-desc-text { flex: 1 1 auto; min-width: 0; }
-    .pb-desc.collapsed .pb-desc-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .pb-desc-toggle {
-        flex-shrink: 0;
-        background: transparent; border: none; padding: 0;
-        font-family: inherit;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n7);
-        cursor: pointer;
-        display: none;
-        transition: opacity .15s;
-    }
-    .pb-desc-toggle:hover { opacity: 0.6; }
-    .pb-desc.has-overflow .pb-desc-toggle { display: inline-block; }
+    /* ── PLAYBOOK HEADER styles moved to ./components/playbook-header.css ── */
 
     /* ── Chat FAB (always bottom-right on every playbook page) ── */
     @keyframes fabBreathe {
@@ -1049,7 +812,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     max-width: 90px; margin-left: var(--spacing-xxs);
   }
-  .mover-detail { font-size: 12px; font-weight:400; letter-spacing: 0.12px; }
+  .mover-detail { font-size: 12px; font-weight:400; letter-spacing: 0.12px; white-space: nowrap; flex-shrink: 0; }
   .mover-empty {
     font-size: 12px; color: var(--text-n5); padding: var(--spacing-s) 0;
     line-height: 18px; text-align: center;
@@ -1424,104 +1187,27 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
     color: rgba(0,0,0,0.5); white-space: pre-wrap;
   }
 
-  .feeds-popover-row.clickable { cursor: pointer; transition: background 0.15s; }
-  .feeds-popover-row.clickable:hover { background: rgba(0,0,0,0.02); }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
-<section class="playbook-info">
-    <div class="pb-top">
-        <div class="pb-top-left">
-            <h1 class="pb-title">Quality Value Stock Screener 2</h1>
-            <span class="pb-freq-chip">
-                <span class="pb-freq-dot" aria-hidden="true"></span>
-                15m
-            </span>
-        </div>
-        <div class="pb-actions">
-            <button class="pb-action" type="button" aria-label="Share">
-                <span class="pb-action-icon ic-share"></span>
-            </button>
-            <button class="pb-action" type="button" aria-label="Star">
-                <span class="pb-action-icon ic-star"></span>
-                <span class="pb-action-count">12</span>
-            </button>
-            <button class="pb-action" type="button" aria-label="Remix">
-                <span class="pb-action-icon ic-remix"></span>
-                <span class="pb-action-count">56</span>
-            </button>
-            <button class="pb-action" type="button" aria-label="Comments">
-                <span class="pb-action-icon ic-chat"></span>
-                <span class="pb-action-count">6</span>
-            </button>
-            <button class="pb-trade-btn" type="button">Trade</button>
-        </div>
-    </div>
-    <div class="pb-meta">
-        <div class="pb-meta-author">
-            <img class="pb-meta-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=YGGYLL&backgroundColor=fff3e0" alt="YGGYLL" />
-            <span>YGGYLL</span>
-        </div>
-        <span class="pb-meta-sep">|</span>
-        <div class="pb-meta-item">
-            <span class="pb-meta-icon ic-update" aria-hidden="true"></span>
-            <span>Every 5 minutes</span>
-        </div>
-        <span class="pb-meta-sep">|</span>
-        <button class="pb-meta-link" type="button">
-            <span>History</span>
-            <span class="pb-meta-link-chev" aria-hidden="true"></span>
-        </button>
-        <span class="pb-meta-sep">|</span>
-        <div class="feeds-menu">
-            <button class="pb-meta-link" type="button" id="feeds-trigger" aria-haspopup="menu" aria-expanded="false">
-                <span>3 Feeds</span>
-                <span class="pb-meta-link-chev" aria-hidden="true"></span>
-            </button>
-            <div class="feeds-popover" id="feeds-popover" role="menu" aria-hidden="true">
-                <div class="feeds-popover-header">
-                    <div class="feeds-popover-cell-name">Feed</div>
-                    <div class="feeds-popover-cell-interval">Interval</div>
-                    <div class="feeds-popover-cell-last">Last Run</div>
-                </div>
-                <div class="feeds-popover-row clickable" data-feed="capacity-monitor" role="button" tabindex="0">
-                    <div class="feeds-popover-cell-name">
-                        <span class="pb-freq-dot" aria-hidden="true"></span>
-                        <span>Capacity-Monitor</span>
-                    </div>
-                    <div class="feeds-popover-cell-interval">5 minutes</div>
-                    <div class="feeds-popover-cell-last">15 minutes ago</div>
-                </div>
-                <div class="feeds-popover-row">
-                    <div class="feeds-popover-cell-name">
-                        <span class="pb-freq-dot" aria-hidden="true"></span>
-                        <span>OEM-Tracker</span>
-                    </div>
-                    <div class="feeds-popover-cell-interval">1 hour</div>
-                    <div class="feeds-popover-cell-last">2 hours ago</div>
-                </div>
-                <div class="feeds-popover-row">
-                    <div class="feeds-popover-cell-name">
-                        <span class="pb-freq-dot" aria-hidden="true"></span>
-                        <span>Supply-Chain</span>
-                    </div>
-                    <div class="feeds-popover-cell-interval">6 hours</div>
-                    <div class="feeds-popover-cell-last">2 hours ago</div>
-                </div>
-                <div class="feeds-popover-viewall" role="button" tabindex="0">
-                    <span class="feeds-popover-viewall-label">View all feeds in Settings</span>
-                    <span class="feeds-popover-viewall-chev" aria-hidden="true"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="pb-desc collapsed">
-        <span class="pb-desc-text">Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.</span>
-        <button class="pb-desc-toggle" type="button" aria-expanded="false">Show more</button>
-    </div>
-</section>
+<playbook-header
+    title="Quality Value Stock Screener"
+    freq="15m"
+    owner="YGGYLL"
+    owner-seed="YGGYLL"
+    update-interval="Every 5 minutes"
+    star="12" remix="56" comments="6"
+    description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
+    <script type="application/json" class="pb-feeds-data">
+[
+  {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago","clickable":true},
+  {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"},
+  {"id":"supply-chain","name":"Supply-Chain","interval":"6 hours","lastRun":"2 hours ago"}
+]
+    <\/script>
+</playbook-header>
 <div class="playbook-container">
   <!-- Info chips -->
   <div class="info-chips">
@@ -1926,32 +1612,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BaHn18Kz.
   </div>
 </div>
 
-<script>
-    (function () {
-        document.querySelectorAll('.pb-desc').forEach(function (desc) {
-            var text = desc.querySelector('.pb-desc-text');
-            var toggle = desc.querySelector('.pb-desc-toggle');
-            if (!text || !toggle) return;
-
-            function checkOverflow() {
-                var wasCollapsed = desc.classList.contains('collapsed');
-                desc.classList.add('collapsed');
-                var overflows = text.scrollWidth - text.clientWidth > 1;
-                if (!wasCollapsed) desc.classList.remove('collapsed');
-                desc.classList.toggle('has-overflow', overflows);
-            }
-
-            checkOverflow();
-            window.addEventListener('resize', checkOverflow);
-
-            toggle.addEventListener('click', function () {
-                var collapsed = desc.classList.toggle('collapsed');
-                toggle.textContent = collapsed ? 'Show more' : 'Show less';
-                toggle.setAttribute('aria-expanded', String(!collapsed));
-            });
-        });
-    })();
-<\/script>
 <script>
 window.__ALVA_OFFLINE_DATA__ = {
   "/screener/rankings/@last/60": [{"band": "elite", "date": 1776391090115, "debtToEquity": 0.24, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Insurance - Property & Casualty", "marketCap": 56638541280, "name": "The Allstate Corporation", "peRatio": 5.64, "qualityScore": 45, "rank": 1, "roe": 39.51, "safetyScore": 68, "score": 95, "sector": "Financial Services", "ticker": "ALL", "valueScore": 86}, {"band": "elite", "date": 1776391090115, "debtToEquity": 1.02, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Broadcasting", "marketCap": 103125240695, "name": "Comcast Corporation Class A Common Stock Ex-Distribution When Issued", "peRatio": 5.26, "qualityScore": 11, "rank": 2, "roe": 24.73, "safetyScore": 14, "score": 81, "sector": "Consumer Cyclical", "ticker": "CMCSV", "valueScore": 100}, {"band": "elite", "date": 1776391090115, "debtToEquity": 0.67, "flagLabel": "ROE \\u8fc7\\u9ad8", "flagTier": "soft", "flagsCsv": "ROE \\u8fc7\\u9ad8", "industry": "Drug Manufacturers - General", "marketCap": 181361334227, "name": "Novo Nordisk A/S", "peRatio": 10.36, "qualityScore": 100, "rank": 3, "roe": 63.95, "safetyScore": 32, "score": 80, "sector": "Healthcare", "ticker": "NVO", "valueScore": 0}, {"band": "strong", "date": 1776391090115, "debtToEquity": 1.14, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Telecommunications Services", "marketCap": 103122213529, "name": "Comcast Corporation", "peRatio": 5.26, "qualityScore": 4, "rank": 4, "roe": 21.71, "safetyScore": 10, "score": 78, "sector": "Communication Services", "ticker": "CMCSA", "valueScore": 100}, {"band": "strong", "date": 1776391090115, "debtToEquity": 0.92, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Oil & Gas Integrated", "marketCap": 132367287458, "name": "Petr\\u00f3leo Brasileiro S.A. - Petrobras", "peRatio": 6.63, "qualityScore": 23, "rank": 5, "roe": 29.78, "safetyScore": 19, "score": 72, "sector": "Energy", "ticker": "PBR", "valueScore": 58}, {"band": "average", "date": 1776391090115, "debtToEquity": 0.01, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Specialty Retail", "marketCap": 143021985136, "name": "PDD Holdings Inc.", "peRatio": 10.07, "qualityScore": 18, "rank": 6, "roe": 27.7, "safetyScore": 100, "score": 66, "sector": "Consumer Cyclical", "ticker": "PDD", "valueScore": 3}, {"band": "weak", "date": 1776391090115, "debtToEquity": 1.43, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Banks - Diversified", "marketCap": 132665636379, "name": "Banco Bilbao Vizcaya Argentaria, S.A.", "peRatio": 10.13, "qualityScore": 0, "rank": 7, "roe": 19.75, "safetyScore": 0, "score": 45, "sector": "Financial Services", "ticker": "BBVA", "valueScore": 2}, {"band": "elite", "date": 1776391118631, "debtToEquity": 0.24, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Insurance - Property & Casualty", "marketCap": 56638541280, "name": "The Allstate Corporation", "peRatio": 5.64, "qualityScore": 59, "rank": 1, "roe": 39.51, "safetyScore": 69, "score": 95, "sector": "Financial Services", "ticker": "ALL", "valueScore": 68}, {"band": "elite", "date": 1776391118631, "debtToEquity": 0.17, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Airlines, Airports & Air Services", "marketCap": 32531529207, "name": "Ryanair Holdings plc", "peRatio": 5.85, "qualityScore": 40, "rank": 2, "roe": 28.04, "safetyScore": 77, "score": 88, "sector": "Industrials", "ticker": "RYAAY", "valueScore": 63}, {"band": "elite", "date": 1776391118631, "debtToEquity": 1.79, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Telecommunications Services", "marketCap": 24049840820, "name": "BCE Inc.", "peRatio": 4.82, "qualityScore": 47, "rank": 3, "roe": 32.17, "safetyScore": 0, "score": 88, "sector": "Communication Services", "ticker": "BCE", "valueScore": 93}, {"band": "elite", "date": 1776391118631, "debtToEquity": 1.02, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Broadcasting", "marketCap": 103125240695, "name": "Comcast Corporation Class A Common Stock Ex-Distribution When Issued", "peRatio": 5.26, "qualityScore": 35, "rank": 4, "roe": 24.73, "safetyScore": 21, "score": 82, "sector": "Consumer Cyclical", "ticker": "CMCSV", "valueScore": 79}, {"band": "elite", "date": 1776391118631, "debtToEquity": 0.67, "flagLabel": "ROE \\u8fc7\\u9ad8", "flagTier": "soft", "flagsCsv": "ROE \\u8fc7\\u9ad8,P/E \\u504f\\u9ad8", "industry": "Drug Manufacturers - General", "marketCap": 181361334227, "name": "Novo Nordisk A/S", "peRatio": 10.36, "qualityScore": 100, "rank": 5, "roe": 63.95, "safetyScore": 37, "score": 81, "sector": "Healthcare", "ticker": "NVO", "valueScore": 0}, {"band": "elite", "date": 1776391118631, "debtToEquity": 1.69, "flagLabel": "ROE \\u504f\\u4f4e", "flagTier": "soft", "flagsCsv": "ROE \\u504f\\u4f4e", "industry": "Banks - Diversified", "marketCap": 33757777900, "name": "NatWest Group plc", "peRatio": 4.64, "qualityScore": 18, "rank": 6, "roe": 14.73, "safetyScore": 2, "score": 81, "sector": "Financial Services", "ticker": "NWG", "valueScore": 100}, {"band": "elite", "date": 1776391118631, "debtToEquity": 1.14, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Telecommunications Services", "marketCap": 103122213529, "name": "Comcast Corporation", "peRatio": 5.26, "qualityScore": 30, "rank": 7, "roe": 21.71, "safetyScore": 17, "score": 80, "sector": "Communication Services", "ticker": "CMCSA", "valueScore": 79}, {"band": "strong", "date": 1776391118631, "debtToEquity": 0.92, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Oil & Gas Integrated", "marketCap": 132367287458, "name": "Petr\\u00f3leo Brasileiro S.A. - Petrobras", "peRatio": 6.63, "qualityScore": 43, "rank": 8, "roe": 29.78, "safetyScore": 25, "score": 75, "sector": "Energy", "ticker": "PBR", "valueScore": 46}, {"band": "strong", "date": 1776391118631, "debtToEquity": 0.18, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Travel Services", "marketCap": 35373020771, "name": "Trip.com Group Limited", "peRatio": 7.48, "qualityScore": 29, "rank": 9, "roe": 21.62, "safetyScore": 76, "score": 74, "sector": "Consumer Cyclical", "ticker": "TCOM", "valueScore": 32}, {"band": "strong", "date": 1776391118631, "debtToEquity": 0.01, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Specialty Retail", "marketCap": 143021985136, "name": "PDD Holdings Inc.", "peRatio": 10.07, "qualityScore": 40, "rank": 10, "roe": 27.7, "safetyScore": 98, "score": 72, "sector": "Consumer Cyclical", "ticker": "PDD", "valueScore": 3}, {"band": "strong", "date": 1776391118631, "debtToEquity": 0.11, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Insurance - Diversified", "marketCap": 34725913812, "name": "Arch Capital Group Ltd.", "peRatio": 8.23, "qualityScore": 26, "rank": 11, "roe": 19.54, "safetyScore": 84, "score": 71, "sector": "Financial Services", "ticker": "ACGL", "valueScore": 21}, {"band": "average", "date": 1776391118631, "debtToEquity": 0.3, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Insurance - Life", "marketCap": 39041696892, "name": "Prudential plc", "peRatio": 8.97, "qualityScore": 33, "rank": 12, "roe": 23.54, "safetyScore": 64, "score": 67, "sector": "Financial Services", "ticker": "PUK", "valueScore": 13}, {"band": "average", "date": 1776391118631, "debtToEquity": 0.49, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Financial - Credit Services", "marketCap": 45637364050, "name": "PayPal Holdings, Inc.", "peRatio": 9.08, "qualityScore": 36, "rank": 13, "roe": 25.73, "safetyScore": 49, "score": 65, "sector": "Financial Services", "ticker": "PYPL", "valueScore": 12}, {"band": "average", "date": 1776391118631, "debtToEquity": 0.23, "flagLabel": "P/E \\u504f\\u9ad8", "flagTier": "soft", "flagsCsv": "P/E \\u504f\\u9ad8", "industry": "Insurance - Diversified", "marketCap": 38276027048, "name": "The Hartford Financial Services Group, Inc.", "peRatio": 10.25, "qualityScore": 30, "rank": 14, "roe": 21.66, "safetyScore": 71, "score": 63, "sector": "Financial Services", "ticker": "HIG", "valueScore": 1}, {"band": "average", "date": 1776391118631, "debtToEquity": 0, "flagLabel": "ROE \\u504f\\u4f4e", "flagTier": "soft", "flagsCsv": "ROE \\u504f\\u4f4e", "industry": "Banks - Regional", "marketCap": 37784884303, "name": "KB Financial Group Inc.", "peRatio": 9.96, "qualityScore": 10, "rank": 15, "roe": 9.94, "safetyScore": 100, "score": 63, "sector": "Financial Services", "ticker": "KB", "valueScore": 4}, {"band": "average", "date": 1776391118631, "debtToEquity": 0.91, "flagLabel": "\\u2014", "flagTier": "clean", "flagsCsv": "", "industry": "Financial - Credit Services", "marketCap": 27369404397, "name": "Synchrony Financial", "peRatio": 8.1, "qualityScore": 29, "rank": 16, "roe": 21.3, "safetyScore": 26, "score": 63, "sector": "Financial Services", "ticker": "SYF", "valueScore": 23}, {"band": "weak", "date": 1776391118631, "debtToEquity": 0.7, "flagLabel": "P/E \\u504f\\u9ad8", "flagTier": "soft", "flagsCsv": "P/E \\u504f\\u9ad8", "industry": "Airlines, Airports & Air Services", "marketCap": 47297006051, "name": "Delta Air Lines, Inc.", "peRatio": 10.4, "qualityScore": 35, "rank": 17, "roe": 25, "safetyScore": 36, "score": 59, "sector": "Industrials", "ticker": "DAL", "valueScore": 0}, {"band": "weak", "date": 1776391118631, "debtToEquity": 1.43, "flagLabel": "P/E \\u504f\\u9ad8", "flagTier": "soft", "flagsCsv": "P/E \\u504f\\u9ad8", "industry": "Banks - Diversified", "marketCap": 132665636379, "name": "Banco Bilbao Vizcaya Argentaria, S.A.", "peRatio": 10.13, "qualityScore": 26, "rank": 18, "roe": 19.75, "safetyScore": 8, "score": 52, "sector": "Financial Services", "ticker": "BBVA", "valueScore": 2}, {"band": "weak", "date": 1776391118631, "debtToEquity": 1.12, "flagLabel": "ROE \\u504f\\u4f4e", "flagTier": "soft", "flagsCsv": "ROE \\u504f\\u4f4e", "industry": "Information Technology Services", "marketCap": 32776543620, "name": "Fiserv, Inc.", "peRatio": 9.64, "qualityScore": 15, "rank": 19, "roe": 13.16, "safetyScore": 18, "score": 52, "sector": "Technology", "ticker": "FISV", "valueScore": 6}, {"band": "weak", "date": 1776391118631, "debtToEquity": 1.03, "flagLabel": "ROE \\u504f\\u4f4e", "flagTier": "soft", "flagsCsv": "ROE \\u504f\\u4f4e", "industry": "Insurance - Life", "marketCap": 34598159901, "name": "Prudential Financial, Inc.", "peRatio": 9.87, "qualityScore": 13, "rank": 20, "roe": 11.86, "safetyScore": 21, "score": 51, "sector": "Financial Services", "ticker": "PRU", "valueScore": 4}, {"band": "weak", "date": 1776391118631, "debtToEquity": 1.09, "flagLabel": "P/E \\u504f\\u9ad8", "flagTier": "soft", "flagsCsv": "P/E \\u504f\\u9ad8,ROE \\u504f\\u4f4e", "industry": "Auto - Manufacturers", "marketCap": 31831492628, "name": "Honda Motor Co., Ltd.", "peRatio": 10.26, "qualityScore": 0, "rank": 21, "roe": 3.91, "safetyScore": 19, "score": 45, "sector": "Consumer Cyclical", "ticker": "HMC", "valueScore": 1}],
@@ -2825,52 +2485,19 @@ window.__ALVA_OFFLINE_DATA__ = {
 
   /* ── Init ── */
   function setupFeedsPopover() {
-    var trigger = document.getElementById('feeds-trigger');
-    var popover = document.getElementById('feeds-popover');
-    if (!trigger || !popover) return;
-    function close() {
-      popover.classList.remove('open');
-      popover.setAttribute('aria-hidden', 'true');
-      trigger.setAttribute('aria-expanded', 'false');
-    }
-    function open() {
-      popover.classList.add('open');
-      popover.setAttribute('aria-hidden', 'false');
-      trigger.setAttribute('aria-expanded', 'true');
-    }
-    trigger.addEventListener('click', function(e){
-      e.stopPropagation();
-      if (popover.classList.contains('open')) close(); else open();
+    // Popover open/close/row-navigation now lives in <playbook-header>.
+    // We subscribe to its custom events to keep existing detail-modal behavior.
+    document.addEventListener('playbook-feed-click', function(e){
+      var id = e && e.detail && e.detail.id;
+      if (id) openFeedDetail(id);
     });
-    document.addEventListener('click', function(e){
-      if (!popover.classList.contains('open')) return;
-      if (popover.contains(e.target) || trigger.contains(e.target)) return;
-      close();
+    document.addEventListener('playbook-feeds-viewall', function(){
+      try {
+        var top = window.top || window.parent;
+        if (top && top !== window.self) { top.location.hash = 'automations'; return; }
+      } catch(e) {}
+      window.location.hash = 'automations';
     });
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') close();
-    });
-    popover.querySelectorAll('[data-feed]').forEach(function(row){
-      row.addEventListener('click', function(){
-        close();
-        openFeedDetail(row.getAttribute('data-feed'));
-      });
-    });
-    var viewAll = popover.querySelector('.feeds-popover-viewall');
-    if (viewAll) {
-      var go = function(){
-        close();
-        try {
-          var top = window.top || window.parent;
-          if (top && top !== window.self) { top.location.hash = 'automations'; return; }
-        } catch(e) {}
-        window.location.hash = 'automations';
-      };
-      viewAll.addEventListener('click', go);
-      viewAll.addEventListener('keydown', function(e){
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-      });
-    }
   }
 
   // ── Feed detail data (source: PlaybookInfoPopup.tsx DEFAULT_FEEDS) ──
@@ -3114,4 +2741,4 @@ window.__ALVA_OFFLINE_DATA__ = {
 <\/script>
 
 </body>
-`,r=e();function i(){return(0,r.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,r.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,r.jsx)(`iframe`,{srcDoc:n,title:`Playbook Info Remix — Defense Thesis Tracker`,className:`block h-full w-full border-0`})})})}function a({onNavigate:e}){return(0,r.jsx)(t,{activePage:`thesis-remix`,onNavigate:e,children:(0,r.jsx)(i,{})})}export{a as default};
+`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Quality Value Stock Screener`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
