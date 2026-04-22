@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.js";import{t as n}from"./inlinePlaybookHeader-BYX9LsaQ.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.js";import{t as n}from"./inlinePlaybookHeader-B6QndvzF.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -72,49 +72,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
         font-size: 14px; font-weight: 500;
         line-height: 22px; letter-spacing: 0.14px;
         color: #fff; white-space: nowrap;
-    }
-
-    /* ══════════════════════════════════════════
-       INFO CHIPS — Snapshot / Methodology / Framing / Change Log
-       ══════════════════════════════════════════ */
-    .info-chips {
-        display: flex; align-items: center; gap: var(--sp-xs);
-        flex-wrap: wrap;
-    }
-    .info-chip {
-        display: inline-flex; align-items: center; justify-content: center;
-        gap: var(--sp-xxs);
-        padding: var(--sp-xxs) 10px;
-        background: rgba(0,0,0,0.03);
-        border: none; border-radius: 4px;
-        font-family: inherit;
-        font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-        color: var(--text-n7);
-        cursor: pointer; user-select: none; white-space: nowrap;
-        transition: background 0.15s;
-    }
-    .info-chip:hover { background: rgba(0,0,0,0.05); }
-    .info-chip-icon {
-        width: 14px; height: 14px; flex-shrink: 0;
-        background-color: var(--text-n7);
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-size: contain; mask-size: contain;
-    }
-    .info-chip-icon.ic-framing     { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');         mask-image: url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg'); }
-    .info-chip-icon.ic-methodology { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg'); }
-    .info-chip-icon.ic-changelog   { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');   mask-image: url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg'); }
-    .info-chip-snap-label { color: var(--text-n5); }
-    .info-chip-snap-value { color: var(--text-n9); }
-    .info-chip-snap-sub { font-size: 11px; color: var(--text-n5); margin-left: 2px; }
-    .info-chip-snap-caret {
-        width: 12px; height: 12px; display: inline-block; flex-shrink: 0;
-        background-color: rgba(0,0,0,0.2);
-        -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg');
-                mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-down-f2.svg');
-        -webkit-mask-position: center; mask-position: center;
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
     }
 
     /* ══════════════════════════════════════════
@@ -381,68 +338,22 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
   @keyframes spin { to { transform:rotate(360deg); } }
 
-  /* ── Info chips (Framing / Methodology / Change Log) above tabs ── */
-  .info-chips {
-    display:flex; align-items:center; gap: var(--spacing-xs);
-    flex-wrap: wrap;
-  }
-  .info-chip {
-    display:inline-flex; align-items:center; justify-content:center;
-    gap: var(--spacing-xxs);
-    padding: var(--spacing-xxs) 10px;
-    background: var(--content-br03, rgba(0,0,0,0.03));
-    border-radius: 4px;
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: var(--text-n7, rgba(0,0,0,0.7));
-    cursor: pointer; user-select: none; white-space: nowrap;
-    transition: background 0.15s ease;
-  }
-  .info-chip:hover { background: rgba(0,0,0,0.05); }
-  .info-chip-icon {
-    width:14px; height:14px; flex-shrink:0;
-    background-color: var(--text-n7, rgba(0,0,0,0.7));
-    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-    -webkit-mask-position:center; mask-position:center;
-    -webkit-mask-size:contain; mask-size:contain;
-  }
-  .info-chip-icon.ic-framing {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
-  }
-  .info-chip-icon.ic-methodology {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
-  }
-  .info-chip-icon.ic-changelog {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
-  }
-  /* Snapshot trigger adopts chip appearance when in .info-chips row */
-  .info-chips .filter-dropdown-trigger {
-    background: var(--content-br03, rgba(0,0,0,0.03));
-    padding: var(--spacing-xxs) 10px;
-    border-radius: 4px;
-    margin: 0;
-    line-height: 20px;
-    gap: var(--spacing-xxs);
-  }
-  .info-chips .filter-dropdown-trigger:hover { background: rgba(0,0,0,0.05); }
-  .info-chips .filter-dropdown-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
-  .info-chips .filter-dropdown-value { color: var(--text-n9, rgba(0,0,0,0.9)); }
-  .info-chips .filter-dropdown.open .filter-dropdown-caret {
-    transform: none;
-    background-color: var(--text-n7, rgba(0,0,0,0.7));
-  }
-
   /* ── Tabs (Alva Underline; .tab-l keeps the original 16px size) ── */
+  .tab-wrapper-row .tab-snapshot .filter-dropdown-menu { left:auto; right:0; }
   .tab-wrapper-row {
     display:flex; align-items:flex-end; justify-content:space-between;
-    gap: var(--spacing-m); flex-wrap:wrap;
+    gap: var(--spacing-m); flex-wrap:nowrap;
     border-bottom: 1px solid var(--line-l07);
   }
   .tab.tab-underline {
-    display:flex; align-items:center; flex:1; gap: var(--spacing-m);
+    display:flex; align-items:center; flex:1 1 auto; min-width:0;
+    gap: var(--spacing-m);
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .tab.tab-underline::-webkit-scrollbar { display:none; }
+  .tab.tab-underline .tab-item { flex-shrink:0; white-space:nowrap; }
+  .tab-wrapper-row .tab-snapshot { flex-shrink:0; align-self:flex-end; padding-bottom:9px; }
   .tab-underline .tab-item {
     padding-bottom: var(--spacing-xxs);
     margin-bottom: -1px;
@@ -476,37 +387,14 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
   .tab-panel { display:none; }
   .tab-panel.active { display:block; }
 
-  /* ── Tabs on mobile: horizontal scroll, dropdown on its own row ── */
-  @media (max-width: 768px) {
-    .tab-wrapper-row {
-      flex-direction: column;
-      align-items: stretch;
-      border-bottom: none;
-      gap: var(--spacing-s);
-    }
-    .tab.tab-underline {
-      width: 100%;
-      overflow-x: auto;
-      border-bottom: 1px solid var(--line-l07);
-    }
-    .tab.tab-underline .tab-item {
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-    .filter-dropdown-trigger {
-      padding-bottom: 0;
-      margin-bottom: 0;
-    }
-  }
-
   /* ── Snapshot picker dropdown (original) ── */
   .filter-dropdown { position:relative; display:inline-flex; align-items:center; }
   .filter-dropdown-trigger {
     background:transparent;
     border:none;
     border-radius:0;
-    padding:0 0 6px 0;
-    margin-bottom:2px;
+    padding:0;
+    margin:0;
     font-family:inherit; font-size:12px; color:var(--text-n9);
     cursor:pointer; display:inline-flex; align-items:center; gap:8px;
     line-height:20px;
@@ -1193,6 +1081,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
     owner="YGGYLL"
     owner-seed="YGGYLL"
     update-interval="Every 5 minutes"
+    readme-modal="methodology-modal"
     star="12" remix="56" comments="6"
     description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
     <script type="application/json" class="pb-feeds-data">
@@ -1204,20 +1093,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
     <\/script>
 </playbook-header>
 <div class="playbook-container">
-  <!-- Info chips -->
-  <div class="info-chips">
-    <div class="filter-dropdown" id="snap-filter" style="display:none;">
-      <button type="button" class="filter-dropdown-trigger" id="snap-filter-trigger" aria-haspopup="listbox" aria-expanded="false">
-        <span class="filter-dropdown-label">Snapshot</span>
-        <span class="filter-dropdown-value" id="snap-filter-value">&mdash;</span>
-        <span class="filter-dropdown-caret"></span>
-      </button>
-      <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
-    </div>
-    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Readme</div>
-    <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
-  </div>
-
   <!-- Tabs -->
   <div class="tab-wrapper">
     <div class="tab-wrapper-row">
@@ -1226,6 +1101,13 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
         <div class="tab-item" data-tab="trends" data-text="Movers &amp; Trends">Movers &amp; Trends</div>
         <div class="tab-item" data-tab="analysis" data-text="Analysis">Analysis</div>
         <div class="tab-item" data-tab="feed" data-text="Feed">Feed</div>
+      </div>
+      <div class="filter-dropdown tab-snapshot" id="snap-filter" style="display:none;">
+        <button type="button" class="filter-dropdown-trigger" id="snap-filter-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="filter-dropdown-value" id="snap-filter-value">&mdash;</span>
+          <span class="filter-dropdown-caret"></span>
+        </button>
+        <div class="filter-dropdown-menu" id="snap-filter-menu" role="listbox"></div>
       </div>
     </div>
   </div>
@@ -2395,6 +2277,10 @@ window.__ALVA_OFFLINE_DATA__ = {
   function setupModals() {
     document.querySelectorAll('[data-modal-open]').forEach(function(btn){
       btn.addEventListener('click', function(){ openModal(btn.getAttribute('data-modal-open')); });
+    });
+    document.addEventListener('playbook-readme-click', function(e){
+      var id = e.detail && e.detail.modalId;
+      if (id) openModal(id);
     });
     document.querySelectorAll('[data-modal-close]').forEach(function(btn){
       btn.addEventListener('click', function(e){ e.stopPropagation(); closeModal(btn.getAttribute('data-modal-close')); });

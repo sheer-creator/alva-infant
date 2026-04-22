@@ -128,6 +128,11 @@ playbook-header { display: block; }
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
 }
+.pb-meta-icon.ic-readme {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
+}
+.pb-meta-link .pb-meta-icon { background-color: currentColor; margin-right: 2px; }
 .pb-meta-link {
     display: inline-flex; align-items: center; gap: 2px;
     background: transparent; border: none; padding: 0;
@@ -495,6 +500,15 @@ playbook-header { display: block; }
         '</div><span class="pb-meta-sep">|</span>'
       : '';
 
+    var readmeModal = host.getAttribute('readme-modal') || '';
+    var readmeBlock = readmeModal
+      ? '<button class="pb-meta-link" type="button" data-readme-trigger>' +
+          '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
+          '<span>Readme</span>' +
+          '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
+        '</button><span class="pb-meta-sep">|</span>'
+      : '';
+
     var feedsCount = feeds.length;
     var feedsBlock = feedsCount
       ? '<span class="pb-meta-sep">|</span>' +
@@ -564,11 +578,24 @@ playbook-header { display: block; }
         '<div class="pb-meta">' +
           authorBlock +
           updateBlock +
+          readmeBlock +
           '<button class="pb-meta-link" type="button"><span>History</span><span class="pb-meta-link-chev" aria-hidden="true"></span></button>' +
           feedsBlock +
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupReadmeTrigger(host) {
+    var btn = host.querySelector('[data-readme-trigger]');
+    if (!btn) return;
+    var modalId = host.getAttribute('readme-modal') || '';
+    btn.addEventListener('click', function () {
+      host.dispatchEvent(new CustomEvent('playbook-readme-click', {
+        bubbles: true,
+        detail: { modalId: modalId }
+      }));
+    });
   }
 
   function setupDescToggle(host) {
@@ -753,6 +780,7 @@ playbook-header { display: block; }
         setupDescToggle(self);
         setupFeedsPopover(self);
         setupRemixPopover(self);
+        setupReadmeTrigger(self);
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mount, { once: true });

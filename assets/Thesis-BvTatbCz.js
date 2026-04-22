@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.js";import{t as n}from"./inlinePlaybookHeader-BYX9LsaQ.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.js";import{t as n}from"./inlinePlaybookHeader-B6QndvzF.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -31,59 +31,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
   }
   a { color: var(--main-m1); text-decoration: none; }
   a:hover { text-decoration: underline; }
-
-  /* Info chips (aligned with Screener redesign) */
-  .info-chips {
-    display:flex; align-items:center; gap: var(--spacing-xs);
-    flex-wrap: wrap;
-  }
-  .info-chip {
-    display:inline-flex; align-items:center; justify-content:center;
-    gap: var(--spacing-xxs);
-    padding: var(--spacing-xxs) 10px;
-    background: var(--content-br03, rgba(0,0,0,0.03));
-    border-radius: 4px;
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: var(--text-n7, rgba(0,0,0,0.7));
-    cursor: pointer; user-select: none; white-space: nowrap;
-    transition: background 0.15s ease;
-  }
-  .info-chip:hover { background: rgba(0,0,0,0.05); }
-  .info-chip-icon {
-    width:14px; height:14px; flex-shrink:0;
-    background-color: var(--text-n7, rgba(0,0,0,0.7));
-    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-    -webkit-mask-position:center; mask-position:center;
-    -webkit-mask-size:contain; mask-size:contain;
-  }
-  .info-chip-icon.ic-framing {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/buld-l.svg');
-  }
-  .info-chip-icon.ic-methodology {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
-  }
-  .info-chip-icon.ic-changelog {
-    -webkit-mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
-            mask-image:url('https://alva-ai-static.b-cdn.net/icons/disclaimer-l.svg');
-  }
-  /* Snapshot trigger adopts chip appearance when in .info-chips row */
-  .info-chips .filter-dropdown-trigger {
-    background: var(--content-br03, rgba(0,0,0,0.03));
-    padding: var(--spacing-xxs) 10px;
-    border-radius: 4px;
-    margin: 0;
-    line-height: 20px;
-    gap: var(--spacing-xxs);
-  }
-  .info-chips .filter-dropdown-trigger:hover { background: rgba(0,0,0,0.05); }
-  .info-chips .filter-dropdown-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
-  .info-chips .filter-dropdown-value { color: var(--text-n9, rgba(0,0,0,0.9)); }
-  .info-chips .filter-dropdown.open .filter-dropdown-caret {
-    transform: none;
-    background-color: var(--text-n7, rgba(0,0,0,0.7));
-  }
 
   .meta-sep { color: var(--text-n3); }
   .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:2px 8px; border-radius: var(--radius-ct-xs); line-height:18px; }
@@ -217,14 +164,21 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
   .hero-deltas-toggle:hover { color: var(--text-n9); }
 
   /* Tabs — Alva Underline (aligned with Screener redesign) */
+  .tab-wrapper-row .tab-snapshot .filter-dropdown-menu { left:auto; right:0; }
   .tab-wrapper-row {
     display:flex; align-items:flex-end; justify-content:space-between;
-    gap: var(--spacing-m); flex-wrap:wrap;
+    gap: var(--spacing-m); flex-wrap:nowrap;
     border-bottom: 1px solid var(--line-l07);
   }
   .tab.tab-underline {
-    display:flex; align-items:center; flex:1; gap: var(--spacing-m);
+    display:flex; align-items:center; flex:1 1 auto; min-width:0;
+    gap: var(--spacing-m);
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .tab.tab-underline::-webkit-scrollbar { display:none; }
+  .tab.tab-underline .tab-item { flex-shrink:0; white-space:nowrap; }
+  .tab-wrapper-row .tab-snapshot { flex-shrink:0; align-self:flex-end; padding-bottom:6px; }
   .tab-underline .tab-item {
     padding-bottom: var(--spacing-xxs);
     margin-bottom: -1px;
@@ -258,24 +212,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
   }
   .tab-panel { display:none; }
   .tab-panel.active { display:flex; flex-direction:column; gap: var(--spacing-xl); }
-
-  @media (max-width: 768px) {
-    .tab-wrapper-row {
-      flex-direction: column;
-      align-items: stretch;
-      border-bottom: none;
-      gap: var(--spacing-s);
-    }
-    .tab.tab-underline {
-      width: 100%;
-      overflow-x: auto;
-      border-bottom: 1px solid var(--line-l07);
-    }
-    .tab.tab-underline .tab-item {
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-  }
 
   /* Widgets */
   .widget-card { background: transparent; display:flex; flex-direction:column; position:relative; }
@@ -678,6 +614,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
     owner="YGGYLL"
     owner-seed="YGGYLL"
     update-interval="Every 5 minutes"
+    readme-modal="methodology-modal"
     star="12" remix="56" comments="6"
     description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
     <script type="application/json" class="pb-feeds-data">
@@ -690,23 +627,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
 </playbook-header>
 <div class="playbook-container">
 
-  <!-- Info chips -->
-  <div class="info-chips">
-    <div class="filter-dropdown" id="hero-date-filter">
-      <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
-        <span class="filter-dropdown-label">Snapshot</span>
-        <span class="filter-dropdown-value">
-          <span id="hero-date-label">—</span>
-          <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
-        </span>
-        <span class="filter-dropdown-caret"></span>
-      </button>
-      <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
-    </div>
-    <div class="info-chip" data-modal-open="methodology-modal"><span class="info-chip-icon ic-methodology"></span>Readme</div>
-    <div class="info-chip"><span class="info-chip-icon ic-framing"></span>Framing</div>
-  </div>
-
   <!-- Tabs -->
   <div class="tab-wrapper">
     <div class="tab-wrapper-row">
@@ -717,6 +637,16 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
         <div class="tab-item" data-tab="risks" data-text="Risks">Risks</div>
         <div class="tab-item" data-tab="macro" data-text="Macro &amp; Industry">Macro &amp; Industry</div>
         <div class="tab-item" data-tab="news" data-text="News &amp; Social">News &amp; Social</div>
+      </div>
+      <div class="filter-dropdown tab-snapshot" id="hero-date-filter">
+        <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="filter-dropdown-value">
+            <span id="hero-date-label">—</span>
+            <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
+          </span>
+          <span class="filter-dropdown-caret"></span>
+        </button>
+        <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
       </div>
     </div>
   </div>
@@ -1237,6 +1167,10 @@ function closeModal(id) {
 }
 document.querySelectorAll('[data-modal-open]').forEach(btn => {
   btn.addEventListener('click', () => openModal(btn.getAttribute('data-modal-open')));
+});
+document.addEventListener('playbook-readme-click', e => {
+  const id = e.detail && e.detail.modalId;
+  if (id) openModal(id);
 });
 document.querySelectorAll('[data-modal-close]').forEach(btn => {
   btn.addEventListener('click', e => { e.stopPropagation(); closeModal(btn.getAttribute('data-modal-close')); });
