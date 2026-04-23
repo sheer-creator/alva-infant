@@ -41,6 +41,7 @@
   }
 
   function avatarUrl(seed) {
+    if (seed === 'YGGYLL') return '/alva-infant/portrait.png';
     var s = encodeURIComponent(seed || 'user');
     return 'https://api.dicebear.com/9.x/notionists/svg?seed=' + s + '&backgroundColor=fff3e0';
   }

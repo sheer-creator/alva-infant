@@ -77,14 +77,14 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
               <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{USER.name}</span>
               <div className="flex items-center gap-[4px] shrink-0">
                 <span
-                  className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px]"
-                  style={{ color: 'rgba(0,0,0,0.9)', background: '#49a3a6', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
+                  className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px] text-white"
+                  style={{ background: '#49a3a6', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
                 >
                   Pro
                 </span>
                 <span
                   className="inline-flex items-center justify-center h-[18px] text-[11px] leading-[18px] tracking-[0.11px] px-[6px] rounded-full"
-                  style={{ color: 'rgba(0,0,0,0.9)', background: 'rgba(73,163,166,0.1)', fontFamily: FONT }}
+                  style={{ color: '#49a3a6', background: 'rgba(73,163,166,0.1)', fontFamily: FONT }}
                 >
                   Annual
                 </span>

@@ -187,13 +187,13 @@ playbook-header { display: block; }
 .pb-meta-icon-badge {
     display: inline-flex; align-items: center; justify-content: center;
     width: 20px; height: 20px; flex-shrink: 0;
-    background: var(--b0-sidebar, #2A2A38);
+    background: var(--b-r05);
     border-radius: 999px;
 }
 .pb-meta-icon-badge .pb-meta-icon-img {
     width: 12px; height: 12px;
     display: block;
-    filter: brightness(0) invert(1);
+    filter: brightness(0);
 }
 .pb-meta-link:hover { opacity: 0.7; }
 .pb-meta-link-chev {
