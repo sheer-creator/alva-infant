@@ -139,8 +139,10 @@
 
     var readmeModal = host.getAttribute('readme-modal') || '';
     var readmeBlock = readmeModal
-      ? '<button class="pb-meta-link" type="button" data-readme-trigger>' +
-          '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
+      ? '<button class="pb-meta-link pb-meta-link--readme" type="button" data-readme-trigger>' +
+          '<span class="pb-meta-icon-badge" aria-hidden="true">' +
+            '<img class="pb-meta-icon-img" src="https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg" width="12" height="12" alt="" />' +
+          '</span>' +
           '<span>Readme</span>' +
           '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
         '</button><span class="pb-meta-sep">|</span>'

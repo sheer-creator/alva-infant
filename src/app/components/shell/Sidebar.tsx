@@ -32,7 +32,7 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
   { label: 'Home', page: 'home' },
   { label: 'Explore', page: 'explore' },
   { label: 'Portfolio' },
-  { label: 'Agent', page: 'agent', badge: 3 },
+  { label: 'Agent', page: 'agent' },
   { label: 'Alva Skill' },
 ];
 
@@ -147,8 +147,8 @@ export function Sidebar({
             <div
               key={item.label}
               title={sidebarCompact ? item.label : undefined}
-              className={`flex items-center h-[36px] cursor-pointer overflow-hidden whitespace-nowrap rounded-[4px] px-[8px] text-[13px] tracking-[0.13px] transition-colors ${
-                item.page === activePage ? 'text-[#49A3A6]' : 'text-white hover:bg-white/5'
+              className={`flex items-center h-[36px] cursor-pointer overflow-hidden whitespace-nowrap rounded-[4px] px-[8px] text-[13px] tracking-[0.13px] text-white transition-colors ${
+                item.page === activePage ? 'bg-white/5' : 'hover:bg-white/5'
               } ${sidebarCompact ? 'text-center px-[4px] text-[11px]' : ''}`}
               onClick={() => item.page && onNavigate(item.page)}
             >
@@ -175,8 +175,8 @@ export function Sidebar({
             <div
               key={item.label}
               title={sidebarCompact ? item.label : undefined}
-              className={`h-[36px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-[4px] px-[8px] text-[13px] leading-[36px] tracking-[0.13px] transition-colors ${
-                item.page === activePage ? 'text-[#49A3A6]' : 'text-white hover:bg-white/5'
+              className={`h-[36px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-[4px] px-[8px] text-[13px] leading-[36px] tracking-[0.13px] text-white transition-colors ${
+                item.page === activePage ? 'bg-white/5' : 'hover:bg-white/5'
               } ${sidebarCompact ? 'text-center px-[4px] text-[10px]' : ''}`}
               onClick={() => {
                 if (item.page) {

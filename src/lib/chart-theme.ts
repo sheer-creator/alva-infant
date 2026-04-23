@@ -28,7 +28,7 @@ export const CREATOR_AVATARS: Record<string, string> = {
   'Harry Zzz': 'https://api.dicebear.com/9.x/notionists/svg?seed=HarryZzz&backgroundColor=e3f2fd',
   'Smart Jing': 'https://api.dicebear.com/9.x/notionists/svg?seed=SmartJing&backgroundColor=fce4ec',
   'Sheer YLL YGG': 'https://api.dicebear.com/9.x/notionists/svg?seed=SheerYLL&backgroundColor=fff3e0',
-  'YGGYLL':        'https://api.dicebear.com/9.x/notionists/svg?seed=YGGYLL&backgroundColor=fff3e0',
+  'YGGYLL':        `${import.meta.env.BASE_URL}portrait.png`,
   'Macro Scope X': 'https://api.dicebear.com/9.x/notionists/svg?seed=MacroScopeX&backgroundColor=ede7f6',
 };
 
