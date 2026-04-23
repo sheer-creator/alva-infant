@@ -27,6 +27,7 @@ playbook-header { display: block; }
     overflow: hidden; text-overflow: ellipsis;
 }
 .pb-freq-chip {
+    position: relative;
     display: inline-flex; align-items: center; gap: 2px;
     padding: 1px 8px 1px 6px;
     border: 1px solid var(--line-l07);
@@ -34,6 +35,50 @@ playbook-header { display: block; }
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
     color: var(--text-n5);
     white-space: nowrap; flex-shrink: 0;
+    outline: none;
+}
+.pb-freq-chip:has(.pb-freq-tip-anchor) { cursor: pointer; }
+/* tooltip anchor — positioning around the freq chip (places below to avoid top-edge clipping) */
+.pb-freq-tip-anchor {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%) translateY(-4px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+    z-index: 100;
+    white-space: nowrap;
+}
+.pb-freq-chip:hover .pb-freq-tip-anchor,
+.pb-freq-chip:focus-visible .pb-freq-tip-anchor {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    transition-delay: .12s;
+}
+/* Tooltip primitive — aligned with alva-design .tooltip spec */
+.pb-freq-tip-anchor .tooltip {
+    position: relative;
+    background-color: var(--b0-container);
+    border-radius: var(--radius-ct-m);
+    box-shadow: var(--shadow-s);
+    padding: var(--spacing-m);
+    width: fit-content;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xxxs);
+}
+.pb-freq-tip-anchor .tooltip-border {
+    position: absolute;
+    border: 0.5px solid var(--line-l2);
+    border-radius: var(--radius-ct-m);
+    inset: 0;
+    pointer-events: none;
+}
+.pb-freq-tip-anchor .tooltip-text {
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
+    font-weight: 400;
 }
 .pb-freq-dot {
     width: 12px; height: 12px; position: relative;
@@ -124,10 +169,6 @@ playbook-header { display: block; }
     -webkit-mask-size: contain; mask-size: contain;
     flex-shrink: 0;
 }
-.pb-meta-icon.ic-update {
-    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
-            mask-image: url('https://alva-ai-static.b-cdn.net/icons/update-l.svg');
-}
 .pb-meta-icon.ic-readme {
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
@@ -138,13 +179,13 @@ playbook-header { display: block; }
     background: transparent; border: none; padding: 0;
     cursor: pointer; font-family: inherit;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: var(--text-n5);
-    transition: color .15s;
+    color: var(--text-n9);
+    transition: opacity .15s;
 }
-.pb-meta-link:hover { color: var(--text-n9); }
+.pb-meta-link:hover { opacity: 0.7; }
 .pb-meta-link-chev {
     width: 12px; height: 12px; display: inline-block; flex-shrink: 0;
-    background-color: currentColor;
+    background-color: var(--text-n5);
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
     -webkit-mask-position: center; mask-position: center;
@@ -374,14 +415,14 @@ playbook-header { display: block; }
      <playbook-header
        title="Quality Value Stock Screener 2"
        freq="15m"
+       last-updated="15 minutes ago"
        owner="YGGYLL"
        owner-seed="YGGYLL"
-       update-interval="Every 5 minutes"
        star="12" remix="56" comments="6"
        description="...">
        <script type="application/json" class="pb-feeds-data">
          [
-           {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago","clickable":true},
+           {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"20 Minutes","lastRun":"15 minutes ago","clickable":true},
            {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"}
          ]
        <\/script>
@@ -473,30 +514,31 @@ playbook-header { display: block; }
   function render(host) {
     var title = host.getAttribute('title') || '';
     var freq = host.getAttribute('freq') || '';
+    var lastUpdated = host.getAttribute('last-updated') || '';
     var owner = host.getAttribute('owner') || '';
     var ownerSeed = host.getAttribute('owner-seed') || owner;
-    var updateInterval = host.getAttribute('update-interval') || '';
     var star = host.getAttribute('star') || '';
     var remix = host.getAttribute('remix') || '';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
     var feeds = readFeeds(host);
 
+    var freqTooltip = lastUpdated
+      ? '<span class="pb-freq-tip-anchor" role="tooltip">' +
+          '<div class="tooltip">' +
+            '<div class="tooltip-border"></div>' +
+            '<div class="tooltip-text">Last Updated: ' + esc(lastUpdated) + '</div>' +
+          '</div>' +
+        '</span>'
+      : '';
     var freqChip = freq
-      ? '<span class="pb-freq-chip"><span class="pb-freq-dot" aria-hidden="true"></span>' + esc(freq) + '</span>'
+      ? '<span class="pb-freq-chip"' + (lastUpdated ? ' tabindex="0"' : '') + '><span class="pb-freq-dot" aria-hidden="true"></span>' + esc(freq) + freqTooltip + '</span>'
       : '';
 
     var authorBlock = owner
       ? '<div class="pb-meta-author">' +
           '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
           '<span>' + esc(owner) + '</span>' +
-        '</div><span class="pb-meta-sep">|</span>'
-      : '';
-
-    var updateBlock = updateInterval
-      ? '<div class="pb-meta-item">' +
-          '<span class="pb-meta-icon ic-update" aria-hidden="true"></span>' +
-          '<span>' + esc(updateInterval) + '</span>' +
         '</div><span class="pb-meta-sep">|</span>'
       : '';
 
@@ -577,7 +619,6 @@ playbook-header { display: block; }
         '</div>' +
         '<div class="pb-meta">' +
           authorBlock +
-          updateBlock +
           readmeBlock +
           '<button class="pb-meta-link" type="button"><span>History</span><span class="pb-meta-link-chev" aria-hidden="true"></span></button>' +
           feedsBlock +

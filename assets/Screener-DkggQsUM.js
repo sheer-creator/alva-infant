@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.js";import{t as n}from"./inlinePlaybookHeader-B6QndvzF.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-hp-vQAM6.js";import{t as n}from"./inlinePlaybookHeader-6KgBDDCe.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -1077,15 +1077,15 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-PIjzakkq.
 <playbook-header
     title="Quality Value Stock Screener"
     freq="15m"
+    last-updated="15 minutes ago"
     owner="YGGYLL"
     owner-seed="YGGYLL"
-    update-interval="Every 5 minutes"
     readme-modal="methodology-modal"
     star="12" remix="56" comments="6"
     description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
     <script type="application/json" class="pb-feeds-data">
 [
-  {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago","clickable":true},
+  {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"20 Minutes","lastRun":"15 minutes ago","clickable":true},
   {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"},
   {"id":"supply-chain","name":"Supply-Chain","interval":"6 hours","lastRun":"2 hours ago"}
 ]
