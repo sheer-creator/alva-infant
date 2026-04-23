@@ -129,8 +129,8 @@ playbook-header { display: block; }
     white-space: nowrap; flex-shrink: 0;
 }
 button.pb-pill { cursor: pointer; transition: background .15s, border-color .15s; }
-button.pb-pill:hover { background: rgba(0,0,0,0.04); }
-button.pb-pill.is-open { background: var(--main-m1-10, rgba(73,163,166,0.1)); border-color: var(--main-m1); color: var(--main-m1); }
+button.pb-pill:hover { background: var(--b-r03); }
+button.pb-pill.is-open { background: var(--b-r03); border-color: var(--line-l9); }
 /* Author pill: avatar (20px) + name. Left padding tighter to hug avatar. */
 .pb-pill--author { padding-left: 2px; padding-right: 8px; height: auto; }
 .pb-meta-avatar {

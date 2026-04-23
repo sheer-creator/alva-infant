@@ -1,9 +1,9 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.js";import{t as n}from"./inlinePlaybookHeader-J4lwemG4.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.js";import{t as n}from"./inlinePlaybookHeader-DYx4N7zD.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Template-Thesis - Alva</title>
+<title>Defense Thesis Tracker - Alva</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
 <link rel="stylesheet" href="./components/discussion-panel.css" />
@@ -57,43 +57,12 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     margin-left: var(--spacing-s);
   }
 
-  /* Hero Section — daily thesis summary + deltas (Markdown medium card) */
-  .hero-card { margin: 0; }
-  .free-text-body { padding: var(--spacing-l); }
-  .markdown-container {
-    width: 100%;
-    display: flex; flex-direction: column;
-    gap: var(--spacing-m);
+  /* Hero Section — daily thesis summary + deltas + date picker */
+  .hero-card {
+    background: var(--grey-g01);
+    border-radius: var(--radius-ct-l);
+    padding: var(--spacing-l) var(--spacing-l) var(--spacing-s);
   }
-  .markdown-container * { box-sizing: border-box; }
-  .markdown-container p {
-    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 16px; line-height: 26px; letter-spacing: 0.16px;
-    color: var(--text-n9); margin: 0; white-space: pre-wrap;
-  }
-  .markdown-container ul,
-  .markdown-container ol {
-    display: flex; flex-direction: column; gap: var(--spacing-xs);
-    list-style: none; margin: 0; padding: 0;
-  }
-  .markdown-container li {
-    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 16px; line-height: 26px; letter-spacing: 0.16px;
-    color: var(--text-n9); position: relative; padding-left: var(--spacing-xl);
-  }
-  .markdown-container ul > li::before {
-    content: ''; position: absolute;
-    left: 9.5px; top: 10.5px;
-    width: 5px; height: 5px; border-radius: 50%; background: var(--text-n9);
-  }
-  .markdown-container em { font-style: italic; }
-  .markdown-container strong { font-weight: 500; }
-  .markdown-container--m { gap: var(--spacing-xs); }
-  .markdown-container--m p,
-  .markdown-container--m li { font-size: 14px; line-height: 22px; letter-spacing: 0.14px; }
-  .markdown-container--m li { padding-left: var(--spacing-l); }
-  .markdown-container--m ul > li::before { left: 7.5px; top: 8.5px; }
-  .markdown-container--m ul { gap: var(--spacing-xxs); }
   .hero-head {
     display:flex; justify-content: space-between; align-items: center;
     gap: var(--spacing-m); margin-bottom: var(--spacing-xs);
@@ -212,54 +181,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
   .tab.tab-underline::-webkit-scrollbar { display:none; }
   .tab.tab-underline .tab-item { flex-shrink:0; white-space:nowrap; }
   .tab-wrapper-row .tab-snapshot { flex-shrink:0; align-self:flex-end; padding-bottom:9px; }
-  .tab-wrapper-row .tab-right-group {
-    display:flex; align-items:center; gap: var(--spacing-xs);
-    flex-shrink:0; align-self:flex-end; padding-bottom:11px;
-  }
-  .tab-wrapper-row .tab-right-group .tab-snapshot { padding-bottom:0; }
-  .tab-wrapper-row .tab-readme { cursor:pointer; }
-
-  /* ── Tab-bar README (chip style, scoped to .tab-readme only) ── */
-  .pb-meta-link--readme.tab-readme {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xxs);
-    height: 24px;
-    padding: var(--spacing-xxxs) var(--spacing-xs);
-    background: var(--b-r02);
-    border: 0.5px solid var(--line-l2);
-    border-radius: var(--radius-ct-s);
-    font-family: inherit;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 0.12px;
-    color: var(--text-n9);
-    transition: background .15s, border-color .15s;
-  }
-  .pb-meta-link--readme.tab-readme .pb-meta-icon-badge {
-    width: 14px; height: 14px;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-  }
-  .pb-meta-link--readme.tab-readme .pb-meta-icon-img {
-    width: 14px; height: 14px;
-  }
-  .pb-meta-link--readme.tab-readme:hover,
-  .pb-meta-link--readme.tab-readme:active,
-  .pb-meta-link--readme.tab-readme.is-open {
-    background: var(--b-r03);
-    border-color: var(--line-l9);
-    opacity: 1;
-  }
-  .pb-meta-link--readme.tab-readme:hover .pb-meta-icon-badge {
-    background: transparent;
-    border: none;
-  }
-  .pb-meta-link--readme.tab-readme:hover .pb-meta-icon-img {
-    filter: brightness(0);
-  }
-  .tab-wrapper-row .tab-right-group:has(#hero-date-filter[style*="none"]) .pb-meta-sep { display:none; }
   .tab-underline .tab-item {
     padding-bottom: var(--spacing-xxs);
     color: var(--text-n7);
@@ -590,12 +511,12 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
   .tl-item::before {
     content:""; box-sizing: border-box;
     position:absolute; left:-19px; top:11px;
-    width:14px; height:14px; border-radius:50%; background: var(--grey-g1);
+    width:14px; height:14px; border-radius:50%; background: var(--text-n5);
     border: 2px solid var(--b0-page);
   }
   .tl-item.bull::before { background: #2a9b7d; }
   .tl-item.bear::before { background: #e05357; }
-  .tl-item.ambig::before, .tl-item.ambiguous::before { background: var(--grey-g1); }
+  .tl-item.ambig::before, .tl-item.ambiguous::before { background: var(--text-n5); }
   .tl-item.done::before, .tl-item.delivered::before { background: #2a9b7d; box-shadow: 0 0 0 2px rgba(42,155,125,0.25); }
   .tl-item.missed::before { background: #e05357; }
   .tl-date { font-size:12px; line-height:20px; letter-spacing:0.12px; color: var(--text-n5); }
@@ -689,7 +610,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
 </head>
 <body>
 <playbook-header
-    title="Template-Thesis"
+    title="Defense Thesis Tracker"
     freq="15m"
     last-updated="15 minutes ago"
     owner="YGGYLL"
@@ -718,24 +639,15 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
         <div class="tab-item" data-tab="macro" data-text="Macro &amp; Industry">Macro &amp; Industry</div>
         <div class="tab-item" data-tab="news" data-text="News &amp; Social">News &amp; Social</div>
       </div>
-      <div class="tab-right-group">
-        <button class="pb-meta-link pb-meta-link--readme tab-readme" type="button" data-modal-open="methodology-modal">
-          <span class="pb-meta-icon-badge" aria-hidden="true">
-            <img class="pb-meta-icon-img" src="https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg" width="14" height="14" alt="" />
+      <div class="filter-dropdown tab-snapshot" id="hero-date-filter">
+        <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="filter-dropdown-value">
+            <span id="hero-date-label">—</span>
+            <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
           </span>
-          <span>README</span>
+          <span class="filter-dropdown-caret"></span>
         </button>
-        <span class="pb-meta-sep" aria-hidden="true">|</span>
-        <div class="filter-dropdown tab-snapshot" id="hero-date-filter" style="display:none;">
-          <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
-            <span class="filter-dropdown-value">
-              <span id="hero-date-label">—</span>
-              <span class="filter-dropdown-value-sub" id="hero-date-age-label"></span>
-            </span>
-            <span class="filter-dropdown-caret"></span>
-          </button>
-          <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
-        </div>
+        <div class="filter-dropdown-menu" id="hero-date-dropdown" role="listbox"></div>
       </div>
     </div>
   </div>
@@ -743,31 +655,12 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
   <!-- ================== OVERVIEW ================== -->
   <div class="tab-panel active" id="panel-overview">
 
-    <!-- HERO — daily thesis + deltas (Markdown medium card) -->
-    <div class="widget-card hero-card" id="hero-card">
-      <div class="widget-body" style="background:var(--grey-g01);">
-        <div class="free-text-body">
-          <div class="markdown-container markdown-container--m">
-            <script type="text/markdown">
-The structural rearmament thesis remains intact, but leadership is narrowing — stock selection now matters more than broad basket ownership as the active driver shifts from policy concept to funded missile-defense procurement.
-
-**What changed in this snapshot**
-
-- **CATALYST · LTAMDS LRIP delivered** — RTX received a $904.6M U.S. Army award on 2026-04-16 for five LTAMDS units plus six spares.
-- **MACRO · FY27 topline focus** — HASC Chair Mike Rogers expects to craft an FY2027 NDAA with a $1.15T topline.
-- **MACRO · NATO 2% milestone** — All 32 NATO allies met or exceeded 2% of GDP defense spending in 2025 (Rutte annual report).
-- **RISK · Breadth still narrow** — Only 50% of the basket is above its 200-day moving average, despite 12.1 points of 1Y alpha.
-            <\/script>
-          </div>
-        </div>
-        <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva"/></div>
-      </div>
-      <!-- Hidden stubs so dynamic loader JS keeps working without errors -->
-      <div aria-hidden="true" style="display:none !important;">
-        <p id="hero-text"></p>
-        <div id="hero-deltas-block">
-          <ul id="hero-deltas-list"></ul>
-        </div>
+    <!-- HERO — daily thesis + deltas -->
+    <div class="hero-card" id="hero-card">
+      <p class="hero-text" id="hero-text"><span class="loading">Loading thesis…</span></p>
+      <div id="hero-deltas-block" style="display:none;">
+        <div class="hero-deltas-title">What changed in this snapshot</div>
+        <ul class="hero-deltas-list" id="hero-deltas-list"></ul>
       </div>
     </div>
 
@@ -2688,29 +2581,6 @@ async function renderAnnouncements() {
   await loadNewsFeed();
 })();
 <\/script>
-<script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"><\/script>
-<script>
-(function() {
-  if (!window.markdownit) return;
-  var md = window.markdownit({ html: false, linkify: true, typographer: false });
-  var defaultLinkOpen = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
-    return self.renderToken(tokens, idx, options);
-  };
-  md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
-    tokens[idx].attrSet('target', '_blank');
-    tokens[idx].attrSet('rel', 'noopener noreferrer');
-    return defaultLinkOpen(tokens, idx, options, env, self);
-  };
-  document.querySelectorAll('script[type="text/markdown"]').forEach(function(el) {
-    var container = el.parentElement;
-    var src = el.textContent.replace(/^\\n+/, '').replace(/\\n+\\s*$/, '');
-    var indent = (src.match(/^[ \\t]+/) || [''])[0];
-    if (indent) src = src.split('\\n').map(function(line) { return line.replace(new RegExp('^' + indent), ''); }).join('\\n');
-    el.remove();
-    container.insertAdjacentHTML('beforeend', md.render(src));
-  });
-})();
-<\/script>
 </body>
 </html>
-`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Template-Thesis`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`template-thesis`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
+`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Defense Thesis Tracker`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`thesis`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
