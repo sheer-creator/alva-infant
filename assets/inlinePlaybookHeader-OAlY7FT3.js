@@ -182,6 +182,19 @@ playbook-header { display: block; }
     color: var(--text-n9);
     transition: opacity .15s;
 }
+.pb-meta-link--readme { gap: var(--sp-xxs, 4px); }
+.pb-meta-link--readme > .pb-meta-icon-badge + span { margin-left: 2px; }
+.pb-meta-icon-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; flex-shrink: 0;
+    background: var(--b0-sidebar, #2A2A38);
+    border-radius: 999px;
+}
+.pb-meta-icon-badge .pb-meta-icon-img {
+    width: 12px; height: 12px;
+    display: block;
+    filter: brightness(0) invert(1);
+}
 .pb-meta-link:hover { opacity: 0.7; }
 .pb-meta-link-chev {
     width: 12px; height: 12px; display: inline-block; flex-shrink: 0;
@@ -544,8 +557,10 @@ playbook-header { display: block; }
 
     var readmeModal = host.getAttribute('readme-modal') || '';
     var readmeBlock = readmeModal
-      ? '<button class="pb-meta-link" type="button" data-readme-trigger>' +
-          '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
+      ? '<button class="pb-meta-link pb-meta-link--readme" type="button" data-readme-trigger>' +
+          '<span class="pb-meta-icon-badge" aria-hidden="true">' +
+            '<img class="pb-meta-icon-img" src="https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg" width="12" height="12" alt="" />' +
+          '</span>' +
           '<span>Readme</span>' +
           '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
         '</button><span class="pb-meta-sep">|</span>'
@@ -942,7 +957,7 @@ playbook-header { display: block; }
   /* ── Background ── */
   --b0-page:           #ffffff;
   --b0-container:      #ffffff;
-  --b0-sidebar:        #1D1D1D;
+  --b0-sidebar:        #2A2A38;
   --b0-sidebar-select: rgba(255, 255, 255, 0.03);
   --grey-g01: #fafafa;
   --grey-g02: #f5f5f5;
@@ -1015,7 +1030,7 @@ playbook-header { display: block; }
   /* Background */
   --b0-page: #15161a;
   --b0-container: #15161a;
-  --b0-sidebar: #1D1D1D;
+  --b0-sidebar: #2A2A38;
   --b0-sidebar-select: rgba(255, 255, 255, 0.03);
   --grey-g01: #1a1b1f;
   --grey-g02: #1c1d21;
