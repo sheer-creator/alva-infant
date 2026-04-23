@@ -1,10 +1,18 @@
 import headerCss from './playbook-header.css?raw';
 import headerJs from './playbook-header.js?raw';
+import panelCss from './discussion-panel.css?raw';
+import panelJs from './discussion-panel.js?raw';
 import tokensCss from '../../styles/tokens.css?raw';
 
 const TOKENS_LINK = '<link rel="stylesheet" href="./styles/tokens.css" />';
 const CSS_LINK = '<link rel="stylesheet" href="./components/playbook-header.css" />';
 const JS_SCRIPT = '<script src="./components/playbook-header.js" defer></script>';
+const PANEL_CSS_LINK = '<link rel="stylesheet" href="./components/discussion-panel.css" />';
+const PANEL_JS_SCRIPT = '<script src="./components/discussion-panel.js" defer></script>';
+
+function escapeScript(src: string): string {
+  return src.replace(/<\/script>/gi, '<\\/script>');
+}
 
 /**
  * Playbook HTML files reference design tokens, header CSS and header JS via
@@ -13,9 +21,10 @@ const JS_SCRIPT = '<script src="./components/playbook-header.js" defer></script>
  * inline <style>/<script> blocks.
  */
 export function inlinePlaybookHeader(html: string): string {
-  const safeJs = headerJs.replace(/<\/script>/gi, '<\\/script>');
   return html
     .replace(TOKENS_LINK, `<style>${tokensCss}</style>`)
     .replace(CSS_LINK, `<style>${headerCss}</style>`)
-    .replace(JS_SCRIPT, `<script>${safeJs}</script>`);
+    .replace(JS_SCRIPT, `<script>${escapeScript(headerJs)}</script>`)
+    .replace(PANEL_CSS_LINK, `<style>${panelCss}</style>`)
+    .replace(PANEL_JS_SCRIPT, `<script>${escapeScript(panelJs)}</script>`);
 }

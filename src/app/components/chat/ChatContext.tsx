@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import type { Page } from '@/app/App';
 import {
+  DEFAULT_PLAYBOOK_CONTEXT,
   HOME_CHAT_CONTEXT,
   PAGE_CONTEXT_MAP,
   PAGE_DEFAULT_THREAD,
@@ -295,12 +296,12 @@ export function ChatProvider({
   useEffect(() => () => { simRef.current?.cancel(); }, []);
 
   const contextTag = useMemo((): ContextTagData | null => {
-    const base = PAGE_CONTEXT_MAP[activePage] ?? null;
-    if (base) return base;
-    if (activePage === 'home' && threadsEntryMode === '1' && chatTriggerMode === 'fab') {
-      return HOME_CHAT_CONTEXT;
+    if (typeof activePage === 'string' && activePage.startsWith('thread/')) return null;
+    if (activePage === 'home') {
+      return threadsEntryMode === '1' && chatTriggerMode === 'fab' ? HOME_CHAT_CONTEXT : null;
     }
-    return null;
+    if (activePage in PAGE_CONTEXT_MAP) return PAGE_CONTEXT_MAP[activePage];
+    return DEFAULT_PLAYBOOK_CONTEXT;
   }, [activePage, threadsEntryMode, chatTriggerMode]);
 
   const value = useMemo(

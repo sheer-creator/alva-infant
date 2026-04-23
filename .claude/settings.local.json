@@ -6,7 +6,8 @@
       "mcp__mcp-registry__suggest_connectors",
       "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_screenshot",
       "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_design_context",
-      "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_variable_defs"
+      "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_variable_defs",
+      "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_metadata"
     ]
   }
 }

@@ -65,6 +65,7 @@
       var extra = f.clickable
         ? ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"'
         : '';
+      var chev = '<span class="feeds-popover-row-chev' + (f.clickable ? '' : ' is-placeholder') + '" aria-hidden="true"></span>';
       return (
         '<div class="' + cls + '"' + extra + '>' +
           '<div class="feeds-popover-cell-name">' +
@@ -73,6 +74,7 @@
           '</div>' +
           '<div class="feeds-popover-cell-interval">' + esc(f.interval) + '</div>' +
           '<div class="feeds-popover-cell-last">' + esc(f.lastRun) + '</div>' +
+          chev +
         '</div>'
       );
     }).join('');
@@ -81,6 +83,7 @@
         '<div class="feeds-popover-cell-name">Automation</div>' +
         '<div class="feeds-popover-cell-interval">Interval</div>' +
         '<div class="feeds-popover-cell-last">Last Run</div>' +
+        '<span class="feeds-popover-row-chev is-placeholder" aria-hidden="true"></span>' +
       '</div>' +
       rows +
       '<div class="feeds-popover-viewall" role="button" tabindex="0">' +
@@ -119,48 +122,60 @@
     var description = host.getAttribute('description') || '';
     var feeds = readFeeds(host);
 
-    var freqTooltip = lastUpdated
-      ? '<span class="pb-freq-tip-anchor" role="tooltip">' +
+    var authorBlock = owner
+      ? '<span class="pb-pill pb-pill--author">' +
+          '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
+          '<span>' + esc(owner) + '</span>' +
+        '</span>'
+      : '';
+
+    var readmeModal = host.getAttribute('readme-modal') || '';
+    var readmeBlock = readmeModal
+      ? '<button class="pb-pill pb-pill--readme" type="button" data-readme-trigger>' +
+          '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
+          '<span>README</span>' +
+        '</button>'
+      : '';
+
+    var feedsCount = feeds.length;
+    var statusParts = [];
+    if (feedsCount) statusParts.push('<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>');
+    if (freq) statusParts.push('<span>' + esc(freq) + '</span>');
+    var statusInner = '';
+    for (var i = 0; i < statusParts.length; i++) {
+      if (i > 0) statusInner += '<span class="pb-pill-sep" aria-hidden="true">•</span>';
+      statusInner += statusParts[i];
+    }
+    var statusTooltip = lastUpdated
+      ? '<span class="pb-pill-tip" role="tooltip">' +
           '<div class="tooltip">' +
             '<div class="tooltip-border"></div>' +
             '<div class="tooltip-text">Last Updated: ' + esc(lastUpdated) + '</div>' +
           '</div>' +
         '</span>'
       : '';
-    var freqChip = freq
-      ? '<span class="pb-freq-chip"' + (lastUpdated ? ' tabindex="0"' : '') + '><span class="pb-freq-dot" aria-hidden="true"></span>' + esc(freq) + freqTooltip + '</span>'
+    var statusTag = feedsCount ? 'button' : 'span';
+    var statusAttrs = feedsCount
+      ? ' type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false"'
       : '';
-
-    var authorBlock = owner
-      ? '<div class="pb-meta-author">' +
-          '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
-          '<span>' + esc(owner) + '</span>' +
-        '</div><span class="pb-meta-sep">|</span>'
-      : '';
-
-    var readmeModal = host.getAttribute('readme-modal') || '';
-    var readmeBlock = readmeModal
-      ? '<button class="pb-meta-link pb-meta-link--readme" type="button" data-readme-trigger>' +
-          '<span class="pb-meta-icon-badge" aria-hidden="true">' +
-            '<img class="pb-meta-icon-img" src="https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg" width="12" height="12" alt="" />' +
-          '</span>' +
-          '<span>Readme</span>' +
-          '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
-        '</button><span class="pb-meta-sep">|</span>'
-      : '';
-
-    var feedsCount = feeds.length;
-    var feedsBlock = feedsCount
-      ? '<span class="pb-meta-sep">|</span>' +
-        '<div class="feeds-menu">' +
-          '<button class="pb-meta-link" type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false">' +
-            '<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>' +
-            '<span class="pb-meta-link-chev" aria-hidden="true"></span>' +
-          '</button>' +
-          '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
-            renderFeeds(feeds) +
-          '</div>' +
-        '</div>'
+    var statusClasses = 'pb-pill pb-pill--status' + (lastUpdated ? ' has-tooltip' : '');
+    var statusBlock = statusParts.length
+      ? (feedsCount
+          ? '<div class="feeds-menu">' +
+              '<' + statusTag + ' class="' + statusClasses + '"' + statusAttrs + (lastUpdated && !feedsCount ? ' tabindex="0"' : '') + '>' +
+                '<span class="pb-freq-dot" aria-hidden="true"></span>' +
+                statusInner +
+                statusTooltip +
+              '</' + statusTag + '>' +
+              '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
+                renderFeeds(feeds) +
+              '</div>' +
+            '</div>'
+          : '<' + statusTag + ' class="' + statusClasses + '"' + (lastUpdated ? ' tabindex="0"' : '') + '>' +
+              '<span class="pb-freq-dot" aria-hidden="true"></span>' +
+              statusInner +
+              statusTooltip +
+            '</' + statusTag + '>')
       : '';
 
     var descBlock = description
@@ -175,15 +190,76 @@
         '<div class="pb-top">' +
           '<div class="pb-top-left">' +
             '<h1 class="pb-title">' + esc(title) + '</h1>' +
-            freqChip +
           '</div>' +
           '<div class="pb-actions">' +
-            '<button class="pb-action" type="button" aria-label="Share"><span class="pb-action-icon ic-share"></span></button>' +
-            '<button class="pb-action" type="button" aria-label="Star"><span class="pb-action-icon ic-star"></span>' + (star ? '<span class="pb-action-count">' + esc(star) + '</span>' : '') + '</button>' +
-            '<div class="remix-menu">' +
-              '<button class="pb-action" type="button" aria-label="Remix" data-remix-trigger aria-haspopup="dialog" aria-expanded="false">' +
-                '<span class="pb-action-icon ic-remix"></span>' +
-                (remix ? '<span class="pb-action-count">' + esc(remix) + '</span>' : '') +
+            '<div class="share-menu">' +
+              '<button class="pb-action pb-action--icon-only" type="button" aria-label="Share" data-share-trigger aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-share"></span></button>' +
+              '<div class="share-popover" data-share-popover role="dialog" aria-label="Share" aria-hidden="true">' +
+                '<h2 class="share-popover-title">Share</h2>' +
+                '<div class="share-popover-group" role="radiogroup" aria-label="Share visibility">' +
+                  '<button class="share-popover-row" type="button" role="radio" aria-checked="false" data-share-option="private">' +
+                    '<span class="share-popover-icon-badge"><span class="share-popover-icon ic-hide"></span></span>' +
+                    '<span class="share-popover-row-text">' +
+                      '<span class="share-popover-row-title">Private</span>' +
+                      '<span class="share-popover-row-desc">Visible to yourself only.</span>' +
+                    '</span>' +
+                    '<span class="share-popover-pro">Pro</span>' +
+                  '</button>' +
+                  '<button class="share-popover-row is-selected" type="button" role="radio" aria-checked="true" data-share-option="public">' +
+                    '<span class="share-popover-icon-badge is-filled"><span class="share-popover-icon ic-global"></span></span>' +
+                    '<span class="share-popover-row-text">' +
+                      '<span class="share-popover-row-title">Public</span>' +
+                      '<span class="share-popover-row-desc">Anyone can access by link.</span>' +
+                      '<span class="share-popover-row-note">Share to earn up to 3,000 credits/week.</span>' +
+                    '</span>' +
+                    '<span class="share-popover-check" aria-hidden="true"></span>' +
+                  '</button>' +
+                  '<button class="share-popover-row" type="button" role="radio" aria-checked="false" data-share-option="sealed">' +
+                    '<span class="share-popover-icon-badge"><span class="share-popover-icon ic-lightning"></span></span>' +
+                    '<span class="share-popover-row-text">' +
+                      '<span class="share-popover-row-title">Sealed</span>' +
+                      '<span class="share-popover-row-desc">Other users need to pay credits to read.</span>' +
+                      '<span class="share-popover-row-note">Share to earn up to 3,000 credits/week.</span>' +
+                    '</span>' +
+                    '<span class="share-popover-pro">Pro</span>' +
+                  '</button>' +
+                '</div>' +
+                '<button class="share-popover-copy" type="button" data-share-copy>' +
+                  '<span class="share-popover-copy-icon" data-share-copy-icon></span>' +
+                  '<span data-share-copy-label>Copy Link</span>' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="star-menu">' +
+              '<button class="pb-action" type="button" aria-label="Star" data-star-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                '<span class="pb-action-icon ic-star"></span>' +
+                (star ? '<span class="pb-action-count">' + esc(star) + '</span>' : '') +
+              '</button>' +
+              '<div class="star-popover" data-star-popover role="dialog" aria-label="Connect Agents to Get Notified" aria-hidden="true">' +
+                '<div class="star-popover-card">' +
+                  '<div class="star-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
+                  '<p class="star-popover-title">Connect Agents to Get Notified</p>' +
+                  '<a href="https://t.me/alva_ai_bot" target="_blank" rel="noopener" class="star-popover-cta">' +
+                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                    '<span>Connect Telegram</span>' +
+                  '</a>' +
+                  '<div class="star-popover-socials">' +
+                    '<span class="star-popover-chip"><img src="/alva-infant/logo-social-discord.svg" alt="" /><span>Discord</span></span>' +
+                    '<span class="star-popover-chip is-disabled"><img src="/alva-infant/logo-social-slack.svg" alt="" /><span>Slack</span></span>' +
+                    '<span class="star-popover-chip is-disabled"><img src="/alva-infant/logo-social-whatsapp.svg" alt="" /><span>WhatsApp</span></span>' +
+                  '</div>' +
+                '</div>' +
+                '<button class="star-popover-footer" type="button" data-star-footer>' +
+                  '<span class="star-popover-footer-icon" aria-hidden="true"></span>' +
+                  '<span>Starred</span>' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+            '<button class="pb-action" type="button" aria-label="Comments" data-discuss-trigger aria-pressed="false"><span class="pb-action-icon ic-chat"></span>' + (comments ? '<span class="pb-action-count">' + esc(comments) + '</span>' : '') + '</button>' +
+            '<div class="remix-menu pb-remix-wrap">' +
+              '<button class="pb-remix-btn" type="button" aria-label="Remix" data-remix-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                '<span class="pb-remix-label">Remix</span>' +
+                (remix ? '<span class="pb-remix-count">' + esc(remix) + '</span>' : '') +
               '</button>' +
               '<div class="remix-popover" data-remix-popover role="dialog" aria-label="Remix this Playbook" aria-hidden="true">' +
                 '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
@@ -211,15 +287,12 @@
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<button class="pb-action" type="button" aria-label="Comments"><span class="pb-action-icon ic-chat"></span>' + (comments ? '<span class="pb-action-count">' + esc(comments) + '</span>' : '') + '</button>' +
-            '<button class="pb-trade-btn" type="button">Trade</button>' +
           '</div>' +
         '</div>' +
         '<div class="pb-meta">' +
           authorBlock +
           readmeBlock +
-          '<button class="pb-meta-link" type="button"><span>History</span><span class="pb-meta-link-chev" aria-hidden="true"></span></button>' +
-          feedsBlock +
+          statusBlock +
         '</div>' +
         descBlock +
       '</section>';
@@ -266,6 +339,14 @@
     });
   }
 
+  function registerPopover(host, closeFn) {
+    host._popovers = host._popovers || [];
+    host._popovers.push(closeFn);
+  }
+  function closeOtherPopovers(host, self) {
+    (host._popovers || []).forEach(function (fn) { if (fn !== self) fn(); });
+  }
+
   function setupFeedsPopover(host) {
     var trigger = host.querySelector('[data-feeds-trigger]');
     var popover = host.querySelector('[data-feeds-popover]');
@@ -275,12 +356,16 @@
       popover.classList.remove('open');
       popover.setAttribute('aria-hidden', 'true');
       trigger.setAttribute('aria-expanded', 'false');
+      trigger.classList.remove('is-open');
     }
     function open() {
+      closeOtherPopovers(host, close);
       popover.classList.add('open');
       popover.setAttribute('aria-hidden', 'false');
       trigger.setAttribute('aria-expanded', 'true');
+      trigger.classList.add('is-open');
     }
+    registerPopover(host, close);
 
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -339,14 +424,18 @@
       popover.classList.remove('agent-open');
       popover.setAttribute('aria-hidden', 'true');
       trigger.setAttribute('aria-expanded', 'false');
+      trigger.classList.remove('is-open');
       var agentToggleEl = popover.querySelector('[data-remix-agent-toggle]');
       if (agentToggleEl) agentToggleEl.setAttribute('aria-expanded', 'false');
     }
     function open() {
+      closeOtherPopovers(host, close);
       popover.classList.add('open');
       popover.setAttribute('aria-hidden', 'false');
       trigger.setAttribute('aria-expanded', 'true');
+      trigger.classList.add('is-open');
     }
+    registerPopover(host, close);
 
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -405,7 +494,148 @@
     }
   }
 
+  function setupDiscussTrigger(host) {
+    var btn = host.querySelector('[data-discuss-trigger]');
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      host.dispatchEvent(new CustomEvent('playbook-discuss-click', { bubbles: true }));
+    });
+  }
+
+  function updateDiscussActive(host) {
+    var btn = host.querySelector('[data-discuss-trigger]');
+    if (!btn) return;
+    var active = host.getAttribute('discuss-active') === 'true';
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  }
+
+  function setupSharePopover(host) {
+    var trigger = host.querySelector('[data-share-trigger]');
+    var popover = host.querySelector('[data-share-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.classList.remove('is-open');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      trigger.classList.add('is-open');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+
+    var rows = popover.querySelectorAll('[data-share-option]');
+    rows.forEach(function (row) {
+      row.addEventListener('click', function (e) {
+        e.stopPropagation();
+        rows.forEach(function (r) {
+          r.classList.remove('is-selected');
+          r.setAttribute('aria-checked', 'false');
+          var badge = r.querySelector('.share-popover-icon-badge');
+          if (badge) badge.classList.remove('is-filled');
+        });
+        row.classList.add('is-selected');
+        row.setAttribute('aria-checked', 'true');
+        var badge = row.querySelector('.share-popover-icon-badge');
+        if (badge) badge.classList.add('is-filled');
+      });
+    });
+
+    var copyBtn = popover.querySelector('[data-share-copy]');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var icon = copyBtn.querySelector('[data-share-copy-icon]');
+        var label = copyBtn.querySelector('[data-share-copy-label]');
+        var ok = function () {
+          if (icon) icon.classList.add('copied');
+          if (label) label.textContent = 'Copied';
+          setTimeout(function () {
+            if (icon) icon.classList.remove('copied');
+            if (label) label.textContent = 'Copy Link';
+          }, 2000);
+        };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(window.location.href).then(ok).catch(function () {});
+          }
+        } catch (_) {}
+      });
+    }
+  }
+
+  function setupStarPopover(host) {
+    var trigger = host.querySelector('[data-star-trigger]');
+    var popover = host.querySelector('[data-star-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.classList.remove('is-open');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      trigger.classList.add('is-open');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+
+    var footer = popover.querySelector('[data-star-footer]');
+    if (footer) footer.addEventListener('click', close);
+  }
+
   class PlaybookHeader extends HTMLElement {
+    static get observedAttributes() { return ['discuss-active']; }
+    attributeChangedCallback(name) {
+      if (name === 'discuss-active' && this._pbHeaderMounted) updateDiscussActive(this);
+    }
     connectedCallback() {
       if (this._pbHeaderMounted) return;
       this._pbHeaderMounted = true;
@@ -419,7 +649,11 @@
         setupDescToggle(self);
         setupFeedsPopover(self);
         setupRemixPopover(self);
+        setupStarPopover(self);
+        setupSharePopover(self);
         setupReadmeTrigger(self);
+        setupDiscussTrigger(self);
+        updateDiscussActive(self);
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mount, { once: true });

@@ -31,13 +31,27 @@ export const HOME_CHAT_CONTEXT: ContextTagData = {
   icon: 'sidebar-discover-normal',
 };
 
-/** Maps each page to its @context tag. null = no chat trigger on that page */
+/** Fallback for any page not listed in PAGE_CONTEXT_MAP — new playbooks
+ *  pick this up automatically until an explicit label is registered. */
+export const DEFAULT_PLAYBOOK_CONTEXT: ContextTagData = {
+  label: 'Playbook',
+  icon: 'sidebar-discover-normal',
+};
+
+/** Maps each page to its @context tag.
+ *  - explicit entry with value → FAB uses that label
+ *  - explicit null → opt out (no FAB)
+ *  - key absent → falls back to DEFAULT_PLAYBOOK_CONTEXT */
 export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
   screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
+  'template-screener': { label: 'Template-Screener', icon: 'sidebar-discover-normal' },
   thesis: { label: 'Defense Thesis Tracker', icon: 'sidebar-discover-normal' },
+  'template-thesis': { label: 'Template-Thesis', icon: 'sidebar-discover-normal' },
+  'template-whatif': { label: 'Template-Whatif', icon: 'sidebar-discover-normal' },
   agent: null,
+  'alva-skills': null,
 };
 
 export interface ConversationItem {
@@ -63,5 +77,8 @@ export const CONVERSATIONS: ConversationItem[] = [
 /** Default thread to load when opening chat on a specific page */
 export const PAGE_DEFAULT_THREAD: Record<string, string> = {
   screener: 'demo',
+  'template-screener': 'demo',
   thesis: 'demo',
+  'template-thesis': 'demo',
+  'template-whatif': 'demo',
 };
