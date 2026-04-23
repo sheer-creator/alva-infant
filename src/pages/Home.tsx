@@ -79,6 +79,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
             alignItems: 'center',
             justifyContent: 'center',
             gap: 40,
+            padding: '0 var(--spacing-xxl)',
             position: 'relative',
             overflow: 'hidden',
           }}

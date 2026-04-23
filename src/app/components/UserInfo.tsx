@@ -69,7 +69,7 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
 
         {/* Basic Info — hover 通栏 */}
         <div
-          className="flex gap-[12px] items-center py-[16px] -mx-[20px] px-[20px] w-[calc(100%+40px)] cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)]"
+          className="flex gap-[12px] items-center py-[20px] -mx-[20px] px-[20px] w-[calc(100%+40px)] cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)]"
         >
           <Avatar name={USER.name} size={48} />
           <div className="flex flex-col min-w-0 flex-1 pb-[4px]">
@@ -77,14 +77,14 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
               <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{USER.name}</span>
               <div className="flex items-center gap-[4px] shrink-0">
                 <span
-                  className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px] text-white"
-                  style={{ background: '#49a3a6', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
+                  className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px]"
+                  style={{ color: 'rgba(0,0,0,0.9)', background: '#49a3a6', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
                 >
                   Pro
                 </span>
                 <span
                   className="inline-flex items-center justify-center h-[18px] text-[11px] leading-[18px] tracking-[0.11px] px-[6px] rounded-full"
-                  style={{ color: '#49a3a6', background: 'rgba(73,163,166,0.1)', fontFamily: FONT }}
+                  style={{ color: 'rgba(0,0,0,0.9)', background: 'rgba(73,163,166,0.1)', fontFamily: FONT }}
                 >
                   Annual
                 </span>
@@ -110,7 +110,7 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
         <div style={{ borderTop: '0.5px solid rgba(0,0,0,0.07)' }} />
 
         {/* Menu */}
-        <div className="py-[8px] flex flex-col">
+        <div className="py-[4px] flex flex-col">
 
           {/* Usage + Available card — 整块 hover 通栏 */}
           <button

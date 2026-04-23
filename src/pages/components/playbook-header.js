@@ -10,14 +10,14 @@
      <playbook-header
        title="Quality Value Stock Screener 2"
        freq="15m"
+       last-updated="15 minutes ago"
        owner="YGGYLL"
        owner-seed="YGGYLL"
-       update-interval="Every 5 minutes"
        star="12" remix="56" comments="6"
        description="...">
        <script type="application/json" class="pb-feeds-data">
          [
-           {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"5 minutes","lastRun":"15 minutes ago","clickable":true},
+           {"id":"capacity-monitor","name":"Capacity-Monitor","interval":"20 Minutes","lastRun":"15 minutes ago","clickable":true},
            {"id":"oem-tracker","name":"OEM-Tracker","interval":"1 hour","lastRun":"2 hours ago"}
          ]
        </script>
@@ -109,30 +109,31 @@
   function render(host) {
     var title = host.getAttribute('title') || '';
     var freq = host.getAttribute('freq') || '';
+    var lastUpdated = host.getAttribute('last-updated') || '';
     var owner = host.getAttribute('owner') || '';
     var ownerSeed = host.getAttribute('owner-seed') || owner;
-    var updateInterval = host.getAttribute('update-interval') || '';
     var star = host.getAttribute('star') || '';
     var remix = host.getAttribute('remix') || '';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
     var feeds = readFeeds(host);
 
+    var freqTooltip = lastUpdated
+      ? '<span class="pb-freq-tip-anchor" role="tooltip">' +
+          '<div class="tooltip">' +
+            '<div class="tooltip-border"></div>' +
+            '<div class="tooltip-text">Last Updated: ' + esc(lastUpdated) + '</div>' +
+          '</div>' +
+        '</span>'
+      : '';
     var freqChip = freq
-      ? '<span class="pb-freq-chip"><span class="pb-freq-dot" aria-hidden="true"></span>' + esc(freq) + '</span>'
+      ? '<span class="pb-freq-chip"' + (lastUpdated ? ' tabindex="0"' : '') + '><span class="pb-freq-dot" aria-hidden="true"></span>' + esc(freq) + freqTooltip + '</span>'
       : '';
 
     var authorBlock = owner
       ? '<div class="pb-meta-author">' +
           '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
           '<span>' + esc(owner) + '</span>' +
-        '</div><span class="pb-meta-sep">|</span>'
-      : '';
-
-    var updateBlock = updateInterval
-      ? '<div class="pb-meta-item">' +
-          '<span class="pb-meta-icon ic-update" aria-hidden="true"></span>' +
-          '<span>' + esc(updateInterval) + '</span>' +
         '</div><span class="pb-meta-sep">|</span>'
       : '';
 
@@ -213,7 +214,6 @@
         '</div>' +
         '<div class="pb-meta">' +
           authorBlock +
-          updateBlock +
           readmeBlock +
           '<button class="pb-meta-link" type="button"><span>History</span><span class="pb-meta-link-chev" aria-hidden="true"></span></button>' +
           feedsBlock +
