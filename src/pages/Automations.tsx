@@ -80,7 +80,6 @@ Sends real-time alerts via Telegram and Slack when a new signal is generated, wh
 
 const SIDEBAR_PLAYBOOKS: UsedByPlaybook[] = [
   { author: 'YGGYLL', name: 'quality-value-screener',  target: 'screener' as Page },
-  { author: 'YGGYLL', name: 'defense-thesis-tracker',  target: 'thesis'   as Page },
 ];
 
 const pickPlaybook = () => SIDEBAR_PLAYBOOKS[Math.floor(Math.random() * SIDEBAR_PLAYBOOKS.length)];

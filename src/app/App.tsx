@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
 
 const VALID_PAGES = [
-  'home', 'explore', 'screener', 'template-screener', 'thesis', 'template-thesis', 'template-whatif', 'agent',
+  'home', 'explore', 'screener', 'template-screener', 'template-thesis', 'template-whatif', 'agent',
   'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'api-keys', 'alva-skills',
   'user-profile', 'pricing', 'skills',
 ] as const;
@@ -15,7 +15,6 @@ const Home = lazy(() => import('../pages/Home'));
 const Explore = lazy(() => import('../pages/Explore'));
 const Screener = lazy(() => import('../pages/Screener'));
 const TemplateScreener = lazy(() => import('../pages/TemplateScreener'));
-const Thesis = lazy(() => import('../pages/Thesis'));
 const TemplateThesis = lazy(() => import('../pages/TemplateThesis'));
 const TemplateWhatif = lazy(() => import('../pages/TemplateWhatif'));
 const Thread = lazy(() => import('../pages/Thread'));
@@ -74,7 +73,6 @@ export default function App() {
       {page === 'explore' && <Explore onNavigate={navigate} />}
       {page === 'screener' && <Screener onNavigate={navigate} />}
       {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
-      {page === 'thesis' && <Thesis onNavigate={navigate} />}
       {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
       {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
       {page === 'agent' && <Agent onNavigate={navigate} />}

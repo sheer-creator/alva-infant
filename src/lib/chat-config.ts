@@ -47,7 +47,6 @@ export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
   screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
   'template-screener': { label: 'Template-Screener', icon: 'sidebar-discover-normal' },
-  thesis: { label: 'Defense Thesis Tracker', icon: 'sidebar-discover-normal' },
   'template-thesis': { label: 'Template-Thesis', icon: 'sidebar-discover-normal' },
   'template-whatif': { label: 'Template-Whatif', icon: 'sidebar-discover-normal' },
   agent: null,
