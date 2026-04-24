@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BR4r15Ir.js";import{t as n}from"./inlinePlaybookHeader-B8Pjxx84.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BR4r15Ir.js";import{t as n}from"./inlinePlaybookHeader-DRbfycj0.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -499,6 +499,16 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BR4r15Ir.
   .metric-label { font-size:12px; color: var(--text-n5); }
   .metric-value { font-size:22px; color: var(--text-n9); line-height:28px; }
   .metric-sub { font-size:11px; color: var(--text-n5); }
+  /* YTD metric row — 3 cards (Theme / Benchmark / Alpha); Alpha accented */
+  .ytd-metrics-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: var(--spacing-m);
+  }
+  .metric-card-accent {
+    background: rgba(42,155,125,0.08);
+    border: 0.5px solid rgba(42,155,125,0.25);
+  }
+  @media (max-width: 768px) { .ytd-metrics-grid { grid-template-columns: 1fr; } }
   /* Tag pill — aligned with Screener .band-pill spec */
   .tag {
     display: inline-flex; align-items: center; justify-content: center;
@@ -715,7 +725,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BR4r15Ir.
         <div class="tab-item" data-tab="basket" data-text="Basket">Basket</div>
         <div class="tab-item" data-tab="catalysts" data-text="Catalysts">Catalysts</div>
         <div class="tab-item" data-tab="risks" data-text="Risks">Risks</div>
-        <div class="tab-item" data-tab="macro" data-text="Macro &amp; Industry">Macro &amp; Industry</div>
         <div class="tab-item" data-tab="news" data-text="News &amp; Social">News &amp; Social</div>
       </div>
       <div class="tab-right-group">
@@ -768,6 +777,25 @@ The structural rearmament thesis remains intact, but leadership is narrowing —
         <div id="hero-deltas-block">
           <ul id="hero-deltas-list"></ul>
         </div>
+      </div>
+    </div>
+
+    <!-- YTD metrics — Theme / Benchmark / Alpha (per thesis template §Tab 1) -->
+    <div class="ytd-metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Theme YTD</div>
+        <div class="metric-value" style="color:#2a9b7d;" id="ytd-theme">+14.2%</div>
+        <div class="metric-sub">8 names, equal-weighted basket</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Benchmark YTD</div>
+        <div class="metric-value" style="color:#2a9b7d;" id="ytd-benchmark">+4.8%</div>
+        <div class="metric-sub">SPY</div>
+      </div>
+      <div class="metric-card metric-card-accent">
+        <div class="metric-label">Alpha YTD</div>
+        <div class="metric-value" style="color:#2a9b7d;" id="ytd-alpha">+9.4 pp</div>
+        <div class="metric-sub">Theme − Benchmark</div>
       </div>
     </div>
 
@@ -880,85 +908,14 @@ The structural rearmament thesis remains intact, but leadership is narrowing —
 
       <div class="table-card" id="risk-table">
         <div class="table-row table-header">
+          <div class="table-cell">Category</div>
           <div class="table-cell">Risk</div>
+          <div class="table-cell">Divergence</div>
           <div class="table-cell">Exit trigger</div>
           <div class="table-cell">If triggered</div>
           <div class="table-cell">Priority</div>
         </div>
         <div id="risk-rows"><div class="loading">Loading risks...</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================== MACRO & INDUSTRY ================== -->
-  <div class="tab-panel" id="panel-macro">
-
-    <div class="widget-card">
-      <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
-        <span class="widget-title-text">DoD Consumption Expenditures</span>
-        <span class="small">US Federal Defense Consumption Expenditures &amp; Gross Investment (FRED: FDEFX), quarterly, annualized $B. Last 10 years.</span>
-      </div>
-      <div class="chart-body chart-dotted-background" style="height: 340px;">
-        <div id="dod-chart" class="chart-container" style="height:100%;"></div>
-        <div class="alva-watermark">
-          <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" />
-        </div>
-      </div>
-    </div>
-
-    <div class="widget-card">
-      <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
-        <span class="widget-title-text">NATO Members — Defense Spending % GDP</span>
-        <span class="small">Latest reported year. Source: World Bank indicator MS.MIL.XPND.GD.ZS. Red = below NATO 2% target, green = at or above. The 2% line is NATO's long-standing floor; 2025 Hague summit raised the ambition toward 5% by 2035.</span>
-      </div>
-      <div class="chart-body chart-dotted-background" style="height: 520px;">
-        <div id="nato-chart" class="chart-container" style="height:100%;"></div>
-        <div class="alva-watermark">
-          <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" />
-        </div>
-      </div>
-    </div>
-
-    <div class="widget-card">
-      <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
-        <span class="widget-title-text">US DoD Contract Awards — Quarterly by Contractor Family</span>
-        <span class="small">Top 10 recipient families + Other, last 8 fully-reported quarters. Source: USAspending.gov (prime contract obligations, award types A/B/C/D). ~1-quarter reporting lag, so the most recent 2 calendar quarters are excluded until filings complete. Subsidiaries (Sikorsky → LMT, Electric Boat/Bath Iron Works → GD, Raytheon/Collins/P&amp;W → RTX) rolled up to parent. Ticker shown for public; blank = private (e.g. BAE Systems US, Bechtel, Sierra Nevada, Anduril, SpaceX, General Atomics).</span>
-      </div>
-      <div class="chart-body chart-dotted-background" style="height: 420px;">
-        <div id="contracts-trend" class="chart-container" style="height:100%;"></div>
-        <div class="alva-watermark">
-          <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" />
-        </div>
-      </div>
-    </div>
-
-    <div class="widget-card">
-      <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
-        <span class="widget-title-text">US DoD Contract Awards — Latest Quarter Breakdown</span>
-        <span class="small">Horizontal bar — allocation share of latest fully-reported quarter. Value in $B; percent-of-quarter shown at bar end.</span>
-      </div>
-      <div class="chart-body chart-dotted-background" style="height: 420px;">
-        <div id="contracts-latest" class="chart-container" style="height:100%;"></div>
-        <div class="alva-watermark">
-          <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" />
-        </div>
-      </div>
-    </div>
-
-    <div class="widget-card">
-      <div class="widget-title" style="flex-direction:column; align-items:flex-start; gap: var(--spacing-xxs);">
-        <span class="widget-title-text">Latest DoD Contract Announcements (Flow View)</span>
-        <span class="small">DoD contract announcements with action in the last 180 days — <strong>sorted by action date (newest first)</strong>. Filtered to awards ≥ $5M to strip Army Corps environmental / DISA telecom noise; a curated list of emerging-defense names (Anduril, Palantir, SpaceX, Kratos, AeroVironment, Sierra Nevada, General Atomics, SAIC) bypass the filter so their smaller awards still show. Source: USAspending.gov spending_by_award. "Amount" = total contract value (most big awards are modifications to long-running IDIQ contracts, so this is cumulative lifetime obligation, not fresh new money). Procurement-code noise (IGF::OT::IGF, contract-number prefixes, internal coding) stripped from descriptions; sub-agencies abbreviated (DISA, DCMA, MDA, USACE, etc.).</span>
-      </div>
-      <div class="table-card" id="announcements-table">
-        <div class="table-row table-header">
-          <div class="table-cell">Action date</div>
-          <div class="table-cell" style="justify-content:flex-end;">Amount</div>
-          <div class="table-cell">Recipient</div>
-          <div class="table-cell">Sub-agency</div>
-          <div class="table-cell">Description</div>
-        </div>
-        <div id="announcement-rows"><div class="loading">Loading contract announcements...</div></div>
       </div>
     </div>
   </div>
@@ -1186,7 +1143,7 @@ function initTableAlignment(tableEl) {
 }
 
 function realignAllTables() {
-  ["basket-table", "risk-table", "announcements-table"].forEach(function (id) {
+  ["basket-table", "risk-table"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el && el.offsetParent !== null) initTableAlignment(el);
   });
@@ -1649,10 +1606,13 @@ function renderRiskTable(items) {
     const prioCls  = p.level === "High" ? "prio-high" : p.level === "Medium" ? "prio-medium" : "prio-low";
     const sevTxt   = sevLabel[String(r.sev || "M").toUpperCase()] || "Med";
     const stTxt    = r.status || "Dormant";
-    const catPrefix = r.cat ? \`<span class="risk-cat-prefix">[\${r.cat}]</span> \` : "";
+    const catText   = r.cat || "—";
+    const divText   = r.divergenceType || r.divergence || "—";
     const prioTip   = \`\${sevTxt} severity · \${stTxt}\`;
     row.innerHTML = \`
-      <div class="table-cell" style="white-space: normal;"><span>\${catPrefix}\${r.risk || ""}</span></div>
+      <div class="table-cell" style="white-space: normal;">\${catText}</div>
+      <div class="table-cell" style="white-space: normal;">\${r.risk || ""}</div>
+      <div class="table-cell" style="white-space: normal;">\${divText}</div>
       <div class="table-cell \${exitCls}" style="white-space: normal;">\${exitText}</div>
       <div class="table-cell" style="white-space: normal;">\${respText}</div>
       <div class="table-cell">
@@ -2269,422 +2229,10 @@ function renderValScatter(funds) {
   window.addEventListener("resize", () => chart.resize());
 }
 
-// ====== DoD Consumption Expenditures chart ======
-async function renderDoDChart() {
-  try {
-    const macro = await fetchJson(\`\${base}/kpi/macro/@last/2000\`);
-    const dod = macro.filter(m => m.metric === "DOD_SPENDING").sort((a,b)=>a.date-b.date);
-    const last10y = dod.filter(m => m.date >= Date.now() - 10*365.25*86400*1000);
-    const el = document.getElementById("dod-chart");
-    const chart = echarts.init(el);
-
-    const FONT_FAMILY = "'Delight', -apple-system, 'OPPO Sans 4.0', BlinkMacSystemFont, sans-serif";
-    const AX = {
-      axisLine: { show: false },
-      axisTick: { show: false },
-      axisLabel: { fontSize: 10, color: "rgba(0,0,0,0.7)", fontFamily: FONT_FAMILY, margin: 8 },
-      splitLine: { show: false },
-    };
-    const GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
-    const TT_COLORS = {
-      bg: "rgba(255,255,255,0.96)",
-      border: "rgba(0,0,0,0.08)",
-      title: "rgba(0,0,0,0.7)",
-      text: "rgba(0,0,0,0.9)",
-      pointer: "rgba(0,0,0,0.1)",
-    };
-    const TT = {
-      trigger: "axis",
-      backgroundColor: TT_COLORS.bg,
-      borderColor: TT_COLORS.border,
-      borderWidth: 1,
-      borderRadius: 6,
-      padding: 12,
-      textStyle: { fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 400, color: TT_COLORS.text },
-      axisPointer: { type: "line", lineStyle: { color: TT_COLORS.pointer, width: 1 } },
-      extraCssText: "box-shadow:none;",
-      formatter: (params) => {
-        const p = params[0];
-        const t = (p.axisValueLabel || fmtETDate(p.axisValue)).slice(0, 7);
-        return \`<div style="font-size:12px;color:\${TT_COLORS.title};margin-bottom:6px;">\${t}</div>\` +
-          \`<div style="display:flex;align-items:center;gap:6px;line-height:20px;">\` +
-          \`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:\${p.color};"></span>\` +
-          \`<span style="color:\${TT_COLORS.text};">Defense Spending</span>\` +
-          \`<span style="color:\${TT_COLORS.text};margin-left:auto;">$\${p.value[1].toFixed(0)}B</span>\` +
-          \`</div>\`;
-      },
-    };
-
-    const RGB = "64,165,68"; // --chart-green1-main #40a544
-    chart.setOption({
-      grid: GRID,
-      tooltip: TT,
-      xAxis: { type: "time", boundaryGap: false, ...AX },
-      yAxis: { type: "value", scale: true, ...AX, axisLabel: { ...AX.axisLabel, formatter: "\${value}B" } },
-      series: [{
-        name: "Defense Spending",
-        type: "line",
-        data: last10y.map(m => [m.date, m.value]),
-        smooth: 0.1,
-        symbol: "circle",
-        symbolSize: 10,
-        showSymbol: false,
-        lineStyle: { width: 1, color: \`rgb(\${RGB})\` },
-        itemStyle: { color: \`rgb(\${RGB})\` },
-        emphasis: { itemStyle: { borderColor: "#ffffff", borderWidth: 1, color: \`rgb(\${RGB})\` } },
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: \`rgba(\${RGB}, 0.15)\` },
-            { offset: 1, color: \`rgba(\${RGB}, 0)\` },
-          ]),
-        },
-      }]
-    });
-    window.addEventListener("resize", () => chart.resize());
-  } catch (e) { document.getElementById("dod-chart").innerHTML = \`<div class="loading">Error: \${e.message}</div>\`; }
-}
-
-// ====== NATO members defense %GDP ======
-async function renderNatoChart() {
-  try {
-    const rows = await fetchJson(\`\${base}/macro_tab/nato_gdp/@last/1000\`);
-    if (!rows || !rows.length) {
-      document.getElementById("nato-chart").innerHTML = \`<div class="loading">No NATO data yet — next quant run will populate.</div>\`;
-      return;
-    }
-    // Keep only latest year per country
-    const latest = {};
-    for (const r of rows) {
-      if (!latest[r.countryCode] || parseInt(r.year) > parseInt(latest[r.countryCode].year)) latest[r.countryCode] = r;
-    }
-    const arr = Object.values(latest).sort((a, b) => a.pct - b.pct);
-    const el = document.getElementById("nato-chart");
-    const chart = echarts.init(el);
-
-    const FONT_FAMILY = "'Delight', -apple-system, 'OPPO Sans 4.0', BlinkMacSystemFont, sans-serif";
-    const AX = {
-      axisLine: { show: false },
-      axisTick: { show: false },
-      axisLabel: { fontSize: 10, color: "rgba(0,0,0,0.7)", fontFamily: FONT_FAMILY, margin: 8 },
-      splitLine: { show: false },
-    };
-    const GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
-    const TT_COLORS = {
-      bg: "rgba(255,255,255,0.96)", border: "rgba(0,0,0,0.08)",
-      title: "rgba(0,0,0,0.7)", text: "rgba(0,0,0,0.9)", pointer: "rgba(0,0,0,0.04)",
-    };
-    const TT = {
-      trigger: "axis",
-      axisPointer: { type: "shadow", shadowStyle: { color: TT_COLORS.pointer } },
-      backgroundColor: TT_COLORS.bg, borderColor: TT_COLORS.border, borderWidth: 1,
-      borderRadius: 6, padding: 12,
-      textStyle: { fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 400, color: TT_COLORS.text },
-      extraCssText: "box-shadow:none;",
-      formatter: (ps) => {
-        const p = ps[0];
-        return \`<div style="font-size:12px;color:\${TT_COLORS.title};margin-bottom:6px;">\${p.name} · \${p.data.year}</div>\` +
-          \`<div style="display:flex;align-items:center;gap:6px;line-height:20px;">\` +
-          \`<span style="display:inline-block;width:8px;height:8px;border-radius:0.5px;flex-shrink:0;background:\${p.color};"></span>\` +
-          \`<span style="color:\${TT_COLORS.text};">% of GDP</span>\` +
-          \`<span style="color:\${TT_COLORS.text};margin-left:auto;">\${p.value.toFixed(2)}%</span>\` +
-          \`</div>\`;
-      },
-    };
-
-    chart.setOption({
-      grid: GRID,
-      tooltip: TT,
-      xAxis: { type: "value", ...AX, axisLabel: { ...AX.axisLabel, formatter: "{value}%" } },
-      yAxis: { type: "category", data: arr.map(x => x.country), ...AX },
-      series: [{
-        type: "bar",
-        data: arr.map(x => ({
-          value: x.pct, year: x.year,
-          itemStyle: { color: x.pct >= 2 ? "#2a9b7d" : "#e05357", borderRadius: [0, 1, 1, 0] },
-        })),
-        barMaxWidth: 16,
-        label: {
-          show: true, position: "right",
-          formatter: p => p.value.toFixed(2) + "%",
-          fontSize: 10, color: "rgba(0,0,0,0.7)", fontFamily: FONT_FAMILY,
-        },
-      }],
-    });
-    window.addEventListener("resize", () => chart.resize());
-  } catch (e) { document.getElementById("nato-chart").innerHTML = \`<div class="loading">Error: \${e.message}</div>\`; }
-}
-
-// ====== US DoD contract awards — quarterly stacked + latest breakdown ======
-// Chart palette (spec-compliant, no duplicates); grey reserved for "Other" bucket
-const CONTRACT_COLORS = ["#3d8bd1","#ff9800","#40a544","#5f75c9","#c76466","#dc7aa5","#a878dc","#7cafad","#54A5C2","#8fc13a"];
-async function renderContractsCharts() {
-  try {
-    const rawRows = await fetchJson(\`\${base}/macro_tab/contracts_quarterly/@last/500\`);
-    if (!rawRows || !rawRows.length) {
-      document.getElementById("contracts-trend").innerHTML = \`<div class="loading">No contract data yet — next quant run will populate.</div>\`;
-      document.getElementById("contracts-latest").innerHTML = \`<div class="loading">No contract data yet — next quant run will populate.</div>\`;
-      return;
-    }
-    // Feed appends on every cron run; dedupe by (quarter, family) keeping the highest
-    // amount_b (= most-complete USAspending snapshot). Then drop any quarter whose total
-    // is less than 50% of the median — these are partially-reported quarters.
-    const keyed = {};
-    for (const r of rawRows) {
-      const k = r.quarter + "|" + r.family;
-      if (!keyed[k] || r.amount_b > keyed[k].amount_b) keyed[k] = r;
-    }
-    let rows = Object.values(keyed);
-    const quarterTotals = {};
-    for (const r of rows) quarterTotals[r.quarter] = (quarterTotals[r.quarter] || 0) + r.amount_b;
-    const totals = Object.values(quarterTotals).sort((a,b) => a-b);
-    const median = totals[Math.floor(totals.length / 2)];
-    const goodQs = new Set(Object.keys(quarterTotals).filter(q => quarterTotals[q] >= median * 0.5));
-    rows = rows.filter(r => goodQs.has(r.quarter));
-    const quarters = Array.from(new Set(rows.map(r => r.quarter))).sort();
-    const latestQ = quarters[quarters.length - 1];
-    // Determine top families by most-recent quarter amount
-    const familyOrder = rows
-      .filter(r => r.quarter === latestQ && r.family !== "Other")
-      .sort((a, b) => b.amount_b - a.amount_b)
-      .map(r => r.family);
-    const families = familyOrder.concat(["Other"]);
-
-    // --- Shared spec-compliant config ---
-    const FONT_FAMILY = "'Delight', -apple-system, 'OPPO Sans 4.0', BlinkMacSystemFont, sans-serif";
-    const AX = {
-      axisLine: { show: false },
-      axisTick: { show: false },
-      axisLabel: { fontSize: 10, color: "rgba(0,0,0,0.7)", fontFamily: FONT_FAMILY, margin: 8 },
-      splitLine: { show: false },
-    };
-    const GRID = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true };
-    const TT_COLORS = {
-      bg: "rgba(255,255,255,0.96)", border: "rgba(0,0,0,0.08)",
-      title: "rgba(0,0,0,0.7)", text: "rgba(0,0,0,0.9)", pointer: "rgba(0,0,0,0.04)",
-    };
-    const ttBase = {
-      backgroundColor: TT_COLORS.bg, borderColor: TT_COLORS.border, borderWidth: 1,
-      borderRadius: 6, padding: 12,
-      textStyle: { fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 400, color: TT_COLORS.text },
-      axisPointer: { type: "shadow", shadowStyle: { color: TT_COLORS.pointer } },
-      extraCssText: "box-shadow:none;",
-    };
-
-    // --- Stacked trend chart ---
-    const series = families.map((f, i) => {
-      const isTop = i === families.length - 1;
-      return {
-        name: f,
-        type: "bar",
-        stack: "total",
-        barMaxWidth: 16,
-        itemStyle: {
-          color: f === "Other" ? "#838383" : CONTRACT_COLORS[i % CONTRACT_COLORS.length],
-          borderRadius: isTop ? [1, 1, 0, 0] : 0,
-        },
-        data: quarters.map(q => {
-          const row = rows.find(r => r.quarter === q && r.family === f);
-          return row ? +row.amount_b.toFixed(2) : 0;
-        }),
-      };
-    });
-    const elTrend = document.getElementById("contracts-trend");
-    const chartTrend = echarts.init(elTrend);
-    chartTrend.setOption({
-      legend: {
-        type: "scroll", top: 0,
-        textStyle: { fontSize: 10, color: "rgba(0,0,0,0.5)", fontFamily: FONT_FAMILY },
-        itemWidth: 8, itemHeight: 8, itemGap: 12,
-        icon: "roundRect",
-      },
-      grid: { ...GRID, top: 28 },
-      tooltip: {
-        ...ttBase,
-        trigger: "axis",
-        formatter: ps => {
-          const total = ps.reduce((s, p) => s + (p.value || 0), 0);
-          let s = \`<div style="font-size:12px;color:\${TT_COLORS.title};margin-bottom:6px;">\${ps[0].axisValue} · total $\${total.toFixed(1)}B</div>\`;
-          ps.filter(p => p.value > 0).sort((a, b) => b.value - a.value).forEach(p => {
-            s += \`<div style="display:flex;align-items:center;gap:6px;line-height:20px;">\` +
-              \`<span style="display:inline-block;width:8px;height:8px;border-radius:0.5px;flex-shrink:0;background:\${p.color};"></span>\` +
-              \`<span style="color:\${TT_COLORS.text};">\${p.seriesName}</span>\` +
-              \`<span style="color:\${TT_COLORS.text};margin-left:auto;">$\${p.value.toFixed(2)}B</span>\` +
-              \`</div>\`;
-          });
-          return s;
-        },
-      },
-      xAxis: { type: "category", data: quarters, ...AX },
-      yAxis: { type: "value", ...AX, axisLabel: { ...AX.axisLabel, formatter: "\${value}B" } },
-      series,
-    });
-    window.addEventListener("resize", () => chartTrend.resize());
-
-    // --- Latest quarter breakdown (horizontal bar) ---
-    const latestRows = rows
-      .filter(r => r.quarter === latestQ)
-      .sort((a, b) => a.amount_b - b.amount_b);  // ascending so biggest is on top
-    const elLatest = document.getElementById("contracts-latest");
-    const chartLatest = echarts.init(elLatest);
-    chartLatest.setOption({
-      grid: GRID,
-      tooltip: {
-        ...ttBase,
-        trigger: "axis",
-        formatter: ps => {
-          const r = latestRows[ps[0].dataIndex];
-          return \`<div style="font-size:12px;color:\${TT_COLORS.title};margin-bottom:6px;">\${r.family}\${r.ticker ? " (" + r.ticker + ")" : ""} · \${latestQ}</div>\` +
-            \`<div style="display:flex;align-items:center;gap:6px;line-height:20px;">\` +
-            \`<span style="display:inline-block;width:8px;height:8px;border-radius:0.5px;flex-shrink:0;background:\${ps[0].color};"></span>\` +
-            \`<span style="color:\${TT_COLORS.text};">Amount</span>\` +
-            \`<span style="color:\${TT_COLORS.text};margin-left:auto;">$\${r.amount_b.toFixed(2)}B · \${r.pct_of_quarter.toFixed(1)}%</span>\` +
-            \`</div>\`;
-        },
-      },
-      xAxis: { type: "value", ...AX, axisLabel: { ...AX.axisLabel, formatter: "\${value}B" } },
-      yAxis: { type: "category", data: latestRows.map(r => r.ticker ? \`\${r.family} (\${r.ticker})\` : r.family), ...AX },
-      series: [{
-        type: "bar", barMaxWidth: 16,
-        data: latestRows.map(r => ({
-          value: +r.amount_b.toFixed(2),
-          itemStyle: {
-            color: r.family === "Other" ? "#838383" : (r.ticker ? "#3d8bd1" : "#5f75c9"),
-            borderRadius: [0, 1, 1, 0],
-          },
-        })),
-        label: {
-          show: true, position: "right",
-          fontSize: 10, color: "rgba(0,0,0,0.7)", fontFamily: FONT_FAMILY,
-          formatter: p => {
-            const r = latestRows[p.dataIndex];
-            return \`$\${r.amount_b.toFixed(1)}B · \${r.pct_of_quarter.toFixed(1)}%\`;
-          },
-        },
-      }],
-    });
-    window.addEventListener("resize", () => chartLatest.resize());
-  } catch (e) {
-    document.getElementById("contracts-trend").innerHTML = \`<div class="loading">Error: \${e.message}</div>\`;
-    document.getElementById("contracts-latest").innerHTML = \`<div class="loading">Error: \${e.message}</div>\`;
-  }
-}
-
-// ====== Latest DoD contract announcements (flow view) ======
-async function renderAnnouncements() {
-  try {
-    const rawRows = await fetchJson(\`\${base}/macro_tab/contract_announcements/@last/300\`);
-    if (!rawRows || !rawRows.length) {
-      document.getElementById("announcement-rows").innerHTML = \`<div class="loading">No contract announcements yet — next quant run will populate.</div>\`;
-      return;
-    }
-    // Dedupe by awardId (feed appends on every cron run), keep the most recent actionDate
-    const keyed = {};
-    for (const r of rawRows) {
-      const k = r.awardId || (r.recipient + "|" + r.description);
-      if (!keyed[k] || (r.actionDate || "") > (keyed[k].actionDate || "")) keyed[k] = r;
-    }
-    // FRONTIER list is still used to let small emerging-defense awards (Anduril at $17M etc.)
-    // bypass the <$5M noise filter below, but we no longer highlight them visually — the user
-    // reads ticker / "(private)" as the only qualifier.
-    const FRONTIER = ["Anduril", "Palantir", "SpaceX", "Kratos", "AeroVironment", "Sierra Nevada", "General Atomics", "SAIC"];
-    // Abbreviate USAspending awarding-sub-agency labels so the column fits.
-    const SUB_AGENCY_ABBREV = {
-      "Department of the Army": "Army",
-      "Department of the Navy": "Navy",
-      "Department of the Air Force": "Air Force",
-      "Department of Defense": "DoD",
-      "Defense Information Systems Agency": "DISA",
-      "Defense Contract Management Agency": "DCMA",
-      "Defense Health Agency": "DHA",
-      "Defense Logistics Agency": "DLA",
-      "Defense Threat Reduction Agency": "DTRA",
-      "Defense Finance and Accounting Service": "DFAS",
-      "Missile Defense Agency": "MDA",
-      "U.S. Army Corps of Engineers": "USACE",
-      "United States Space Force": "Space Force",
-      "Office of the Secretary of Defense": "OSD",
-      "Defense Advanced Research Projects Agency": "DARPA",
-      "National Geospatial Intelligence Agency": "NGA",
-      "Defense Counterintelligence and Security Agency": "DCSA",
-    };
-    function abbrevSubAgency(s) {
-      if (!s) return "";
-      const trimmed = s.trim();
-      return SUB_AGENCY_ABBREV[trimmed] || trimmed;
-    }
-    // Clean USAspending description noise: IGF::OT::IGF prefix, contract-number lead-ins,
-    // internal procurement codes (e.g. "200506!000026!5700!FA8214"), PR numbers, etc.
-    function cleanDesc(s) {
-      if (!s) return "";
-      let t = s;
-      // Strip IGF classification flags
-      t = t.replace(/^(?:IGF[:\\s]*(?:OT|CT|CL)[:\\s]*IGF[\\s]*)+/ig, "");
-      t = t.replace(/\\bIGF::OT::IGF\\b/g, "");
-      // Strip leading contract-ID tokens ("W58RGZ-16-C-0023 IS FOR ..." -> "IS FOR ...")
-      t = t.replace(/^(?:[A-Z0-9]{5,}(?:-[A-Z0-9]+)+)\\s+(?:IS\\s+(?:FOR|TO)\\s+)?/i, "");
-      // Strip leading "!"-delimited internal code blocks ("200506!000026!5700!FA8214!OO-ALC/... ")
-      t = t.replace(/^(?:\\S*!\\S*(?:\\s+|$))+/, "");
-      // Strip SBS / PR / TO stand-alone prefix codes
-      t = t.replace(/^(?:SBS\\d+|PR\\d+|TO\\d+|SIP\\s*TO\\d+)\\s+/i, "");
-      // Strip leading "THE (CONTRACT|PURPOSE) (OF THIS|AWARD) (IS )?(FOR|TO) " filler
-      t = t.replace(/^THE\\s+(?:PURPOSE|CONTRACT|EFFORT|AWARD)\\s+(?:OF\\s+THIS\\s+\\w+\\s+)?(?:IS\\s+)?(?:FOR|TO)\\s+(?:AWARD\\s+)?/i, "");
-      // Collapse whitespace, trim, normalize case if ALL-CAPS
-      t = t.replace(/\\s+/g, " ").trim();
-      if (t && t === t.toUpperCase() && t.length > 6) {
-        // Title-case it for readability
-        t = t.toLowerCase().replace(/(^|\\s|\\()([a-z])/g, (_, p, c) => p + c.toUpperCase());
-        // But keep common all-caps acronyms
-        t = t.replace(/\\b(usn|usaf|usa|usmc|navy|army|dod|fms|saoc|ssn|cvn|lrip|ndaa|ita|kc-\\d+|f-\\d+\\w?|mq-\\d+\\w?|bqm-\\d+\\w?|e-\\d+\\w?|v-\\d+|p-\\d+\\w?|ssat|gbsd|nssl|pbl|idiq|ffrdc|rtx|lmt|gd|noc|ba|hii|boeing)\\b/gi, m => m.toUpperCase());
-      }
-      return t || s;
-    }
-    // Filter trivial contracts (<$5M) — USAspending is full of <$1M env/IT noise that has
-    // nothing to do with the defense thesis. Keep frontier names at any size.
-    const rows = Object.values(keyed).filter(r => {
-      const isFrontier = FRONTIER.some(f => (r.family || "").includes(f));
-      return r.amount_m >= 5 || isFrontier;
-    }).sort((a, b) => {
-      // Sort by actionDate desc (newest first); break ties by amount desc.
-      const da = (a.actionDate || "").slice(0, 10);
-      const db = (b.actionDate || "").slice(0, 10);
-      if (db !== da) return db.localeCompare(da);
-      return b.amount_m - a.amount_m;
-    }).slice(0, 120);
-    const container = document.getElementById("announcement-rows");
-    container.innerHTML = "";
-    for (const r of rows) {
-      const fmt = n => n >= 1000 ? \`$\${(n/1000).toFixed(2)}B\` : \`$\${n.toFixed(1)}M\`;
-      const familyLabel = r.family || r.recipient;
-      // Public → "(TICKER)"; non-public → "(private)". No other qualifier.
-      const qualifier = r.ticker ? \`(\${r.ticker})\` : \`(private)\`;
-      const actionDateShort = (r.actionDate || "").slice(0, 10);
-      const cleanedDesc = cleanDesc(r.description);
-      const subAgencyShort = abbrevSubAgency(r.subAgency);
-      const row = document.createElement("div");
-      row.className = "table-row table-body-row";
-      row.innerHTML = \`
-        <div class="table-cell" style="font-variant-numeric: tabular-nums;">\${actionDateShort}</div>
-        <div class="table-cell" style="justify-content:flex-end; font-variant-numeric: tabular-nums;">\${fmt(r.amount_m)}</div>
-        <div class="table-cell">\${familyLabel}<span style="color: var(--text-n5); margin-left: 4px;">\${qualifier}</span></div>
-        <div class="table-cell">\${subAgencyShort}</div>
-        <div class="table-cell" style="white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">\${cleanedDesc}</div>
-      \`;
-      container.appendChild(row);
-    }
-    initTableAlignment(document.getElementById("announcements-table"));
-  } catch (e) {
-    document.getElementById("announcement-rows").innerHTML = \`<div class="loading">Error: \${e.message}</div>\`;
-  }
-}
-
 // Init
 (async () => {
   await Promise.all([loadHero(), loadBenchmark(), loadNarrativeSections()]);
   await loadBasket();
-  await renderDoDChart();
-  await renderNatoChart();
-  await renderContractsCharts();
-  await renderAnnouncements();
   await loadNewsFeed();
 })();
 <\/script>

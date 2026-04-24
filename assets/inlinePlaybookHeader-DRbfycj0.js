@@ -244,6 +244,21 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
     color: rgba(0,0,0,0.5);
 }
+.feeds-popover-meta {
+    position: relative;
+    padding: 10px 20px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
+.feeds-popover-meta::after {
+    content: '';
+    position: absolute;
+    left: 20px; right: 20px; bottom: 0;
+    height: 1px;
+    background: rgba(0,0,0,0.07);
+    pointer-events: none;
+}
 .feeds-popover-row {
     font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
     color: rgba(0,0,0,0.9);
@@ -742,8 +757,11 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     }
   }
 
-  function renderFeeds(feeds) {
+  function renderFeeds(feeds, lastUpdated) {
     if (!feeds.length) return '';
+    var metaRow = lastUpdated
+      ? '<div class="feeds-popover-meta">Last Updated: ' + esc(lastUpdated) + '</div>'
+      : '';
     var rows = feeds.map(function (f) {
       var cls = 'feeds-popover-row' + (f.clickable ? ' clickable' : '');
       var extra = f.clickable
@@ -763,6 +781,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       );
     }).join('');
     return (
+      metaRow +
       '<div class="feeds-popover-header">' +
         '<div class="feeds-popover-cell-name">Automation</div>' +
         '<div class="feeds-popover-cell-interval">Interval</div>' +
@@ -852,7 +871,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                 statusTooltip +
               '</' + statusTag + '>' +
               '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
-                renderFeeds(feeds) +
+                renderFeeds(feeds, lastUpdated) +
               '</div>' +
             '</div>'
           : '<' + statusTag + ' class="' + statusClasses + '"' + (lastUpdated ? ' tabindex="0"' : '') + '>' +
