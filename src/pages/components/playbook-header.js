@@ -58,8 +58,11 @@
     }
   }
 
-  function renderFeeds(feeds) {
+  function renderFeeds(feeds, lastUpdated) {
     if (!feeds.length) return '';
+    var metaRow = lastUpdated
+      ? '<div class="feeds-popover-meta">Last Updated: ' + esc(lastUpdated) + '</div>'
+      : '';
     var rows = feeds.map(function (f) {
       var cls = 'feeds-popover-row' + (f.clickable ? ' clickable' : '');
       var extra = f.clickable
@@ -79,6 +82,7 @@
       );
     }).join('');
     return (
+      metaRow +
       '<div class="feeds-popover-header">' +
         '<div class="feeds-popover-cell-name">Automation</div>' +
         '<div class="feeds-popover-cell-interval">Interval</div>' +
@@ -168,7 +172,7 @@
                 statusTooltip +
               '</' + statusTag + '>' +
               '<div class="feeds-popover" data-feeds-popover role="menu" aria-hidden="true">' +
-                renderFeeds(feeds) +
+                renderFeeds(feeds, lastUpdated) +
               '</div>' +
             '</div>'
           : '<' + statusTag + ' class="' + statusClasses + '"' + (lastUpdated ? ' tabindex="0"' : '') + '>' +
