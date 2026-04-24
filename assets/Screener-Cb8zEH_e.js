@@ -1,9 +1,9 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGJ9P6Yp.js";import{t as n}from"./inlinePlaybookHeader-CvoeFvVm.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BTQ7Q4U8.js";import{t as n}from"./inlinePlaybookHeader-CPINmEil.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quality Value Stock Screener - Alva</title>
+<title>Feed Test - Alva</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
 <link rel="stylesheet" href="./components/discussion-panel.css" />
@@ -1077,7 +1077,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGJ9P6Yp.
 
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
 <playbook-header
-    title="Quality Value Stock Screener"
+    title="Feed Test"
     freq="15m"
     last-updated="15 minutes ago"
     owner="YGGYLL"
@@ -2622,4 +2622,4 @@ window.__ALVA_OFFLINE_DATA__ = {
 <\/script>
 
 </body>
-`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Quality Value Stock Screener`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
+`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Feed Test`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`screener`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};

@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGJ9P6Yp.js";import{t as n}from"./inlinePlaybookHeader-CvoeFvVm.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BTQ7Q4U8.js";import{t as n}from"./inlinePlaybookHeader-CPINmEil.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -705,6 +705,9 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGJ9P6Yp.
     owner="YGGYLL"
     owner-seed="YGGYLL"
     readme-modal="methodology-modal"
+    get-alerts
+    alerts-label="Alert On"
+    alerts-connected
     star="12" remix="56" comments="6"
     description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">
     <script type="application/json" class="pb-feeds-data">
