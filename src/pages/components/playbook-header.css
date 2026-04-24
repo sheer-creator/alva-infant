@@ -571,6 +571,15 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 }
 .pb-alerts-btn:hover { opacity: 0.9; }
 .pb-alerts-btn.is-open { opacity: 0.9; }
+/* Connected ("Alert On") variant — btn-second style */
+.pb-alerts-btn.is-on {
+    background: transparent;
+    border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+    transition: background .15s, border-color .15s;
+}
+.pb-alerts-btn.is-on:hover { opacity: 1; background: var(--b-r03, rgba(0,0,0,0.03)); }
+.pb-alerts-btn.is-on.is-open { opacity: 1; background: var(--b-r03, rgba(0,0,0,0.03)); border-color: var(--line-l9); }
+.pb-alerts-btn.is-on .pb-alerts-label { color: var(--text-n9); }
 .pb-alerts-label {
     font-family: inherit;
     font-size: 12px; font-weight: 500;
@@ -587,8 +596,11 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     flex-direction: column;
     gap: var(--sp-m, 16px);
     width: 480px;
+    max-height: min(720px, calc(100vh - 80px));
     padding: var(--sp-l, 20px);
     background: #fff;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
     border-radius: var(--radius-pop-popover, 8px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
@@ -758,8 +770,8 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: transparent; border: none; padding: 0;
     cursor: pointer;
     font-family: inherit;
-    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
-    color: var(--text-n7, rgba(0,0,0,0.7));
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
     transition: color .15s;
 }
 .alerts-connected-manage:hover { color: var(--text-n9); }
@@ -773,40 +785,22 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     -webkit-mask-size: contain; mask-size: contain;
 }
 .alerts-connected-account {
-    display: flex; align-items: center; gap: var(--sp-s, 12px);
-    padding: var(--sp-s, 12px) var(--sp-m, 16px);
+    display: flex; align-items: center; gap: var(--sp-xs, 8px);
+    padding: var(--sp-m, 16px);
     background: var(--grey-g01, #fafafa);
     border-radius: var(--radius-ct-l, 8px);
     width: 100%;
 }
 .alerts-connected-avatar {
     width: 32px; height: 32px;
-    display: inline-flex; align-items: center; justify-content: center;
-    border-radius: 960px;
+    display: inline-block;
     flex-shrink: 0;
-    background-color: #5865F2;
-}
-.alerts-connected-avatar::after {
-    content: '';
-    width: 18px; height: 18px;
-    background-color: #fff;
-    -webkit-mask-position: center; mask-position: center;
-    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-    -webkit-mask-size: contain; mask-size: contain;
-}
-.alerts-connected-avatar[data-platform="telegram"] { background-color: #24a1de; }
-.alerts-connected-avatar[data-platform="telegram"]::after {
-    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg');
-            mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg');
-}
-.alerts-connected-avatar[data-platform="discord"] { background-color: #5865F2; }
-.alerts-connected-avatar[data-platform="discord"]::after {
-    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-discord.svg');
-            mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-discord.svg');
+    object-fit: contain;
+    border-radius: 50%;
 }
 .alerts-connected-name {
     flex: 1 1 auto;
-    font-size: 14px; font-weight: 500; line-height: 22px; letter-spacing: 0.14px;
+    font-size: 16px; font-weight: 400; line-height: 26px; letter-spacing: 0.16px;
     color: var(--text-n9);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
@@ -858,30 +852,43 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     color: var(--text-n7, rgba(0,0,0,0.7));
 }
 .alerts-signals-list {
-    display: flex; flex-direction: column; gap: var(--sp-xs, 8px);
-    max-height: 280px;
-    overflow-y: auto;
-    padding-right: 2px;
+    display: flex; flex-direction: column; gap: var(--sp-s, 12px);
 }
 .alerts-signal-card {
     display: flex; flex-direction: column; gap: var(--sp-xs, 8px);
-    padding: var(--sp-s, 12px) var(--sp-m, 16px);
+    padding: var(--sp-m, 16px);
     background: var(--grey-g01, #fafafa);
     border-radius: var(--radius-ct-m, 6px);
 }
+/* Signal card title — markdown heading style */
 .alerts-signal-date {
     margin: 0;
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: var(--text-n7, rgba(0,0,0,0.7));
+    font-size: 14px; font-weight: 500; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
 }
+/* Bullet list follows Alva Markdown Medium spec */
 .alerts-signal-bullets {
-    margin: 0; padding-left: 18px;
+    margin: 0; padding: 0;
     display: flex; flex-direction: column; gap: 4px;
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: var(--text-n7, rgba(0,0,0,0.7));
+    list-style: none;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
 }
-.alerts-signal-bullets li { margin: 0; }
-.alerts-signal-bullets li strong { color: var(--text-n9); font-weight: 500; }
+.alerts-signal-bullets li {
+    position: relative;
+    margin: 0;
+    padding-left: 20px;
+}
+.alerts-signal-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 7.5px; top: 8.5px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-n9);
+}
+.alerts-signal-bullets li strong { font-weight: 500; color: inherit; }
 
 /* remix popover */
 .remix-menu { position: relative; display: inline-flex; }

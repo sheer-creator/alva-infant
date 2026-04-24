@@ -37,10 +37,10 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
 ];
 
 const PLAYBOOKS: { label: string; page?: Page }[] = [
-  { label: 'Quality Value Stock Screener', page: 'screener' },
   { label: 'Template-Screener', page: 'template-screener' },
   { label: 'Template-Thesis', page: 'template-thesis' },
   { label: 'Template-Whatif', page: 'template-whatif' },
+  { label: 'Feed Test', page: 'screener' },
 ];
 
 export function Sidebar({

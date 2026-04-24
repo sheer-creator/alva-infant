@@ -127,6 +127,9 @@
     var remix = host.getAttribute('remix') || '';
     var alertsEnabled = host.hasAttribute('get-alerts')
       && host.getAttribute('get-alerts') !== 'false';
+    var alertsLabel = host.getAttribute('alerts-label') || 'Get Alerts';
+    var alertsStartConnected = host.hasAttribute('alerts-connected')
+      && host.getAttribute('alerts-connected') !== 'false';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
     var feeds = readFeeds(host);
@@ -298,10 +301,10 @@
             '</div>' +
             (alertsEnabled
               ? '<div class="alerts-menu">' +
-                  '<button class="pb-alerts-btn" type="button" aria-label="Get Alerts" data-alerts-trigger aria-haspopup="dialog" aria-expanded="false">' +
-                    '<span class="pb-alerts-label">Get Alerts</span>' +
+                  '<button class="pb-alerts-btn' + (alertsStartConnected ? ' is-on' : '') + '" type="button" aria-label="' + esc(alertsLabel) + '" data-alerts-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                    '<span class="pb-alerts-label">' + esc(alertsLabel) + '</span>' +
                   '</button>' +
-                  '<div class="alerts-popover" data-alerts-popover role="dialog" aria-label="Get Alerts" aria-hidden="true">' +
+                  '<div class="alerts-popover' + (alertsStartConnected ? ' is-connected' : '') + '" data-alerts-popover role="dialog" aria-label="' + esc(alertsLabel) + '" aria-hidden="true">' +
                     '<div class="alerts-popover-initial" data-alerts-initial>' +
                       '<p class="alerts-popover-title">Get Alerts</p>' +
                       '<div class="alerts-popover-card">' +
@@ -338,13 +341,13 @@
                       '<div class="alerts-connected-section">' +
                         '<div class="alerts-connected-head">' +
                           '<span class="alerts-connected-head-label">Connected</span>' +
-                          '<button class="alerts-connected-manage" type="button">' +
+                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
                             '<span>Manage Accounts</span>' +
                             '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
                           '</button>' +
                         '</div>' +
                         '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<span class="alerts-connected-avatar" data-alerts-avatar></span>' +
+                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg') + '" alt="" />' +
                           '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
                           '<div class="alerts-connected-toggle">' +
                             '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
@@ -781,6 +784,10 @@
           var avatarEl = popover.querySelector('[data-alerts-avatar]');
           if (avatarEl) {
             avatarEl.setAttribute('data-platform', platform);
+            var iconSrc = platform === 'discord'
+              ? '/alva-infant/logo-social-discord.svg'
+              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg';
+            if (avatarEl.tagName === 'IMG') avatarEl.setAttribute('src', iconSrc);
           }
           popover.classList.add('is-connected');
           // reset loading (so if user re-opens, buttons are fresh)
@@ -791,6 +798,18 @@
         }, 1500);
       });
     });
+
+    // Manage Accounts → navigate parent to Alva Agent settings
+    var manageBtn = popover.querySelector('[data-alerts-manage]');
+    if (manageBtn) {
+      manageBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        try {
+          (window.parent || window).postMessage({ type: 'alva:navigate', page: 'alva-agent' }, '*');
+        } catch (_) {}
+        close();
+      });
+    }
 
     // Receive Alerts toggle switch
     var switchBtn = popover.querySelector('[data-alerts-switch]');

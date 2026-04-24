@@ -11,7 +11,7 @@ function ScreenerContent() {
       <div className="flex-1 overflow-hidden">
         <iframe
           srcDoc={html}
-          title="Quality Value Stock Screener"
+          title="Feed Test"
           className="block h-full w-full border-0"
         />
       </div>

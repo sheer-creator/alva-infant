@@ -1,6 +1,6 @@
 /**
  * [INPUT]: SettingsLayout
- * [OUTPUT]: Alva Agent 设置页 — Connected messenger (single receiver) + Customize prompt
+ * [OUTPUT]: Alva Agent 设置页 — Connected App (per-platform Connect/Disconnect) + receiver dropdown + Customize prompt
  * [POS]: 页面层
  */
 
@@ -12,7 +12,7 @@ import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
 
 const FONT = "'Delight', sans-serif";
 
-function TelegramMark({ size = 20 }: { size?: number }) {
+function TelegramMark({ size = 52 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 240 240" fill="none" style={{ display: 'block' }}>
       <circle cx="120" cy="120" r="120" fill="#26A5E4" />
@@ -21,7 +21,7 @@ function TelegramMark({ size = 20 }: { size?: number }) {
   );
 }
 
-function DiscordMark({ size = 20 }: { size?: number }) {
+function DiscordMark({ size = 52 }: { size?: number }) {
   return (
     <img
       src={`${import.meta.env.BASE_URL}logo-social-discord.svg`}
@@ -38,21 +38,19 @@ const PLATFORMS: PlatformMeta[] = [
   { id: 'discord', name: 'Discord', handle: 'sheerruan', render: (s) => <DiscordMark size={s} /> },
 ];
 
-function MessengerDropdown({
+/* ── Receiver dropdown: only bound platforms are selectable ── */
+function ReceiverDropdown({
   platforms,
   active,
-  onConnect,
   onSelect,
-  onDisconnect,
 }: {
   platforms: AgentPlatform[];
   active: AgentPlatform | null;
-  onConnect: (p: AgentPlatform) => void;
   onSelect: (p: AgentPlatform) => void;
-  onDisconnect: (p: AgentPlatform) => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const hasBound = platforms.length > 0;
 
   useEffect(() => {
     if (!open) return;
@@ -64,88 +62,109 @@ function MessengerDropdown({
   }, [open]);
 
   const activeMeta = active ? PLATFORMS.find(p => p.id === active) : null;
+  const boundItems = PLATFORMS.filter(p => platforms.includes(p.id));
+
+  const [hover, setHover] = useState(false);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative shrink-0">
+      {/* Trigger — Select (Medium) */}
       <button
         type="button"
-        onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-[8px] cursor-pointer"
+        disabled={!hasBound}
+        onClick={() => hasBound && setOpen(v => !v)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        className={`relative flex items-center ${hasBound ? 'cursor-pointer' : 'cursor-not-allowed'}`}
         style={{
-          height: 36,
-          padding: '0 12px',
-          borderRadius: 6,
-          background: '#fff',
-          border: '0.5px solid rgba(0,0,0,0.2)',
+          height: 40,
+          padding: '8px 12px',
+          gap: 8,
+          borderRadius: 'var(--radius-ct-l)',
+          background: 'var(--b0-container)',
           fontFamily: FONT,
-          minWidth: 180,
+          fontWeight: 400,
+          fontSize: 14,
+          lineHeight: '22px',
+          letterSpacing: '0.14px',
+          minWidth: 160,
+          opacity: hasBound ? 1 : 0.5,
         }}
       >
+        {/* Border overlay per Select spec */}
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'var(--radius-ct-l)',
+            border: `0.5px solid ${(hover || open) && hasBound ? 'var(--text-n9)' : 'var(--line-l3)'}`,
+            pointerEvents: 'none',
+            transition: 'border-color 0.12s ease',
+          }}
+        />
         {activeMeta ? (
           <>
             {activeMeta.render(20)}
-            <span className="flex-1 text-left text-[14px] leading-[22px]" style={{ color: 'rgba(0,0,0,0.9)' }}>{activeMeta.name}</span>
+            <span className="flex-1 text-left" style={{ color: 'var(--text-n9)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{activeMeta.name}</span>
           </>
         ) : (
-          <span className="flex-1 text-left text-[14px] leading-[22px]" style={{ color: 'rgba(0,0,0,0.5)' }}>Select messenger</span>
+          <span className="flex-1 text-left" style={{ color: 'var(--text-n3)' }}>
+            {hasBound ? 'Select receiver' : 'No messenger connected'}
+          </span>
         )}
-        <span style={{ display: 'inline-flex', transform: open ? 'rotate(180deg)' : undefined, transition: 'transform 0.15s ease' }}>
-          <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.5)" />
+        {/* Arrow — does not rotate (per Select spec) */}
+        <span style={{ display: 'inline-flex', opacity: (open || hover) && hasBound ? 1 : 0.22, transition: 'opacity 0.12s ease' }}>
+          <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n9)" />
         </span>
       </button>
 
-      {open && (
+      {open && hasBound && (
         <div
           className="absolute top-full right-0 mt-[4px] z-50 flex flex-col"
           style={{
-            minWidth: 240,
-            background: '#fff',
-            borderRadius: 8,
+            minWidth: 220,
+            background: 'var(--b0-container)',
+            borderRadius: 'var(--radius-ct-m)',
             padding: '8px 0',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-            border: '0.5px solid rgba(0,0,0,0.1)',
+            boxShadow: 'var(--shadow-s)',
           }}
         >
-          {PLATFORMS.map(p => {
-            const bound = platforms.includes(p.id);
+          {/* Dropdown border overlay per Dropdown spec */}
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              border: '0.5px solid var(--line-l2)',
+              borderRadius: 'var(--radius-ct-m)',
+              pointerEvents: 'none',
+            }}
+          />
+          {boundItems.map(p => {
             const isActive = active === p.id;
             return (
               <div
                 key={p.id}
-                className="group flex items-center gap-[12px] cursor-pointer"
-                style={{ padding: '8px 16px', transition: 'background 0.12s ease' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(0,0,0,0.03)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
-                onClick={() => {
-                  if (!bound) onConnect(p.id);
-                  else if (!isActive) onSelect(p.id);
-                  setOpen(false);
+                className="relative cursor-pointer"
+                style={{
+                  transition: 'background-color 0.12s ease',
+                  backgroundColor: isActive ? 'var(--b-r03)' : 'transparent',
                 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = 'var(--b-r03)'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = isActive ? 'var(--b-r03)' : 'transparent'; }}
+                onClick={() => { onSelect(p.id); setOpen(false); }}
               >
-                {p.render(20)}
-                <span className="flex-1 text-[14px] leading-[22px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>
-                  {p.name}
-                </span>
-                {!bound && (
-                  <span className="text-[14px] leading-[22px]" style={{ color: '#49a3a6', fontFamily: FONT }}>Connect</span>
-                )}
-                {bound && (
-                  <span className="relative inline-flex items-center justify-end" style={{ minWidth: 70, height: 20 }}>
-                    {isActive && (
-                      <span className="absolute inset-0 flex items-center justify-end group-hover:opacity-0 transition-opacity">
-                        <CdnIcon name="check-l1" size={16} color="rgba(0,0,0,0.9)" />
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      className="opacity-0 group-hover:opacity-100 cursor-pointer text-[12px] leading-[20px] transition-opacity"
-                      style={{ color: 'rgba(0,0,0,0.5)', background: 'none', border: 'none', fontFamily: FONT, padding: 0 }}
-                      onClick={(e) => { e.stopPropagation(); onDisconnect(p.id); }}
-                    >
-                      Disconnect
-                    </button>
+                <div className="flex items-center" style={{ padding: '7px 16px', gap: 8 }}>
+                  {p.render(20)}
+                  <span
+                    className="flex-1 min-w-0"
+                    style={{ fontFamily: FONT, fontSize: 14, lineHeight: '22px', letterSpacing: '0.14px', color: 'var(--text-n9)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  >
+                    {p.name}
                   </span>
-                )}
+                  {isActive && <CdnIcon name="check-l1" size={16} color="var(--main-m1)" />}
+                </div>
               </div>
             );
           })}
@@ -155,47 +174,164 @@ function MessengerDropdown({
   );
 }
 
+/* ── Section with switch toggle + textarea ── */
+function ToggleSection({
+  title,
+  description,
+  enabled,
+  onToggle,
+  value,
+  onChange,
+  placeholder,
+}: {
+  title: string;
+  description: string;
+  enabled: boolean;
+  onToggle: () => void;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+}) {
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const el = taRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    const next = Math.min(320, Math.max(160, el.scrollHeight));
+    el.style.height = `${next}px`;
+  }, [value, enabled]);
+  return (
+    <div className="flex flex-col gap-[var(--spacing-m)]">
+      <div className="flex items-center gap-[var(--spacing-m)]">
+        <div className="flex-1 min-w-0">
+          <p className="text-[16px] leading-[26px] tracking-[0.16px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{title}</p>
+          <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[var(--spacing-xxxs)]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{description}</p>
+        </div>
+        <div
+          className={`switch${enabled ? ' on' : ''}`}
+          role="switch"
+          aria-checked={enabled}
+          onClick={onToggle}
+        >
+          <div className="switch-thumb" />
+        </div>
+      </div>
+      {enabled && (
+        <textarea
+          ref={taRef}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="p-[var(--spacing-m)] text-[16px] leading-[26px] tracking-[0.16px] outline-none resize-none"
+          style={{
+            color: 'var(--text-n9)',
+            fontFamily: FONT,
+            border: '0.5px solid var(--line-l3)',
+            background: 'var(--b0-container)',
+            borderRadius: 'var(--radius-ct-l)',
+            minHeight: 160,
+            maxHeight: 320,
+            overflowY: 'auto',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const { platforms, active, connect, disconnect, setActive } = useAgentPlatforms();
-  const [prompt, setPrompt] = useState('');
-  const dirty = prompt.trim().length > 0;
+  const { platforms, active, has, connect, disconnect, setActive } = useAgentPlatforms();
+  const INITIAL_PROMPT = '';
+  const INITIAL_CUSTOMIZE_ON = true;
+  const INITIAL_MEMORY_ON = true;
+  const [prompt, setPrompt] = useState(INITIAL_PROMPT);
+  const [customizeOn, setCustomizeOn] = useState(INITIAL_CUSTOMIZE_ON);
+  const [memoryOn, setMemoryOn] = useState(INITIAL_MEMORY_ON);
+  const INITIAL_MEMORY = `Read .claude/skills/frontend-monorepo-conventions/SKILL.md and AGENTS.md for project-level conventions (token system, coding rules, architecture). The alva-design skill is for playbook/widget generation, not for frontend-monorepo coding standards.
+
+**Why:** User corrected that the authoritative token/convention source for this repo is the in-repo skill, not the external alva-design skill.
+
+**How to apply:** When looking up design tokens, component specs, or coding conventions for homepage-ssr, always check .claude/skills/frontend-monorepo-conventions/ first.
+
+Read .claude/skills/frontend-monorepo-conventions/SKILL.md and AGENTS.md for project-level conventions (token system, coding rules, architecture). The alva-design skill is for playbook/widget generation, not for frontend-monorepo coding standards.
+
+**Why:** User corrected that the authoritative token/convention source for this repo is the in-repo skill, not the external alva-design skill.
+
+**How to apply:** When looking up design tokens, component specs, or coding conventions for homepage-ssr, always check .claude/skills/frontend-monorepo-conventions/ first.`;
+  const [memory, setMemory] = useState(INITIAL_MEMORY);
+  const dirty =
+    prompt !== INITIAL_PROMPT ||
+    memory !== INITIAL_MEMORY ||
+    customizeOn !== INITIAL_CUSTOMIZE_ON ||
+    memoryOn !== INITIAL_MEMORY_ON;
 
   return (
     <SettingsLayout active="alva-agent" onNavigate={onNavigate} mapTo={{ 'alva-agent': 'agent' }}>
 
-      <h1 className="text-[28px] leading-[38px] tracking-[0.28px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT, fontWeight: 400 }}>Alva Agent</h1>
+      <h1 className="text-[28px] leading-[38px] tracking-[0.28px]" style={{ color: 'var(--text-n9)', fontFamily: FONT, fontWeight: 400 }}>Alva Agent</h1>
 
-      {/* Connected messenger */}
-      <div className="flex items-start justify-between gap-[var(--spacing-m)]">
-        <div className="min-w-0 flex-1">
-          <p className="text-[16px] leading-[26px] tracking-[0.16px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>Connected messenger</p>
-          <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>
-            Select the messenger where you want to use Alva Agent (Single platform only).
-          </p>
+      {/* Connected App */}
+      <div className="flex flex-col gap-[var(--spacing-m)]">
+        <div className="flex items-center justify-between gap-[var(--spacing-m)]">
+          <div className="min-w-0 flex-1">
+            <p className="text-[16px] leading-[26px] tracking-[0.16px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>Connected App</p>
+            <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[var(--spacing-xxxs)]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>
+              Choose the messaging app for your Alva Agent (single platform).
+            </p>
+          </div>
+          <ReceiverDropdown platforms={platforms} active={active} onSelect={setActive} />
         </div>
-        <MessengerDropdown
-          platforms={platforms}
-          active={active}
-          onConnect={connect}
-          onSelect={setActive}
-          onDisconnect={disconnect}
-        />
+
+        <div className="flex flex-col gap-[var(--spacing-m)]">
+          {PLATFORMS.map(p => {
+            const isBound = has(p.id);
+            return (
+              <div
+                key={p.id}
+                className="flex items-center gap-[var(--spacing-s)] p-[var(--spacing-l)] rounded-[var(--radius-ct-l)]"
+                style={{ background: 'var(--grey-g01)' }}
+              >
+                {p.render(40)}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[16px] leading-[26px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{p.name}</p>
+                  {isBound && (
+                    <p className="text-[14px] leading-[22px] mt-[var(--spacing-xxxs)]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{p.handle}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => (isBound ? disconnect(p.id) : connect(p.id))}
+                  className="text-[14px] leading-[22px] cursor-pointer"
+                  style={{ color: isBound ? 'var(--text-n5)' : 'var(--main-m1)', background: 'none', border: 'none', fontFamily: FONT, fontWeight: 400 }}
+                >
+                  {isBound ? 'Disconnect' : 'Connect'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Customize */}
-      <div className="flex flex-col gap-[12px]">
-        <div>
-          <p className="text-[16px] leading-[26px] tracking-[0.16px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>Customize Your Assistant</p>
-          <p className="text-[12px] leading-[20px] tracking-[0.12px] mt-[2px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>Define the personality, tone, and response style.</p>
-        </div>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Define your assistant's identity: name, tone, and response style"
-          className="h-[160px] p-[16px] rounded-[8px] text-[16px] leading-[26px] tracking-[0.16px] outline-none resize-none"
-          style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT, border: '0.5px solid rgba(0,0,0,0.3)', background: '#fff' }}
-        />
-      </div>
+      <ToggleSection
+        title="Customize Your Assistant"
+        description="Define the personality, tone, and response style."
+        enabled={customizeOn}
+        onToggle={() => setCustomizeOn(v => !v)}
+        value={prompt}
+        onChange={setPrompt}
+        placeholder="Define your assistant's identity: name, tone, and response style"
+      />
+
+      {/* Generate Memory from Chat History */}
+      <ToggleSection
+        title="Generate Memory from Chat History"
+        description="Allow Alva to remember relevant context from your chats."
+        enabled={memoryOn}
+        onToggle={() => setMemoryOn(v => !v)}
+        value={memory}
+        onChange={setMemory}
+        placeholder="Your accumulated memory will appear here."
+      />
 
       <button
         disabled={!dirty}

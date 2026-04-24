@@ -106,10 +106,13 @@ function AppShellInner({
       if (data.type === 'alva:remix' && typeof data.prompt === 'string') {
         openChatWithPrefill(data.prompt);
       }
+      if (data.type === 'alva:navigate' && typeof data.page === 'string') {
+        onNavigate(data.page as Page);
+      }
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [closeChat, openChatWithPrefill]);
+  }, [closeChat, openChatWithPrefill, onNavigate]);
 
   useEffect(() => {
     if (!chatOpen) return;
