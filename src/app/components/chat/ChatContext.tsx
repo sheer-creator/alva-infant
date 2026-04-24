@@ -194,12 +194,18 @@ function createStreamSimulation(
 }
 
 /* ── Context ── */
+export interface PrefillPrompt {
+  text: string;
+  nonce: number;
+}
+
 interface ChatContextValue {
   chatOpen: boolean;
   hasInitialInput: boolean;
   toggleChat: () => void;
   closeChat: () => void;
   openChat: (withInput?: boolean) => void;
+  openChatWithPrefill: (text: string) => void;
   reopenChat: () => void;
   contextTag: ContextTagData | null;
   activePage: Page;
@@ -210,6 +216,8 @@ interface ChatContextValue {
   sendPrompt: (text: string) => void;
   overlay: OverlayData | null;
   dismissOverlay: () => void;
+  prefillPrompt: PrefillPrompt | null;
+  clearPrefill: () => void;
 }
 
 const INITIAL_STREAMING: StreamingState = {
@@ -239,6 +247,7 @@ export function ChatProvider({
   const [streamingState, setStreamingState] = useState<StreamingState | null>(null);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
   const [overlay, setOverlay] = useState<OverlayData | null>(null);
+  const [prefillPrompt, setPrefillPrompt] = useState<PrefillPrompt | null>(null);
   const simRef = useRef<{ cancel: () => void; continueStream: () => void } | null>(null);
 
   useEffect(() => {
@@ -267,6 +276,19 @@ export function ChatProvider({
     }
     setChatOpen(true);
   }, [activePage, streamingState]);
+
+  const openChatWithPrefill = useCallback((text: string) => {
+    simRef.current?.cancel();
+    simRef.current = null;
+    setStreamingState(null);
+    setOverlay(null);
+    setActiveConversationId('new');
+    setHasInitialInput(false);
+    setPrefillPrompt({ text, nonce: Date.now() });
+    setChatOpen(true);
+  }, []);
+
+  const clearPrefill = useCallback(() => setPrefillPrompt(null), []);
 
   const setActiveConversation = useCallback((id: string) => {
     setActiveConversationId(id);
@@ -306,15 +328,17 @@ export function ChatProvider({
 
   const value = useMemo(
     () => ({
-      chatOpen, hasInitialInput, toggleChat, closeChat, openChat, reopenChat,
+      chatOpen, hasInitialInput, toggleChat, closeChat, openChat, openChatWithPrefill, reopenChat,
       contextTag, activePage, activeConversationId, setActiveConversation,
       streamingState, pendingPrompt, sendPrompt,
       overlay, dismissOverlay,
+      prefillPrompt, clearPrefill,
     }),
-    [chatOpen, hasInitialInput, toggleChat, closeChat, openChat, reopenChat,
+    [chatOpen, hasInitialInput, toggleChat, closeChat, openChat, openChatWithPrefill, reopenChat,
      contextTag, activePage, activeConversationId, setActiveConversation,
      streamingState, pendingPrompt, sendPrompt,
-     overlay, dismissOverlay],
+     overlay, dismissOverlay,
+     prefillPrompt, clearPrefill],
   );
 
   return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

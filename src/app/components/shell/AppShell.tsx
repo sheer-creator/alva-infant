@@ -72,8 +72,16 @@ function AppShellInner({
   triggerMode,
   threadsEntryMode,
 }: AppShellProps & { triggerMode: ChatTriggerMode; threadsEntryMode: ThreadsEntryMode }) {
-  const { chatOpen, closeChat, toggleChat, openChat, contextTag, activeConversationId, setActiveConversation } =
-    useChatContext();
+  const {
+    chatOpen,
+    closeChat,
+    toggleChat,
+    openChat,
+    openChatWithPrefill,
+    contextTag,
+    activeConversationId,
+    setActiveConversation,
+  } = useChatContext();
   const showChat = chatOpen && contextTag !== null;
   const [panelWidth, setPanelWidth] = useState(DEFAULT_PANEL_W);
   const dragging = useRef(false);
@@ -95,10 +103,13 @@ function AppShellInner({
       const data = e.data;
       if (!data || typeof data !== 'object') return;
       if (data.type === 'alva:drawer-open' && data.drawer !== 'chat') closeChat();
+      if (data.type === 'alva:remix' && typeof data.prompt === 'string') {
+        openChatWithPrefill(data.prompt);
+      }
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [closeChat]);
+  }, [closeChat, openChatWithPrefill]);
 
   useEffect(() => {
     if (!chatOpen) return;
