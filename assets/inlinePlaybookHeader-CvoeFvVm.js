@@ -53,6 +53,7 @@ playbook-header { display: block; }
 }
 .pb-action--icon-only { width: 32px; padding: 6px; justify-content: center; }
 .pb-action:hover { background: rgba(0,0,0,0.04); }
+.pb-action.is-starred:hover { background: rgba(0,0,0,0.04); }
 .pb-action.is-active,
 .pb-action.is-open { background-color: var(--main-m1-10, rgba(73,163,166,0.1)); color: var(--main-m1); }
 .pb-action.is-active .pb-action-icon,
@@ -69,6 +70,13 @@ playbook-header { display: block; }
 }
 .pb-action-icon.ic-share { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/share-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/share-l.svg'); }
 .pb-action-icon.ic-star  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-l.svg');   mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-l.svg'); }
+.pb-action.is-starred { background-color: transparent; color: var(--main-m1); }
+.pb-action.is-starred .pb-action-icon.ic-star {
+    background-color: var(--main-m1);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-f.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-f.svg');
+}
+.pb-action.is-starred .pb-action-count { color: var(--main-m1); }
 .pb-action-icon.ic-remix { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg'); }
 .pb-action-icon.ic-chat  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg'); }
 .pb-action-count {
@@ -90,8 +98,8 @@ playbook-header { display: block; }
     cursor: pointer; white-space: nowrap;
     transition: background .15s, border-color .15s;
 }
-.pb-remix-btn:hover { background: rgba(0,0,0,0.04); }
-.pb-remix-btn.is-open { background-color: var(--b-r02, rgba(0,0,0,0.02)); border-color: var(--line-l3, rgba(0,0,0,0.3)); }
+.pb-remix-btn:hover { background: var(--b-r03); }
+.pb-remix-btn.is-open { background: var(--b-r03); border-color: var(--line-l9); }
 .pb-remix-label {
     font-family: inherit;
     font-size: 12px; font-weight: 500;
@@ -104,8 +112,6 @@ playbook-header { display: block; }
     line-height: 20px; letter-spacing: 0.12px;
     color: rgba(0,0,0,0.5);
 }
-.pb-remix-btn.is-open .pb-remix-label,
-.pb-remix-btn.is-open .pb-remix-count { color: var(--main-m1); }
 
 /* meta row — bordered pills */
 .pb-meta {
@@ -343,6 +349,10 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     font-family: inherit;
     color: inherit;
 }
+.share-popover-row.is-disabled,
+.share-popover-row[disabled] {
+    cursor: not-allowed;
+}
 .share-popover-row + .share-popover-row::before {
     content: '';
     position: absolute;
@@ -544,6 +554,334 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-size: contain; mask-size: contain;
 }
+
+/* Get Alerts button (primary CTA — variant only) */
+.alerts-menu { position: relative; display: inline-flex; padding-left: var(--sp-xs, 8px); }
+.pb-alerts-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px;
+    height: 32px; padding: 6px 10px;
+    background: var(--main-m1);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    cursor: pointer; white-space: nowrap;
+    transition: opacity .15s;
+}
+.pb-alerts-btn:hover { opacity: 0.9; }
+.pb-alerts-btn.is-open { opacity: 0.9; }
+.pb-alerts-label {
+    font-family: inherit;
+    font-size: 12px; font-weight: 500;
+    line-height: 20px; letter-spacing: 0.12px;
+    color: #fff;
+}
+
+/* Alerts popover (opens from Star or Get Alerts) */
+.alerts-popover {
+    position: absolute;
+    top: calc(100% + 6px); right: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-m, 16px);
+    width: 480px;
+    padding: var(--sp-l, 20px);
+    background: #fff;
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    border-radius: var(--radius-pop-popover, 8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px) scale(0.98);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: opacity 160ms ease-out,
+                transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0s linear 200ms;
+}
+.alerts-popover.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition: opacity 160ms ease-out,
+                transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0s;
+}
+.alerts-popover-title {
+    margin: 0;
+    font-size: 16px; font-weight: 500;
+    line-height: 26px; letter-spacing: 0.16px;
+    color: var(--text-n9);
+}
+.alerts-popover-card {
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--sp-s, 12px);
+    padding: var(--sp-xl, 24px) var(--sp-l, 20px);
+    background: var(--b-r02, rgba(0,0,0,0.02));
+    border-radius: var(--radius-ct-l, 8px);
+    width: 100%;
+}
+.alerts-popover-logo {
+    width: 48px; height: 48px;
+    background: var(--b0-sidebar, #2A2A38);
+    border-radius: 960px;
+    display: inline-flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.alerts-popover-logo img { width: 48px; height: 48px; display: block; }
+.alerts-popover-subtitle {
+    margin: 0;
+    font-size: 16px; line-height: 26px; letter-spacing: 0.16px;
+    color: var(--text-n9);
+    text-align: center;
+    width: 100%;
+}
+.alerts-popover-ctas {
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--sp-s, 12px);
+    width: 100%;
+}
+.alerts-popover-cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--sp-xs, 8px);
+    height: 40px; width: 280px;
+    padding: 9px var(--sp-m, 16px);
+    border-radius: var(--radius-ct-m, 6px);
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    line-height: 22px; letter-spacing: 0.14px;
+    cursor: pointer; white-space: nowrap;
+    text-decoration: none;
+    transition: opacity .15s, background .15s, border-color .15s;
+}
+.alerts-popover-cta--primary {
+    background: #24a1de;
+    color: #fff;
+    border: none;
+}
+.alerts-popover-cta--primary:hover { opacity: 0.9; }
+.alerts-popover-cta--primary .alerts-popover-cta-icon { filter: brightness(0) invert(1); }
+.alerts-popover-cta--secondary {
+    background: transparent;
+    color: var(--text-n9);
+    border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+}
+.alerts-popover-cta--secondary:hover { background: var(--b-r03, rgba(0,0,0,0.03)); }
+.alerts-popover-cta-icon { width: 18px; height: 18px; flex-shrink: 0; display: block; }
+.alerts-popover-extra {
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--sp-xs, 8px);
+    padding-top: var(--sp-s, 12px);
+    width: 100%;
+}
+.alerts-popover-extra-label {
+    margin: 0;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5);
+    text-align: center;
+    width: 100%;
+}
+.alerts-popover-chips {
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--sp-xs, 8px);
+}
+.alerts-popover-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px 4px 6px;
+    background: var(--b-r05, rgba(0,0,0,0.05));
+    border-radius: 960px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n9);
+    white-space: nowrap;
+}
+.alerts-popover-chip.is-disabled { opacity: 0.5; color: var(--text-n5); }
+.alerts-popover-chip img { width: 18px; height: 18px; display: block; flex-shrink: 0; border-radius: 960px; }
+
+/* CTA loading spinner + disabled state */
+.alerts-popover-cta { position: relative; overflow: hidden; }
+.alerts-popover-cta-inner {
+    display: inline-flex; align-items: center; gap: var(--sp-xs, 8px);
+    transition: opacity .15s;
+}
+.alerts-popover-cta-spinner {
+    position: absolute;
+    top: 50%; left: 50%;
+    margin: -9px 0 0 -9px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    opacity: 0;
+    pointer-events: none;
+    animation: alerts-spinner 0.8s linear infinite;
+}
+.alerts-popover-cta--primary .alerts-popover-cta-spinner { color: #fff; }
+.alerts-popover-cta--secondary .alerts-popover-cta-spinner { color: var(--text-n9); }
+.alerts-popover-cta.is-loading .alerts-popover-cta-inner { opacity: 0; }
+.alerts-popover-cta.is-loading .alerts-popover-cta-spinner { opacity: 1; }
+.alerts-popover-cta.is-loading { cursor: progress; }
+.alerts-popover-cta.is-disabled {
+    opacity: 0.5; pointer-events: none;
+}
+@keyframes alerts-spinner { to { transform: rotate(360deg); } }
+
+/* Two-state popover: toggle between initial and connected */
+.alerts-popover-initial,
+.alerts-popover-connected {
+    display: flex; flex-direction: column; gap: var(--sp-m, 16px);
+    width: 100%;
+}
+.alerts-popover-connected { display: none; }
+.alerts-popover.is-connected .alerts-popover-initial { display: none; }
+.alerts-popover.is-connected .alerts-popover-connected { display: flex; }
+
+/* Connected state: header + account */
+.alerts-connected-section {
+    display: flex; flex-direction: column; gap: var(--sp-s, 12px);
+    width: 100%;
+}
+.alerts-connected-head {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%;
+}
+.alerts-connected-head-label {
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+}
+.alerts-connected-manage {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; border: none; padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+    transition: color .15s;
+}
+.alerts-connected-manage:hover { color: var(--text-n9); }
+.alerts-connected-manage-chev {
+    width: 12px; height: 12px; display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.alerts-connected-account {
+    display: flex; align-items: center; gap: var(--sp-s, 12px);
+    padding: var(--sp-s, 12px) var(--sp-m, 16px);
+    background: var(--grey-g01, #fafafa);
+    border-radius: var(--radius-ct-l, 8px);
+    width: 100%;
+}
+.alerts-connected-avatar {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 960px;
+    flex-shrink: 0;
+    background-color: #5865F2;
+}
+.alerts-connected-avatar::after {
+    content: '';
+    width: 18px; height: 18px;
+    background-color: #fff;
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.alerts-connected-avatar[data-platform="telegram"] { background-color: #24a1de; }
+.alerts-connected-avatar[data-platform="telegram"]::after {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg');
+}
+.alerts-connected-avatar[data-platform="discord"] { background-color: #5865F2; }
+.alerts-connected-avatar[data-platform="discord"]::after {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-discord.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/logo-social-discord.svg');
+}
+.alerts-connected-name {
+    flex: 1 1 auto;
+    font-size: 14px; font-weight: 500; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.alerts-connected-toggle {
+    display: inline-flex; align-items: center; gap: var(--sp-xs, 8px);
+    flex-shrink: 0;
+}
+.alerts-connected-toggle-label {
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5);
+}
+/* Alva Design System — Switch (medium) */
+.switch {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+    background-color: var(--b-r1, rgba(0,0,0,0.1));
+    width: 32px;
+    height: 16px;
+    border-radius: 1000px;
+    border: none;
+    padding: 0;
+}
+.switch.on { background-color: var(--main-m1, #49A3A6); }
+.switch-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    border-radius: 50%;
+    transition: left 0.2s ease;
+    width: 10.67px;
+    height: 10.67px;
+    left: 2.67px;
+}
+.switch.on .switch-thumb { left: calc(100% - 10.67px - 2.67px); }
+
+/* Connected state: signals list */
+.alerts-signals-section {
+    display: flex; flex-direction: column; gap: var(--sp-s, 12px);
+    width: 100%;
+}
+.alerts-signals-title {
+    margin: 0;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+}
+.alerts-signals-list {
+    display: flex; flex-direction: column; gap: var(--sp-xs, 8px);
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+.alerts-signal-card {
+    display: flex; flex-direction: column; gap: var(--sp-xs, 8px);
+    padding: var(--sp-s, 12px) var(--sp-m, 16px);
+    background: var(--grey-g01, #fafafa);
+    border-radius: var(--radius-ct-m, 6px);
+}
+.alerts-signal-date {
+    margin: 0;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+}
+.alerts-signal-bullets {
+    margin: 0; padding-left: 18px;
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+}
+.alerts-signal-bullets li { margin: 0; }
+.alerts-signal-bullets li strong { color: var(--text-n9); font-weight: 500; }
 
 /* remix popover */
 .remix-menu { position: relative; display: inline-flex; }
@@ -763,11 +1101,9 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       ? '<div class="feeds-popover-meta">Last Updated: ' + esc(lastUpdated) + '</div>'
       : '';
     var rows = feeds.map(function (f) {
-      var cls = 'feeds-popover-row' + (f.clickable ? ' clickable' : '');
-      var extra = f.clickable
-        ? ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"'
-        : '';
-      var chev = '<span class="feeds-popover-row-chev' + (f.clickable ? '' : ' is-placeholder') + '" aria-hidden="true"></span>';
+      var cls = 'feeds-popover-row clickable';
+      var extra = ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"';
+      var chev = '<span class="feeds-popover-row-chev" aria-hidden="true"></span>';
       return (
         '<div class="' + cls + '"' + extra + '>' +
           '<div class="feeds-popover-cell-name">' +
@@ -804,6 +1140,11 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 
   function buildRemixPrompt(title) {
     var ref = '@alva/' + (slugify(title) || 'playbook');
+    return 'Remix ' + ref + ' — customize it based on my preferences and deploy as a new playbook under my account.';
+  }
+
+  function buildExternalRemixPrompt(title) {
+    var ref = '@alva/' + (slugify(title) || 'playbook');
     return 'Remix Playbook(' + ref + '):\\n\\n' +
       'If you have the Alva skill → use it to build my own version.\\n' +
       'If not → install it first: npx skills add https://github.com/alva-ai/skills\\n\\n' +
@@ -821,6 +1162,8 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     var ownerSeed = host.getAttribute('owner-seed') || owner;
     var star = host.getAttribute('star') || '';
     var remix = host.getAttribute('remix') || '';
+    var alertsEnabled = host.hasAttribute('get-alerts')
+      && host.getAttribute('get-alerts') !== 'false';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
     var feeds = readFeeds(host);
@@ -900,7 +1243,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
               '<div class="share-popover" data-share-popover role="dialog" aria-label="Share" aria-hidden="true">' +
                 '<h2 class="share-popover-title">Share</h2>' +
                 '<div class="share-popover-group" role="radiogroup" aria-label="Share visibility">' +
-                  '<button class="share-popover-row" type="button" role="radio" aria-checked="false" data-share-option="private">' +
+                  '<button class="share-popover-row is-disabled" type="button" role="radio" aria-checked="false" aria-disabled="true" disabled data-share-option="private">' +
                     '<span class="share-popover-icon-badge"><span class="share-popover-icon ic-hide"></span></span>' +
                     '<span class="share-popover-row-text">' +
                       '<span class="share-popover-row-title">Private</span>' +
@@ -917,7 +1260,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                     '</span>' +
                     '<span class="share-popover-check" aria-hidden="true"></span>' +
                   '</button>' +
-                  '<button class="share-popover-row" type="button" role="radio" aria-checked="false" data-share-option="sealed">' +
+                  '<button class="share-popover-row is-disabled" type="button" role="radio" aria-checked="false" aria-disabled="true" disabled data-share-option="sealed">' +
                     '<span class="share-popover-icon-badge"><span class="share-popover-icon ic-lightning"></span></span>' +
                     '<span class="share-popover-row-text">' +
                       '<span class="share-popover-row-title">Sealed</span>' +
@@ -967,10 +1310,10 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
               '<div class="remix-popover" data-remix-popover role="dialog" aria-label="Remix this Playbook" aria-hidden="true">' +
                 '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
                 '<p class="remix-popover-desc">Create your own version — customize the data, layout, and style to fit your needs. Your remix will be published under your account.</p>' +
-                '<a href="https://app.alva.xyz" target="_blank" rel="noopener" class="remix-popover-cta" data-remix-cta>' +
+                '<button class="remix-popover-cta" type="button" data-remix-cta>' +
                   '<span class="remix-popover-cta-icon"></span>' +
                   '<span>Remix</span>' +
-                '</a>' +
+                '</button>' +
                 '<div class="remix-popover-agent">' +
                   '<div class="remix-popover-divider">' +
                     '<div class="remix-popover-divider-line"></div>' +
@@ -981,7 +1324,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                     '<div class="remix-popover-divider-line"></div>' +
                   '</div>' +
                   '<div class="remix-popover-agent-body">' +
-                    '<pre class="remix-popover-prompt" data-remix-prompt>' + esc(buildRemixPrompt(title)) + '</pre>' +
+                    '<pre class="remix-popover-prompt" data-remix-prompt>' + esc(buildExternalRemixPrompt(title)) + '</pre>' +
                     '<button class="remix-popover-copy" type="button" data-remix-copy>' +
                       '<span class="remix-popover-copy-icon" data-remix-copy-icon></span>' +
                       '<span data-remix-copy-label>Copy</span>' +
@@ -990,6 +1333,87 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                 '</div>' +
               '</div>' +
             '</div>' +
+            (alertsEnabled
+              ? '<div class="alerts-menu">' +
+                  '<button class="pb-alerts-btn" type="button" aria-label="Get Alerts" data-alerts-trigger aria-haspopup="dialog" aria-expanded="false">' +
+                    '<span class="pb-alerts-label">Get Alerts</span>' +
+                  '</button>' +
+                  '<div class="alerts-popover" data-alerts-popover role="dialog" aria-label="Get Alerts" aria-hidden="true">' +
+                    '<div class="alerts-popover-initial" data-alerts-initial>' +
+                      '<p class="alerts-popover-title">Get Alerts</p>' +
+                      '<div class="alerts-popover-card">' +
+                        '<div class="alerts-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
+                        '<p class="alerts-popover-subtitle">Connect Agents to Get Notified</p>' +
+                        '<div class="alerts-popover-ctas">' +
+                          '<button type="button" class="alerts-popover-cta alerts-popover-cta--primary" data-connect-platform="telegram">' +
+                            '<span class="alerts-popover-cta-inner">' +
+                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                              '<span>Connect Telegram</span>' +
+                            '</span>' +
+                            '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
+                          '</button>' +
+                          '<button type="button" class="alerts-popover-cta alerts-popover-cta--secondary" data-connect-platform="discord">' +
+                            '<span class="alerts-popover-cta-inner">' +
+                              '<img class="alerts-popover-cta-icon" src="/alva-infant/logo-social-discord.svg" alt="" />' +
+                              '<span>Connect Discord</span>' +
+                            '</span>' +
+                            '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
+                          '</button>' +
+                        '</div>' +
+                        '<div class="alerts-popover-extra">' +
+                          '<p class="alerts-popover-extra-label">Same agent, more channels</p>' +
+                          '<div class="alerts-popover-chips">' +
+                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-slack.svg" alt="" /><span>Slack</span></span>' +
+                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-whatsapp.svg" alt="" /><span>WhatsApp</span></span>' +
+                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-line.svg" alt="" /><span>Line</span></span>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                    '<div class="alerts-popover-connected" data-alerts-connected>' +
+                      '<p class="alerts-popover-title">Get Alerts</p>' +
+                      '<div class="alerts-connected-section">' +
+                        '<div class="alerts-connected-head">' +
+                          '<span class="alerts-connected-head-label">Connected</span>' +
+                          '<button class="alerts-connected-manage" type="button">' +
+                            '<span>Manage Accounts</span>' +
+                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
+                          '</button>' +
+                        '</div>' +
+                        '<div class="alerts-connected-account" data-alerts-account>' +
+                          '<span class="alerts-connected-avatar" data-alerts-avatar></span>' +
+                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
+                          '<div class="alerts-connected-toggle">' +
+                            '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
+                            '<button type="button" class="switch" data-alerts-switch role="switch" aria-checked="false"><span class="switch-thumb"></span></button>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>' +
+                      '<div class="alerts-signals-section">' +
+                        '<p class="alerts-signals-title">Latest Signals</p>' +
+                        '<div class="alerts-signals-list">' +
+                          '<div class="alerts-signal-card">' +
+                            '<p class="alerts-signal-date">Apr 16, 2026 · Market Close Digest</p>' +
+                            '<ul class="alerts-signal-bullets">' +
+                              '<li><strong>Top of basket:</strong> ALL (Allstate) holds #1 at Score 95 — ROE 39.5%, P/E 5.64; leadership in Insurance — Property &amp; Casualty continues.</li>' +
+                              '<li><strong>New entries:</strong> BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
+                              '<li><strong>Dropouts:</strong> TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
+                            '</ul>' +
+                          '</div>' +
+                          '<div class="alerts-signal-card">' +
+                            '<p class="alerts-signal-date">Apr 15, 2026 · Market Close Digest</p>' +
+                            '<ul class="alerts-signal-bullets">' +
+                              '<li><strong>Momentum:</strong> NVDA, META extend leadership on improving estimates; Score moves +2 avg.</li>' +
+                              '<li><strong>Re-rating:</strong> Energy basket re-rates higher on improving ROE and lower leverage.</li>' +
+                              '<li><strong>Watch:</strong> DIS, NKE drift lower — guidance risks heading into Q2 prints.</li>' +
+                            '</ul>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>'
+              : '') +
           '</div>' +
         '</div>' +
         '<div class="pb-meta">' +
@@ -1170,7 +1594,17 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     }
 
     var cta = popover.querySelector('[data-remix-cta]');
-    if (cta) cta.addEventListener('click', close);
+    if (cta) {
+      cta.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var title = host.getAttribute('title') || '';
+        var prompt = buildRemixPrompt(title);
+        try {
+          window.parent.postMessage({ type: 'alva:remix', prompt: prompt, title: title }, '*');
+        } catch (_) {}
+        close();
+      });
+    }
 
     var copyBtn = popover.querySelector('[data-remix-copy]');
     var promptEl = popover.querySelector('[data-remix-prompt]');
@@ -1294,32 +1728,127 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 
   function setupStarPopover(host) {
     var trigger = host.querySelector('[data-star-trigger]');
+    if (!trigger) return;
+    var alertsEnabled = host.hasAttribute('get-alerts')
+      && host.getAttribute('get-alerts') !== 'false';
     var popover = host.querySelector('[data-star-popover]');
-    if (!trigger || !popover) return;
+    if (popover && popover.parentNode) popover.parentNode.removeChild(popover);
+    trigger.removeAttribute('aria-haspopup');
+    trigger.removeAttribute('aria-expanded');
+
+    if (alertsEnabled) return; // alerts variant handles star click in setupAlertsPopover
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      trigger.classList.toggle('is-starred');
+      trigger.setAttribute('aria-pressed', trigger.classList.contains('is-starred') ? 'true' : 'false');
+    });
+  }
+
+  function setupAlertsPopover(host) {
+    var popover = host.querySelector('[data-alerts-popover]');
+    if (!popover) return;
+    var alertsBtn = host.querySelector('[data-alerts-trigger]');
+    var starBtn = host.querySelector('[data-star-trigger]');
 
     function close() {
       popover.classList.remove('open');
       popover.setAttribute('aria-hidden', 'true');
-      trigger.setAttribute('aria-expanded', 'false');
-      trigger.classList.remove('is-open');
+      if (alertsBtn) {
+        alertsBtn.setAttribute('aria-expanded', 'false');
+        alertsBtn.classList.remove('is-open');
+      }
+      if (starBtn) starBtn.setAttribute('aria-expanded', 'false');
     }
     function open() {
       closeOtherPopovers(host, close);
       popover.classList.add('open');
       popover.setAttribute('aria-hidden', 'false');
-      trigger.setAttribute('aria-expanded', 'true');
-      trigger.classList.add('is-open');
+      if (alertsBtn) {
+        alertsBtn.setAttribute('aria-expanded', 'true');
+        alertsBtn.classList.add('is-open');
+      }
+      if (starBtn) starBtn.setAttribute('aria-expanded', 'true');
     }
     registerPopover(host, close);
 
-    trigger.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (popover.classList.contains('open')) close(); else open();
+    if (alertsBtn) {
+      alertsBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (popover.classList.contains('open')) close(); else open();
+      });
+    }
+    if (starBtn) {
+      var starOpenTimer = null;
+      starBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var nowStarred = !starBtn.classList.contains('is-starred');
+        starBtn.classList.toggle('is-starred', nowStarred);
+        starBtn.setAttribute('aria-pressed', nowStarred ? 'true' : 'false');
+        if (starOpenTimer) { clearTimeout(starOpenTimer); starOpenTimer = null; }
+        if (nowStarred) {
+          // Small delay so the star fill animates first, then the popover eases in.
+          starOpenTimer = setTimeout(function () { open(); starOpenTimer = null; }, 240);
+        } else {
+          close();
+        }
+      });
+      host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+        if (starOpenTimer) { clearTimeout(starOpenTimer); starOpenTimer = null; }
+      });
+    }
+
+    // ── Connect buttons: fake loading → connected state ──
+    var connectTimer = null;
+    var connectBtns = popover.querySelectorAll('[data-connect-platform]');
+    connectBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.classList.contains('is-loading')) return;
+        if (popover.classList.contains('is-connected')) return;
+        // mark loading + disable all connect buttons
+        connectBtns.forEach(function (b) { b.classList.add('is-disabled'); });
+        btn.classList.remove('is-disabled');
+        btn.classList.add('is-loading');
+        btn.setAttribute('aria-busy', 'true');
+        if (connectTimer) clearTimeout(connectTimer);
+        connectTimer = setTimeout(function () {
+          // transition to connected state
+          var platform = btn.getAttribute('data-connect-platform') || 'telegram';
+          var avatarEl = popover.querySelector('[data-alerts-avatar]');
+          if (avatarEl) {
+            avatarEl.setAttribute('data-platform', platform);
+          }
+          popover.classList.add('is-connected');
+          // reset loading (so if user re-opens, buttons are fresh)
+          btn.classList.remove('is-loading');
+          btn.removeAttribute('aria-busy');
+          connectBtns.forEach(function (b) { b.classList.remove('is-disabled'); });
+          connectTimer = null;
+        }, 1500);
+      });
+    });
+
+    // Receive Alerts toggle switch
+    var switchBtn = popover.querySelector('[data-alerts-switch]');
+    if (switchBtn) {
+      switchBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var on = !switchBtn.classList.contains('on');
+        switchBtn.classList.toggle('on', on);
+        switchBtn.setAttribute('aria-checked', on ? 'true' : 'false');
+      });
+    }
+
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
     });
 
     var onDocClick = function (e) {
       if (!popover.classList.contains('open')) return;
-      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      if (popover.contains(e.target)) return;
+      if (alertsBtn && alertsBtn.contains(e.target)) return;
+      if (starBtn && starBtn.contains(e.target)) return;
       close();
     };
     var onKeydown = function (e) { if (e.key === 'Escape') close(); };
@@ -1329,9 +1858,6 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKeydown);
     });
-
-    var footer = popover.querySelector('[data-star-footer]');
-    if (footer) footer.addEventListener('click', close);
   }
 
   class PlaybookHeader extends HTMLElement {
@@ -1353,6 +1879,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         setupFeedsPopover(self);
         setupRemixPopover(self);
         setupStarPopover(self);
+        setupAlertsPopover(self);
         setupSharePopover(self);
         setupReadmeTrigger(self);
         setupDiscussTrigger(self);

@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-BR4r15Ir.js";import{t as n}from"./inlinePlaybookHeader-DRbfycj0.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DGJ9P6Yp.js";import{t as n}from"./inlinePlaybookHeader-CvoeFvVm.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -2472,7 +2472,6 @@ window.__ALVA_OFFLINE_DATA__ = {
       var row = document.createElement('div'); row.className = 'feed-run-row';
       var head = document.createElement('div'); head.className = 'feed-run-head' + (run.log ? ' clickable' : '');
       var caret = document.createElement('span'); caret.className = 'feed-run-caret';
-      if (!run.log) caret.style.visibility = 'hidden';
       var id = document.createElement('span'); id.className = 'feed-run-id'; id.textContent = run.id;
       var dur = document.createElement('span'); dur.className = 'feed-run-duration'; dur.textContent = run.duration;
       var ts = document.createElement('span'); ts.className = 'feed-run-time'; ts.textContent = run.timestamp;
