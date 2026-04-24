@@ -21,6 +21,15 @@
 (function () {
   if (customElements.get('discussion-panel')) return;
 
+  /* Right-drawer mutex: close self when any other right drawer (e.g. parent Chat) opens */
+  window.addEventListener('message', function (e) {
+    var data = e && e.data;
+    if (!data || typeof data !== 'object') return;
+    if (data.type !== 'alva:drawer-open') return;
+    if (data.drawer === 'discussion') return;
+    document.querySelectorAll('discussion-panel[open]').forEach(function (h) { closePanel(h); });
+  });
+
   /* ── default mock (generic investing thread) ── */
   var DEFAULT_COMMENTS = [
     {
@@ -340,6 +349,7 @@
     document.body.classList.add('dp-open');
     var header = document.querySelector('playbook-header');
     if (header) header.setAttribute('discuss-active', 'true');
+    try { window.parent.postMessage({ type: 'alva:drawer-open', drawer: 'discussion' }, '*'); } catch (_) {}
   }
   function closePanel(host) {
     host.removeAttribute('open');

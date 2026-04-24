@@ -90,6 +90,23 @@ function AppShellInner({
     if (threadsEntryMode !== '2' && threadsEntryMode !== '4') setThreadsRailOpen(false);
   }, [threadsEntryMode]);
 
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      const data = e.data;
+      if (!data || typeof data !== 'object') return;
+      if (data.type === 'alva:drawer-open' && data.drawer !== 'chat') closeChat();
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [closeChat]);
+
+  useEffect(() => {
+    if (!chatOpen) return;
+    document.querySelectorAll('iframe').forEach((f) => {
+      try { f.contentWindow?.postMessage({ type: 'alva:drawer-open', drawer: 'chat' }, '*'); } catch (_) {}
+    });
+  }, [chatOpen]);
+
   const handleUserEnter = useCallback(() => {
     if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
     setIsUserInfoOpen(true);
