@@ -1,9 +1,9 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.js";import{t as n}from"./inlinePlaybookHeader-DYx4N7zD.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-DuitnvCp.js";import{t as n}from"./inlinePlaybookHeader-B8Pjxx84.js";var r=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Q1 2026 earnings sector heatmap — 93% beat but stock reactions muted</title>
+<title>S&amp;P 500 After a Q1 2026 Earnings Beat — Quarter-to-Date What-If</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
 <link rel="stylesheet" href="./components/discussion-panel.css" />
@@ -82,6 +82,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     display:grid; grid-template-columns: repeat(8, 1fr);
     gap: var(--spacing-xl); align-items: stretch;
   }
+  .widget-grid + .widget-grid { margin-top: var(--spacing-xl); }
   .col-2 { grid-column: span 2; }
   .col-4 { grid-column: span 4; }
   .col-8 { grid-column: span 8; }
@@ -113,18 +114,30 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     opacity:0.2; line-height:0; pointer-events:none;
   }
 
-  /* ═══════════════ Free-text / hero card ═══════════════ */
-  .free-text-body { padding: var(--spacing-l); }
-  .hero-sentence {
-    font-size:16px; line-height:26px; letter-spacing:0.16px;
-    color: var(--text-n9); font-weight:400;
+  /* ═══════════════ Free-text card + Markdown ═══════════════ */
+  .free-text-body { padding: var(--spacing-l); width:100%; }
+  .markdown-container {
+    width:100%; display:flex; flex-direction:column;
+    gap: var(--spacing-m);
   }
-  .hero-sentence .pos { color: var(--main-m3); font-weight:500; }
-  .hero-sentence .neg { color: var(--main-m4); font-weight:500; }
-  .hero-sub {
-    margin-top: var(--spacing-s);
+  .markdown-container * { box-sizing:border-box; }
+  .markdown-container p {
+    font-family:'Delight', sans-serif;
+    font-size:16px; line-height:26px; letter-spacing:0.16px;
+    color: var(--text-n9); margin:0; white-space:pre-wrap;
+  }
+  .markdown-container--m { gap: var(--spacing-xs); }
+  .markdown-container--m p,
+  .markdown-container--m li {
     font-size:14px; line-height:22px; letter-spacing:0.14px;
-    color: var(--text-n7);
+  }
+  .markdown-container .pos { color: var(--main-m3); font-weight:500; }
+  .markdown-container .neg { color: var(--main-m4); font-weight:500; }
+  .widget-subtitle {
+    font-size:12px; line-height:20px; letter-spacing:0.12px;
+    color: var(--text-n5);
+    margin-top: calc(-1 * var(--spacing-xs));
+    margin-bottom: var(--spacing-m);
   }
 
   /* ═══════════════ Metric (KPI) card ═══════════════ */
@@ -273,7 +286,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     owner-seed="YGGYLL"
     readme-modal="methodology-modal"
     star="12" remix="56" comments="6"
-    description="Q1 2026 earnings heatmap across 43 S&amp;P 500 reporters through April 18. Beats were near-universal (93%), yet the median next-day stock reaction hovered around zero — beating expectations has stopped meaning rallying.">
+    description="Q1 2026 earnings across 43 S&amp;P 500 reporters through April 18. 93% beat — yet the typical next-day price move hovered around zero.">
     <script type="application/json" class="pb-feeds-data">
 [
   {"id":"earnings-calendar","name":"Earnings-Calendar","interval":"1 hour","lastRun":"15 minutes ago","clickable":true},
@@ -285,42 +298,39 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
 
 <div class="playbook-container">
 
-  <!-- ═══════════════ Hero sentence ═══════════════ -->
+  <!-- ═══════════════ §1 Title + README chip ═══════════════ -->
   <div class="section-title">
-    <span class="section-title-text">What Q1 2026 has looked like so far</span>
-    <span class="section-title-sub">Through April 18, 2026</span>
+    <span class="section-title-text">S&amp;P 500 After a Q1 2026 Earnings Beat — Quarter-to-Date What-If</span>
     <button type="button" class="section-readme-btn" data-modal-open="methodology-modal" aria-label="Open README">
       <span class="section-readme-icon" aria-hidden="true"></span>
       <span>README</span>
     </button>
   </div>
+
+  <!-- ═══════════════ §2 Verdict hero ═══════════════ -->
   <div class="widget-grid">
     <div class="widget-card col-8">
       <div class="widget-body" style="background:var(--grey-g01); border-radius: var(--radius-ct-s);">
-        <div class="free-text-body" style="width:100%;">
-          <div id="hero-sentence" class="hero-sentence"><span class="loading">Loading live historical data…</span></div>
-          <div id="hero-sub" class="hero-sub"></div>
+        <div class="free-text-body">
+          <div class="markdown-container markdown-container--m">
+            <p id="hero-sentence"><span class="loading">Loading live data…</span></p>
+          </div>
         </div>
         <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ KPI row ═══════════════ -->
-  <div class="section-title">
-    <span class="section-title-text">The biggest beats and the worst reactions</span>
-    <span class="section-title-sub">43 reporters · through April 18</span>
-  </div>
+  <!-- ═══════════════ §3 Summary cards (dimension: single-event extremes) ═══════════════ -->
   <div class="widget-grid" id="summary-cards"></div>
 
-  <!-- ═══════════════ Sector heatmap ═══════════════ -->
-  <div class="section-title">
-    <span class="section-title-text">Sector breakdown: beat rate vs. stock reaction</span>
-    <span class="section-title-sub">11 GICS sectors · sorted by share that beat</span>
-  </div>
+  <!-- ═══════════════ §3 Supporting chart ═══════════════ -->
   <div class="widget-grid">
     <div class="widget-card col-8">
-      <div class="chart-caption">Each cell is colored by how the sector compares across the rest on the same metric. Darker green = higher beat rate, larger surprise, or stronger next-day reaction. Darker red = the opposite. Empty cells mean the sector had too few reporters so far.</div>
+      <div class="widget-title">
+        <span class="widget-title-text">Sector breakdown: beat rate vs. next-day price move</span>
+      </div>
+      <div class="widget-subtitle">11 GICS sectors, sorted by the share that beat. Darker green means a relatively higher value among sectors on that metric; darker red means relatively lower. Empty cells mean too few reporters so far.</div>
       <div class="chart-body chart-dotted-background">
         <div id="chart-heatmap" class="chart-container"></div>
         <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
@@ -328,13 +338,13 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     </div>
   </div>
 
-  <!-- ═══════════════ Event table ═══════════════ -->
-  <div class="section-title">
-    <span class="section-title-text">All 43 reporters, newest first</span>
-    <span class="section-title-sub">Reported · Company · Surprise · Reaction</span>
-  </div>
+  <!-- ═══════════════ §3 Event table ═══════════════ -->
   <div class="widget-grid">
     <div class="widget-card col-8">
+      <div class="widget-title">
+        <span class="widget-title-text">All 43 reporters, newest first</span>
+      </div>
+      <div class="widget-subtitle">One row per company · earnings surprise and next-day price move</div>
       <div class="table-card" id="event-table">
         <div class="table-row table-header">
           <div class="table-cell">Reported</div>
@@ -342,10 +352,29 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
           <div class="table-cell">Company</div>
           <div class="table-cell">Sector</div>
           <div class="table-cell cell-right">Earnings surprise</div>
-          <div class="table-cell cell-right">Pre-report close</div>
-          <div class="table-cell cell-right">Next-day reaction</div>
+          <div class="table-cell cell-right">Pre-report price</div>
+          <div class="table-cell cell-right">Next-day move</div>
         </div>
         <div id="event-table-body"><div class="table-row"><div class="table-cell cell-muted">Loading…</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ §3 References ═══════════════ -->
+  <div class="widget-grid">
+    <div class="widget-card col-8">
+      <div class="widget-title">
+        <span class="widget-title-text">References</span>
+      </div>
+      <div class="widget-body" style="background:var(--grey-g01); border-radius: var(--radius-ct-s);">
+        <div class="free-text-body">
+          <div class="markdown-container markdown-container--m">
+            <p><strong>Trigger source:</strong> S&amp;P 500 constituents that reported Q1 2026 earnings between April 1 and April 18, 2026 (43 companies).</p>
+            <p><strong>Data source:</strong> Alva SDK adjusted daily OHLCV for pre-report and next-day closes; FactSet Earnings Insight, CNBC, and Seeking Alpha for EPS consensus and reported figures.</p>
+            <p><strong>Cited context:</strong> FactSet Earnings Insight (2026-04-17) — "88% have reported actual EPS above estimates, above the 5-year average of 78%"; Financials earnings growth rate +19.7%. Motley Fool (2026-04-15) — "This Industry Group Is the Most Positive About Q1 Earnings".</p>
+          </div>
+        </div>
+        <div class="alva-watermark"><img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" /></div>
       </div>
     </div>
   </div>
@@ -362,43 +391,19 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     <div class="modal-body">
 
       <div class="method-section">
-        <h3>Overview in plain English</h3>
+        <h3>How we picked events</h3>
         <div class="method-body">
-          <p>This playbook looks at every S&amp;P 500 company that reported Q1 2026 earnings between April 1 and April 18, 2026 — 43 companies in total. We cut off at April 18 because that was the last reporting day before this page was built.</p>
-          <p>For each reporter, we compare the company's reported earnings per share against what analysts expected just before the report. We then measure how the stock moved from the last close before the report to the first close on or after the report.</p>
+          <p>Every S&amp;P 500 company that reported Q1 2026 earnings between April 1 and April 18, 2026 — 43 companies in total. The April 18 cutoff is simply the last reporting day before this page was built.</p>
+          <p>We group companies into the 11 standard GICS stock-market sectors so readers can see where beats and moves clustered. Sectors with only one reporter so far (for example, Energy) are still shown but reflect that one company only.</p>
         </div>
       </div>
 
       <div class="method-section">
-        <h3>How we measured the surprise</h3>
+        <h3>How we measured the moves</h3>
         <div class="method-body">
-          <p><strong>Earnings surprise</strong> = (reported EPS − consensus EPS) / |consensus EPS|, expressed as a percent. A positive surprise means the company beat; negative means it missed.</p>
-        </div>
-      </div>
-
-      <div class="method-section">
-        <h3>How we measured the reaction</h3>
-        <div class="method-body">
-          <p><strong>Next-day reaction</strong> is the percentage change from the closing price just before the report to the first close on or after the report — typically the close of the next trading session.</p>
-        </div>
-      </div>
-
-      <div class="method-section">
-        <h3>How we grouped by sector</h3>
-        <div class="method-body">
-          <p>We used the 11 standard GICS stock-market sectors. For each sector we show how many companies reported, what share beat expectations, the typical (median) size of the beat, and the typical next-day stock reaction. Sectors with only one reporter so far (for example, Energy) are shown but reflect only that one company.</p>
-        </div>
-      </div>
-
-      <div class="method-section">
-        <h3>Data sources &amp; references</h3>
-        <div class="method-body">
-          <p>Alva SDK adjusted daily OHLCV; CNBC, Seeking Alpha, and FactSet Earnings Insight headline data.</p>
-          <div class="method-refs">
-            <div>FactSet Earnings Insight 2026-04-17 — "88% have reported actual EPS above estimates, which is above the 5-year average of 78%".</div>
-            <div>FactSet 2026-04-17 — "Financials sector recorded an increase in earnings growth rate to 19.7%".</div>
-            <div>Motley Fool 2026-04-15 — "This Industry Group Is the Most Positive About Q1 Earnings".</div>
-          </div>
+          <p><strong>Earnings surprise</strong> is how far reported earnings per share landed from the consensus analyst forecast just before the report, expressed as a percent of that forecast. Positive means a beat, negative a miss.</p>
+          <p><strong>Next-day move</strong> is the percent change from the closing price right before the report to the first close on or after the report — typically the next trading session.</p>
+          <p><em>Historical observation only — not investment advice.</em></p>
         </div>
       </div>
 
@@ -440,36 +445,40 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     sectors = Array.from(byS.values()).sort((a, b) => (b.pct_beat || 0) - (a.pct_beat || 0));
     const s = stats_raw[stats_raw.length - 1];
 
-    /* ══════════════════════ Hero ══════════════════════ */
+    /* ══════════════════════ §2 Verdict hero ══════════════════════ */
     document.getElementById("hero-sentence").innerHTML =
-      \`Of <span class="pos">\${s.n_total_reported}</span> big-name Q1 2026 reporters through April 18, <span class="pos">\${s.overall_pct_beat.toFixed(0)}%</span> beat expectations — but the typical next-day stock reaction was only <span class="\${s.median_reaction_pct >= 0 ? 'pos' : 'neg'}">\${fmtPct(s.median_reaction_pct)}</span>. Beating expectations has stopped meaning rallying.\`;
-    document.getElementById("hero-sub").textContent =
-      "The beat rate has been historically high, but the market reaction hasn't followed: stocks have barely moved on the news, and the few sectors that did rally haven't made up for the sectors that sold off.";
+      \`<span class="pos">\${s.overall_pct_beat.toFixed(0)}%</span> of the <span class="pos">\${s.n_total_reported}</span> S&P 500 companies that reported Q1 2026 earnings through April 18 beat expectations, yet the typical next-day price move was just <span class="\${s.median_reaction_pct >= 0 ? 'pos' : 'neg'}">\${fmtPct(s.median_reaction_pct)}</span> — beating is no longer moving the stock.\`;
 
-    /* ══════════════════════ KPI cards ══════════════════════ */
-    let biggestBeat = { val: null, company: null, sector: null };
+    /* ══════════════════════ §3 Summary cards — single-event extremes ══════════════════════
+       Cutting dimension: per-company single-event extremes of the two hero atoms
+       (93% beat rate → biggest beat; +0.2% typical move → biggest rally / biggest drop /
+       count of beats that still fell). Every card is a tail of a hero atom. */
+    let biggestBeat = { val: null, company: null, ticker: null };
+    let biggestRally = { val: null, company: null, ticker: null };
+    let biggestDrop = { val: null, company: null, ticker: null };
+    let beatsThatFell = 0, totalBeats = 0;
     events.forEach(e => {
-      if (e.eps_surprise_pct == null) return;
-      if (biggestBeat.val == null || e.eps_surprise_pct > biggestBeat.val) biggestBeat = { val: e.eps_surprise_pct, company: e.company, sector: e.sector };
+      if (e.eps_surprise_pct != null && (biggestBeat.val == null || e.eps_surprise_pct > biggestBeat.val)) {
+        biggestBeat = { val: e.eps_surprise_pct, company: e.company, ticker: e.ticker };
+      }
+      if (e.reaction_pct != null && (biggestRally.val == null || e.reaction_pct > biggestRally.val)) {
+        biggestRally = { val: e.reaction_pct, company: e.company, ticker: e.ticker };
+      }
+      if (e.reaction_pct != null && (biggestDrop.val == null || e.reaction_pct < biggestDrop.val)) {
+        biggestDrop = { val: e.reaction_pct, company: e.company, ticker: e.ticker };
+      }
+      if (e.beat_status === "beat") {
+        totalBeats += 1;
+        if (e.reaction_pct != null && e.reaction_pct < 0) beatsThatFell += 1;
+      }
     });
-    let worstDrop = { val: null, company: null, sector: null };
-    events.forEach(e => {
-      if (e.beat_status !== "beat" || e.reaction_pct == null) return;
-      if (worstDrop.val == null || e.reaction_pct < worstDrop.val) worstDrop = { val: e.reaction_pct, company: e.company, sector: e.sector };
-    });
-    let bestSector = { sector: null, val: null };
-    let worstSector = { sector: null, val: null };
-    sectors.forEach(r => {
-      if (r.median_reaction_pct == null) return;
-      if (bestSector.val == null || r.median_reaction_pct > bestSector.val) bestSector = { sector: r.sector, val: r.median_reaction_pct };
-      if (worstSector.val == null || r.median_reaction_pct < worstSector.val) worstSector = { sector: r.sector, val: r.median_reaction_pct };
-    });
+    const beatFellPct = totalBeats > 0 ? (beatsThatFell / totalBeats) * 100 : null;
 
     const cards = [
-      { label: "Biggest single EPS beat",            val: fmtPct(biggestBeat.val),  pos: biggestBeat.val != null && biggestBeat.val >= 0, foot: biggestBeat.company ? \`\${biggestBeat.company} · \${biggestBeat.sector}\` : "" },
-      { label: "Worst next-day drop after a beat",   val: fmtPct(worstDrop.val),    pos: worstDrop.val != null && worstDrop.val >= 0,     foot: worstDrop.company ? \`\${worstDrop.company} · \${worstDrop.sector}\` : "" },
-      { label: "Best sector median reaction",        val: fmtPct(bestSector.val),   pos: bestSector.val != null && bestSector.val >= 0,   foot: bestSector.sector || "" },
-      { label: "Worst sector median reaction",       val: fmtPct(worstSector.val),  pos: worstSector.val != null && worstSector.val >= 0, foot: worstSector.sector || "" },
+      { label: "Biggest single EPS beat",         val: fmtPct(biggestBeat.val),   pos: true,  foot: biggestBeat.company || "" },
+      { label: "Biggest next-day rally",          val: fmtPct(biggestRally.val),  pos: true,  foot: biggestRally.company || "" },
+      { label: "Biggest next-day drop",           val: fmtPct(biggestDrop.val),   pos: false, foot: biggestDrop.company || "" },
+      { label: "Beat, then fell the next day",    val: beatFellPct == null ? "—" : Math.round(beatFellPct) + "%", pos: false, foot: \`\${beatsThatFell} of \${totalBeats} beats\` },
     ];
     const cg = document.getElementById("summary-cards");
     cg.innerHTML = "";
@@ -489,8 +498,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CJDxTMai.
     const cols = [
       { key: "n_reported",          label: "Companies reported",    fmt: v => v == null ? "—" : String(v),                                                divergent: false },
       { key: "pct_beat",            label: "Percent beat EPS",      fmt: v => v == null ? "—" : Number(v).toFixed(0) + "%",                                divergent: false },
-      { key: "median_surprise_pct", label: "Median EPS surprise",   fmt: v => v == null ? "—" : (v >= 0 ? "+" : "") + Number(v).toFixed(1) + "%",          divergent: true  },
-      { key: "median_reaction_pct", label: "Median next-day reaction", fmt: v => v == null ? "—" : (v >= 0 ? "+" : "") + Number(v).toFixed(2) + "%",       divergent: true  },
+      { key: "median_surprise_pct", label: "Typical EPS surprise",  fmt: v => v == null ? "—" : (v >= 0 ? "+" : "") + Number(v).toFixed(1) + "%",          divergent: true  },
+      { key: "median_reaction_pct", label: "Typical next-day move",  fmt: v => v == null ? "—" : (v >= 0 ? "+" : "") + Number(v).toFixed(2) + "%",       divergent: true  },
     ];
 
     const heatmapData = [];
