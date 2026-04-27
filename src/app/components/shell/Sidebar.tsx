@@ -40,6 +40,7 @@ const PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Template-Screener', page: 'template-screener' },
   { label: 'Template-Thesis', page: 'template-thesis' },
   { label: 'Template-Whatif', page: 'template-whatif' },
+  { label: 'Template-Notification', page: 'template-notification' },
   { label: 'Feed Test', page: 'screener' },
 ];
 

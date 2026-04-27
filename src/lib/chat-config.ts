@@ -49,6 +49,7 @@ export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   'template-screener': { label: 'Template-Screener', icon: 'sidebar-discover-normal' },
   'template-thesis': { label: 'Template-Thesis', icon: 'sidebar-discover-normal' },
   'template-whatif': { label: 'Template-Whatif', icon: 'sidebar-discover-normal' },
+  'template-notification': { label: 'Template-Notification', icon: 'sidebar-discover-normal' },
   agent: null,
   'alva-skills': null,
 };
@@ -80,4 +81,5 @@ export const PAGE_DEFAULT_THREAD: Record<string, string> = {
   thesis: 'demo',
   'template-thesis': 'demo',
   'template-whatif': 'demo',
+  'template-notification': 'demo',
 };

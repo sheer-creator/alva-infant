@@ -4,16 +4,31 @@
    Depends on design-tokens.css for --sp-*, --r-*, --text-*, --main-*, --line-*.
    ══════════════════════════════════════════════════════════════ */
 
-playbook-header { display: block; }
+/* display:contents lets .pb-top-bar's containing block be the body, so
+   position:sticky tracks the full page scroll instead of being clipped to
+   <playbook-header>'s short box. */
+playbook-header { display: contents; }
+
+/* sticky title-bar wrapper — full body width, holds the centered .pb-top */
+.pb-top-bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--b0-page);
+}
 
 .playbook-info {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: var(--sp-xl) var(--sp-xxl);
+    padding: 0 var(--sp-xxl) var(--sp-xl);
     display: flex; flex-direction: column; gap: var(--sp-xs);
 }
 
-/* title row */
-.pb-top { display: flex; align-items: center; gap: var(--sp-xs); width: 100%; }
+/* title row — centered inside the full-width sticky bar.
+   Bottom padding (xs) provides the gap to .pb-meta and stays inside the
+   sticky zone, so when stuck that gap stays pinned along with the title. */
+.pb-top {
+    width: 100%; max-width: 2048px; margin: 0 auto;
+    padding: var(--sp-xl) var(--sp-xxl) var(--sp-xs);
+    display: flex; align-items: center; gap: var(--sp-xs);
+}
 .pb-top-left {
     display: flex; flex: 1 1 0; min-width: 0;
     align-items: center; gap: var(--sp-xs);
@@ -677,7 +692,6 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     border: none;
 }
 .alerts-popover-cta--primary:hover { opacity: 0.9; }
-.alerts-popover-cta--primary .alerts-popover-cta-icon { filter: brightness(0) invert(1); }
 .alerts-popover-cta--secondary {
     background: transparent;
     color: var(--text-n9);
@@ -787,7 +801,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 .alerts-connected-account {
     display: flex; align-items: center; gap: var(--sp-xs, 8px);
     padding: var(--sp-m, 16px);
-    background: var(--grey-g01, #fafafa);
+    background: rgba(73, 163, 166, 0.08);
     border-radius: var(--radius-ct-l, 8px);
     width: 100%;
 }

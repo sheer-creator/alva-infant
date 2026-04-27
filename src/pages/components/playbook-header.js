@@ -152,25 +152,18 @@
     var feedsCount = feeds.length;
     var statusParts = [];
     if (feedsCount) statusParts.push('<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>');
-    if (freq) statusParts.push('<span>' + esc(freq) + '</span>');
+    if (freq) statusParts.push('<span>' + esc(freq) + ' ago</span>');
     var statusInner = '';
     for (var i = 0; i < statusParts.length; i++) {
       if (i > 0) statusInner += '<span class="pb-pill-sep" aria-hidden="true">•</span>';
       statusInner += statusParts[i];
     }
-    var statusTooltip = lastUpdated
-      ? '<span class="pb-pill-tip" role="tooltip">' +
-          '<div class="tooltip">' +
-            '<div class="tooltip-border"></div>' +
-            '<div class="tooltip-text">Last Updated: ' + esc(lastUpdated) + '</div>' +
-          '</div>' +
-        '</span>'
-      : '';
+    var statusTooltip = '';
     var statusTag = feedsCount ? 'button' : 'span';
     var statusAttrs = feedsCount
       ? ' type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false"'
       : '';
-    var statusClasses = 'pb-pill pb-pill--status' + (lastUpdated ? ' has-tooltip' : '');
+    var statusClasses = 'pb-pill pb-pill--status';
     var statusBlock = statusParts.length
       ? (feedsCount
           ? '<div class="feeds-menu">' +
@@ -198,7 +191,7 @@
       : '';
 
     host.innerHTML =
-      '<section class="playbook-info">' +
+      '<div class="pb-top-bar">' +
         '<div class="pb-top">' +
           '<div class="pb-top-left">' +
             '<h1 class="pb-title">' + esc(title) + '</h1>' +
@@ -313,7 +306,7 @@
                         '<div class="alerts-popover-ctas">' +
                           '<button type="button" class="alerts-popover-cta alerts-popover-cta--primary" data-connect-platform="telegram">' +
                             '<span class="alerts-popover-cta-inner">' +
-                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
                               '<span>Connect Telegram</span>' +
                             '</span>' +
                             '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
@@ -382,6 +375,8 @@
               : '') +
           '</div>' +
         '</div>' +
+      '</div>' +
+      '<section class="playbook-info">' +
         '<div class="pb-meta">' +
           authorBlock +
           readmeBlock +
