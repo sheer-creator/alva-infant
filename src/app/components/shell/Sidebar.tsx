@@ -36,11 +36,14 @@ const NAV_ITEMS: { label: string; page?: Page; badge?: number }[] = [
   { label: 'Alva Skill' },
 ];
 
-const PLAYBOOKS: { label: string; page?: Page }[] = [
+const STARRED: { label: string; page?: Page }[] = [
   { label: 'Template-Screener', page: 'template-screener' },
   { label: 'Template-Thesis', page: 'template-thesis' },
   { label: 'Template-Whatif', page: 'template-whatif' },
   { label: 'Template-Notification', page: 'template-notification' },
+];
+
+const MY_PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Feed Test', page: 'screener' },
 ];
 
@@ -168,30 +171,35 @@ export function Sidebar({
           ))}
         </div>
 
-        <div className="py-[4px]">
-          {!sidebarCompact && (
-            <div className="flex h-[36px] shrink-0 items-center px-[8px] text-[12px] tracking-[0.12px] text-white/50">
-              Playbooks
+        {(['Starred', 'My Playbooks'] as const).map(section => {
+          const items = section === 'Starred' ? STARRED : MY_PLAYBOOKS;
+          return (
+            <div key={section} className="py-[4px]">
+              {!sidebarCompact && (
+                <div className="flex h-[36px] shrink-0 items-center px-[8px] text-[12px] tracking-[0.12px] text-white/50">
+                  {section}
+                </div>
+              )}
+              {items.map(item => (
+                <div
+                  key={item.label}
+                  title={sidebarCompact ? item.label : undefined}
+                  className={`h-[36px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-[4px] px-[8px] text-[13px] leading-[36px] tracking-[0.13px] text-white transition-colors ${
+                    item.page === activePage ? 'bg-white/5' : 'hover:bg-white/5'
+                  } ${sidebarCompact ? 'text-center px-[4px] text-[10px]' : ''}`}
+                  onClick={() => {
+                    if (item.page) {
+                      if (onChatToggle) sessionStorage.setItem('openChatWithThread', 'demo');
+                      onNavigate(item.page);
+                    }
+                  }}
+                >
+                  {sidebarCompact ? '▸' : item.label}
+                </div>
+              ))}
             </div>
-          )}
-          {PLAYBOOKS.map(item => (
-            <div
-              key={item.label}
-              title={sidebarCompact ? item.label : undefined}
-              className={`h-[36px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-[4px] px-[8px] text-[13px] leading-[36px] tracking-[0.13px] text-white transition-colors ${
-                item.page === activePage ? 'bg-white/5' : 'hover:bg-white/5'
-              } ${sidebarCompact ? 'text-center px-[4px] text-[10px]' : ''}`}
-              onClick={() => {
-                if (item.page) {
-                  if (onChatToggle) sessionStorage.setItem('openChatWithThread', 'demo');
-                  onNavigate(item.page);
-                }
-              }}
-            >
-              {sidebarCompact ? '▸' : item.label}
-            </div>
-          ))}
-        </div>
+          );
+        })}
 
         <div className="min-h-0 flex-1" />
 

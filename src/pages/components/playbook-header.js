@@ -106,6 +106,37 @@
     return 'Remix ' + ref + ' — customize it based on my preferences and deploy as a new playbook under my account.';
   }
 
+  function buildHistoryEntries() {
+    return [
+      { version: 'v1.2.0', desc: 'Main tabs upgraded to tab-l (16px, gap 24px, padding-bottom 6px)', date: '04/27/2026 16:20', active: true },
+      { version: 'v1.1.0', desc: 'Tab bar CSS rewritten to match Alva template: border-bottom on wrapper-row, flex-end alignment, horizontal scroll, right-group padding, responsive breakpoint', date: '04/27/2026 16:16' },
+      { version: 'v1.0.0', desc: 'Remix from @yy11/next-bottleneck — tab bar CSS/HTML fixed to Alva Design System spec (7 items)', date: '04/27/2026 16:08' },
+      { version: 'draft', desc: 'Draft', date: '04/27/2026 16:08' }
+    ];
+  }
+
+  function renderHistory(entries) {
+    return entries.map(function (e) {
+      var meta = '<span>' + esc(e.date) + '</span>';
+      var check = e.active
+        ? '<span class="history-row-check" aria-hidden="true"></span>'
+        : '';
+      return (
+        '<div class="history-row" role="button" tabindex="0" data-history-version="' + esc(e.version) + '"' + (e.active ? ' aria-current="true"' : '') + '>' +
+          '<div class="history-row-body">' +
+            '<div class="history-row-title">' +
+              '<span class="history-row-version">' + esc(e.version) + '</span>' +
+              '<span class="history-row-bullet" aria-hidden="true">•</span>' +
+              '<span>' + esc(e.desc) + '</span>' +
+            '</div>' +
+            '<div class="history-row-meta">' + meta + '</div>' +
+          '</div>' +
+          check +
+        '</div>'
+      );
+    }).join('');
+  }
+
   function buildExternalRemixPrompt(title) {
     var ref = '@alva/' + (slugify(title) || 'playbook');
     return 'Remix Playbook(' + ref + '):\n\n' +
@@ -132,7 +163,41 @@
       && host.getAttribute('alerts-connected') !== 'false';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
+    var creator = host.hasAttribute('creator')
+      && host.getAttribute('creator') !== 'false';
     var feeds = readFeeds(host);
+
+    var creatorBlock = creator
+      ? '<div class="pb-creator-actions">' +
+          '<div class="settings-menu">' +
+            '<button class="pb-creator-icon-btn" type="button" aria-label="Settings" data-creator-settings aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-settings"></span></button>' +
+            '<div class="settings-popover" data-settings-popover role="dialog" aria-label="Setting" aria-hidden="true">' +
+              '<div class="settings-popover-header">' +
+                '<h2 class="settings-popover-title">Setting</h2>' +
+                '<button class="settings-popover-close" type="button" aria-label="Close" data-settings-close><span class="settings-popover-close-icon"></span></button>' +
+              '</div>' +
+              '<div class="settings-field">' +
+                '<label class="settings-field-label">Title</label>' +
+                '<input class="settings-field-input" type="text" value="' + esc(title) + '" />' +
+              '</div>' +
+              '<div class="settings-field settings-field--textarea">' +
+                '<label class="settings-field-label">Description</label>' +
+                '<textarea class="settings-field-textarea">' + esc(description) + '</textarea>' +
+              '</div>' +
+              '<button class="settings-more" type="button" data-settings-more>' +
+                '<span class="settings-more-label">More Settings</span>' +
+                '<span class="settings-more-chev" aria-hidden="true"></span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="history-menu">' +
+            '<button class="pb-creator-icon-btn" type="button" aria-label="History" data-creator-history aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-history"></span></button>' +
+            '<div class="history-popover" data-history-popover role="dialog" aria-label="Version history" aria-hidden="true">' +
+              renderHistory(buildHistoryEntries()) +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      : '';
 
     var authorBlock = owner
       ? '<span class="pb-pill pb-pill--author">' +
@@ -195,6 +260,7 @@
         '<div class="pb-top">' +
           '<div class="pb-top-left">' +
             '<h1 class="pb-title">' + esc(title) + '</h1>' +
+            creatorBlock +
           '</div>' +
           '<div class="pb-actions">' +
             '<div class="share-menu">' +
@@ -245,7 +311,7 @@
                   '<div class="star-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
                   '<p class="star-popover-title">Connect Agents to Get Notified</p>' +
                   '<a href="https://t.me/alva_ai_bot" target="_blank" rel="noopener" class="star-popover-cta">' +
-                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
                     '<span>Connect Telegram</span>' +
                   '</a>' +
                   '<div class="star-popover-socials">' +
@@ -340,7 +406,7 @@
                           '</button>' +
                         '</div>' +
                         '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg') + '" alt="" />' +
+                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg') + '" alt="" />' +
                           '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
                           '<div class="alerts-connected-toggle">' +
                             '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
@@ -384,6 +450,87 @@
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupSettingsPopover(host) {
+    var trigger = host.querySelector('[data-creator-settings]');
+    var popover = host.querySelector('[data-settings-popover]');
+    if (!trigger || !popover) return;
+    var closeBtn = popover.querySelector('[data-settings-close]');
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        close();
+      });
+    }
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+  }
+
+  function setupHistoryPopover(host) {
+    var trigger = host.querySelector('[data-creator-history]');
+    var popover = host.querySelector('[data-history-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
   }
 
   function setupReadmeTrigger(host) {
@@ -781,7 +928,7 @@
             avatarEl.setAttribute('data-platform', platform);
             var iconSrc = platform === 'discord'
               ? '/alva-infant/logo-social-discord.svg'
-              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg';
+              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg';
             if (avatarEl.tagName === 'IMG') avatarEl.setAttribute('src', iconSrc);
           }
           popover.classList.add('is-connected');
@@ -858,6 +1005,8 @@
         setupStarPopover(self);
         setupAlertsPopover(self);
         setupSharePopover(self);
+        setupSettingsPopover(self);
+        setupHistoryPopover(self);
         setupReadmeTrigger(self);
         setupDiscussTrigger(self);
         updateDiscussActive(self);
