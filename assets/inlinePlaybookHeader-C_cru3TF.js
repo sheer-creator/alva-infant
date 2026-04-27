@@ -4,16 +4,31 @@ var e=`/* ═══════════════════════�
    Depends on design-tokens.css for --sp-*, --r-*, --text-*, --main-*, --line-*.
    ══════════════════════════════════════════════════════════════ */
 
-playbook-header { display: block; }
+/* display:contents lets .pb-top-bar's containing block be the body, so
+   position:sticky tracks the full page scroll instead of being clipped to
+   <playbook-header>'s short box. */
+playbook-header { display: contents; }
+
+/* sticky title-bar wrapper — full body width, holds the centered .pb-top */
+.pb-top-bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--b0-page);
+}
 
 .playbook-info {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: var(--sp-xl) var(--sp-xxl);
+    padding: 0 var(--sp-xxl) var(--sp-xl);
     display: flex; flex-direction: column; gap: var(--sp-xs);
 }
 
-/* title row */
-.pb-top { display: flex; align-items: center; gap: var(--sp-xs); width: 100%; }
+/* title row — centered inside the full-width sticky bar.
+   Bottom padding (xs) provides the gap to .pb-meta and stays inside the
+   sticky zone, so when stuck that gap stays pinned along with the title. */
+.pb-top {
+    width: 100%; max-width: 2048px; margin: 0 auto;
+    padding: var(--sp-xl) var(--sp-xxl) var(--sp-xs);
+    display: flex; align-items: center; gap: var(--sp-xs);
+}
 .pb-top-left {
     display: flex; flex: 1 1 0; min-width: 0;
     align-items: center; gap: var(--sp-xs);
@@ -677,7 +692,6 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     border: none;
 }
 .alerts-popover-cta--primary:hover { opacity: 0.9; }
-.alerts-popover-cta--primary .alerts-popover-cta-icon { filter: brightness(0) invert(1); }
 .alerts-popover-cta--secondary {
     background: transparent;
     color: var(--text-n9);
@@ -787,7 +801,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 .alerts-connected-account {
     display: flex; align-items: center; gap: var(--sp-xs, 8px);
     padding: var(--sp-m, 16px);
-    background: var(--grey-g01, #fafafa);
+    background: rgba(73, 163, 166, 0.08);
     border-radius: var(--radius-ct-l, 8px);
     width: 100%;
 }
@@ -1196,25 +1210,18 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     var feedsCount = feeds.length;
     var statusParts = [];
     if (feedsCount) statusParts.push('<span>' + feedsCount + ' Automation' + (feedsCount > 1 ? 's' : '') + '</span>');
-    if (freq) statusParts.push('<span>' + esc(freq) + '</span>');
+    if (freq) statusParts.push('<span>' + esc(freq) + ' ago</span>');
     var statusInner = '';
     for (var i = 0; i < statusParts.length; i++) {
       if (i > 0) statusInner += '<span class="pb-pill-sep" aria-hidden="true">•</span>';
       statusInner += statusParts[i];
     }
-    var statusTooltip = lastUpdated
-      ? '<span class="pb-pill-tip" role="tooltip">' +
-          '<div class="tooltip">' +
-            '<div class="tooltip-border"></div>' +
-            '<div class="tooltip-text">Last Updated: ' + esc(lastUpdated) + '</div>' +
-          '</div>' +
-        '</span>'
-      : '';
+    var statusTooltip = '';
     var statusTag = feedsCount ? 'button' : 'span';
     var statusAttrs = feedsCount
       ? ' type="button" data-feeds-trigger aria-haspopup="menu" aria-expanded="false"'
       : '';
-    var statusClasses = 'pb-pill pb-pill--status' + (lastUpdated ? ' has-tooltip' : '');
+    var statusClasses = 'pb-pill pb-pill--status';
     var statusBlock = statusParts.length
       ? (feedsCount
           ? '<div class="feeds-menu">' +
@@ -1242,7 +1249,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       : '';
 
     host.innerHTML =
-      '<section class="playbook-info">' +
+      '<div class="pb-top-bar">' +
         '<div class="pb-top">' +
           '<div class="pb-top-left">' +
             '<h1 class="pb-title">' + esc(title) + '</h1>' +
@@ -1357,7 +1364,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                         '<div class="alerts-popover-ctas">' +
                           '<button type="button" class="alerts-popover-cta alerts-popover-cta--primary" data-connect-platform="telegram">' +
                             '<span class="alerts-popover-cta-inner">' +
-                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
                               '<span>Connect Telegram</span>' +
                             '</span>' +
                             '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
@@ -1426,6 +1433,8 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
               : '') +
           '</div>' +
         '</div>' +
+      '</div>' +
+      '<section class="playbook-info">' +
         '<div class="pb-meta">' +
           authorBlock +
           readmeBlock +
