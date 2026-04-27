@@ -178,7 +178,7 @@ function FeedCard({
           </p>
         </div>
         <RowAction
-          icon={isActive ? 'pause-l2' : 'play-l2'}
+          icon={isActive ? 'pause-l2' : 'play-l'}
           label={isActive ? 'Stop' : 'Resume'}
           onClick={onToggleStatus}
         />
@@ -191,17 +191,11 @@ function FeedCard({
           className="flex gap-[8px] items-center leading-[20px] text-[12px] tracking-[0.12px] whitespace-nowrap shrink-0"
           style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}
         >
-          {isActive ? (
-            <>
-              <p>Last Run: {feed.lastRun}</p>
-              <p style={{ color: 'var(--text-n2)' }}>|</p>
-              <p>{feed.runEvery}</p>
-              <p style={{ color: 'var(--text-n2)' }}>|</p>
-              <p>{feed.totalRuns} Runs</p>
-            </>
-          ) : (
-            <p>{feed.totalRuns} Runs</p>
-          )}
+          <p>Last Run: {feed.lastRun ?? '—'}</p>
+          <p style={{ color: 'var(--text-n2)' }}>|</p>
+          <p>{feed.runEvery ?? 'Every 5 minutes'}</p>
+          <p style={{ color: 'var(--text-n2)' }}>|</p>
+          <p>{feed.totalRuns} Runs</p>
         </div>
         {hasUsedBy && (
           <div className="flex gap-[8px] items-center shrink-0">
