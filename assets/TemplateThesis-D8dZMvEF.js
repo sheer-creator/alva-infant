@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CRA9H0uA.js";import{t as n}from"./inlinePlaybookHeader-C_cru3TF.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-D3tqD6o5.js";import{t as n}from"./inlinePlaybookHeader-Tths1C5s.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -28,7 +28,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-CRA9H0uA.
   button, input, select, textarea { font-family: inherit; }
   .playbook-container {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: 0 var(--spacing-xxl) var(--spacing-xxxxl);
+    padding: var(--spacing-xl) var(--spacing-xxl) var(--spacing-xxxxl);
     display:flex; flex-direction:column; gap: var(--spacing-xl);
   }
   a { color: var(--main-m1); text-decoration: none; }

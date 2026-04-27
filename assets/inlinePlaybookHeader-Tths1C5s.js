@@ -17,7 +17,7 @@ playbook-header { display: contents; }
 
 .playbook-info {
     width: 100%; max-width: 2048px; margin: 0 auto;
-    padding: 0 var(--sp-xxl) var(--sp-xl);
+    padding: 0 var(--sp-xxl) 0;
     display: flex; flex-direction: column; gap: var(--sp-xs);
 }
 
@@ -92,8 +92,215 @@ playbook-header { display: contents; }
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/star-f.svg');
 }
 .pb-action.is-starred .pb-action-count { color: var(--main-m1); }
-.pb-action-icon.ic-remix { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg'); }
-.pb-action-icon.ic-chat  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg'); }
+.pb-action-icon.ic-remix    { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg');     mask-image: url('https://alva-ai-static.b-cdn.net/icons/remix-l.svg'); }
+.pb-action-icon.ic-chat     { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg');     mask-image: url('https://alva-ai-static.b-cdn.net/icons/chat-l1.svg'); }
+.pb-action-icon.ic-settings { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/settings-l.svg');  mask-image: url('https://alva-ai-static.b-cdn.net/icons/settings-l.svg'); }
+.pb-action-icon.ic-history  { -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/history-l.svg');   mask-image: url('https://alva-ai-static.b-cdn.net/icons/history-l.svg'); }
+
+/* creator variant — bare 16x16 icons immediately after .pb-title.
+   All three gaps (title↔icon1, icon1↔icon2) are equal to --sp-s. */
+.pb-top-left:has(.pb-creator-actions) { gap: var(--sp-s); }
+.pb-creator-actions {
+    display: inline-flex; align-items: center;
+    gap: var(--sp-s);
+    flex-shrink: 0;
+}
+.pb-creator-icon-btn {
+    width: 16px; height: 16px; flex-shrink: 0;
+    padding: 0; border: none; background: transparent;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0.9; transition: opacity .15s ease;
+}
+.pb-creator-icon-btn:hover { opacity: 1; }
+
+/* settings popover (creator variant) — anchored under the settings icon */
+.settings-menu { position: relative; display: inline-flex; }
+.settings-popover {
+    position: absolute;
+    top: calc(100% + 6px); left: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    gap: var(--sp-l, 20px);
+    width: 400px;
+    padding: var(--sp-l, 20px);
+    background: var(--b0-container, #fff);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    border-radius: var(--radius-pop-popover, 8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.settings-popover.open { display: flex; }
+.settings-popover-header {
+    display: flex; align-items: center; gap: var(--sp-s, 12px);
+    width: 100%; height: 26px;
+}
+.settings-popover-title {
+    flex: 1 1 0; min-width: 0;
+    margin: 0;
+    font-size: 16px; font-weight: 500;
+    line-height: 26px; letter-spacing: 0.16px;
+    color: var(--text-n9);
+}
+.settings-popover-close {
+    width: 16px; height: 16px; flex-shrink: 0;
+    padding: 0; border: none; background: transparent;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0.9; transition: opacity .15s ease;
+}
+.settings-popover-close:hover { opacity: 1; }
+.settings-popover-close-icon {
+    width: 16px; height: 16px; display: inline-block;
+    background-color: var(--text-n9);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/close-l1.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.settings-field {
+    display: flex; flex-direction: column;
+    gap: var(--sp-xs, 8px);
+    width: 100%;
+}
+.settings-field--textarea { gap: var(--sp-s, 12px); height: 146px; }
+.settings-field-label {
+    font-family: inherit;
+    font-size: 14px; font-weight: 400;
+    line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+}
+.settings-field-input,
+.settings-field-textarea {
+    width: 100%;
+    background: var(--b0-container, #fff);
+    border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+    border-radius: var(--radius-btn-m, 8px);
+    font-family: inherit;
+    font-size: 14px; font-weight: 400;
+    line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
+    outline: none;
+    transition: border-color .15s ease;
+}
+.settings-field-input {
+    height: 40px;
+    padding: 8px var(--sp-s, 12px);
+}
+.settings-field-textarea {
+    flex: 1 1 0; min-height: 0;
+    padding: var(--sp-s, 12px);
+    resize: none;
+}
+.settings-field-input:focus,
+.settings-field-textarea:focus { border-color: var(--line-l9, rgba(0,0,0,0.9)); }
+.settings-more {
+    display: flex; align-items: center; gap: 4px;
+    padding: 0; width: 100%;
+    background: transparent; border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+.settings-more-label {
+    flex: 1 1 0; min-width: 0;
+    text-align: left;
+    font-size: 14px; font-weight: 400;
+    line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+    transition: color .15s ease;
+}
+.settings-more:hover .settings-more-label { color: var(--text-n9); }
+.settings-more-chev {
+    width: 12px; height: 12px; flex-shrink: 0;
+    background-color: var(--text-n7, rgba(0,0,0,0.7));
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    transition: background-color .15s ease;
+}
+.settings-more:hover .settings-more-chev { background-color: var(--text-n9); }
+
+/* history popover (creator variant) — version timeline anchored under history icon */
+.history-menu { position: relative; display: inline-flex; }
+.history-popover {
+    position: absolute;
+    top: calc(100% + 6px); left: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    width: 400px;
+    max-height: min(560px, calc(100vh - 80px));
+    padding: var(--sp-xxs, 4px);
+    background: var(--b0-container, #fff);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    border-radius: var(--radius-pop-popover, 8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    overflow-y: auto;
+    font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.history-popover.open { display: flex; }
+.history-row {
+    display: flex; align-items: flex-start; gap: var(--sp-s, 12px);
+    padding: var(--sp-s, 12px);
+    border-radius: var(--radius-ct-m, 6px);
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.history-row:hover { background: var(--b-r03); }
+.history-row-body {
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; gap: 4px;
+}
+.history-row-title {
+    font-family: inherit;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
+    word-break: break-word;
+}
+.history-row-version { font-weight: 500; }
+.history-row-bullet {
+    margin: 0 6px;
+    color: var(--text-n3, rgba(0,0,0,0.3));
+}
+.history-row-meta {
+    display: flex; align-items: center; gap: var(--sp-xs, 8px);
+    font-family: inherit;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5);
+}
+.history-row-meta-sep {
+    color: var(--text-n3, rgba(0,0,0,0.3));
+    user-select: none;
+}
+.history-row-meta-viewing {
+    display: inline-flex; align-items: center; gap: 4px;
+}
+.history-row-eye {
+    width: 14px; height: 14px;
+    display: inline-block;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/eye-l.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/eye-l.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.history-row-check {
+    width: 16px; height: 16px; flex-shrink: 0;
+    margin-top: 3px; /* visually align with the title cap-height */
+    background-color: var(--main-m1);
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/check-l1.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+
 .pb-action-count {
     font-family: inherit;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
@@ -1164,6 +1371,37 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     return 'Remix ' + ref + ' — customize it based on my preferences and deploy as a new playbook under my account.';
   }
 
+  function buildHistoryEntries() {
+    return [
+      { version: 'v1.2.0', desc: 'Main tabs upgraded to tab-l (16px, gap 24px, padding-bottom 6px)', date: '04/27/2026 16:20', active: true },
+      { version: 'v1.1.0', desc: 'Tab bar CSS rewritten to match Alva template: border-bottom on wrapper-row, flex-end alignment, horizontal scroll, right-group padding, responsive breakpoint', date: '04/27/2026 16:16' },
+      { version: 'v1.0.0', desc: 'Remix from @yy11/next-bottleneck — tab bar CSS/HTML fixed to Alva Design System spec (7 items)', date: '04/27/2026 16:08' },
+      { version: 'draft', desc: 'Draft', date: '04/27/2026 16:08' }
+    ];
+  }
+
+  function renderHistory(entries) {
+    return entries.map(function (e) {
+      var meta = '<span>' + esc(e.date) + '</span>';
+      var check = e.active
+        ? '<span class="history-row-check" aria-hidden="true"></span>'
+        : '';
+      return (
+        '<div class="history-row" role="button" tabindex="0" data-history-version="' + esc(e.version) + '"' + (e.active ? ' aria-current="true"' : '') + '>' +
+          '<div class="history-row-body">' +
+            '<div class="history-row-title">' +
+              '<span class="history-row-version">' + esc(e.version) + '</span>' +
+              '<span class="history-row-bullet" aria-hidden="true">•</span>' +
+              '<span>' + esc(e.desc) + '</span>' +
+            '</div>' +
+            '<div class="history-row-meta">' + meta + '</div>' +
+          '</div>' +
+          check +
+        '</div>'
+      );
+    }).join('');
+  }
+
   function buildExternalRemixPrompt(title) {
     var ref = '@alva/' + (slugify(title) || 'playbook');
     return 'Remix Playbook(' + ref + '):\\n\\n' +
@@ -1190,7 +1428,41 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       && host.getAttribute('alerts-connected') !== 'false';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
+    var creator = host.hasAttribute('creator')
+      && host.getAttribute('creator') !== 'false';
     var feeds = readFeeds(host);
+
+    var creatorBlock = creator
+      ? '<div class="pb-creator-actions">' +
+          '<div class="settings-menu">' +
+            '<button class="pb-creator-icon-btn" type="button" aria-label="Settings" data-creator-settings aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-settings"></span></button>' +
+            '<div class="settings-popover" data-settings-popover role="dialog" aria-label="Setting" aria-hidden="true">' +
+              '<div class="settings-popover-header">' +
+                '<h2 class="settings-popover-title">Setting</h2>' +
+                '<button class="settings-popover-close" type="button" aria-label="Close" data-settings-close><span class="settings-popover-close-icon"></span></button>' +
+              '</div>' +
+              '<div class="settings-field">' +
+                '<label class="settings-field-label">Title</label>' +
+                '<input class="settings-field-input" type="text" value="' + esc(title) + '" />' +
+              '</div>' +
+              '<div class="settings-field settings-field--textarea">' +
+                '<label class="settings-field-label">Description</label>' +
+                '<textarea class="settings-field-textarea">' + esc(description) + '</textarea>' +
+              '</div>' +
+              '<button class="settings-more" type="button" data-settings-more>' +
+                '<span class="settings-more-label">More Settings</span>' +
+                '<span class="settings-more-chev" aria-hidden="true"></span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="history-menu">' +
+            '<button class="pb-creator-icon-btn" type="button" aria-label="History" data-creator-history aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-history"></span></button>' +
+            '<div class="history-popover" data-history-popover role="dialog" aria-label="Version history" aria-hidden="true">' +
+              renderHistory(buildHistoryEntries()) +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      : '';
 
     var authorBlock = owner
       ? '<span class="pb-pill pb-pill--author">' +
@@ -1253,6 +1525,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         '<div class="pb-top">' +
           '<div class="pb-top-left">' +
             '<h1 class="pb-title">' + esc(title) + '</h1>' +
+            creatorBlock +
           '</div>' +
           '<div class="pb-actions">' +
             '<div class="share-menu">' +
@@ -1303,7 +1576,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                   '<div class="star-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
                   '<p class="star-popover-title">Connect Agents to Get Notified</p>' +
                   '<a href="https://t.me/alva_ai_bot" target="_blank" rel="noopener" class="star-popover-cta">' +
-                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
                     '<span>Connect Telegram</span>' +
                   '</a>' +
                   '<div class="star-popover-socials">' +
@@ -1398,7 +1671,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                           '</button>' +
                         '</div>' +
                         '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg') + '" alt="" />' +
+                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg') + '" alt="" />' +
                           '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
                           '<div class="alerts-connected-toggle">' +
                             '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
@@ -1442,6 +1715,87 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupSettingsPopover(host) {
+    var trigger = host.querySelector('[data-creator-settings]');
+    var popover = host.querySelector('[data-settings-popover]');
+    if (!trigger || !popover) return;
+    var closeBtn = popover.querySelector('[data-settings-close]');
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        close();
+      });
+    }
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
+  }
+
+  function setupHistoryPopover(host) {
+    var trigger = host.querySelector('[data-creator-history]');
+    var popover = host.querySelector('[data-history-popover]');
+    if (!trigger || !popover) return;
+
+    function close() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      closeOtherPopovers(host, close);
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    registerPopover(host, close);
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (popover.classList.contains('open')) close(); else open();
+    });
+
+    var onDocClick = function (e) {
+      if (!popover.classList.contains('open')) return;
+      if (popover.contains(e.target) || trigger.contains(e.target)) return;
+      close();
+    };
+    var onKeydown = function (e) { if (e.key === 'Escape') close(); };
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeydown);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKeydown);
+    });
   }
 
   function setupReadmeTrigger(host) {
@@ -1839,7 +2193,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
             avatarEl.setAttribute('data-platform', platform);
             var iconSrc = platform === 'discord'
               ? '/alva-infant/logo-social-discord.svg'
-              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg';
+              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg';
             if (avatarEl.tagName === 'IMG') avatarEl.setAttribute('src', iconSrc);
           }
           popover.classList.add('is-connected');
@@ -1916,6 +2270,8 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         setupStarPopover(self);
         setupAlertsPopover(self);
         setupSharePopover(self);
+        setupSettingsPopover(self);
+        setupHistoryPopover(self);
         setupReadmeTrigger(self);
         setupDiscussTrigger(self);
         updateDiscussActive(self);
