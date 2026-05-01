@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-D3tqD6o5.js";import{t as n}from"./inlinePlaybookHeader-Tths1C5s.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-D3tqD6o5.js";import{t as n}from"./inlinePlaybookHeader-C7-GjGJ-.js";var r=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -477,10 +477,12 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-D3tqD6o5.
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
 <playbook-header
     title="Template-Notification"
-    freq="Daily 12:00 UTC"
+    freq="1d"
     last-updated="15 minutes ago"
     owner="YGGYLL"
     owner-seed="YGGYLL"
+    built-on="@leo/BTC Ultimate AI Trader"
+    built-on-seed="leo"
     readme-modal="methodology-modal"
     get-alerts
     star="12" remix="56" comments="6"

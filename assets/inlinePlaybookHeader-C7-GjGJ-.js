@@ -356,8 +356,11 @@ playbook-header { display: contents; }
     color: var(--text-n9);
     white-space: nowrap; flex-shrink: 0;
 }
-button.pb-pill { cursor: pointer; transition: background .15s, border-color .15s; }
-button.pb-pill:hover { background: var(--b-r03); }
+button.pb-pill,
+a.pb-pill { cursor: pointer; transition: background .15s, border-color .15s; }
+a.pb-pill { text-decoration: none; color: var(--text-n9); }
+button.pb-pill:hover,
+a.pb-pill:hover { background: var(--b-r03); }
 button.pb-pill.is-open { background: var(--b-r03); border-color: var(--line-l9); }
 /* Author pill: avatar (20px) + name. Left padding tighter to hug avatar. */
 .pb-pill--author { padding-left: 2px; padding-right: 8px; height: auto; }
@@ -381,6 +384,19 @@ button.pb-pill.is-open { background: var(--b-r03); border-color: var(--line-l9);
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
 }
 button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
+/* Built-on pill: "Built on:" + avatar (14px) + creator handle */
+.pb-pill--built-on { gap: 4px; }
+.pb-built-on-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
+.pb-built-on-avatar {
+    width: 14px; height: 14px; border-radius: 50%;
+    flex-shrink: 0; object-fit: cover;
+    background: #f0f0f0;
+}
+.pb-built-on-name {
+    max-width: 120px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    color: var(--text-n9);
+}
 /* Status pill: dot + automations + • + freq */
 .pb-pill--status { padding-left: 5px; padding-right: 8px; }
 .pb-pill--status .pb-pill-sep {
@@ -1430,6 +1446,8 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     var description = host.getAttribute('description') || '';
     var creator = host.hasAttribute('creator')
       && host.getAttribute('creator') !== 'false';
+    var builtOn = host.getAttribute('built-on') || '';
+    var builtOnSeed = host.getAttribute('built-on-seed') || builtOn;
     var feeds = readFeeds(host);
 
     var creatorBlock = creator
@@ -1465,10 +1483,10 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       : '';
 
     var authorBlock = owner
-      ? '<span class="pb-pill pb-pill--author">' +
+      ? '<a class="pb-pill pb-pill--author" href="#user-profile" target="_top">' +
           '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
           '<span>' + esc(owner) + '</span>' +
-        '</span>'
+        '</a>'
       : '';
 
     var readmeModal = host.getAttribute('readme-modal') || '';
@@ -1476,6 +1494,14 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       ? '<button class="pb-pill pb-pill--readme" type="button" data-readme-trigger>' +
           '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
           '<span>README</span>' +
+        '</button>'
+      : '';
+
+    var builtOnBlock = builtOn
+      ? '<button class="pb-pill pb-pill--built-on" type="button" data-built-on-trigger>' +
+          '<span class="pb-built-on-label">Built on:</span>' +
+          '<img class="pb-built-on-avatar" src="' + avatarUrl(builtOnSeed) + '" alt="" />' +
+          '<span class="pb-built-on-name">' + esc(builtOn) + '</span>' +
         '</button>'
       : '';
 
@@ -1712,6 +1738,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
           authorBlock +
           readmeBlock +
           statusBlock +
+          builtOnBlock +
         '</div>' +
         descBlock +
       '</section>';
@@ -3227,4 +3254,4 @@ discussion-panel[open] {
   --shadow-s: 0 6px 20px 0 rgba(0, 0, 0, 0.24);
   --shadow-l: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
 }
-`,a=`<link rel="stylesheet" href="./styles/tokens.css" />`,o=`<link rel="stylesheet" href="./components/playbook-header.css" />`,s=`<script src="./components/playbook-header.js" defer><\/script>`,c=`<link rel="stylesheet" href="./components/discussion-panel.css" />`,l=`<script src="./components/discussion-panel.js" defer><\/script>`;function u(e){return e.replace(/<\/script>/gi,`<\\/script>`)}function d(d){return d.replace(a,`<style>${i}</style>`).replace(o,`<style>${e}</style>`).replace(s,`<script>${u(t)}<\/script>`).replace(c,`<style>${n}</style>`).replace(l,`<script>${u(r)}<\/script>`)}export{d as t};
+`,a=`<link rel="stylesheet" href="./styles/tokens.css" />`,o=`<link rel="stylesheet" href="./components/playbook-header.css" />`,s=`<script src="./components/playbook-header.js" defer><\/script>`,c=`<link rel="stylesheet" href="./components/discussion-panel.css" />`,l=`<script src="./components/discussion-panel.js" defer><\/script>`;function u(e){return e.replace(/<\/script>/gi,`<\\/script>`)}function d(e){return e.replace(/\/alva-infant\//g,`/alva-infant/`)}function f(f){return f.replace(a,`<style>${i}</style>`).replace(o,`<style>${e}</style>`).replace(s,`<script>${u(d(t))}<\/script>`).replace(c,`<style>${n}</style>`).replace(l,`<script>${u(d(r))}<\/script>`)}export{f as t};
