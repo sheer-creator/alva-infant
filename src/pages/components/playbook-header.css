@@ -356,8 +356,11 @@ playbook-header { display: contents; }
     color: var(--text-n9);
     white-space: nowrap; flex-shrink: 0;
 }
-button.pb-pill { cursor: pointer; transition: background .15s, border-color .15s; }
-button.pb-pill:hover { background: var(--b-r03); }
+button.pb-pill,
+a.pb-pill { cursor: pointer; transition: background .15s, border-color .15s; }
+a.pb-pill { text-decoration: none; color: var(--text-n9); }
+button.pb-pill:hover,
+a.pb-pill:hover { background: var(--b-r03); }
 button.pb-pill.is-open { background: var(--b-r03); border-color: var(--line-l9); }
 /* Author pill: avatar (20px) + name. Left padding tighter to hug avatar. */
 .pb-pill--author { padding-left: 2px; padding-right: 8px; height: auto; }
@@ -381,6 +384,19 @@ button.pb-pill.is-open { background: var(--b-r03); border-color: var(--line-l9);
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg');
 }
 button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
+/* Built-on pill: "Built on:" + avatar (14px) + creator handle */
+.pb-pill--built-on { gap: 4px; }
+.pb-built-on-label { color: var(--text-n5, rgba(0,0,0,0.5)); }
+.pb-built-on-avatar {
+    width: 14px; height: 14px; border-radius: 50%;
+    flex-shrink: 0; object-fit: cover;
+    background: #f0f0f0;
+}
+.pb-built-on-name {
+    max-width: 120px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    color: var(--text-n9);
+}
 /* Status pill: dot + automations + • + freq */
 .pb-pill--status { padding-left: 5px; padding-right: 8px; }
 .pb-pill--status .pb-pill-sep {

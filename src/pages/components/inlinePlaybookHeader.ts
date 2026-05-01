@@ -14,6 +14,13 @@ function escapeScript(src: string): string {
   return src.replace(/<\/script>/gi, '<\\/script>');
 }
 
+// playbook-header.js was authored against Infant's /alva-infant/ deploy base.
+// Rebase to the host project's actual BASE_URL so /alva-infant/foo.svg becomes
+// e.g. /foo.svg in Freshman (root deploy) and stays /alva-infant/foo.svg in Infant.
+function rebaseAssets(src: string): string {
+  return src.replace(/\/alva-infant\//g, import.meta.env.BASE_URL);
+}
+
 /**
  * Playbook HTML files reference design tokens, header CSS and header JS via
  * relative <link>/<script> tags. When injected into an iframe via `srcDoc`,
@@ -24,7 +31,7 @@ export function inlinePlaybookHeader(html: string): string {
   return html
     .replace(TOKENS_LINK, `<style>${tokensCss}</style>`)
     .replace(CSS_LINK, `<style>${headerCss}</style>`)
-    .replace(JS_SCRIPT, `<script>${escapeScript(headerJs)}</script>`)
+    .replace(JS_SCRIPT, `<script>${escapeScript(rebaseAssets(headerJs))}</script>`)
     .replace(PANEL_CSS_LINK, `<style>${panelCss}</style>`)
-    .replace(PANEL_JS_SCRIPT, `<script>${escapeScript(panelJs)}</script>`);
+    .replace(PANEL_JS_SCRIPT, `<script>${escapeScript(rebaseAssets(panelJs))}</script>`);
 }

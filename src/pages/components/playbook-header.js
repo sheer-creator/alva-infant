@@ -165,6 +165,8 @@
     var description = host.getAttribute('description') || '';
     var creator = host.hasAttribute('creator')
       && host.getAttribute('creator') !== 'false';
+    var builtOn = host.getAttribute('built-on') || '';
+    var builtOnSeed = host.getAttribute('built-on-seed') || builtOn;
     var feeds = readFeeds(host);
 
     var creatorBlock = creator
@@ -200,10 +202,10 @@
       : '';
 
     var authorBlock = owner
-      ? '<span class="pb-pill pb-pill--author">' +
+      ? '<a class="pb-pill pb-pill--author" href="#user-profile" target="_top">' +
           '<img class="pb-meta-avatar" src="' + avatarUrl(ownerSeed) + '" alt="' + esc(owner) + '" />' +
           '<span>' + esc(owner) + '</span>' +
-        '</span>'
+        '</a>'
       : '';
 
     var readmeModal = host.getAttribute('readme-modal') || '';
@@ -211,6 +213,14 @@
       ? '<button class="pb-pill pb-pill--readme" type="button" data-readme-trigger>' +
           '<span class="pb-meta-icon ic-readme" aria-hidden="true"></span>' +
           '<span>README</span>' +
+        '</button>'
+      : '';
+
+    var builtOnBlock = builtOn
+      ? '<button class="pb-pill pb-pill--built-on" type="button" data-built-on-trigger>' +
+          '<span class="pb-built-on-label">Built on:</span>' +
+          '<img class="pb-built-on-avatar" src="' + avatarUrl(builtOnSeed) + '" alt="" />' +
+          '<span class="pb-built-on-name">' + esc(builtOn) + '</span>' +
         '</button>'
       : '';
 
@@ -447,6 +457,7 @@
           authorBlock +
           readmeBlock +
           statusBlock +
+          builtOnBlock +
         '</div>' +
         descBlock +
       '</section>';
