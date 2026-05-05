@@ -1,19 +1,20 @@
 import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
 
 const VALID_PAGES = [
-  'home', 'explore', 'screener', 'template-screener', 'template-thesis', 'template-whatif', 'template-notification', 'agent',
-  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'api-keys', 'alva-skills',
+  'home', 'explore', 'screener', 'trade-notification-test', 'template-screener', 'template-thesis', 'template-whatif', 'template-notification', 'agent',
+  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys', 'alva-skills',
   'user-profile', 'pricing', 'skills',
 ] as const;
 export type Page = (typeof VALID_PAGES)[number] | `thread/${string}`;
 
 const SETTINGS_PAGES: readonly Page[] = [
-  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'api-keys', 'alva-skills',
+  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys', 'alva-skills',
 ];
 
 const Home = lazy(() => import('../pages/Home'));
 const Explore = lazy(() => import('../pages/Explore'));
 const Screener = lazy(() => import('../pages/Screener'));
+const TradeNotificationTest = lazy(() => import('../pages/TradeNotificationTest'));
 const TemplateScreener = lazy(() => import('../pages/TemplateScreener'));
 const TemplateThesis = lazy(() => import('../pages/TemplateThesis'));
 const TemplateWhatif = lazy(() => import('../pages/TemplateWhatif'));
@@ -25,6 +26,7 @@ const Billing = lazy(() => import('../pages/Billing'));
 const PortfolioSettings = lazy(() => import('../pages/PortfolioSettings'));
 const AlvaAgentSettings = lazy(() => import('../pages/AlvaAgentSettings'));
 const Automations = lazy(() => import('../pages/Automations'));
+const Notifications = lazy(() => import('../pages/Notifications'));
 const ApiKeys = lazy(() => import('../pages/ApiKeys'));
 const AlvaSkills = lazy(() => import('../pages/AlvaSkills'));
 
@@ -73,6 +75,7 @@ export default function App() {
       {page === 'home' && <Home onNavigate={navigate} />}
       {page === 'explore' && <Explore onNavigate={navigate} />}
       {page === 'screener' && <Screener onNavigate={navigate} />}
+      {page === 'trade-notification-test' && <TradeNotificationTest onNavigate={navigate} />}
       {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
       {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
       {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
@@ -83,6 +86,7 @@ export default function App() {
       {page === 'portfolio-settings' && <PortfolioSettings onNavigate={navigate} />}
       {page === 'alva-agent' && <AlvaAgentSettings onNavigate={navigate} />}
       {page === 'automations' && <Automations onNavigate={navigate} />}
+      {page === 'notifications' && <Notifications onNavigate={navigate} />}
       {page === 'api-keys' && <ApiKeys onNavigate={navigate} />}
       {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
       {threadId && <Thread threadId={threadId} onNavigate={navigate} />}
