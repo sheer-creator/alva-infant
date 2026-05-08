@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { SettingsLayout } from '@/app/components/shell/SettingsLayout';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
+import { DiscordConnectModal } from '@/app/components/shared/DiscordConnectModal';
 import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
 
 const FONT = "'Delight', sans-serif";
@@ -241,6 +242,7 @@ function ToggleSection({
 
 export default function AlvaAgentSettings({ onNavigate }: { onNavigate: (page: Page) => void }) {
   const { platforms, active, has, connect, disconnect, setActive } = useAgentPlatforms();
+  const [discordFlowOpen, setDiscordFlowOpen] = useState(false);
   const INITIAL_PROMPT = '';
   const INITIAL_CUSTOMIZE_ON = true;
   const INITIAL_MEMORY_ON = true;
@@ -299,7 +301,11 @@ Read .claude/skills/frontend-monorepo-conventions/SKILL.md and AGENTS.md for pro
                   )}
                 </div>
                 <button
-                  onClick={() => (isBound ? disconnect(p.id) : connect(p.id))}
+                  onClick={() => {
+                    if (isBound) { disconnect(p.id); return; }
+                    if (p.id === 'discord') { setDiscordFlowOpen(true); return; }
+                    connect(p.id);
+                  }}
                   className="text-[14px] leading-[22px] cursor-pointer"
                   style={{ color: isBound ? 'var(--text-n5)' : 'var(--main-m1)', background: 'none', border: 'none', fontFamily: FONT, fontWeight: 400 }}
                 >
@@ -339,6 +345,15 @@ Read .claude/skills/frontend-monorepo-conventions/SKILL.md and AGENTS.md for pro
       >
         Save
       </button>
+
+      <DiscordConnectModal
+        isOpen={discordFlowOpen}
+        onClose={() => setDiscordFlowOpen(false)}
+        onPaired={() => {
+          setDiscordFlowOpen(false);
+          connect('discord');
+        }}
+      />
     </SettingsLayout>
   );
 }
