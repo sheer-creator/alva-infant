@@ -3254,4 +3254,24 @@ discussion-panel[open] {
   --shadow-s: 0 6px 20px 0 rgba(0, 0, 0, 0.24);
   --shadow-l: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
 }
+
+/* Alva Markdown — bullet list */
+.alva-md-bullets {
+  margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 4px;
+  list-style: none;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+  color: var(--text-n9);
+}
+.alva-md-bullets li {
+  position: relative; margin: 0; padding-left: 20px;
+}
+.alva-md-bullets li::before {
+  content: ''; position: absolute;
+  left: 7.5px; top: 8.5px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-n9);
+}
 `,a=`<link rel="stylesheet" href="./styles/tokens.css" />`,o=`<link rel="stylesheet" href="./components/playbook-header.css" />`,s=`<script src="./components/playbook-header.js" defer><\/script>`,c=`<link rel="stylesheet" href="./components/discussion-panel.css" />`,l=`<script src="./components/discussion-panel.js" defer><\/script>`;function u(e){return e.replace(/<\/script>/gi,`<\\/script>`)}function d(e){return e.replace(/\/alva-infant\//g,`/alva-infant/`)}function f(f){return f.replace(a,`<style>${i}</style>`).replace(o,`<style>${e}</style>`).replace(s,`<script>${u(d(t))}<\/script>`).replace(c,`<style>${n}</style>`).replace(l,`<script>${u(d(r))}<\/script>`)}export{f as t};
