@@ -81,6 +81,8 @@ function AppShellInner({
     contextTag,
     activeConversationId,
     setActiveConversation,
+    inspectorActive,
+    addElementQuote,
   } = useChatContext();
   const showChat = chatOpen && contextTag !== null;
   const [panelWidth, setPanelWidth] = useState(DEFAULT_PANEL_W);
@@ -89,6 +91,9 @@ function AppShellInner({
   const startW = useRef(DEFAULT_PANEL_W);
   const [threadsRailOpen, setThreadsRailOpen] = useState(false);
   const sidebarCompact = false;
+
+  const inspectorActiveRef = useRef(inspectorActive);
+  inspectorActiveRef.current = inspectorActive;
 
   const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -109,10 +114,28 @@ function AppShellInner({
       if (data.type === 'alva:navigate' && typeof data.page === 'string') {
         onNavigate(data.page as Page);
       }
+      /* inspector → quote */
+      if (data.type === 'alva:inspector-quote') {
+        addElementQuote({
+          index: data.index ?? 0,
+          selector: data.selector,
+          tagName: data.tagName,
+          newText: data.newText ?? null,
+          originalText: data.originalText ?? null,
+          instruction: data.instruction ?? null,
+        });
+      }
+      /* iframe (re)loaded — re-send current inspector state */
+      if (data.type === 'alva:inspector-ready') {
+        const src = e.source as Window | null;
+        if (src && inspectorActiveRef.current) {
+          try { src.postMessage({ type: 'alva:inspector-activate' }, '*'); } catch (_) {}
+        }
+      }
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [closeChat, openChatWithPrefill, onNavigate]);
+  }, [closeChat, openChatWithPrefill, onNavigate, addElementQuote]);
 
   useEffect(() => {
     if (!chatOpen) return;
@@ -120,6 +143,16 @@ function AppShellInner({
       try { f.contentWindow?.postMessage({ type: 'alva:drawer-open', drawer: 'chat' }, '*'); } catch (_) {}
     });
   }, [chatOpen]);
+
+  /* notify iframes when inspector mode toggles or chat panel opens/closes */
+  useEffect(() => {
+    const msg = inspectorActive
+      ? { type: 'alva:inspector-activate' }
+      : { type: 'alva:inspector-deactivate' };
+    document.querySelectorAll('iframe').forEach((f) => {
+      try { f.contentWindow?.postMessage(msg, '*'); } catch (_) {}
+    });
+  }, [inspectorActive, chatOpen]);
 
   const handleUserEnter = useCallback(() => {
     if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }

@@ -75,6 +75,16 @@ export interface OverlayData {
   answer?: StreamingState['answer'];
 }
 
+/* ── Element inspector quote ── */
+export interface ElementQuote {
+  index: number;
+  selector: string;
+  tagName: string;
+  newText: string | null;
+  originalText: string | null;
+  instruction: string | null;
+}
+
 /* ── Streaming simulation ── */
 function createStreamSimulation(
   setState: (fn: (prev: StreamingState) => StreamingState) => void,
@@ -218,6 +228,13 @@ interface ChatContextValue {
   dismissOverlay: () => void;
   prefillPrompt: PrefillPrompt | null;
   clearPrefill: () => void;
+  /* inspector */
+  inspectorActive: boolean;
+  toggleInspector: () => void;
+  elementQuotes: ElementQuote[];
+  addElementQuote: (q: ElementQuote) => void;
+  removeElementQuote: (index: number) => void;
+  clearElementQuotes: () => void;
 }
 
 const INITIAL_STREAMING: StreamingState = {
@@ -248,6 +265,8 @@ export function ChatProvider({
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
   const [overlay, setOverlay] = useState<OverlayData | null>(null);
   const [prefillPrompt, setPrefillPrompt] = useState<PrefillPrompt | null>(null);
+  const [inspectorActive, setInspectorActive] = useState(false);
+  const [elementQuotes, setElementQuotes] = useState<ElementQuote[]>([]);
   const simRef = useRef<{ cancel: () => void; continueStream: () => void } | null>(null);
 
   useEffect(() => {
@@ -289,6 +308,29 @@ export function ChatProvider({
   }, []);
 
   const clearPrefill = useCallback(() => setPrefillPrompt(null), []);
+
+  const toggleInspector = useCallback(() => {
+    setInspectorActive(v => !v);
+  }, []);
+
+  const addElementQuote = useCallback((q: ElementQuote) => {
+    setElementQuotes(prev => [...prev, q]);
+    setChatOpen(true);
+  }, []);
+
+  const removeElementQuote = useCallback((index: number) => {
+    setElementQuotes(prev => prev.filter(q => q.index !== index));
+    document.querySelectorAll('iframe').forEach((f) => {
+      try { f.contentWindow?.postMessage({ type: 'alva:inspector-remove-badge', index }, '*'); } catch (_) {}
+    });
+  }, []);
+
+  const clearElementQuotes = useCallback(() => {
+    setElementQuotes([]);
+    document.querySelectorAll('iframe').forEach((f) => {
+      try { f.contentWindow?.postMessage({ type: 'alva:inspector-clear-badges' }, '*'); } catch (_) {}
+    });
+  }, []);
 
   const setActiveConversation = useCallback((id: string) => {
     setActiveConversationId(id);
@@ -333,12 +375,14 @@ export function ChatProvider({
       streamingState, pendingPrompt, sendPrompt,
       overlay, dismissOverlay,
       prefillPrompt, clearPrefill,
+      inspectorActive, toggleInspector, elementQuotes, addElementQuote, removeElementQuote, clearElementQuotes,
     }),
     [chatOpen, hasInitialInput, toggleChat, closeChat, openChat, openChatWithPrefill, reopenChat,
      contextTag, activePage, activeConversationId, setActiveConversation,
      streamingState, pendingPrompt, sendPrompt,
      overlay, dismissOverlay,
-     prefillPrompt, clearPrefill],
+     prefillPrompt, clearPrefill,
+     inspectorActive, toggleInspector, elementQuotes, addElementQuote, removeElementQuote, clearElementQuotes],
   );
 
   return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

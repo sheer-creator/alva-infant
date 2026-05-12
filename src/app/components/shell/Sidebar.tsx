@@ -45,7 +45,6 @@ const STARRED: { label: string; page?: Page }[] = [
 
 const MY_PLAYBOOKS: { label: string; page?: Page }[] = [
   { label: 'Feed Test', page: 'screener' },
-  { label: 'Trade Notification Test', page: 'trade-notification-test' },
 ];
 
 export function Sidebar({
