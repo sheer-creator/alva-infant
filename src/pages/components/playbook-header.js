@@ -167,6 +167,14 @@
       && host.getAttribute('creator') !== 'false';
     var builtOn = host.getAttribute('built-on') || '';
     var builtOnSeed = host.getAttribute('built-on-seed') || builtOn;
+    var builtWith = host.getAttribute('built-with') || '';
+    var builtWithSeed = host.getAttribute('built-with-seed') || builtWith;
+    var builtWithAvatar = host.getAttribute('built-with-avatar') || '';
+    var builtWithCreator = host.getAttribute('built-with-creator') || '';
+    var builtWithCreatorAvatar = host.getAttribute('built-with-creator-avatar') || builtWithAvatar;
+    var builtWithUpdated = host.getAttribute('built-with-updated') || '';
+    var builtWithDesc = host.getAttribute('built-with-desc') || '';
+    var builtWithSocials = (host.getAttribute('built-with-socials') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     var feeds = readFeeds(host);
 
     var creatorBlock = creator
@@ -222,6 +230,48 @@
           '<img class="pb-built-on-avatar" src="' + avatarUrl(builtOnSeed) + '" alt="" />' +
           '<span class="pb-built-on-name">' + esc(builtOn) + '</span>' +
         '</button>'
+      : '';
+
+    var socialIcons = {
+      discord: '<img src="/alva-infant/logo-social-discord.svg" alt="" />',
+      telegram: '<img src="/logo-telegram.svg" alt="" />',
+      x: '<svg viewBox="0 0 24 24" fill="rgba(0,0,0,0.85)" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+      instagram: '<svg viewBox="0 0 24 24" fill="rgba(0,0,0,0.85)" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>'
+    };
+    var builtWithSocialsHtml = builtWithSocials.map(function (k) {
+      var icon = socialIcons[k] || '';
+      if (!icon) return '';
+      return '<span class="pb-bw-social" aria-label="' + esc(k) + '">' + icon + '</span>';
+    }).join('');
+    var builtWithCard = (builtWithCreator || builtWithDesc)
+      ? '<div class="pb-built-with-popover" data-built-with-popover role="tooltip" aria-hidden="true">' +
+          '<div class="pb-bw-row">' +
+            '<div class="pb-bw-col">' +
+              '<span class="pb-bw-caps">Created by</span>' +
+              '<div class="pb-bw-creator">' +
+                '<img class="pb-bw-avatar" src="' + esc(builtWithCreatorAvatar) + '" alt="" />' +
+                '<span class="pb-bw-creator-name">' + esc(builtWithCreator || builtWith) + '</span>' +
+              '</div>' +
+            '</div>' +
+            (builtWithUpdated || builtWithSocialsHtml
+              ? '<div class="pb-bw-col pb-bw-col-right">' +
+                  (builtWithUpdated ? '<span class="pb-bw-caps">Last updated ' + esc(builtWithUpdated) + '</span>' : '') +
+                  (builtWithSocialsHtml ? '<div class="pb-bw-socials">' + builtWithSocialsHtml + '</div>' : '') +
+                '</div>'
+              : '') +
+          '</div>' +
+          (builtWithDesc ? '<div class="pb-bw-divider"></div><p class="pb-bw-desc">' + esc(builtWithDesc) + '</p>' : '') +
+        '</div>'
+      : '';
+    var builtWithBlock = builtWith
+      ? '<div class="pb-built-with-menu">' +
+          '<button class="pb-pill pb-pill--built-on pb-pill--built-with" type="button" data-built-with-trigger>' +
+            '<span class="pb-built-on-label">Built with:</span>' +
+            '<img class="pb-built-on-avatar" src="' + esc(builtWithAvatar || avatarUrl(builtWithSeed)) + '" alt="" />' +
+            '<span class="pb-built-on-name">' + esc(builtWith) + '</span>' +
+          '</button>' +
+          builtWithCard +
+        '</div>'
       : '';
 
     var feedsCount = feeds.length;
@@ -395,52 +445,48 @@
                             '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
                           '</button>' +
                         '</div>' +
-                        '<div class="alerts-popover-extra">' +
-                          '<p class="alerts-popover-extra-label">Same agent, more channels</p>' +
-                          '<div class="alerts-popover-chips">' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-slack.svg" alt="" /><span>Slack</span></span>' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-whatsapp.svg" alt="" /><span>WhatsApp</span></span>' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-line.svg" alt="" /><span>Line</span></span>' +
-                          '</div>' +
-                        '</div>' +
                       '</div>' +
                     '</div>' +
                     '<div class="alerts-popover-connected" data-alerts-connected>' +
                       '<p class="alerts-popover-title">Get Alerts</p>' +
                       '<div class="alerts-connected-section">' +
                         '<div class="alerts-connected-head">' +
-                          '<span class="alerts-connected-head-label">Connected</span>' +
-                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
-                            '<span>Manage Accounts</span>' +
-                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
-                          '</button>' +
-                        '</div>' +
-                        '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg') + '" alt="" />' +
-                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
+                          '<span class="alerts-connected-head-label">Automations</span>' +
                           '<div class="alerts-connected-toggle">' +
                             '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
                             '<button type="button" class="switch" data-alerts-switch role="switch" aria-checked="false"><span class="switch-thumb"></span></button>' +
                           '</div>' +
                         '</div>' +
+                        '<div class="alerts-automations-list" data-alerts-automations>' +
+                          '<div class="alerts-automation-row">' +
+                            '<span class="alerts-automation-name">ai-chip-supply-chain</span>' +
+                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
+                          '</div>' +
+                          '<div class="alerts-automation-row">' +
+                            '<span class="alerts-automation-name">space-rotation-prices</span>' +
+                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
+                          '</div>' +
+                        '</div>' +
+                        '<div class="alerts-connected-account" data-alerts-account>' +
+                          '<img class="alerts-connected-avatar" data-alerts-avatar src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                          '<span class="alerts-connected-name-label">Connected:</span>' +
+                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
+                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
+                            '<span>Manage</span>' +
+                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
+                          '</button>' +
+                        '</div>' +
                       '</div>' +
                       '<div class="alerts-signals-section">' +
-                        '<p class="alerts-signals-title">Latest Signals</p>' +
+                        '<p class="alerts-signals-title">Recent Alerts</p>' +
                         '<div class="alerts-signals-list">' +
                           '<div class="alerts-signal-card">' +
-                            '<p class="alerts-signal-date">Apr 16, 2026 · Market Close Digest</p>' +
+                            '<p class="alerts-signal-date">May 8, 12:00 PM &middot; ai-chip-supply-chain</p>' +
+                            '<p class="alerts-signal-headline"><strong>AMD to Entrust 2nm Production to Samsung Foundry Samsung Electronics has entered into substantive discussions with AMD</strong></p>' +
                             '<ul class="alerts-signal-bullets">' +
-                              '<li><strong>Top of basket:</strong> ALL (Allstate) holds #1 at Score 95 — ROE 39.5%, P/E 5.64; leadership in Insurance — Property &amp; Casualty continues.</li>' +
-                              '<li><strong>New entries:</strong> BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
-                              '<li><strong>Dropouts:</strong> TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
-                            '</ul>' +
-                          '</div>' +
-                          '<div class="alerts-signal-card">' +
-                            '<p class="alerts-signal-date">Apr 15, 2026 · Market Close Digest</p>' +
-                            '<ul class="alerts-signal-bullets">' +
-                              '<li><strong>Momentum:</strong> NVDA, META extend leadership on improving estimates; Score moves +2 avg.</li>' +
-                              '<li><strong>Re-rating:</strong> Energy basket re-rates higher on improving ROE and lower leverage.</li>' +
-                              '<li><strong>Watch:</strong> DIS, NKE drift lower — guidance risks heading into Q2 prints.</li>' +
+                              '<li>Top of basket: ALL (Allstate) holds #1 at Score 95 &mdash; ROE 39.5%, P/E 5.64; leadership in Insurance &mdash; Property &amp; Casualty continues.</li>' +
+                              '<li>New entries: BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
+                              '<li>Dropouts: TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
                             '</ul>' +
                           '</div>' +
                         '</div>' +
@@ -458,9 +504,39 @@
           readmeBlock +
           statusBlock +
           builtOnBlock +
+          builtWithBlock +
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupBuiltWithHover(host) {
+    var trigger = host.querySelector('[data-built-with-trigger]');
+    var popover = host.querySelector('[data-built-with-popover]');
+    if (!trigger || !popover) return;
+    var hideTimer = null;
+    function show() {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+    }
+    function hide() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+    }
+    function delayedHide() {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, 160);
+    }
+    trigger.addEventListener('mouseenter', show);
+    trigger.addEventListener('mouseleave', delayedHide);
+    popover.addEventListener('mouseenter', show);
+    popover.addEventListener('mouseleave', delayedHide);
+    trigger.addEventListener('focus', show);
+    trigger.addEventListener('blur', delayedHide);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      if (hideTimer) clearTimeout(hideTimer);
+    });
   }
 
   function setupSettingsPopover(host) {
@@ -1019,6 +1095,7 @@
         setupSettingsPopover(self);
         setupHistoryPopover(self);
         setupReadmeTrigger(self);
+        setupBuiltWithHover(self);
         setupDiscussTrigger(self);
         updateDiscussActive(self);
       };
