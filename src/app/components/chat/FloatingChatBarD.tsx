@@ -263,14 +263,14 @@ export function FloatingChatBarD() {
                 title="Expand to chat panel"
                 onClick={() => { doCollapse(); openChat(false); }}
               >
-                <CdnIcon name="unfoldd-l" size={16} color="rgba(0,0,0,0.35)" />
+                <CdnIcon name="unfoldd-l" size={16} color="var(--text-n3)" />
               </button>
               <button
                 className="flex items-center justify-center size-[28px] rounded-[6px] cursor-pointer hover:bg-black/[0.04] transition-colors"
                 title="Collapse"
                 onClick={doCollapse}
               >
-                <CdnIcon name="minus-l2" size={16} color="rgba(0,0,0,0.35)" />
+                <CdnIcon name="minus-l2" size={16} color="var(--text-n3)" />
               </button>
             </div>
           </div>
