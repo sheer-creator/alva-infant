@@ -1,10 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Page } from '../../App';
 import { Sidebar } from './Sidebar';
-import { ChatProvider, useChatContext } from '../chat/ChatContext';
+import { useChatContext } from '../chat/ChatContext';
 import { ChatPanel } from '../chat/ChatPanel';
 import {
   CHAT_TRIGGER_MODE,
+  isPlaybookOwnerPage,
   type ChatTriggerMode,
   type ThreadsEntryMode,
 } from '@/lib/chat-config';
@@ -38,7 +39,7 @@ function HomeThreadsCorner({ onNavigate }: { onNavigate: (page: Page) => void })
             className="cursor-pointer rounded-[8px] p-[6px] transition-colors hover:bg-black/[0.06]"
             aria-label="Recent threads"
           >
-            <CdnIcon name="history-l" size={16} color="rgba(0,0,0,0.85)" />
+            <CdnIcon name="history-l" size={16} color="var(--text-n9)" />
           </button>
         }
       />
@@ -55,7 +56,7 @@ function HomeThreadsLeft({ onToggle }: { onToggle: () => void }) {
         aria-label="Recent threads"
         onClick={onToggle}
       >
-        <CdnIcon name="history-l" size={16} color="rgba(0,0,0,0.85)" />
+        <CdnIcon name="history-l" size={16} color="var(--text-n9)" />
       </button>
     </div>
   );
@@ -129,7 +130,7 @@ function AppShellInner({
       if (data.type === 'alva:inspector-ready') {
         const src = e.source as Window | null;
         if (src && inspectorActiveRef.current) {
-          try { src.postMessage({ type: 'alva:inspector-activate' }, '*'); } catch (_) {}
+          try { src.postMessage({ type: 'alva:inspector-activate', viewerMode: !isPlaybookOwnerPage(activePage || '') }, '*'); } catch (_) {}
         }
       }
     };
@@ -147,12 +148,12 @@ function AppShellInner({
   /* notify iframes when inspector mode toggles or chat panel opens/closes */
   useEffect(() => {
     const msg = inspectorActive
-      ? { type: 'alva:inspector-activate' }
+      ? { type: 'alva:inspector-activate', viewerMode: !isPlaybookOwnerPage(activePage || '') }
       : { type: 'alva:inspector-deactivate' };
     document.querySelectorAll('iframe').forEach((f) => {
       try { f.contentWindow?.postMessage(msg, '*'); } catch (_) {}
     });
-  }, [inspectorActive, chatOpen]);
+  }, [inspectorActive, chatOpen, activePage]);
 
   const handleUserEnter = useCallback(() => {
     if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
@@ -353,15 +354,13 @@ export function AppShell({ activePage, onNavigate, children }: AppShellProps) {
   const threadsEntryMode: ThreadsEntryMode = '1';
 
   return (
-    <ChatProvider activePage={activePage} threadsEntryMode={threadsEntryMode} chatTriggerMode={triggerMode}>
-      <AppShellInner
-        activePage={activePage}
-        onNavigate={onNavigate}
-        triggerMode={triggerMode}
-        threadsEntryMode={threadsEntryMode}
-      >
-        {children}
-      </AppShellInner>
-    </ChatProvider>
+    <AppShellInner
+      activePage={activePage}
+      onNavigate={onNavigate}
+      triggerMode={triggerMode}
+      threadsEntryMode={threadsEntryMode}
+    >
+      {children}
+    </AppShellInner>
   );
 }

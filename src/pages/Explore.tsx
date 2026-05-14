@@ -105,7 +105,7 @@ function ExploreContent() {
               <button
                 className="h-[34px] px-[16px] py-[6px] rounded-[6px] text-[14px] leading-[22px] tracking-[0.14px]"
                 style={{
-                  background: 'rgba(0,0,0,0.03)',
+                  background: 'var(--b-r03)',
                   color: 'var(--text-n7, rgba(0,0,0,0.7))',
                 }}
               >

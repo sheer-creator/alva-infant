@@ -45,7 +45,7 @@ export const DEFAULT_PLAYBOOK_CONTEXT: ContextTagData = {
 export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   home: null,
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
-  screener: { label: 'Quality Value Stock Screener', icon: 'sidebar-discover-normal' },
+  screener: { label: 'Feed Test', icon: 'sidebar-discover-normal' },
   'template-screener': { label: 'Template-Screener', icon: 'sidebar-discover-normal' },
   'template-thesis': { label: 'Template-Thesis', icon: 'sidebar-discover-normal' },
   'template-whatif': { label: 'Template-Whatif', icon: 'sidebar-discover-normal' },
@@ -83,3 +83,15 @@ export const PAGE_DEFAULT_THREAD: Record<string, string> = {
   'template-whatif': 'demo',
   'template-notification': 'demo',
 };
+
+/** Pages where the current user is the playbook owner (主态).
+ *  Template pages are visitor (客态). */
+const OWNER_PLAYBOOK_PAGES = new Set(['screener']);
+
+export function isPlaybookOwnerPage(page: string): boolean {
+  return OWNER_PLAYBOOK_PAGES.has(page);
+}
+
+export function isPlaybookPage(page: string): boolean {
+  return OWNER_PLAYBOOK_PAGES.has(page) || page.startsWith('template-');
+}

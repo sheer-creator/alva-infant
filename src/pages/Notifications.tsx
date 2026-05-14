@@ -17,8 +17,8 @@ const FONT = "'Delight', sans-serif";
 /* ========== Status Dot ========== */
 
 function StatusDot({ status = 'green', size = 12 }: { status?: 'green' | 'grey'; size?: number }) {
-  const ringColor = status === 'green' ? '#DBEDED' : 'rgba(0,0,0,0.06)';
-  const dotColor = status === 'green' ? '#49A3A6' : 'rgba(0,0,0,0.3)';
+  const ringColor = status === 'green' ? '#DBEDED' : 'var(--b-r07)';
+  const dotColor = status === 'green' ? 'var(--main-m1)' : 'rgba(0,0,0,0.3)';
   return (
     <div className="flex items-center shrink-0" style={{ width: size, height: size }}>
       <div className="flex-1 h-full min-h-px min-w-px overflow-clip relative">
@@ -47,14 +47,14 @@ function FromChip({ playbook, onClick }: { playbook: FromPlaybook; onClick?: () 
       type="button"
       onClick={(e) => { e.stopPropagation(); onClick?.(); }}
       className="flex items-center gap-[2px] justify-center px-[4px] py-px rounded-[2px] shrink-0 cursor-pointer border-none outline-none transition-colors hover:brightness-95"
-      style={{ background: 'rgba(0,0,0,0.03)' }}
+      style={{ background: 'var(--b-r03)' }}
     >
       <div className="shrink-0 size-[14px] rounded-[2px] overflow-hidden">
         <Avatar name={playbook.author} size={14} />
       </div>
       <p
         className="leading-[20px] text-[12px] tracking-[0.12px] whitespace-nowrap overflow-hidden text-ellipsis"
-        style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT, maxWidth: 120 }}
+        style={{ color: 'var(--text-n5)', fontFamily: FONT, maxWidth: 120 }}
       >
         @{playbook.author}/{playbook.name}
       </p>

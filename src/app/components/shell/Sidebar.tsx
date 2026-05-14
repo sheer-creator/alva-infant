@@ -121,7 +121,7 @@ export function Sidebar({
           <div className="shrink-0 py-[4px]">
             <div
               className="flex h-[32px] cursor-pointer items-center justify-center gap-[8px] rounded-[6px] transition-opacity hover:opacity-90"
-              style={{ background: '#49A3A6' }}
+              style={{ background: 'var(--main-m1)' }}
               onClick={() => {
                 if (activePage === 'home') {
                   const input = document.querySelector<HTMLElement>('[contenteditable], textarea, input[type="text"], .ProseMirror');

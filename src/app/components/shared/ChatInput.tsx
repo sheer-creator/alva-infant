@@ -133,7 +133,7 @@ export function ChatInput({
     <div
       ref={wrapperRef}
       className="relative w-full shrink-0 flex flex-col gap-[12px] p-[16px] chat-input-wrapper"
-      style={{ background: 'white', border: '0.5px solid rgba(0,0,0,0.2)', borderRadius: 12, boxShadow: shadow ? 'var(--shadow-s)' : undefined }}
+      style={{ background: 'var(--b0-container, #fff)', border: '0.5px solid var(--line-l2)', borderRadius: 'var(--radius-ct-m)', boxShadow: shadow ? 'var(--shadow-s)' : undefined }}
     >
       {/* ── Annotation hover popover (positioned relative to wrapper) ── */}
       {quoteHover && elementQuotes.length > 0 && (
@@ -145,8 +145,8 @@ export function ChatInput({
             right: 0,
             maxHeight: 320,
             overflowY: 'auto',
-            background: '#fff',
-            border: '0.5px solid rgba(0,0,0,0.3)',
+            background: 'var(--b0-container, #fff)',
+            border: '0.5px solid var(--line-l3)',
             boxShadow: 'var(--shadow-xs)',
           }}
           onMouseEnter={keepHover}
@@ -156,25 +156,25 @@ export function ChatInput({
             const content = q.originalText || q.selector;
             return (
               <div key={i}>
-                {i > 0 && <div style={{ height: 0, borderTop: '0.5px solid rgba(0,0,0,0.08)', margin: '0 16px' }} />}
+                {i > 0 && <div style={{ height: 0, borderTop: '0.5px solid var(--line-l07)', margin: '0 16px' }} />}
                 <div className="flex items-start gap-[10px] p-[16px]">
                   <span
                     className="flex items-center justify-center shrink-0 rounded-full size-[20px] font-['Delight',sans-serif] text-[11px] font-semibold leading-[20px]"
-                    style={{ background: '#49A3A6', border: '0.5px solid rgba(0,0,0,0.2)', color: '#fff' }}
+                    style={{ background: 'var(--main-m1)', border: '0.5px solid var(--line-l2)', color: '#fff' }}
                   >
                     {q.index}
                   </span>
                   <div className="flex flex-col gap-[2px] min-w-0 flex-1">
                     <span
                       className="font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px]"
-                      style={{ color: 'rgba(0,0,0,0.4)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                      style={{ color: 'var(--text-n5)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
                     >
                       {content}
                     </span>
                     {q.newText && (
                       <span
                         className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px]"
-                        style={{ color: 'rgba(0,0,0,0.85)' }}
+                        style={{ color: 'var(--text-n9)' }}
                       >
                         {q.originalText ? `${q.originalText} → ${q.newText}` : q.newText}
                       </span>
@@ -182,7 +182,7 @@ export function ChatInput({
                     {q.instruction && (
                       <span
                         className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px]"
-                        style={{ color: 'rgba(0,0,0,0.85)' }}
+                        style={{ color: 'var(--text-n9)' }}
                       >
                         {q.instruction}
                       </span>
@@ -190,7 +190,7 @@ export function ChatInput({
                     {!q.newText && !q.instruction && (
                       <span
                         className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px]"
-                        style={{ color: 'rgba(0,0,0,0.85)' }}
+                        style={{ color: 'var(--text-n9)' }}
                       >
                         Edit element
                       </span>
@@ -202,7 +202,7 @@ export function ChatInput({
                     className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 transition-opacity mt-[2px]"
                     onClick={() => removeElementQuote(q.index)}
                   >
-                    <CdnIcon name="close-l1" size={14} color="rgba(0,0,0,0.85)" />
+                    <CdnIcon name="close-l1" size={14} color="var(--text-n9)" />
                   </button>
                 </div>
               </div>
@@ -216,11 +216,11 @@ export function ChatInput({
           {showTag && contextTag && (
             <div
               className="inline-flex items-center gap-[6px] p-[6px] rounded-[4px] shrink-0"
-              style={{ border: '0.5px solid rgba(0,0,0,0.2)' }}
+              style={{ border: '0.5px solid var(--line-l2)' }}
             >
             <span
               className="flex items-center justify-center shrink-0 rounded-[2px] size-[20px]"
-              style={{ background: '#49A3A6' }}
+              style={{ background: 'var(--main-m1)' }}
             >
               <CdnIcon name={contextTag.icon || 'sidebar-discover-normal'} size={16} color="#fff" />
             </span>
@@ -236,7 +236,7 @@ export function ChatInput({
               className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
               onClick={() => setTagDismissed(true)}
             >
-              <CdnIcon name="close-l1" size={12} color="rgba(0,0,0,0.5)" />
+              <CdnIcon name="close-l1" size={12} color="var(--text-n5)" />
             </button>
           </div>
           )}
@@ -247,7 +247,7 @@ export function ChatInput({
               ref={chipRef}
               className="inline-flex items-center gap-[6px] p-[6px] rounded-[4px] shrink-0 cursor-pointer"
               style={{
-                border: '0.5px solid rgba(0,0,0,0.2)',
+                border: '0.5px solid var(--line-l2)',
                 transition: 'box-shadow 0.3s, transform 0.3s',
                 ...(chipPulse ? { boxShadow: '0 0 0 3px rgba(73,163,166,0.25)', transform: 'scale(1.04)' } : {}),
               }}
@@ -256,7 +256,7 @@ export function ChatInput({
             >
               <span
                 className="flex items-center justify-center shrink-0 rounded-[2px] size-[20px]"
-                style={{ background: '#49A3A6' }}
+                style={{ background: 'var(--main-m1)' }}
               >
                 <CdnIcon name="pointer-l" size={16} color="#fff" />
               </span>
@@ -272,7 +272,7 @@ export function ChatInput({
                 className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
                 onClick={(e) => { e.stopPropagation(); clearElementQuotes(); }}
               >
-                <CdnIcon name="close-l1" size={12} color="rgba(0,0,0,0.5)" />
+                <CdnIcon name="close-l1" size={12} color="var(--text-n5)" />
               </button>
 
             </div>
@@ -281,7 +281,7 @@ export function ChatInput({
       )}
       <div className="relative min-h-[44px]" style={{ maxHeight: 240, overflowY: 'auto' }}>
         {showPlaceholder && (
-          <div className="absolute inset-0 pointer-events-none font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n3)]">
+          <div className="absolute inset-0 pointer-events-none font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[color:var(--text-n3)]">
             {placeholder}
           </div>
         )}
@@ -289,7 +289,7 @@ export function ChatInput({
           ref={editorRef}
           contentEditable
           suppressContentEditableWarning
-          className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] outline-none min-h-[22px] w-full"
+          className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[color:var(--text-n9)] outline-none min-h-[22px] w-full"
           style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
           onInput={handleInput}
           onFocus={handleFocus}
@@ -312,7 +312,7 @@ export function ChatInput({
             <CdnIcon
               name={inspectorActive ? 'pointer-f' : 'pointer-l'}
               size={16}
-              color={inspectorActive ? '#49A3A6' : undefined}
+              color={inspectorActive ? 'var(--main-m1)' : undefined}
             />
           </button>
         </Tooltip>
@@ -320,19 +320,19 @@ export function ChatInput({
           <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">
             Sonnet 4.6
           </span>
-          <CdnIcon name="arrow-down-f2" size={12} color="rgba(0,0,0,0.2)" />
+          <CdnIcon name="arrow-down-f2" size={12} color="var(--text-n2)" />
         </div>
         <button
           className="flex items-center justify-center shrink-0 size-[28px] rounded-[6px] cursor-pointer transition-colors"
           style={{
-            background: hasText ? '#49A3A6' : 'rgba(0,0,0,0.05)',
+            background: hasText ? 'var(--main-m1)' : 'var(--b-r05)',
           }}
           onClick={handleSendClick}
         >
           <CdnIcon
             name="arrow-up-l1"
             size={14}
-            color={hasText ? '#ffffff' : 'rgba(0,0,0,0.3)'}
+            color={hasText ? '#ffffff' : 'var(--text-n3)'}
           />
         </button>
       </div>

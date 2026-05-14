@@ -30,7 +30,7 @@ export default function Thread({ threadId, onNavigate }: ThreadProps) {
                   <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">
                     {title}
                   </p>
-                  <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
+                  <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
                 </div>
               }
             />
@@ -57,7 +57,7 @@ export default function Thread({ threadId, onNavigate }: ThreadProps) {
         <div className="flex-1 flex flex-col items-center min-h-0 overflow-hidden">
           <div className="flex flex-col flex-1 min-h-0 w-full" style={{ maxWidth: 840 }}>
             {hasContent ? (
-              <div className="flex-1 min-h-0 overflow-y-auto px-[16px] pb-[64px]">
+              <div className="flex-1 min-h-0 overflow-y-auto px-[16px] pb-[120px]">
                 <ChatMessages conversationId={threadId} />
               </div>
             ) : (

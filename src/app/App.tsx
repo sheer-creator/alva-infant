@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
+import { ChatProvider } from './components/chat/ChatContext';
+import { CHAT_TRIGGER_MODE } from '@/lib/chat-config';
 
 const VALID_PAGES = [
   'home', 'explore', 'screener', 'template-screener', 'template-thesis', 'template-whatif', 'template-notification', 'agent',
@@ -70,24 +72,26 @@ export default function App() {
   const threadId = getThreadId(page);
 
   return (
-    <Suspense fallback={null}>
-      {page === 'home' && <Home onNavigate={navigate} />}
-      {page === 'explore' && <Explore onNavigate={navigate} />}
-      {page === 'screener' && <Screener onNavigate={navigate} />}
-      {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
-      {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
-      {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
-      {page === 'template-notification' && <TemplateNotification onNavigate={navigate} />}
-      {page === 'agent' && <Agent onNavigate={navigate} />}
-      {page === 'account' && <Account onNavigate={navigate} />}
-      {page === 'billing' && <Billing onNavigate={navigate} />}
-      {page === 'portfolio-settings' && <PortfolioSettings onNavigate={navigate} />}
-      {page === 'alva-agent' && <AlvaAgentSettings onNavigate={navigate} />}
-      {page === 'automations' && <Automations onNavigate={navigate} />}
-      {page === 'notifications' && <Notifications onNavigate={navigate} />}
-      {page === 'api-keys' && <ApiKeys onNavigate={navigate} />}
-      {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
-      {threadId && <Thread threadId={threadId} onNavigate={navigate} />}
-    </Suspense>
+    <ChatProvider activePage={page} threadsEntryMode="1" chatTriggerMode={CHAT_TRIGGER_MODE}>
+      <Suspense fallback={null}>
+        {page === 'home' && <Home onNavigate={navigate} />}
+        {page === 'explore' && <Explore onNavigate={navigate} />}
+        {page === 'screener' && <Screener onNavigate={navigate} />}
+        {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
+        {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
+        {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
+        {page === 'template-notification' && <TemplateNotification onNavigate={navigate} />}
+        {page === 'agent' && <Agent onNavigate={navigate} />}
+        {page === 'account' && <Account onNavigate={navigate} />}
+        {page === 'billing' && <Billing onNavigate={navigate} />}
+        {page === 'portfolio-settings' && <PortfolioSettings onNavigate={navigate} />}
+        {page === 'alva-agent' && <AlvaAgentSettings onNavigate={navigate} />}
+        {page === 'automations' && <Automations onNavigate={navigate} />}
+        {page === 'notifications' && <Notifications onNavigate={navigate} />}
+        {page === 'api-keys' && <ApiKeys onNavigate={navigate} />}
+        {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
+        {threadId && <Thread threadId={threadId} onNavigate={navigate} />}
+      </Suspense>
+    </ChatProvider>
   );
 }

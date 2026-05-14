@@ -12,7 +12,7 @@ const CDN = 'https://alva-ai-static.b-cdn.net/icons';
 
 function buildTagHTML(tag: ContextTagData): string {
   const iconUrl = `${CDN}/${tag.icon || 'sidebar-discover-normal'}.svg`;
-  return `<span data-context-tag="" contenteditable="false" style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:2px 6px 2px 3px;max-width:216px;border-radius:2px;background:rgba(73,163,166,0.05);vertical-align:middle;margin-right:6px;user-select:none;cursor:default"><span style="display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px;border-radius:2px;background:#49A3A6"><span style="display:block;width:14px;height:14px;background-color:#fff;-webkit-mask-image:url(${iconUrl});-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;mask-image:url(${iconUrl});mask-size:contain;mask-repeat:no-repeat;mask-position:center"></span></span><span style="font-family:'Delight',sans-serif;font-size:12px;line-height:20px;letter-spacing:0.12px;color:#49A3A6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@${tag.label}</span></span>`;
+  return `<span data-context-tag="" contenteditable="false" style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:2px 6px 2px 3px;max-width:216px;border-radius:2px;background:rgba(73,163,166,0.05);vertical-align:middle;margin-right:6px;user-select:none;cursor:default"><span style="display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px;border-radius:2px;background:var(--main-m1)"><span style="display:block;width:14px;height:14px;background-color:#fff;-webkit-mask-image:url(${iconUrl});-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;mask-image:url(${iconUrl});mask-size:contain;mask-repeat:no-repeat;mask-position:center"></span></span><span style="font-family:'Delight',sans-serif;font-size:12px;line-height:20px;letter-spacing:0.12px;color:var(--main-m1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@${tag.label}</span></span>`;
 }
 
 const ANIM_CSS = `
@@ -175,7 +175,7 @@ export function FloatingChatBarD() {
           <AlvaLoading size={12} />
           <span className="font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)] flex-1 truncate">{statusText}</span>
           <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity" onClick={(e) => { e.stopPropagation(); reopenChat(); }}>
-            <CdnIcon name="unfoldd-l" size={16} color="rgba(0,0,0,0.5)" />
+            <CdnIcon name="unfoldd-l" size={16} color="var(--text-n5)" />
           </button>
         </div>
       </div>
@@ -217,13 +217,13 @@ export function FloatingChatBarD() {
             height: 40,
             padding: '0 12px 0 6px',
             borderRadius: 8,
-            background: '#49A3A6',
+            background: 'var(--main-m1)',
             border: '0.5px solid rgba(0,0,0,0.7)',
             animation: 'barGlow 3s ease-in-out infinite',
             transition: 'background 0.2s ease',
           }}
-          onMouseEnter={e => e.currentTarget.style.background = 'linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.05)),#49A3A6'}
-          onMouseLeave={e => e.currentTarget.style.background = '#49A3A6'}
+          onMouseEnter={e => e.currentTarget.style.background = 'linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.05)),var(--main-m1)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'var(--main-m1)'}
         >
           {/* Logo badge */}
           <div
@@ -251,7 +251,7 @@ export function FloatingChatBarD() {
           willChange: 'opacity, transform',
         }}
       >
-        <div className="relative w-full overflow-hidden" style={{ background: '#ffffff', border: '0.5px solid rgba(0,0,0,0.2)', borderRadius: 12, boxShadow: 'var(--shadow-s)' }}>
+        <div className="relative w-full overflow-hidden" style={{ background: '#ffffff', border: '0.5px solid var(--line-l2)', borderRadius: 12, boxShadow: 'var(--shadow-s)' }}>
           {/* Header bar */}
           <div className="flex items-center px-[16px] py-[8px]">
             <div className="flex items-center flex-1">
@@ -309,14 +309,14 @@ export function FloatingChatBarD() {
                 <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">
                   Sonnet 4.6
                 </span>
-                <CdnIcon name="arrow-down-f2" size={12} color="rgba(0,0,0,0.2)" />
+                <CdnIcon name="arrow-down-f2" size={12} color="var(--text-n2)" />
               </div>
               <button
                 className="flex items-center justify-center shrink-0 size-[28px] rounded-[6px] cursor-pointer transition-colors"
-                style={{ background: hasText ? '#49A3A6' : 'rgba(0,0,0,0.05)' }}
+                style={{ background: hasText ? 'var(--main-m1)' : 'var(--b-r05)' }}
                 onClick={handleSend}
               >
-                <CdnIcon name="arrow-up-l1" size={14} color={hasText ? '#ffffff' : 'rgba(0,0,0,0.3)'} />
+                <CdnIcon name="arrow-up-l1" size={14} color={hasText ? '#ffffff' : 'var(--text-n3)'} />
               </button>
             </div>
           </div>

@@ -100,7 +100,7 @@ function StatCard({ label, value, valueColor }: { label: string; value: string |
       </p>
       <p
         className="font-['Delight',sans-serif] leading-[30px] text-[20px] tracking-[0.2px] w-full"
-        style={{ color: valueColor ?? 'rgba(0,0,0,0.9)' }}
+        style={{ color: valueColor ?? 'var(--text-n9)' }}
       >
         {value}
       </p>
@@ -157,8 +157,8 @@ export function FeedDetailModal({
         className="relative flex w-[600px] max-w-[720px] max-h-full flex-col rounded-[12px]"
         style={{
           background: '#fff',
-          border: '0.5px solid rgba(0,0,0,0.2)',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.08)',
+          border: '0.5px solid var(--line-l2)',
+          boxShadow: 'var(--shadow-l)',
         }}
         onClick={e => e.stopPropagation()}
       >
@@ -201,7 +201,7 @@ export function FeedDetailModal({
                   <span className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
                     Manage feed
                   </span>
-                  <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />
+                  <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
                 </button>
               </>
             )}
@@ -260,7 +260,7 @@ export function FeedDetailModal({
                   className="transition-transform duration-200 ease-out"
                   style={{ transform: descExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
                 >
-                  <CdnIcon name="arrow-down-f2" size={14} color="rgba(0,0,0,0.2)" />
+                  <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
                 </div>
               </button>
             </div>
@@ -270,7 +270,7 @@ export function FeedDetailModal({
         {/* Stats (3 cards) */}
         <div className="shrink-0 flex gap-[16px] items-center w-full">
           <StatCard label={stats.totalLabel} value={stats.totalValue} />
-          <StatCard label="Success" value={stats.successCount} valueColor="#2a9b7d" />
+          <StatCard label="Success" value={stats.successCount} valueColor="var(--main-m3)" />
           <StatCard label="Failed" value={stats.failedCount} valueColor="#e6a91a" />
         </div>
 
@@ -279,7 +279,7 @@ export function FeedDetailModal({
           {/* 表头 */}
           <div
             className="flex gap-[8px] items-center pb-[10px] w-full"
-            style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+            style={{ borderBottom: '1px solid var(--line-l07)' }}
           >
             <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
               Recent 10 Runs
@@ -299,7 +299,7 @@ export function FeedDetailModal({
                 <div
                   key={run.id}
                   className="flex flex-col w-full"
-                  style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+                  style={{ borderBottom: '1px solid var(--line-l07)' }}
                 >
                   <div
                     role="button"
@@ -313,7 +313,7 @@ export function FeedDetailModal({
                       className="size-[12px] shrink-0 flex items-center justify-center transition-transform duration-200 ease-out"
                       style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
                     >
-                      <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />
+                      <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
                     </div>
                     <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px]">
                       {run.id}
@@ -329,7 +329,7 @@ export function FeedDetailModal({
                       {run.status === 'failed' ? (
                         <CdnIcon name="alert-f2" size={16} color="#e6a91a" />
                       ) : (
-                        <CdnIcon name="check-f2" size={16} color="#2a9b7d" />
+                        <CdnIcon name="check-f2" size={16} color="var(--main-m3)" />
                       )}
                     </div>
                   </div>
@@ -341,7 +341,7 @@ export function FeedDetailModal({
                       <div className="min-h-0 overflow-hidden">
                         <div
                           className="rounded-[8px] p-[16px] w-full"
-                          style={{ background: 'rgba(0,0,0,0.02)' }}
+                          style={{ background: 'var(--b-r02)' }}
                         >
                           <pre
                             className="font-mono text-[12px] leading-[20px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] whitespace-pre-wrap m-0"

@@ -98,7 +98,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
               fontSize: 45,
               lineHeight: 1.2,
               fontWeight: 400,
-              color: 'rgba(0,0,0,0.9)',
+              color: 'var(--text-n9)',
               textAlign: 'center',
               maxWidth: 616,
               letterSpacing: 0.45,
@@ -147,7 +147,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                   fontSize: 24,
                   lineHeight: '34px',
                   fontWeight: 400,
-                  color: 'rgba(0,0,0,0.9)',
+                  color: 'var(--text-n9)',
                   letterSpacing: 0.24,
                 }}
               >
@@ -169,13 +169,13 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                       gap: 8,
                       padding: '8px 16px',
                       borderRadius: 6,
-                      border: '0.5px solid rgba(0,0,0,0.3)',
+                      border: '0.5px solid var(--line-l3)',
                       background: tag.active ? '#e5eeee' : 'white',
                       fontFamily: "'Delight', sans-serif",
                       fontSize: 14,
                       lineHeight: '22px',
                       fontWeight: 400,
-                      color: 'rgba(0,0,0,0.9)',
+                      color: 'var(--text-n9)',
                       whiteSpace: 'nowrap',
                       cursor: 'pointer',
                       letterSpacing: 0.14,
@@ -191,7 +191,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                     padding: '8px 0',
                     fontSize: 14,
                     lineHeight: '22px',
-                    color: 'rgba(0,0,0,0.5)',
+                    color: 'var(--text-n5)',
                     cursor: 'pointer',
                     letterSpacing: 0.14,
                   }}
@@ -234,9 +234,9 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                 flex: 1,
                 borderRadius: 12,
                 overflow: 'hidden',
-                border: '0.5px solid rgba(0,0,0,0.3)',
+                border: '0.5px solid var(--line-l3)',
                 background: 'white',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                boxShadow: 'var(--shadow-xs)',
                 position: 'relative',
                 aspectRatio: '1 / 1',
               }}
@@ -272,7 +272,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                     alignItems: 'center',
                     gap: 16,
                     paddingTop: 16,
-                    borderTop: '1px solid rgba(0,0,0,0.07)',
+                    borderTop: '1px solid var(--line-l07)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -281,7 +281,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                       style={{
                         fontSize: 14,
                         lineHeight: '22px',
-                        color: 'rgba(0,0,0,0.9)',
+                        color: 'var(--text-n9)',
                         letterSpacing: 0.14,
                       }}
                     >
@@ -298,14 +298,14 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <CdnIcon name="star-l" size={16} color="rgba(0,0,0,0.9)" />
-                      <span style={{ fontSize: 14, lineHeight: '22px', color: 'rgba(0,0,0,0.9)', letterSpacing: 0.14 }}>
+                      <CdnIcon name="star-l" size={16} color="var(--text-n9)" />
+                      <span style={{ fontSize: 14, lineHeight: '22px', color: 'var(--text-n9)', letterSpacing: 0.14 }}>
                         12.8K
                       </span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <CdnIcon name="remix-l" size={16} color="rgba(0,0,0,0.9)" />
-                      <span style={{ fontSize: 14, lineHeight: '22px', color: 'rgba(0,0,0,0.9)', letterSpacing: 0.14 }}>
+                      <CdnIcon name="remix-l" size={16} color="var(--text-n9)" />
+                      <span style={{ fontSize: 14, lineHeight: '22px', color: 'var(--text-n9)', letterSpacing: 0.14 }}>
                         3
                       </span>
                     </div>
@@ -326,7 +326,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                 fontSize: 24,
                 lineHeight: '34px',
                 fontWeight: 400,
-                color: 'rgba(0,0,0,0.9)',
+                color: 'var(--text-n9)',
                 flex: 1,
                 letterSpacing: 0.24,
               }}
@@ -337,7 +337,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
               style={{
                 fontSize: 14,
                 lineHeight: '22px',
-                color: 'rgba(0,0,0,0.5)',
+                color: 'var(--text-n5)',
                 cursor: 'pointer',
                 letterSpacing: 0.14,
               }}
@@ -356,7 +356,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
                     borderRadius: 12,
                     overflow: 'hidden',
                     background: 'var(--b0-page, #fff)',
-                    border: '0.5px solid rgba(0,0,0,0.3)',
+                    border: '0.5px solid var(--line-l3)',
                     display: 'flex',
                     flexDirection: 'column',
                   }}

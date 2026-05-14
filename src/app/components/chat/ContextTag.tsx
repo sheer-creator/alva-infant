@@ -14,13 +14,13 @@ export function ContextTag({ tag, onRemove }: ContextTagProps) {
     >
       <span
         className="flex items-center justify-center shrink-0 rounded-[2px] size-[18px]"
-        style={{ background: '#49A3A6' }}
+        style={{ background: 'var(--main-m1)' }}
       >
         <CdnIcon name={tag.icon || 'sidebar-discover-normal'} size={14} color="#fff" />
       </span>
       <span
         className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] truncate"
-        style={{ color: '#49A3A6' }}
+        style={{ color: 'var(--main-m1)' }}
       >
         @{tag.label}
       </span>
@@ -29,7 +29,7 @@ export function ContextTag({ tag, onRemove }: ContextTagProps) {
           className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity ml-[2px]"
           onClick={onRemove}
         >
-          <CdnIcon name="close-l1" size={10} color="#49A3A6" />
+          <CdnIcon name="close-l1" size={10} color="var(--main-m1)" />
         </button>
       )}
     </span>

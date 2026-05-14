@@ -27,7 +27,7 @@ const SOCIAL_PATHS = [svgPaths.p1705fd00, svgPaths.p30e25500, svgPaths.p1a857180
 /* ========== Icons ========== */
 
 function ArrowRight() {
-  return <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />;
+  return <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />;
 }
 
 /* ========== Menu item ========== */
@@ -48,10 +48,10 @@ function MenuItem({
     >
       <div className="flex items-center gap-[8px]">
         {icon}
-        <span className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{label}</span>
+        <span className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{label}</span>
       </div>
       <div className="flex items-center gap-[6px]">
-        {dot && <span className="w-[6px] h-[6px] rounded-full" style={{ background: '#49a3a6' }} />}
+        {dot && <span className="w-[6px] h-[6px] rounded-full" style={{ background: 'var(--main-m1)' }} />}
         <ArrowRight />
       </div>
     </button>
@@ -74,17 +74,17 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
           <Avatar name={USER.name} size={48} />
           <div className="flex flex-col min-w-0 flex-1 pb-[4px]">
             <div className="flex items-center gap-[8px] min-w-0">
-              <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{USER.name}</span>
+              <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{USER.name}</span>
               <div className="flex items-center gap-[4px] shrink-0">
                 <span
                   className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px] text-white"
-                  style={{ background: '#49a3a6', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
+                  style={{ background: 'var(--main-m1)', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
                 >
                   Pro
                 </span>
                 <span
                   className="inline-flex items-center justify-center h-[18px] text-[11px] leading-[18px] tracking-[0.11px] px-[6px] rounded-full"
-                  style={{ color: '#49a3a6', background: 'rgba(73,163,166,0.1)', fontFamily: FONT }}
+                  style={{ color: 'var(--main-m1)', background: 'var(--main-m1-10)', fontFamily: FONT }}
                 >
                   Annual
                 </span>
@@ -100,14 +100,14 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
                   <path d={svgPaths.p1b002980} fill="#EB4335" />
                 </g>
               </svg>
-              <span className="text-[12px] leading-[20px] tracking-[0.12px] truncate" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>{USER.email}</span>
+              <span className="text-[12px] leading-[20px] tracking-[0.12px] truncate" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{USER.email}</span>
             </div>
           </div>
           <ArrowRight />
         </div>
 
         {/* Divider — 不通栏，保持在 px-[20px] 内 */}
-        <div style={{ borderTop: '0.5px solid rgba(0,0,0,0.07)' }} />
+        <div style={{ borderTop: '0.5px solid var(--line-l07)' }} />
 
         {/* Menu */}
         <div className="py-[4px] flex flex-col">
@@ -118,45 +118,45 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
             className="flex flex-col pt-[12px] pb-[12px] -mx-[20px] px-[20px] w-[calc(100%+40px)] text-left transition-colors hover:bg-[rgba(0,0,0,0.05)] cursor-pointer bg-transparent border-none"
           >
             <div className="flex items-center gap-[8px] pb-[8px]">
-              <CdnIcon name="credit-l" size={20} color="rgba(0,0,0,0.9)" />
-              <span className="flex-1 text-[14px] leading-[22px] tracking-[0.14px] truncate" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>Usage</span>
+              <CdnIcon name="credit-l" size={20} color="var(--text-n9)" />
+              <span className="flex-1 text-[14px] leading-[22px] tracking-[0.14px] truncate" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>Usage</span>
               <ArrowRight />
             </div>
 
-            <div className="flex items-center gap-[12px] px-[12px] py-[4px] rounded-[8px] w-full" style={{ background: 'rgba(0,0,0,0.03)' }}>
+            <div className="flex items-center gap-[12px] px-[12px] py-[4px] rounded-[8px] w-full" style={{ background: 'var(--b-r03)' }}>
               <div className="flex flex-col gap-[2px] items-start justify-center flex-1 min-w-0 pt-[4px]">
-                <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>Available</span>
-                <span className="text-[24px] leading-[34px] tracking-[0.24px]" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{AVAILABLE.toLocaleString()}</span>
+                <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Available</span>
+                <span className="text-[24px] leading-[34px] tracking-[0.24px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{AVAILABLE.toLocaleString()}</span>
               </div>
               <div className="flex flex-col items-end">
                 {tiers.map((t) => (
                   <div key={t.label} className="flex items-center gap-[4px]">
-                    <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: FONT }}>{t.label}</span>
-                    <span className="text-[10px] leading-[16px] tracking-[0.1px] text-right" style={{ color: 'rgba(0,0,0,0.9)', fontFamily: FONT }}>{t.remaining.toLocaleString()}</span>
+                    <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{t.label}</span>
+                    <span className="text-[10px] leading-[16px] tracking-[0.1px] text-right" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{t.remaining.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
             </div>
           </button>
 
-          <MenuItem icon={<CdnIcon name="gift-l" size={20} color="rgba(0,0,0,0.9)" />} label="Referral" />
-          <MenuItem icon={<CdnIcon name="wallet-l" size={20} color="rgba(0,0,0,0.9)" />} label="Creator Earnings" dot />
-          <MenuItem icon={<CdnIcon name="language-l" size={20} color="rgba(0,0,0,0.9)" />} label="Language" />
-          <MenuItem icon={<CdnIcon name="settings-l" size={20} color="rgba(0,0,0,0.9)" />} label="Settings" onClick={() => onNavigate?.('account')} />
-          <MenuItem icon={<CdnIcon name="logout-l" size={20} color="rgba(0,0,0,0.9)" />} label="Log Out" />
+          <MenuItem icon={<CdnIcon name="gift-l" size={20} color="var(--text-n9)" />} label="Referral" />
+          <MenuItem icon={<CdnIcon name="wallet-l" size={20} color="var(--text-n9)" />} label="Creator Earnings" dot />
+          <MenuItem icon={<CdnIcon name="language-l" size={20} color="var(--text-n9)" />} label="Language" />
+          <MenuItem icon={<CdnIcon name="settings-l" size={20} color="var(--text-n9)" />} label="Settings" onClick={() => onNavigate?.('account')} />
+          <MenuItem icon={<CdnIcon name="logout-l" size={20} color="var(--text-n9)" />} label="Log Out" />
         </div>
 
         {/* Social */}
-        <div className="flex gap-[8px] py-[20px]" style={{ borderTop: '0.5px solid rgba(0,0,0,0.07)' }}>
+        <div className="flex gap-[8px] py-[20px]" style={{ borderTop: '0.5px solid var(--line-l07)' }}>
           {SOCIAL_PATHS.map((path, i) => (
             <button
               key={i}
               type="button"
               className="flex-1 h-[32px] rounded-[6px] flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)] bg-transparent"
-              style={{ border: '0.5px solid rgba(0,0,0,0.3)' }}
+              style={{ border: '0.5px solid var(--line-l3)' }}
             >
               <svg className="w-[16px] h-[16px]" viewBox="0 0 16 16" fill="none">
-                <path d={path} fill="rgba(0,0,0,0.9)" />
+                <path d={path} fill="var(--text-n9)" />
               </svg>
             </button>
           ))}
@@ -164,7 +164,7 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
       </div>
 
       {/* Border overlay */}
-      <div aria-hidden="true" className="absolute border-[0.5px] border-[rgba(0,0,0,0.2)] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[0px_6px_20px_0px_rgba(0,0,0,0.04)]" />
+      <div aria-hidden="true" className="absolute border-[0.5px] border-[var(--line-l2)] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[var(--shadow-s)]" />
     </div>
   );
 }

@@ -122,7 +122,7 @@ export function FloatingChatBar() {
           {/* Expand to open */}
           <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
             onClick={(e) => { e.stopPropagation(); reopenChat(); }}>
-            <CdnIcon name="unfoldd-l" size={16} color="rgba(0,0,0,0.5)" />
+            <CdnIcon name="unfoldd-l" size={16} color="var(--text-n5)" />
           </button>
         </div>
       </div>
@@ -149,7 +149,7 @@ export function FloatingChatBar() {
         className="relative flex gap-[12px] items-end p-[16px] w-full rounded-[12px] overflow-hidden"
         style={{
           background: 'white',
-          border: '0.5px solid ' + (focused ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.2)'),
+          border: '0.5px solid ' + (focused ? 'var(--text-n9)' : 'var(--line-l2)'),
           boxShadow: focused
             ? 'inset 0 0 0 0.5px rgba(0,0,0,0.9), 0 4px 20px rgba(0,0,0,0.08)'
             : '0 4px 20px rgba(0,0,0,0.08)',
@@ -173,7 +173,7 @@ export function FloatingChatBar() {
             className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
             onClick={() => openChat(false)}
           >
-            <CdnIcon name="unfoldd-l" size={16} color="rgba(0,0,0,0.5)" />
+            <CdnIcon name="unfoldd-l" size={16} color="var(--text-n5)" />
           </button>
           <input
             className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] placeholder:text-[var(--text-n3)] flex-1 min-w-0 outline-none bg-transparent"
@@ -197,14 +197,14 @@ export function FloatingChatBar() {
         <button
           className="flex items-center justify-center shrink-0 size-[28px] rounded-[6px] cursor-pointer transition-colors"
           style={{
-            background: input.trim() ? '#49A3A6' : 'rgba(0,0,0,0.05)',
+            background: input.trim() ? 'var(--main-m1)' : 'var(--b-r05)',
           }}
           onClick={handleSend}
         >
           <CdnIcon
             name="arrow-up-l1"
             size={14}
-            color={input.trim() ? '#ffffff' : 'rgba(0,0,0,0.3)'}
+            color={input.trim() ? '#ffffff' : 'var(--text-n3)'}
           />
         </button>
       </div>

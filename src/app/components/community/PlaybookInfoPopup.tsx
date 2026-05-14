@@ -111,7 +111,7 @@ function FeedRow({ feed, onClick }: { feed: PlaybookInfoFeed; onClick?: () => vo
     >
       <div
         className="flex gap-[8px] items-center py-[10px] w-full"
-        style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+        style={{ borderBottom: '1px solid var(--line-l07)' }}
       >
       <div className="flex flex-1 min-w-0 gap-[4px] items-center">
         <StatusDot size={12} />
@@ -126,7 +126,7 @@ function FeedRow({ feed, onClick }: { feed: PlaybookInfoFeed; onClick?: () => vo
         {feed.lastRun}
       </p>
       <div className="size-[12px] shrink-0 flex items-center justify-center">
-        <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />
+        <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
       </div>
       </div>
     </div>
@@ -152,8 +152,8 @@ export function PlaybookInfoPopup({
         className="flex flex-col gap-[20px] items-start p-[20px] rounded-[8px] w-full"
         style={{
           background: '#fff',
-          border: '0.5px solid rgba(0,0,0,0.2)',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.04)',
+          border: '0.5px solid var(--line-l2)',
+          boxShadow: 'var(--shadow-s)',
         }}
       >
         {/* Header */}
@@ -164,7 +164,7 @@ export function PlaybookInfoPopup({
             </p>
             <div
               className="flex items-center justify-center gap-[2px] px-[6px] py-px rounded-full shrink-0"
-              style={{ border: '1px solid rgba(0,0,0,0.07)' }}
+              style={{ border: '1px solid var(--line-l07)' }}
             >
               <StatusDot size={12} />
               <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] whitespace-nowrap">
@@ -189,7 +189,7 @@ export function PlaybookInfoPopup({
           <div className="px-[20px]">
             <div
               className="flex gap-[8px] items-center py-[10px] w-full"
-              style={{ borderTop: '1px solid rgba(0,0,0,0.07)', borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+              style={{ borderTop: '1px solid var(--line-l07)', borderBottom: '1px solid var(--line-l07)' }}
             >
               <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
                 Automation
@@ -227,13 +227,13 @@ export function PlaybookInfoPopup({
             >
               <div
                 className="flex gap-[8px] items-center py-[10px] w-full"
-                style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}
+                style={{ borderBottom: '1px solid var(--line-l07)' }}
               >
                 <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
                   View all automations in Settings
                 </p>
                 <div className="size-[12px] shrink-0 flex items-center justify-center">
-                  <CdnIcon name="arrow-right-l2" size={12} color="rgba(0,0,0,0.5)" />
+                  <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
                 </div>
               </div>
             </div>
