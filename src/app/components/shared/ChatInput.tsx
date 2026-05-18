@@ -138,7 +138,7 @@ export function ChatInput({
       {/* ── Annotation hover popover (positioned relative to wrapper) ── */}
       {quoteHover && elementQuotes.length > 0 && (
         <div
-          className="absolute rounded-[10px] z-[100]"
+          className="absolute z-[100]"
           style={{
             bottom: popoverBottom || '100%',
             left: 0,
@@ -146,7 +146,8 @@ export function ChatInput({
             maxHeight: 320,
             overflowY: 'auto',
             background: 'var(--b0-container, #fff)',
-            border: '0.5px solid var(--line-l3)',
+            border: '0.5px solid var(--line-l2)',
+            borderRadius: 'var(--radius-ct-m)',
             boxShadow: 'var(--shadow-xs)',
           }}
           onMouseEnter={keepHover}
@@ -202,7 +203,7 @@ export function ChatInput({
                     className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 transition-opacity mt-[2px]"
                     onClick={() => removeElementQuote(q.index)}
                   >
-                    <CdnIcon name="close-l1" size={14} color="var(--text-n9)" />
+                    <CdnIcon name="delete-l" size={14} color="var(--text-n9)" />
                   </button>
                 </div>
               </div>
