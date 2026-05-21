@@ -335,7 +335,7 @@ function AppShellInner({
           <div className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
             {children}
           </div>
-          {contextTag !== null && (
+          {activePage !== 'home' && contextTag !== null && (
             <div
               ref={panelWrapperRef}
               className="relative shrink-0"
@@ -359,9 +359,9 @@ function AppShellInner({
         {activePage === 'home' && threadsEntryMode === '4' && <HomeThreadsLeft onToggle={() => setThreadsRailOpen(o => !o)} />}
       </main>
 
-      {contextTag !== null && triggerMode === 'floating-bar' && <FloatingChatBar />}
-      {contextTag !== null && triggerMode === 'fab' && <FloatingChatFAB />}
-      {contextTag !== null && triggerMode === 'inline-composer' && <FloatingChatBarD />}
+      {activePage !== 'home' && contextTag !== null && triggerMode === 'floating-bar' && <FloatingChatBar />}
+      {activePage !== 'home' && contextTag !== null && triggerMode === 'fab' && <FloatingChatFAB />}
+      {activePage !== 'home' && contextTag !== null && triggerMode === 'inline-composer' && <FloatingChatBarD />}
 
       {isUserInfoOpen && (
         <>

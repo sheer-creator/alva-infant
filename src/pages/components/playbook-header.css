@@ -127,7 +127,7 @@ playbook-header { display: contents; }
     padding: var(--sp-l, 20px);
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -177,7 +177,7 @@ playbook-header { display: contents; }
     width: 100%;
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 400;
     line-height: 22px; letter-spacing: 0.14px;
@@ -238,7 +238,7 @@ playbook-header { display: contents; }
     padding: var(--sp-xxs, 4px);
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     overflow-y: auto;
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -734,7 +734,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     padding: 9px var(--sp-l, 20px);
     background: #fff;
     border: 0.5px solid var(--line-l3);
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -809,7 +809,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: #24a1de;
     color: #fff;
     border: none;
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -841,7 +841,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     padding: 9px var(--sp-l, 20px);
     background: transparent;
     border: 0.5px solid var(--line-l3);
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -907,7 +907,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     overflow-y: auto;
     overscroll-behavior: contain;
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
     opacity: 0;

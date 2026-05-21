@@ -705,14 +705,14 @@
   .flag-card.hard .flag-card-title { color: var(--main-m4); }
   .flag-card.soft .flag-card-title { color: var(--main-m5); }
   .flag-card-tier {
-    font-size: 10px; padding: 1px 6px; border-radius: var(--radius-ct-xs);
+    font-size: 10px; padding: 1px 6px; border-radius: var(--radius-ct-min);
     letter-spacing: 0.1px; font-weight:400; line-height: 16px;
   }
   .flag-card.hard .flag-card-tier { background: var(--main-m4-10); }
   .flag-card.soft .flag-card-tier { background: var(--main-m5-10); }
   .flag-card-threshold {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    background: var(--b-r02); padding: 1px 6px; border-radius: var(--radius-ct-xs);
+    background: var(--b-r02); padding: 1px 6px; border-radius: var(--radius-ct-min);
     color: var(--text-n7); letter-spacing: 0.11px;
   }
   .flag-card-body { color: var(--text-n7); margin-top: var(--spacing-xxs); letter-spacing: 0.12px; }
@@ -914,7 +914,7 @@
   .markdown-container code,
   .markdown-container pre {
     background: var(--b-r02);
-    border-radius: var(--radius-ct-xs);
+    border-radius: var(--radius-ct-min);
     font-family: 'JetBrains Mono', monospace;
     color: var(--text-n7);
   }
@@ -956,7 +956,7 @@
     background: var(--b0-container, #fff);
     width: 100%; max-width: 896px;
     max-height: 100%;
-    border-radius: var(--radius-pop-dialog, 12px);
+    border-radius: var(--radius-pop-dialog, 8px);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.1));
     padding: var(--spacing-xxl);
     display:flex; flex-direction:column; gap: var(--spacing-m);
