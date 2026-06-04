@@ -390,7 +390,7 @@ export default function Explore({
         .explore-page {
           min-height: 100%;
           background: #fff;
-          padding: 56px clamp(16px, 1.8vw, 40px) 48px;
+          padding: 56px 28px 48px;
           font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         .explore-inner {
@@ -618,18 +618,8 @@ export default function Explore({
         .explore-grid {
           margin-top: 20px;
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 324px), 1fr));
           gap: 16px;
-        }
-        @container explore-content (min-width: 1728px) {
-          .explore-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-          }
-        }
-        @media (max-width: 1080px) {
-          .explore-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
         }
         @media (max-width: 960px) {
           .explore-page {
@@ -658,7 +648,7 @@ export default function Explore({
             -webkit-box-orient: vertical;
           }
         }
-        @media (max-width: 760px) {
+        @media (max-width: 720px) {
           .explore-filters {
             height: auto;
             flex-wrap: wrap;
@@ -670,9 +660,6 @@ export default function Explore({
           }
           .explore-search {
             flex: 1 1 160px;
-          }
-          .explore-grid {
-            grid-template-columns: 1fr;
           }
         }
       `}</style>

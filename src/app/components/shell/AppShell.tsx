@@ -19,6 +19,7 @@ import UserInfo from '../UserInfo';
 import { useChatContext } from '../chat/ChatContext';
 import { ChatPanel } from '../chat/ChatPanel';
 import { FloatingChatFAB } from '../chat/FloatingChatFAB';
+import alvaLogo from '../chat/logo-green-black.svg';
 
 interface AppShellProps {
   activePage?: Page;
@@ -266,7 +267,7 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
             <CdnIcon name="menu-l" size={20} color="var(--text-n7, rgba(0,0,0,0.7))" />
           </button>
           <img
-            src={`${import.meta.env.BASE_URL}logo-alva-beta-green-black.svg`}
+            src={alvaLogo}
             alt="Alva"
             style={{ height: 14 }}
           />

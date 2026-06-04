@@ -66,7 +66,7 @@ export default function Thread({ threadId, onNavigate }: ThreadProps) {
               </div>
             )}
             <div className="px-[16px] pb-[24px] shrink-0">
-              <ChatInput shadow />
+              <ChatInput shadow allowReferences={false} />
             </div>
           </div>
         </div>

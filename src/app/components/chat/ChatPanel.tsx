@@ -5,10 +5,10 @@ import { Dropdown } from '../shared/Dropdown';
 import { ThreadSwitcherDropdown } from '../shared/ThreadSwitcherDropdown';
 import { useChatContext } from './ChatContext';
 import { ChatMessages } from './ChatMessages';
-import { PlaybookSuggestions, hasContextSuggestions } from './PlaybookSuggestions';
+import { ChatEmptyState } from './PlaybookSuggestions';
 import { TodoListCard, ReviewPlanCard, AnswerQuestionCard } from './StreamingMessages';
 import type { ContextTagData } from '@/lib/chat-config';
-import { CONVERSATIONS } from '@/lib/chat-config';
+import { CONVERSATIONS, isPlaybookPage } from '@/lib/chat-config';
 import { AgentConnectedFeed } from './AgentConnectedFeed';
 
 const FONT = "font-['Delight',sans-serif]";
@@ -43,7 +43,9 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
   const agentScrollRef = useRef<HTMLDivElement>(null);
 
   const isAgent = activeConversationId === '__agent__';
-  const showPlaybookEmpty = hasContextSuggestions(activePage) && activeConversationId === 'new' && !hasInitialInput;
+  const isPlaybookContext = isPlaybookPage(activePage);
+  const inputContextTag = isPlaybookContext ? contextTag : null;
+  const showEmptyState = activeConversationId === 'new' && !hasInitialInput;
   const handlePromptClick = useCallback((text: string) => {
     setInjectSignal({ text, seq: Date.now() });
   }, []);
@@ -138,7 +140,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
               </>
             ) : (
               <>
-                <IconButton label="New chat" onClick={() => { onClose(); window.location.hash = 'new-chat'; }}>
+                <IconButton label="New chat" onClick={() => setActiveConversation('new')}>
                   <CdnIcon name="chat-new-l" size={16} />
                 </IconButton>
                 <IconButton label="Open full view" onClick={handleFullscreen}>
@@ -170,13 +172,13 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
               <div ref={agentScrollRef} className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full px-[16px] pb-[48px]">
                 <AgentConnectedFeed />
               </div>
-              <ChatInput contextTag={contextTag} onSend={handleAgentSend} />
+              <ChatInput contextTag={inputContextTag} allowReferences={isPlaybookContext} onSend={handleAgentSend} />
             </>
           ) : (
             <>
-              {showPlaybookEmpty ? (
-                <div className="flex flex-col flex-1 min-h-0 w-full px-[8px] pt-[16px] pb-[8px] justify-end">
-                  <PlaybookSuggestions page={activePage} onPromptClick={handlePromptClick} />
+              {showEmptyState ? (
+                <div className="flex flex-col flex-1 min-h-0 w-full">
+                  <ChatEmptyState onPromptClick={handlePromptClick} />
                 </div>
               ) : (
                 <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full px-[16px] pb-[48px]">
@@ -207,7 +209,8 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
                     </div>
                   )}
                   <ChatInput
-                    contextTag={contextTag}
+                    contextTag={inputContextTag}
+                    allowReferences={isPlaybookContext}
                     onSend={sendPrompt}
                     injectText={injectSignal}
                   />

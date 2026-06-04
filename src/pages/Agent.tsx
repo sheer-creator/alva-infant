@@ -14,6 +14,7 @@ import { AlertsPopover } from '@/app/components/shared/AlertsPopover';
 import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
 import { PlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
 import { BRAND_REGISTRY } from '@/lib/brand-registry';
+import alvaLogo from '@/app/components/chat/logo-green-black.svg';
 
 type AgentState = 'empty' | 'connecting' | 'connected';
 
@@ -837,7 +838,7 @@ function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
                       </div>
                     ) : (
                       <div key={i} className="flex flex-col gap-[16px] items-start w-full">
-                        <img src={`${import.meta.env.BASE_URL}logo-alva-beta-green-black.svg`} alt="Alva" style={{ height: 12, width: 70 }} />
+                        <img src={alvaLogo} alt="Alva" style={{ height: 12, width: 47 }} />
                         <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>
                           {msg.text}
                         </p>
@@ -847,7 +848,7 @@ function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
                 </div>
               </div>
               <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow onSend={handleSend} placeholder="Message your Alva Agent..." />
+                <ChatInput shadow allowReferences={false} onSend={handleSend} placeholder="Message your Alva Agent..." />
               </div>
             </>
           ) : hasThreadContent ? (
@@ -856,7 +857,7 @@ function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
                 <ChatMessages conversationId={activeView} />
               </div>
               <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow />
+                <ChatInput shadow allowReferences={false} />
               </div>
             </>
           ) : (
@@ -865,7 +866,7 @@ function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
                 <ChatMessages conversationId="new" />
               </div>
               <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow />
+                <ChatInput shadow allowReferences={false} />
               </div>
             </>
           )}

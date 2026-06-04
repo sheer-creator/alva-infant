@@ -2526,6 +2526,7 @@ export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (pag
               shadow
               hideSkill
               hideInspector
+              allowReferences={false}
               bottomChip={
                 selected
                   ? {
