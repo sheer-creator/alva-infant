@@ -13,6 +13,7 @@ type CategoryChip = TrendingFilterChip;
 type SortOption = PopularRecentSort;
 
 const FIGMA_ACTIVE_CHIPS = new Set<CategoryChip>(['Smart Screener', 'Theme Tracker', 'AI Digest']);
+const HOME_PLAYBOOK_LIMIT = 9;
 
 const FEATURED = {
   creator: 'Macro Scope X',
@@ -387,6 +388,9 @@ export default function Explore({
 
     return next;
   }, [filterTouched, searchQuery, selectedChips, sort]);
+  const displayedPlaybooks = useMemo(() => {
+    return filterTouched || searchQuery.trim() ? filteredPlaybooks : filteredPlaybooks.slice(0, HOME_PLAYBOOK_LIMIT);
+  }, [filterTouched, filteredPlaybooks, searchQuery]);
 
   const toggleChip = (chip: CategoryChip) => {
     setFilterTouched(true);
@@ -524,15 +528,19 @@ export default function Explore({
         .explore-search-input {
           flex: 0 0 160px;
           width: 160px;
+          gap: 4px;
         }
         .explore-search-trigger {
+          appearance: none;
+          margin: 0;
           border: 0;
           justify-content: flex-start;
           font-family: inherit;
+          color: var(--text-n3, rgba(0,0,0,0.3));
+          text-align: left;
           cursor: pointer;
         }
         .explore-search-input {
-          gap: 4px;
           z-index: 1;
         }
         .explore-search-input .input-border {
@@ -609,7 +617,7 @@ export default function Explore({
             onSearchChange={setSearchQuery}
           />
           <section className="explore-grid">
-            {filteredPlaybooks.map((playbook) => (
+            {displayedPlaybooks.map((playbook) => (
               <PlaybookCard key={playbook.id} p={playbook} />
             ))}
           </section>

@@ -29,9 +29,9 @@ function NavItem({ label, icon, badge, active, deprecated, collapsed, onClick }:
   const textClass = deprecated
     ? 'text-white/35'
     : active
-      ? 'text-[var(--main-m1)] hover:bg-white/5'
+      ? 'text-white bg-white/5'
       : 'text-white hover:bg-white/5';
-  const iconColor = deprecated ? 'rgba(255,255,255,0.35)' : active ? 'var(--main-m1)' : '#ffffff';
+  const iconColor = deprecated ? 'rgba(255,255,255,0.35)' : '#ffffff';
   return (
     <div
       className={`content-stretch flex h-[36px] items-center overflow-clip relative rounded-[4px] shrink-0 w-full transition-colors ${collapsed ? 'justify-center px-0' : 'gap-[8px] px-[8px] py-[4px]'} ${textClass} ${onClick ? 'cursor-pointer' : ''}`}
@@ -150,16 +150,23 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
       {/* Subscribed */}
       <div className="content-stretch flex flex-col gap-0 items-start py-[4px] relative shrink-0 w-full z-[6]">
         <SectionHeader label="Subscribed" collapsed={collapsed} />
-        <NavItem label="Template-Screener" icon="sidebar-dashboard-normal" active={activePage === 'template-screener'} collapsed={collapsed} onClick={() => onNavigate('template-screener')} />
-        <NavItem label="Template-Thesis" icon="sidebar-dashboard-normal" active={activePage === 'template-thesis'} collapsed={collapsed} onClick={() => onNavigate('template-thesis')} />
-        <NavItem label="Template-Whatif" icon="sidebar-dashboard-normal" active={activePage === 'template-whatif'} collapsed={collapsed} onClick={() => onNavigate('template-whatif')} />
-        <NavItem label="Template-Notification" icon="sidebar-dashboard-normal" active={activePage === 'template-notification'} collapsed={collapsed} onClick={() => onNavigate('template-notification')} />
+        <NavItem label="Attribution Analysis Strategy for Price Trends" icon="sidebar-dashboard-normal" active={activePage === 'template-screener'} collapsed={collapsed} onClick={() => onNavigate('template-screener')} />
+        <NavItem label="NVDA Price Fetcher" icon="sidebar-dashboard-normal" active={activePage === 'template-thesis'} collapsed={collapsed} onClick={() => onNavigate('template-thesis')} />
+        <NavItem label="Google / X Trends Tracker" icon="sidebar-dashboard-normal" active={activePage === 'template-whatif'} collapsed={collapsed} onClick={() => onNavigate('template-whatif')} />
       </div>
 
       {/* Playbooks */}
-      <div className="content-stretch flex flex-col flex-[1_0_0] gap-0 items-start min-h-px py-[4px] relative w-full z-[5]">
+      <div className="content-stretch flex flex-col gap-0 items-start py-[4px] relative shrink-0 w-full z-[5]">
         <SectionHeader label="Playbooks" collapsed={collapsed} />
-        <NavItem label="Feed Test" icon="sidebar-dashboard-normal" active={activePage === 'screener'} collapsed={collapsed} onClick={() => onNavigate('screener')} />
+        <NavItem label="NVDA Price Fetcher" icon="sidebar-dashboard-normal" active={activePage === 'screener'} collapsed={collapsed} onClick={() => onNavigate('screener')} />
+        <NavItem label="Short-Squeeze Risk Map" icon="sidebar-dashboard-normal" active={activePage === 'template-notification'} collapsed={collapsed} onClick={() => onNavigate('template-notification')} />
+      </div>
+
+      {/* Chats */}
+      <div className="content-stretch flex flex-col flex-[1_0_0] gap-0 items-start min-h-px py-[4px] relative w-full z-[4]">
+        <SectionHeader label="Chats" collapsed={collapsed} />
+        <NavItem label="Crypto Price + AI Trend Pulse" icon="chat-l1" collapsed={collapsed} onClick={() => onNavigate('new-chat')} />
+        <NavItem label="Heartbeat Run Counter" icon="chat-l1" collapsed={collapsed} onClick={() => onNavigate('new-chat')} />
       </div>
 
       {/* Upgrade to Pro card — sits above the user row */}
