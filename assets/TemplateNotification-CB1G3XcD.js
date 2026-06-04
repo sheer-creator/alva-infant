@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.js";import{t as n}from"./inlinePlaybookHeader-BlizFtWr.js";var r=`<!DOCTYPE html>
+import{r as e}from"./index-Xte4PxEN.js";import{t}from"./AppShell-CgLdn8U4.js";import{t as n}from"./inlinePlaybookHeader-CwEk-7Ng.js";var r=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -498,17 +498,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
 
 <div class="playbook-container">
 
-  <div class="topic-meta-row">
-    <button class="readme-btn" type="button" id="open-readme" aria-label="Open README">
-      <span class="readme-btn-icon" aria-hidden="true"></span>
-      <span class="readme-btn-label">README</span>
-    </button>
-    <span class="pill source">news</span>
-    <span class="pill source">social</span>
-    <span class="pill source">podcast</span>
-    <span class="topic-meta-spacer"></span>
-    <a class="subscribe-cta" href="https://alva.ai/settings" target="_blank" rel="noopener noreferrer">Follow on Telegram</a>
-  </div>
 
   <div id="timeline">
     <div class="loading">Loading timeline...</div>

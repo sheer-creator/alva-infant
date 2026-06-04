@@ -127,7 +127,7 @@ playbook-header { display: contents; }
     padding: var(--sp-l, 20px);
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -177,7 +177,7 @@ playbook-header { display: contents; }
     width: 100%;
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 400;
     line-height: 22px; letter-spacing: 0.14px;
@@ -238,7 +238,7 @@ playbook-header { display: contents; }
     padding: var(--sp-xxs, 4px);
     background: var(--b0-container, #fff);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     overflow-y: auto;
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -396,6 +396,73 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     max-width: 120px;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     color: var(--text-n9);
+}
+/* Built-with hover card */
+.pb-built-with-menu { position: relative; display: inline-flex; }
+.pb-built-with-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    width: 300px;
+    background: var(--b0-container, #fff);
+    border-radius: 8px;
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    box-shadow: var(--shadow-s, 0 6px 20px 0 rgba(0,0,0,0.04));
+    padding: 14px;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+    font-family: 'Delight', sans-serif;
+}
+.pb-built-with-popover.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+.pb-bw-row { display: flex; align-items: flex-start; gap: 12px; }
+.pb-bw-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.pb-bw-col-right { flex: 0 0 auto; align-items: flex-end; }
+.pb-bw-caps {
+    font-size: 11px;
+    line-height: 14px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
+    letter-spacing: 0.11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.pb-bw-creator { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pb-bw-avatar {
+    width: 22px; height: 22px;
+    border-radius: 50%; object-fit: cover;
+    background: var(--grey-g03, #f0f0f0); flex-shrink: 0; display: block;
+}
+.pb-bw-creator-name {
+    font-size: 14px; line-height: 22px;
+    color: var(--text-n9, rgba(0,0,0,0.9));
+    letter-spacing: 0.14px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pb-bw-socials { display: flex; align-items: center; gap: 8px; }
+.pb-bw-social {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: opacity 120ms ease;
+    flex-shrink: 0;
+}
+.pb-bw-social:hover { opacity: 0.7; }
+.pb-bw-social img,
+.pb-bw-social svg { display: block; width: 16px; height: 16px; }
+.pb-bw-divider { height: 0.5px; background: var(--line-l07, rgba(0,0,0,0.07)); margin: 12px 0 11px; }
+.pb-bw-desc {
+    font-size: 13px; line-height: 20px;
+    color: var(--text-n7, rgba(0,0,0,0.7));
+    letter-spacing: 0.13px;
+    margin: 0;
 }
 /* Status pill: dot + automations + • + freq */
 .pb-pill--status { padding-left: 5px; padding-right: 8px; }
@@ -667,7 +734,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     padding: 9px var(--sp-l, 20px);
     background: #fff;
     border: 0.5px solid var(--line-l3);
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -742,7 +809,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: #24a1de;
     color: #fff;
     border: none;
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -765,7 +832,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     color: var(--text-n9);
     white-space: nowrap;
 }
-.star-popover-chip.is-disabled { opacity: 0.5; color: var(--text-n5); }
+.star-popover-chip.is-disabled { background: var(--b-r03); color: var(--text-n3); }
 .star-popover-chip img { width: 18px; height: 18px; display: block; flex-shrink: 0; }
 .star-popover-footer {
     display: inline-flex; align-items: center; justify-content: center;
@@ -774,7 +841,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     padding: 9px var(--sp-l, 20px);
     background: transparent;
     border: 0.5px solid var(--line-l3);
-    border-radius: var(--radius-btn-m, 8px);
+    border-radius: var(--radius-btn-m, 6px);
     font-family: inherit;
     font-size: 14px; font-weight: 500;
     line-height: 22px; letter-spacing: 0.14px;
@@ -840,7 +907,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     overflow-y: auto;
     overscroll-behavior: contain;
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
-    border-radius: var(--radius-pop-popover, 8px);
+    border-radius: var(--radius-pop-popover, 6px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
     opacity: 0;
@@ -948,7 +1015,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     color: var(--text-n9);
     white-space: nowrap;
 }
-.alerts-popover-chip.is-disabled { opacity: 0.5; color: var(--text-n5); }
+.alerts-popover-chip.is-disabled { background: var(--b-r03); color: var(--text-n3); }
 .alerts-popover-chip img { width: 18px; height: 18px; display: block; flex-shrink: 0; border-radius: 960px; }
 
 /* CTA loading spinner + disabled state */
@@ -1021,24 +1088,42 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-size: contain; mask-size: contain;
 }
-.alerts-connected-account {
-    display: flex; align-items: center; gap: var(--sp-xs, 8px);
+.alerts-automations-list {
+    display: flex; flex-direction: column; gap: var(--sp-xs, 8px);
     padding: var(--sp-m, 16px);
     background: rgba(73, 163, 166, 0.08);
     border-radius: var(--radius-ct-l, 8px);
     width: 100%;
 }
+.alerts-automation-row {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%;
+}
+.alerts-automation-name {
+    flex: 1 1 auto; min-width: 0;
+    font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
+    color: var(--text-n9);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.alerts-connected-account {
+    display: flex; align-items: center; gap: 4px;
+    width: 100%;
+}
 .alerts-connected-avatar {
-    width: 32px; height: 32px;
+    width: 16px; height: 16px;
     display: inline-block;
     flex-shrink: 0;
     object-fit: contain;
-    border-radius: 50%;
+}
+.alerts-connected-name-label {
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
+    white-space: nowrap; flex-shrink: 0;
 }
 .alerts-connected-name {
     flex: 1 1 auto;
-    font-size: 16px; font-weight: 400; line-height: 26px; letter-spacing: 0.16px;
-    color: var(--text-n9);
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .alerts-connected-toggle {
@@ -1064,7 +1149,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     border: none;
     padding: 0;
 }
-.switch.on { background-color: var(--main-m1, #49A3A6); }
+.switch.on, .switch.is-on { background-color: var(--main-m1, #49A3A6); }
 .switch-thumb {
     position: absolute;
     top: 50%;
@@ -1076,7 +1161,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     height: 10.67px;
     left: 2.67px;
 }
-.switch.on .switch-thumb { left: calc(100% - 10.67px - 2.67px); }
+.switch.on .switch-thumb, .switch.is-on .switch-thumb { left: calc(100% - 10.67px - 2.67px); }
 
 /* Connected state: signals list */
 .alerts-signals-section {
@@ -1097,8 +1182,12 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: var(--grey-g01, #fafafa);
     border-radius: var(--radius-ct-m, 6px);
 }
-/* Signal card title — markdown heading style */
 .alerts-signal-date {
+    margin: 0;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
+}
+.alerts-signal-headline {
     margin: 0;
     font-size: 14px; font-weight: 500; line-height: 22px; letter-spacing: 0.14px;
     color: var(--text-n9);
@@ -1448,6 +1537,14 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
       && host.getAttribute('creator') !== 'false';
     var builtOn = host.getAttribute('built-on') || '';
     var builtOnSeed = host.getAttribute('built-on-seed') || builtOn;
+    var builtWith = host.getAttribute('built-with') || '';
+    var builtWithSeed = host.getAttribute('built-with-seed') || builtWith;
+    var builtWithAvatar = host.getAttribute('built-with-avatar') || '';
+    var builtWithCreator = host.getAttribute('built-with-creator') || '';
+    var builtWithCreatorAvatar = host.getAttribute('built-with-creator-avatar') || builtWithAvatar;
+    var builtWithUpdated = host.getAttribute('built-with-updated') || '';
+    var builtWithDesc = host.getAttribute('built-with-desc') || '';
+    var builtWithSocials = (host.getAttribute('built-with-socials') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     var feeds = readFeeds(host);
 
     var creatorBlock = creator
@@ -1503,6 +1600,49 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
           '<img class="pb-built-on-avatar" src="' + avatarUrl(builtOnSeed) + '" alt="" />' +
           '<span class="pb-built-on-name">' + esc(builtOn) + '</span>' +
         '</button>'
+      : '';
+
+    var CDN = 'https://alva-ai-static.b-cdn.net/icons';
+    var socialIcons = {
+      discord: '<img src="' + CDN + '/logo-social-discord.svg" alt="" />',
+      telegram: '<img src="' + CDN + '/logo-social-telegram.svg" alt="" />',
+      x: '<img src="' + CDN + '/logo-feed-x.svg" alt="" />',
+      instagram: '<img src="' + CDN + '/logo-social-instagram.svg" alt="" />'
+    };
+    var builtWithSocialsHtml = builtWithSocials.map(function (k) {
+      var icon = socialIcons[k] || '';
+      if (!icon) return '';
+      return '<span class="pb-bw-social" aria-label="' + esc(k) + '">' + icon + '</span>';
+    }).join('');
+    var builtWithCard = (builtWithCreator || builtWithDesc)
+      ? '<div class="pb-built-with-popover" data-built-with-popover role="tooltip" aria-hidden="true">' +
+          '<div class="pb-bw-row">' +
+            '<div class="pb-bw-col">' +
+              '<span class="pb-bw-caps">Created by</span>' +
+              '<div class="pb-bw-creator">' +
+                '<img class="pb-bw-avatar" src="' + esc(builtWithCreatorAvatar) + '" alt="" />' +
+                '<span class="pb-bw-creator-name">' + esc(builtWithCreator || builtWith) + '</span>' +
+              '</div>' +
+            '</div>' +
+            (builtWithUpdated || builtWithSocialsHtml
+              ? '<div class="pb-bw-col pb-bw-col-right">' +
+                  (builtWithUpdated ? '<span class="pb-bw-caps">Last updated ' + esc(builtWithUpdated) + '</span>' : '') +
+                  (builtWithSocialsHtml ? '<div class="pb-bw-socials">' + builtWithSocialsHtml + '</div>' : '') +
+                '</div>'
+              : '') +
+          '</div>' +
+          (builtWithDesc ? '<div class="pb-bw-divider"></div><p class="pb-bw-desc">' + esc(builtWithDesc) + '</p>' : '') +
+        '</div>'
+      : '';
+    var builtWithBlock = builtWith
+      ? '<div class="pb-built-with-menu">' +
+          '<button class="pb-pill pb-pill--built-on pb-pill--built-with" type="button" data-built-with-trigger>' +
+            '<span class="pb-built-on-label">Built with:</span>' +
+            '<img class="pb-built-on-avatar" src="' + esc(builtWithAvatar || avatarUrl(builtWithSeed)) + '" alt="" />' +
+            '<span class="pb-built-on-name">' + esc(builtWith) + '</span>' +
+          '</button>' +
+          builtWithCard +
+        '</div>'
       : '';
 
     var feedsCount = feeds.length;
@@ -1676,52 +1816,48 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
                             '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
                           '</button>' +
                         '</div>' +
-                        '<div class="alerts-popover-extra">' +
-                          '<p class="alerts-popover-extra-label">Same agent, more channels</p>' +
-                          '<div class="alerts-popover-chips">' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-slack.svg" alt="" /><span>Slack</span></span>' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-whatsapp.svg" alt="" /><span>WhatsApp</span></span>' +
-                            '<span class="alerts-popover-chip is-disabled"><img src="/alva-infant/logo-social-line.svg" alt="" /><span>Line</span></span>' +
-                          '</div>' +
-                        '</div>' +
                       '</div>' +
                     '</div>' +
                     '<div class="alerts-popover-connected" data-alerts-connected>' +
                       '<p class="alerts-popover-title">Get Alerts</p>' +
                       '<div class="alerts-connected-section">' +
                         '<div class="alerts-connected-head">' +
-                          '<span class="alerts-connected-head-label">Connected</span>' +
-                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
-                            '<span>Manage Accounts</span>' +
-                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
-                          '</button>' +
-                        '</div>' +
-                        '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<img class="alerts-connected-avatar" data-alerts-avatar data-platform="' + (alertsStartConnected ? 'discord' : 'telegram') + '" src="' + (alertsStartConnected ? '/alva-infant/logo-social-discord.svg' : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg') + '" alt="" />' +
-                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
+                          '<span class="alerts-connected-head-label">Automations</span>' +
                           '<div class="alerts-connected-toggle">' +
                             '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
                             '<button type="button" class="switch" data-alerts-switch role="switch" aria-checked="false"><span class="switch-thumb"></span></button>' +
                           '</div>' +
                         '</div>' +
+                        '<div class="alerts-automations-list" data-alerts-automations>' +
+                          '<div class="alerts-automation-row">' +
+                            '<span class="alerts-automation-name">ai-chip-supply-chain</span>' +
+                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
+                          '</div>' +
+                          '<div class="alerts-automation-row">' +
+                            '<span class="alerts-automation-name">space-rotation-prices</span>' +
+                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
+                          '</div>' +
+                        '</div>' +
+                        '<div class="alerts-connected-account" data-alerts-account>' +
+                          '<img class="alerts-connected-avatar" data-alerts-avatar src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
+                          '<span class="alerts-connected-name-label">Connected:</span>' +
+                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
+                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
+                            '<span>Manage</span>' +
+                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
+                          '</button>' +
+                        '</div>' +
                       '</div>' +
                       '<div class="alerts-signals-section">' +
-                        '<p class="alerts-signals-title">Latest Signals</p>' +
+                        '<p class="alerts-signals-title">Recent Alerts</p>' +
                         '<div class="alerts-signals-list">' +
                           '<div class="alerts-signal-card">' +
-                            '<p class="alerts-signal-date">Apr 16, 2026 · Market Close Digest</p>' +
+                            '<p class="alerts-signal-date">May 8, 12:00 PM &middot; ai-chip-supply-chain</p>' +
+                            '<p class="alerts-signal-headline"><strong>AMD to Entrust 2nm Production to Samsung Foundry Samsung Electronics has entered into substantive discussions with AMD</strong></p>' +
                             '<ul class="alerts-signal-bullets">' +
-                              '<li><strong>Top of basket:</strong> ALL (Allstate) holds #1 at Score 95 — ROE 39.5%, P/E 5.64; leadership in Insurance — Property &amp; Casualty continues.</li>' +
-                              '<li><strong>New entries:</strong> BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
-                              '<li><strong>Dropouts:</strong> TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
-                            '</ul>' +
-                          '</div>' +
-                          '<div class="alerts-signal-card">' +
-                            '<p class="alerts-signal-date">Apr 15, 2026 · Market Close Digest</p>' +
-                            '<ul class="alerts-signal-bullets">' +
-                              '<li><strong>Momentum:</strong> NVDA, META extend leadership on improving estimates; Score moves +2 avg.</li>' +
-                              '<li><strong>Re-rating:</strong> Energy basket re-rates higher on improving ROE and lower leverage.</li>' +
-                              '<li><strong>Watch:</strong> DIS, NKE drift lower — guidance risks heading into Q2 prints.</li>' +
+                              '<li>Top of basket: ALL (Allstate) holds #1 at Score 95 &mdash; ROE 39.5%, P/E 5.64; leadership in Insurance &mdash; Property &amp; Casualty continues.</li>' +
+                              '<li>New entries: BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
+                              '<li>Dropouts: TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
                             '</ul>' +
                           '</div>' +
                         '</div>' +
@@ -1739,9 +1875,39 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
           readmeBlock +
           statusBlock +
           builtOnBlock +
+          builtWithBlock +
         '</div>' +
         descBlock +
       '</section>';
+  }
+
+  function setupBuiltWithHover(host) {
+    var trigger = host.querySelector('[data-built-with-trigger]');
+    var popover = host.querySelector('[data-built-with-popover]');
+    if (!trigger || !popover) return;
+    var hideTimer = null;
+    function show() {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      popover.classList.add('open');
+      popover.setAttribute('aria-hidden', 'false');
+    }
+    function hide() {
+      popover.classList.remove('open');
+      popover.setAttribute('aria-hidden', 'true');
+    }
+    function delayedHide() {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, 160);
+    }
+    trigger.addEventListener('mouseenter', show);
+    trigger.addEventListener('mouseleave', delayedHide);
+    popover.addEventListener('mouseenter', show);
+    popover.addEventListener('mouseleave', delayedHide);
+    trigger.addEventListener('focus', show);
+    trigger.addEventListener('blur', delayedHide);
+    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
+      if (hideTimer) clearTimeout(hideTimer);
+    });
   }
 
   function setupSettingsPopover(host) {
@@ -2300,6 +2466,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         setupSettingsPopover(self);
         setupHistoryPopover(self);
         setupReadmeTrigger(self);
+        setupBuiltWithHover(self);
         setupDiscussTrigger(self);
         updateDiscussActive(self);
       };
@@ -3050,7 +3217,699 @@ discussion-panel[open] {
     autoMount();
   }
 })();
-`,i=`/* Alva Design Tokens — single source of truth.
+`,i=`/* ══════════════════════════════════════════════════════════════
+   Playbook Inspector — element picker overlay + edit dialog
+   Activated via postMessage from the React parent.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Cursor overrides when inspector is active ── */
+body.alva-inspector-active {
+  cursor: default !important;
+}
+body.alva-inspector-active * {
+  cursor: default !important;
+}
+/* editable zone: crosshair cursor */
+body.alva-inspector-active .playbook-container,
+body.alva-inspector-active .playbook-container * {
+  cursor: crosshair !important;
+}
+/* dialog keeps normal cursor */
+body.alva-inspector-active .alva-inspector-dialog,
+body.alva-inspector-active .alva-inspector-dialog * {
+  cursor: default !important;
+}
+
+/* ── Hover / selected overlay box ── */
+.alva-inspector-overlay {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+  z-index: 99990;
+  border: 1.5px dashed rgba(73,163,166,0.7);
+  background: rgba(73,163,166,0.06);
+  border-radius: 3px;
+  transition: top 0.08s ease, left 0.08s ease, width 0.08s ease, height 0.08s ease;
+}
+.alva-inspector-overlay.is-selected {
+  border-style: solid;
+  border-color: #49A3A6;
+  background: rgba(73,163,166,0.10);
+}
+
+/* ── Tag label pill (shows on hover) ── */
+.alva-inspector-label {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+  z-index: 99991;
+  padding: 1px 6px;
+  background: #2a2a38;
+  color: #fff;
+  font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+  font-size: 10px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  border-radius: 3px;
+  white-space: nowrap;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Edit dialog (ChatBox style) ──
+   Two visual modes, controlled by \`.has-text\`:
+     • default (no text element / viewer): dialog is transparent positioner,
+       the .aid-toolbar inside is the visible dark-bordered chat box.
+     • .has-text (creator + text element): dialog becomes a light-bordered
+       popover wrapping the text field and the (still dark-bordered) chat box. */
+.alva-inspector-dialog {
+  position: absolute;
+  z-index: 99995;
+  width: 480px;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  animation: aidSlideIn 0.15s ease-out;
+}
+@keyframes aidSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Popover wrapper — text-field + chat box stacked */
+.alva-inspector-dialog.has-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* ── Chat box: instruction input + send button (the dark-bordered pill) ── */
+.aid-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  background: #fff;
+  border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+  border-radius: 8px;
+  padding: 12px 12px 12px 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: clip;
+  max-height: 160px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.aid-toolbar:focus-within {
+  border-color: var(--text-n9, rgba(0,0,0,0.9));
+}
+.alva-inspector-dialog.has-text .aid-toolbar {
+  /* outer popover already carries the shadow */
+  box-shadow: none;
+  max-height: 240px;
+}
+
+.aid-instruction-input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.14px;
+  color: rgba(0,0,0,0.9);
+  background: transparent;
+  padding: 3px 0;
+}
+.aid-instruction-input::placeholder {
+  color: rgba(0,0,0,0.3);
+}
+
+/* send button */
+.aid-send {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.05);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+}
+.aid-send.is-active {
+  background: #49A3A6;
+}
+.aid-send.is-active:hover {
+  background: #3d8e91;
+}
+.aid-send img {
+  opacity: 0.3;
+  transition: opacity 0.15s, filter 0.15s;
+}
+.aid-send.is-active img {
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
+/* ── Text content field (only shown for text elements) ── */
+.aid-text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.aid-field-label {
+  display: block;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0.14px;
+  color: rgba(0,0,0,0.7);
+}
+.aid-text-input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+  border-radius: 8px;
+  outline: none;
+  resize: none;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.14px;
+  color: var(--text-n9, rgba(0,0,0,0.9));
+  background: #fff;
+  box-sizing: border-box;
+  min-height: 110px;
+  transition: border-color 0.15s;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.aid-text-input::-webkit-scrollbar { display: none; }
+.aid-text-input:focus {
+  border-color: var(--text-n9, rgba(0,0,0,0.9));
+}
+
+/* ── Numbered badge pinned on selected elements ── */
+.alva-inspector-badge {
+  position: absolute;
+  z-index: 5;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #49A3A6;
+  border: 0.5px solid rgba(0,0,0,0.2);
+  color: #fff;
+  font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+`,a=`/* ══════════════════════════════════════════════════════════════
+   Playbook Inspector — click-to-select element editing tool.
+   Runs inside the playbook iframe; activated / deactivated by
+   postMessage from the React host.
+
+   Activation  : parent sends  { type: 'alva:inspector-activate' }
+   Deactivation: parent sends  { type: 'alva:inspector-deactivate' }
+
+   On confirm  : posts back    { type: 'alva:inspector-quote', ... }
+   On exit     : posts back    { type: 'alva:inspector-deactivated' }
+   ══════════════════════════════════════════════════════════════ */
+
+(function () {
+  /* ── state ── */
+  var active = false;
+  var viewerMode = false; // visitor (客态): no text editing
+  var hoveredEl = null;
+  var selectedEl = null;
+  var overlay = null;   // highlight rectangle
+  var label = null;     // tag-name pill
+  var dialog = null;    // edit popover
+  var badgeCount = 0;   // sequential annotation counter
+  var badges = [];      // DOM elements for numbered badges
+
+  /* ── helpers ── */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /** True for elements the picker should never highlight */
+  function isIgnored(el) {
+    if (!el || el === document.body || el === document.documentElement) return true;
+    if (el.closest && el.closest('.alva-inspector-ui')) return true;
+    if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'LINK' || el.tagName === 'META') return true;
+    /* only allow elements inside .playbook-container, but not the container itself */
+    if (!el.closest || !el.closest('.playbook-container')) return true;
+    if (el.classList && el.classList.contains('playbook-container')) return true;
+    return false;
+  }
+
+  /** Build a short, human-readable CSS-ish path (≤3 segments) */
+  function selectorPath(el) {
+    var parts = [];
+    var cur = el;
+    while (cur && cur !== document.body && parts.length < 3) {
+      var tag = cur.tagName.toLowerCase();
+      var id = cur.id ? '#' + cur.id : '';
+      var cls = '';
+      if (!id && cur.className && typeof cur.className === 'string') {
+        var names = cur.className.trim().split(/\\s+/).filter(function (c) {
+          return c.indexOf('alva-inspector') === -1;
+        });
+        if (names.length) cls = '.' + names.slice(0, 2).join('.');
+      }
+      parts.unshift(tag + id + cls);
+      cur = cur.parentElement;
+    }
+    return parts.join(' > ');
+  }
+
+  /** Detect if element is primarily text (leaf node or only inline children) */
+  var INLINE_TAGS = { SPAN:1, STRONG:1, EM:1, B:1, I:1, A:1, SMALL:1, SUB:1, SUP:1, MARK:1, CODE:1, BR:1, ABBR:1 };
+  function isTextElement(el) {
+    var text = (el.textContent || '').trim();
+    if (!text) return false;
+    if (el.childElementCount === 0) return true;
+    for (var i = 0; i < el.children.length; i++) {
+      if (!INLINE_TAGS[el.children[i].tagName]) return false;
+    }
+    return true;
+  }
+
+  /** Get visible text for the text-edit field */
+  function getVisibleText(el) {
+    return (el.innerText || el.textContent || '').trim();
+  }
+
+  /* ── overlay & label (created once, reused) ── */
+  function ensureUI() {
+    if (overlay) return;
+    overlay = document.createElement('div');
+    overlay.className = 'alva-inspector-ui alva-inspector-overlay';
+    document.body.appendChild(overlay);
+
+    label = document.createElement('div');
+    label.className = 'alva-inspector-ui alva-inspector-label';
+    document.body.appendChild(label);
+  }
+
+  function positionOverlay(el) {
+    var r = el.getBoundingClientRect();
+    var sy = window.scrollY;
+    var sx = window.scrollX;
+    overlay.style.display = 'block';
+    overlay.style.top  = (r.top  + sy) + 'px';
+    overlay.style.left = (r.left + sx) + 'px';
+    overlay.style.width  = r.width  + 'px';
+    overlay.style.height = r.height + 'px';
+
+    var tag = el.tagName.toLowerCase();
+    var cls = (el.className && typeof el.className === 'string')
+      ? '.' + el.className.trim().split(/\\s+/).filter(function (c) {
+          return c.indexOf('alva-inspector') === -1;
+        })[0]
+      : '';
+    if (cls === '.undefined' || cls === '.') cls = '';
+    label.textContent = tag + (el.id ? '#' + el.id : cls);
+    label.style.display = 'block';
+    label.style.top  = Math.max(0, r.top + sy - 22) + 'px';
+    label.style.left = (r.left + sx) + 'px';
+  }
+
+  function hideOverlay() {
+    if (overlay) { overlay.style.display = 'none'; overlay.classList.remove('is-selected'); }
+    if (label)   label.style.display = 'none';
+  }
+
+  /* ── CDN icon helper ── */
+  var CDN_BASE = 'https://alva-ai-static.b-cdn.net/icons';
+  function cdnIcon(name, size) {
+    return '<img src="' + CDN_BASE + '/' + name + '.svg" width="' + size + '" height="' + size + '" style="display:block;" />';
+  }
+
+  /* ── per-dialog state for live preview ── */
+  var _editingEl = null;       // element being edited
+  var _originalHTML = null;     // original innerHTML to restore on cancel
+  var _originalText = '';       // original visible text for comparison
+
+  /** Update send button: active only when there's an actual change */
+  function updateSendState() {
+    if (!dialog) return;
+    var instrInput = dialog.querySelector('.aid-instruction-input');
+    var textInput  = dialog.querySelector('.aid-text-input');
+    var sendBtn    = dialog.querySelector('.aid-send');
+    if (!instrInput || !sendBtn) return;
+
+    var hasInstruction = !!(instrInput.value || '').trim();
+    var textChanged = textInput
+      ? (textInput.value || '').trim() !== _originalText
+      : false;
+    var isActive = hasInstruction || textChanged;
+
+    if (isActive) sendBtn.classList.add('is-active');
+    else          sendBtn.classList.remove('is-active');
+  }
+
+  /** Live-preview text changes on the element */
+  function onTextLiveInput() {
+    if (!_editingEl || !dialog) return;
+    var textInput = dialog.querySelector('.aid-text-input');
+    if (!textInput) return;
+    _editingEl.textContent = textInput.value;
+  }
+
+  /** Revert element to original HTML (called on cancel / close) */
+  function revertLivePreview() {
+    if (_editingEl && _originalHTML !== null) {
+      _editingEl.innerHTML = _originalHTML;
+    }
+    _editingEl = null;
+    _originalHTML = null;
+    _originalText = '';
+  }
+
+  /* ── edit dialog ── */
+  function showDialog(el) {
+    closeDialog();
+
+    var r = el.getBoundingClientRect();
+    var sy = window.scrollY;
+    var sx = window.scrollX;
+    var sel = selectorPath(el);
+    var hasText = viewerMode ? false : isTextElement(el);
+    var originalText = hasText ? getVisibleText(el) : '';
+
+    /* store for live preview & send-state comparison */
+    _editingEl = el;
+    _originalHTML = hasText ? el.innerHTML : null;
+    _originalText = originalText;
+
+    dialog = document.createElement('div');
+    dialog.className = 'alva-inspector-ui alva-inspector-dialog' + (hasText ? ' has-text' : '');
+
+    /* position: prefer below; flip above if not enough room */
+    var top = r.bottom + sy + 8;
+    var spaceBelow = window.innerHeight - r.bottom;
+    if (spaceBelow < 220 && r.top > 220) {
+      top = r.top + sy - 8;
+      dialog.dataset.flip = '1';
+    }
+    var left = Math.min(Math.max(10, r.left + sx), window.innerWidth - 490);
+    dialog.style.top  = top + 'px';
+    dialog.style.left = left + 'px';
+
+    dialog.innerHTML =
+      (hasText
+        ? '<div class="aid-text-field">' +
+            '<label class="aid-field-label">Text Content</label>' +
+            '<textarea class="aid-text-input" rows="4">' + esc(originalText) + '</textarea>' +
+          '</div>'
+        : '') +
+      '<div class="aid-toolbar">' +
+        '<input class="aid-instruction-input" type="text" placeholder="' + (viewerMode ? 'Ask anything about this playbook' : 'Describe a change') + '" />' +
+        '<button class="aid-send" type="button" aria-label="Send">' + cdnIcon('check-l1', 14) + '</button>' +
+      '</div>';
+
+    document.body.appendChild(dialog);
+
+    /* flip upward if flagged */
+    if (dialog.dataset.flip === '1') {
+      var dh = dialog.offsetHeight;
+      dialog.style.top = (r.top + sy - dh - 8) + 'px';
+    }
+
+    var instrInput = dialog.querySelector('.aid-instruction-input');
+    var textInput  = dialog.querySelector('.aid-text-input');
+
+    requestAnimationFrame(function () { instrInput.focus(); });
+
+    /* send button click */
+    dialog.querySelector('.aid-send').onclick = function () {
+      confirmDialog(el, sel, originalText);
+    };
+
+    /* live-update send button state */
+    instrInput.addEventListener('input', updateSendState);
+    if (textInput) {
+      textInput.addEventListener('input', updateSendState);
+      /* live-preview text on the element */
+      textInput.addEventListener('input', onTextLiveInput);
+    }
+
+    /* Enter in instruction → move to text field if present, else confirm */
+    instrInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (textInput) textInput.focus();
+        else confirmDialog(el, sel, originalText);
+      }
+    });
+
+    /* Enter in text field → confirm */
+    if (textInput) {
+      textInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          confirmDialog(el, sel, originalText);
+        }
+      });
+    }
+
+    /* initial send state — inactive since nothing changed yet */
+    updateSendState();
+  }
+
+  /** Update a single badge's position to match its element */
+  function updateBadgePosition(badge, el) {
+    var r = el.getBoundingClientRect();
+    badge.style.top  = (r.top  + window.scrollY - 10) + 'px';
+    badge.style.left = (r.left + window.scrollX - 10) + 'px';
+  }
+
+  /** Reposition all badges (called on scroll / resize) */
+  function repositionBadges() {
+    for (var i = 0; i < badges.length; i++) {
+      updateBadgePosition(badges[i].dom, badges[i].el);
+    }
+  }
+
+  /** Reposition overlay + label + dialog to follow the selected/hovered element on scroll */
+  function repositionOverlay() {
+    var el = selectedEl || hoveredEl;
+    if (!el || !overlay || overlay.style.display === 'none') return;
+    positionOverlay(el);
+    if (dialog && selectedEl) {
+      var r = selectedEl.getBoundingClientRect();
+      var sy = window.scrollY;
+      var sx = window.scrollX;
+      var top = r.bottom + sy + 8;
+      var spaceBelow = window.innerHeight - r.bottom;
+      if (spaceBelow < 220 && r.top > 220) {
+        top = r.top + sy - dialog.offsetHeight - 8;
+      }
+      var left = Math.min(Math.max(10, r.left + sx), window.innerWidth - 490);
+      dialog.style.top  = top + 'px';
+      dialog.style.left = left + 'px';
+    }
+  }
+
+  /** Place a numbered badge at the top-left corner of the element */
+  function placeBadge(el, num) {
+    var badge = document.createElement('div');
+    badge.className = 'alva-inspector-ui alva-inspector-badge';
+    badge.textContent = String(num);
+    updateBadgePosition(badge, el);
+    document.body.appendChild(badge);
+    badges.push({ dom: badge, el: el });
+  }
+
+  /* keep badges + overlay aligned on scroll (capture phase catches nested containers) & resize */
+  function onScrollOrResize() { repositionBadges(); repositionOverlay(); }
+  window.addEventListener('scroll', onScrollOrResize, true);
+  window.addEventListener('resize', onScrollOrResize);
+
+  /** Fly a small dot from the confirm button towards the bottom-right corner */
+  function animateFlyDot() {
+    if (!dialog) return;
+    var btn = dialog.querySelector('.aid-send');
+    if (!btn) return;
+    var br = btn.getBoundingClientRect();
+    var startX = br.left + br.width / 2;
+    var startY = br.top + br.height / 2;
+
+    var dot = document.createElement('div');
+    dot.className = 'alva-inspector-ui';
+    dot.style.cssText =
+      'position:fixed;width:10px;height:10px;border-radius:50%;background:#49A3A6;' +
+      'z-index:99999;pointer-events:none;' +
+      'left:' + startX + 'px;top:' + startY + 'px;';
+    document.body.appendChild(dot);
+
+    var dx = window.innerWidth - startX + 40;
+    var dy = window.innerHeight - startY + 40;
+
+    dot.animate([
+      { transform: 'translate(-5px,-5px) scale(1)', opacity: 1 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(0.4)', opacity: 0 }
+    ], { duration: 420, easing: 'cubic-bezier(0.4,0,0.2,1)', fill: 'forwards' })
+    .onfinish = function () { dot.remove(); };
+  }
+
+  /** Remove all badges and reset counter */
+  function clearBadges() {
+    badges.forEach(function (b) { b.dom.remove(); });
+    badges = [];
+    badgeCount = 0;
+  }
+
+  function confirmDialog(el, sel, originalText) {
+    if (!dialog) return;
+    var instrInput = dialog.querySelector('.aid-instruction-input');
+    var textInput  = dialog.querySelector('.aid-text-input');
+    var newText = textInput ? (textInput.value || '').trim() : null;
+    var instruction = (instrInput.value || '').trim();
+
+    /* need at least one change */
+    var textChanged = newText !== null && newText !== originalText;
+    if (!textChanged && !instruction) {
+      instrInput.focus();
+      return;
+    }
+
+    badgeCount++;
+    placeBadge(el, badgeCount);
+    animateFlyDot();
+
+    /* clear live-preview refs WITHOUT reverting — keep the text change */
+    _editingEl = null;
+    _originalHTML = null;
+    _originalText = '';
+
+    window.parent.postMessage({
+      type: 'alva:inspector-quote',
+      index: badgeCount,
+      selector: sel,
+      tagName: el.tagName.toLowerCase(),
+      newText: textChanged ? newText : null,
+      originalText: originalText || null,
+      instruction: instruction || null,
+    }, '*');
+
+    closeDialog();
+    /* stay in inspector mode — user must click the toggle icon to exit */
+  }
+
+  function closeDialog() {
+    if (dialog) { dialog.remove(); dialog = null; }
+    /* text changes persist — no revert on close */
+    _editingEl = null;
+    _originalHTML = null;
+    _originalText = '';
+    selectedEl = null;
+    if (overlay) overlay.classList.remove('is-selected');
+  }
+
+  /* ── event handlers ── */
+  function onMouseMove(e) {
+    if (!active || dialog) return;
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    if (!el || isIgnored(el)) { hoveredEl = null; hideOverlay(); return; }
+    if (el === hoveredEl) return;
+    hoveredEl = el;
+    positionOverlay(el);
+  }
+
+  function onClick(e) {
+    if (!active) return;
+
+    /* click outside dialog → close it */
+    if (dialog) {
+      if (!dialog.contains(e.target)) { closeDialog(); }
+      return;
+    }
+
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    if (!el || isIgnored(el)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    selectedEl = el;
+    positionOverlay(el);
+    overlay.classList.add('is-selected');
+    showDialog(el);
+  }
+
+  function onKeyDown(e) {
+    if (!active) return;
+    if (e.key === 'Escape') {
+      if (dialog) closeDialog();
+      else deactivate();
+    }
+  }
+
+  /* ── activate / deactivate ── */
+  function activate(isViewer) {
+    if (active) return;
+    active = true;
+    viewerMode = !!isViewer;
+    ensureUI();
+    document.body.classList.add('alva-inspector-active');
+    document.addEventListener('mousemove', onMouseMove, true);
+    document.addEventListener('click', onClick, true);
+    document.addEventListener('keydown', onKeyDown, true);
+  }
+
+  function deactivate() {
+    if (!active) return;
+    active = false;
+    document.body.classList.remove('alva-inspector-active');
+    closeDialog();
+    hideOverlay();
+    clearBadges();
+    hoveredEl = null;
+    document.removeEventListener('mousemove', onMouseMove, true);
+    document.removeEventListener('click', onClick, true);
+    document.removeEventListener('keydown', onKeyDown, true);
+    window.parent.postMessage({ type: 'alva:inspector-deactivated' }, '*');
+  }
+
+  /* ── listen for parent commands ── */
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'alva:inspector-activate')    activate(d.viewerMode);
+    if (d.type === 'alva:inspector-deactivate') deactivate();
+    if (d.type === 'alva:inspector-clear-badges') clearBadges();
+    if (d.type === 'alva:inspector-remove-badge' && d.index) {
+      badges = badges.filter(function (b) {
+        if (b.dom.textContent === String(d.index)) { b.dom.remove(); return false; }
+        return true;
+      });
+    }
+  });
+
+  /* Announce readiness so parent can re-send inspector state */
+  window.parent.postMessage({ type: 'alva:inspector-ready' }, '*');
+})();
+`,o=`/* Alva Design Tokens — single source of truth.
    React side: imported by theme.css.
    Playbook HTML side: inlined into iframe srcDoc by inlinePlaybookHeader.ts. */
 
@@ -3129,21 +3988,29 @@ discussion-panel[open] {
   --spacing-xxxxxxl: 56px;
 
   /* ── Radius ── */
-  --radius-ct-xs: 2px;
+  /* Content */
+  --radius-ct-min: 2px;
   --radius-ct-s: 4px;
   --radius-ct-m: 6px;
   --radius-ct-l: 8px;
   --radius-ct-xl: 12px;
-  --radius-pop-dialog: 12px;
-  --radius-pop-action-sheets: 12px;
-  --radius-pop-dropdown: 8px;
-  --radius-pop-popover: 8px;
-  --radius-pop-toast: 8px;
-  --radius-pop-tips: 8px;
-  --radius-btn-xs: 4px;
-  --radius-btn-s: 6px;
-  --radius-btn-m: 8px;
-  --radius-btn-l: 12px;
+  --radius-ct-xxl: 16px;
+  --radius-ct-xxxl: 20px;
+  --radius-ct-max: 960px;
+  /* Popup */
+  --radius-pop-dialog: 8px;
+  --radius-pop-action-sheets: 8px;
+  --radius-pop-dropdown: 6px;
+  --radius-pop-popover: 6px;
+  --radius-pop-toast: 6px;
+  --radius-pop-tips: 4px;
+  /* Button */
+  --radius-btn-min: 0px;
+  --radius-btn-xs: 2px;
+  --radius-btn-s: 4px;
+  --radius-btn-m: 6px;
+  --radius-btn-l: 8px;
+  --radius-btn-round: 96px;
 
   /* ── Text (Light) ── */
   --text-n9: rgba(0, 0, 0, 0.9);
@@ -3210,10 +4077,10 @@ discussion-panel[open] {
   --sp-xl:  var(--spacing-xl);
   --sp-xxl: var(--spacing-xxl);
   --sp-xxxl:var(--spacing-xxxl);
-  --r-xs: var(--radius-ct-xs);
-  --r-s:  var(--radius-ct-s);
-  --r-m:  var(--radius-btn-s);
-  --r-l:  var(--radius-ct-l);
+  --r-xs: 2px;
+  --r-s:  4px;
+  --r-m:  6px;
+  --r-l:  8px;
 }
 
 /* Dark Mode (disabled — kept for future use) */
@@ -3274,4 +4141,4 @@ discussion-panel[open] {
   border-radius: 50%;
   background: var(--text-n9);
 }
-`,a=`<link rel="stylesheet" href="./styles/tokens.css" />`,o=`<link rel="stylesheet" href="./components/playbook-header.css" />`,s=`<script src="./components/playbook-header.js" defer><\/script>`,c=`<link rel="stylesheet" href="./components/discussion-panel.css" />`,l=`<script src="./components/discussion-panel.js" defer><\/script>`;function u(e){return e.replace(/<\/script>/gi,`<\\/script>`)}function d(e){return e.replace(/\/alva-infant\//g,`/alva-infant/`)}function f(f){return f.replace(a,`<style>${i}</style>`).replace(o,`<style>${e}</style>`).replace(s,`<script>${u(d(t))}<\/script>`).replace(c,`<style>${n}</style>`).replace(l,`<script>${u(d(r))}<\/script>`)}export{f as t};
+`,s=`<link rel="stylesheet" href="./styles/tokens.css" />`,c=`<link rel="stylesheet" href="./components/playbook-header.css" />`,l=`<script src="./components/playbook-header.js" defer><\/script>`,u=`<link rel="stylesheet" href="./components/discussion-panel.css" />`,d=`<script src="./components/discussion-panel.js" defer><\/script>`;function f(e){return e.replace(/<\/script>/gi,`<\\/script>`)}function p(e){return e.replace(/\/alva-infant\//g,`/alva-infant/`)}function m(m){return m.replace(s,`<style>${o}</style>`).replace(c,`<style>${e}</style>`).replace(l,`<script>${f(p(t))}<\/script>`).replace(u,`<style>${n}</style>`).replace(d,`<script>${f(p(r))}<\/script>`).replace(`</head>`,`<style>${i}</style>\n</head>`).replace(`</body>`,`<script>${f(a)}<\/script>\n</body>`)}export{m as t};

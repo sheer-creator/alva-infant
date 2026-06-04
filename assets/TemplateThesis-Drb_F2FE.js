@@ -1,4 +1,4 @@
-import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.js";import{t as n}from"./inlinePlaybookHeader-BlizFtWr.js";var r=`<!doctype html>
+import{r as e}from"./index-Xte4PxEN.js";import{t}from"./AppShell-CgLdn8U4.js";import{t as n}from"./inlinePlaybookHeader-CwEk-7Ng.js";var r=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -35,8 +35,8 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
   a:hover { text-decoration: underline; }
 
   .meta-sep { color: var(--text-n3); }
-  .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:2px 8px; border-radius: var(--radius-ct-xs); line-height:18px; }
-  .badge-phase { padding:2px 8px; border-radius: var(--radius-ct-xs); font-size:12px; line-height:18px; }
+  .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:2px 8px; border-radius: var(--radius-ct-min); line-height:18px; }
+  .badge-phase { padding:2px 8px; border-radius: var(--radius-ct-min); font-size:12px; line-height:18px; }
   .badge-phase-accel { background: rgba(42,155,125,0.14); color:#2a9b7d; }
   .badge-phase-early { background: rgba(100,116,139,0.14); color:#64748b; }
   .badge-phase-mature { background: rgba(223,167,60,0.18); color:#a56b10; }
@@ -175,7 +175,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
     display: inline-flex; align-items: center;
     height: 22px; box-sizing: border-box;
     font-size: 10px; line-height: 1; text-transform: uppercase; letter-spacing: 0.06em;
-    padding: 0 6px; border-radius: var(--radius-ct-xs);
+    padding: 0 6px; border-radius: var(--radius-ct-min);
     margin-right: 6px; vertical-align: top;
   }
   .hero-delta-cat.cat-valuation { background: rgba(124,58,237,0.10); color:#7c3aed; }
@@ -359,7 +359,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
   .tab-pill .tab-item {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 6px var(--spacing-m);
-    border-radius: var(--radius-btn-s, 6px);
+    border-radius: var(--radius-btn-s, 4px);
     font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
     background: var(--b-r03, rgba(0,0,0,0.03));
     color: var(--text-n7);
@@ -644,7 +644,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
 
   .callout {
     border-left: 3px solid var(--main-m1); padding: var(--spacing-s) var(--spacing-m);
-    background: var(--grey-g01); border-radius: var(--radius-ct-xs); font-size:13px; line-height:20px; color: var(--text-n7);
+    background: var(--grey-g01); border-radius: var(--radius-ct-min); font-size:13px; line-height:20px; color: var(--text-n7);
   }
   .callout strong { color: var(--text-n9); }
 
@@ -673,7 +673,7 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
     background: var(--b0-container, #fff);
     width: 100%; max-width: 896px;
     max-height: 100%;
-    border-radius: var(--radius-pop-dialog, 12px);
+    border-radius: var(--radius-pop-dialog, 8px);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.1));
     padding: var(--spacing-xxl);
     display:flex; flex-direction:column; gap: var(--spacing-m);
@@ -731,13 +731,6 @@ import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{t}from"./AppShell-MOrvd4vh.
         <div class="tab-item" data-tab="news" data-text="News &amp; Social">News &amp; Social</div>
       </div>
       <div class="tab-right-group">
-        <button class="pb-meta-link pb-meta-link--readme tab-readme" type="button" data-modal-open="methodology-modal">
-          <span class="pb-meta-icon-badge" aria-hidden="true">
-            <img class="pb-meta-icon-img" src="https://alva-ai-static.b-cdn.net/icons/researcher-l1.svg" width="14" height="14" alt="" />
-          </span>
-          <span>README</span>
-        </button>
-        <span class="pb-meta-sep" aria-hidden="true">|</span>
         <div class="filter-dropdown tab-snapshot" id="hero-date-filter" style="display:none;">
           <button type="button" class="filter-dropdown-trigger" id="hero-date-trigger" aria-haspopup="listbox" aria-expanded="false">
             <span class="filter-dropdown-value">
