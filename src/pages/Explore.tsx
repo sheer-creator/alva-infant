@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { AppShell } from '@/app/components/shell/AppShell';
 import { Avatar } from '@/app/components/shared/Avatar';
@@ -286,13 +286,24 @@ function ExploreFilters({
   onSortChange,
   selectedChips,
   onChipToggle,
+  searchQuery,
+  onSearchChange,
 }: {
   sort: SortOption;
   onSortChange: (sort: SortOption) => void;
   selectedChips: Set<CategoryChip>;
   onChipToggle: (chip: CategoryChip) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }) {
   const [searchActive, setSearchActive] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!searchActive) return;
+    const frame = requestAnimationFrame(() => searchInputRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [searchActive]);
 
   return (
     <div className="explore-filters">
@@ -304,19 +315,37 @@ function ExploreFilters({
         onSortChange={onSortChange}
         onChipToggle={onChipToggle}
         trailing={
-          <button
-            type="button"
-            className={`explore-search${searchActive ? ' is-active' : ''}`}
-            aria-pressed={searchActive}
-            onClick={() => setSearchActive(true)}
-          >
-            <CdnIcon
-              name="search-l"
-              size={14}
-              color={searchActive ? 'var(--main-m1, #2A9B7D)' : 'var(--text-n3, rgba(0,0,0,0.3))'}
-            />
-            <span>Search</span>
-          </button>
+          searchActive ? (
+            <div className="input input-sm explore-search-input">
+              <div className="input-border" />
+              <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                className="input-field"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(event) => onSearchChange(event.target.value)}
+                onBlur={() => {
+                  if (!searchQuery.trim()) setSearchActive(false);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== 'Escape') return;
+                  onSearchChange('');
+                  setSearchActive(false);
+                }}
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-secondary btn-extra-small explore-search-trigger"
+              onClick={() => setSearchActive(true)}
+            >
+              <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
+              <span>Search</span>
+            </button>
+          )
         }
       />
     </div>
@@ -331,17 +360,31 @@ export default function Explore({
   const [sort, setSort] = useState<SortOption>('Popular');
   const [selectedChips, setSelectedChips] = useState<Set<CategoryChip>>(() => new Set(FIGMA_ACTIVE_CHIPS));
   const [filterTouched, setFilterTouched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPlaybooks = useMemo(() => {
     const sorted = sort === 'Recent' ? [...PLAYBOOKS].reverse() : PLAYBOOKS;
-    if (!filterTouched || selectedChips.size === 0) return sorted;
-    return sorted.filter((playbook) => {
-      for (const chip of selectedChips) {
-        if (chipMatchesPlaybook(chip, playbook)) return true;
-      }
-      return false;
-    });
-  }, [filterTouched, selectedChips, sort]);
+    let next = sorted;
+
+    if (filterTouched && selectedChips.size > 0) {
+      next = next.filter((playbook) => {
+        for (const chip of selectedChips) {
+          if (chipMatchesPlaybook(chip, playbook)) return true;
+        }
+        return false;
+      });
+    }
+
+    const query = searchQuery.trim().toLowerCase();
+    if (query) {
+      next = next.filter((playbook) => {
+        const haystack = `${playbook.title} ${playbook.description} ${playbook.creator} ${playbook.tickers.join(' ')} ${playbook.cover.template}`.toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    return next;
+  }, [filterTouched, searchQuery, selectedChips, sort]);
 
   const toggleChip = (chip: CategoryChip) => {
     setFilterTouched(true);
@@ -475,36 +518,23 @@ export default function Explore({
           display: flex;
           align-items: center;
         }
-        .explore-search {
+        .explore-search-trigger,
+        .explore-search-input {
           flex: 0 0 160px;
-          height: 28px;
-          border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
-          border-radius: var(--radius-btn-s, 4px);
-          background: #fff;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 4px 8px;
+          width: 160px;
+        }
+        .explore-search-trigger {
+          justify-content: flex-start;
           font-family: inherit;
+        }
+        .explore-search-input {
+          gap: 4px;
+          z-index: 1;
+        }
+        .explore-search-input .input-field {
           font-size: 12px;
           line-height: 20px;
           letter-spacing: 0.12px;
-          color: var(--text-n3, rgba(0,0,0,0.3));
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
-        }
-        .explore-search.is-active {
-          border-color: var(--main-m1, #2A9B7D);
-          background: var(--main-m1-10, rgba(42,155,125,0.1));
-          color: var(--main-m1, #2A9B7D);
-          box-shadow: 0 0 0 2px rgba(42,155,125,0.08);
-        }
-        .explore-search span {
-          min-width: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         .explore-grid {
           margin-top: 20px;
@@ -544,8 +574,10 @@ export default function Explore({
             height: auto;
             margin-top: 28px;
           }
-          .explore-search {
+          .explore-search-trigger,
+          .explore-search-input {
             flex: 1 1 160px;
+            width: auto;
           }
         }
       `}</style>
@@ -558,6 +590,8 @@ export default function Explore({
             onSortChange={setSort}
             selectedChips={selectedChips}
             onChipToggle={toggleChip}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
           <section className="explore-grid">
             {filteredPlaybooks.map((playbook) => (
