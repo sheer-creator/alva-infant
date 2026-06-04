@@ -1,6 +1,6 @@
 import type { Page } from '@/app/App';
 import { AppShell } from '@/app/components/shell/AppShell';
-import { PlaybookCard } from '@/app/components/shared/PlaybookCard';
+import { PlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
 
 /* ---- mock data --------------------------------------------------------- */
 const PLAYBOOK_CARDS = [
@@ -122,9 +122,20 @@ function ExploreContent() {
               gridTemplateColumns: 'repeat(3, 1fr)',
             }}
           >
-            {PLAYBOOK_CARDS.map((card) => (
-              <PlaybookCard key={card.title} {...card} />
-            ))}
+            {PLAYBOOK_CARDS.map((card, i) => {
+              const p: ExplorePlaybook = {
+                id: String(i),
+                creator: card.author,
+                title: card.title,
+                description: card.desc,
+                tickers: [],
+                pulse: 'idle',
+                stars: 0,
+                remixes: card.remixes,
+                cover: { template: 'general', title: card.title, author: card.author, tickers: [] },
+              };
+              return <PlaybookCard key={card.title} p={p} />;
+            })}
           </div>
         </div>
       </div>

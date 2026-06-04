@@ -1,119 +1,82 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import type { Page } from '../../App';
-import { Sidebar } from './Sidebar';
+/**
+ * [INPUT]: Page type, Sidebar, UserInfo, Chat (方案C)
+ * [OUTPUT]: 统一页面外壳（Sidebar + 内容区 + Chat FAB + ChatPanel）
+ * [POS]: Shell 层 — 所有页面的布局容器
+ */
+
+import { useState, useRef, useCallback, useEffect } from 'react';
+import type { Page } from '@/app/App';
+import { Sidebar, SIDEBAR_W_COLLAPSED, SIDEBAR_W_EXPANDED } from './Sidebar';
+import { CdnIcon } from '../shared/CdnIcon';
+
+import { isPlaybookOwnerPage } from '@/lib/chat-config';
+
+const NARROW_THRESHOLD = 1024;
+const MOBILE_THRESHOLD = 640;
+import SearchModal from '../SearchModal';
+import ReferralModal from '../ReferralModal';
+import UserInfo from '../UserInfo';
 import { useChatContext } from '../chat/ChatContext';
 import { ChatPanel } from '../chat/ChatPanel';
-import {
-  CHAT_TRIGGER_MODE,
-  isPlaybookOwnerPage,
-  type ChatTriggerMode,
-  type ThreadsEntryMode,
-} from '@/lib/chat-config';
-import { FloatingChatBar } from '../chat/FloatingChatBar';
 import { FloatingChatFAB } from '../chat/FloatingChatFAB';
-import { FloatingChatBarD } from '../chat/FloatingChatBarD';
-import { CdnIcon } from '../shared/CdnIcon';
-import { ThreadSwitcherDropdown, AGENT_CONVERSATION_ID } from '../shared/ThreadSwitcherDropdown';
-import UserInfo from '../UserInfo';
 
 interface AppShellProps {
-  activePage: Page;
+  activePage?: Page;
   onNavigate: (page: Page) => void;
+  onOpenSearch?: () => void;
+  onUserMouseEnter?: () => void;
+  onUserMouseLeave?: () => void;
   children: React.ReactNode;
 }
 
-const PRIMARY_W = 228;
-const PRIMARY_COMPACT_W = 80;
-
-function HomeThreadsCorner({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const { activeConversationId } = useChatContext();
-  return (
-    <div className="pointer-events-auto fixed z-[45]" style={{ top: 18, right: 18 }}>
-      <ThreadSwitcherDropdown
-        activeId={activeConversationId}
-        onSelect={(id) => onNavigate((id === AGENT_CONVERSATION_ID ? 'agent' : `thread/${id}`) as Page)}
-        align="right"
-        trigger={
-          <button
-            type="button"
-            className="cursor-pointer rounded-[8px] p-[6px] transition-colors hover:bg-black/[0.06]"
-            aria-label="Recent threads"
-          >
-            <CdnIcon name="history-l" size={16} color="var(--text-n9)" />
-          </button>
-        }
-      />
-    </div>
-  );
-}
-
-function HomeThreadsLeft({ onToggle }: { onToggle: () => void }) {
-  return (
-    <div className="pointer-events-auto absolute z-[45]" style={{ top: 18, left: 18 }}>
-      <button
-        type="button"
-        className="cursor-pointer rounded-[8px] p-[6px] transition-colors hover:bg-black/[0.06]"
-        aria-label="Recent threads"
-        onClick={onToggle}
-      >
-        <CdnIcon name="history-l" size={16} color="var(--text-n9)" />
-      </button>
-    </div>
-  );
-}
-
-const DEFAULT_PANEL_W = 480;
+const DEFAULT_PANEL_W = 496;
 const MIN_PANEL_W = 436;
 const getMaxPanelW = () =>
   typeof window !== 'undefined' ? Math.max(MIN_PANEL_W, window.innerWidth * 0.6) : DEFAULT_PANEL_W;
 
-function AppShellInner({
-  activePage,
-  onNavigate,
-  children,
-  triggerMode,
-  threadsEntryMode,
-}: AppShellProps & { triggerMode: ChatTriggerMode; threadsEntryMode: ThreadsEntryMode }) {
-  const {
-    chatOpen,
-    closeChat,
-    toggleChat,
-    openChat,
-    openChatWithPrefill,
-    contextTag,
-    activeConversationId,
-    setActiveConversation,
-    inspectorActive,
-    addElementQuote,
-  } = useChatContext();
+function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isReferralOpen, setIsReferralOpen] = useState(false);
+  const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const { chatOpen, closeChat, openChatWithPrefill, contextTag, inspectorActive, addElementQuote } = useChatContext();
   const showChat = chatOpen && contextTag !== null;
+  const inspectorActiveRef = useRef(inspectorActive);
+  inspectorActiveRef.current = inspectorActive;
+
+  // 侧边栏折叠：窗口窄时自动折叠，按钮可手动切换；< MOBILE_THRESHOLD 时整体隐藏
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < NARROW_THRESHOLD : false,
+  );
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < MOBILE_THRESHOLD : false,
+  );
+  useEffect(() => {
+    let lastWasNarrow = window.innerWidth < NARROW_THRESHOLD;
+    const handler = () => {
+      const w = window.innerWidth;
+      const isNarrow = w < NARROW_THRESHOLD;
+      if (isNarrow !== lastWasNarrow) {
+        setSidebarCollapsed(isNarrow);
+        lastWasNarrow = isNarrow;
+      }
+      setIsMobile(w < MOBILE_THRESHOLD);
+      setPanelWidth((prev) => Math.min(getMaxPanelW(), Math.max(MIN_PANEL_W, prev)));
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  const sidebarWidth = sidebarCollapsed ? SIDEBAR_W_COLLAPSED : SIDEBAR_W_EXPANDED;
+  void isMobile; void sidebarWidth; // reserved (Freshman shell responsive vars)
   const [panelWidth, setPanelWidth] = useState(() => Math.min(getMaxPanelW(), DEFAULT_PANEL_W));
   const dragging = useRef(false);
   const startX = useRef(0);
   const startW = useRef(DEFAULT_PANEL_W);
   const panelWrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handler = () => {
-      setPanelWidth((prev) => Math.min(getMaxPanelW(), Math.max(MIN_PANEL_W, prev)));
-    };
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, []);
-  const [threadsRailOpen, setThreadsRailOpen] = useState(false);
-  const sidebarCompact = false;
-
-  const inspectorActiveRef = useRef(inspectorActive);
-  inspectorActiveRef.current = inspectorActive;
-
-  const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (threadsEntryMode !== '2' && threadsEntryMode !== '4') setThreadsRailOpen(false);
-  }, [threadsEntryMode]);
-
+  /* ── postMessage bridge: inspector quotes, remix, drawer ── */
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
       const data = e.data;
@@ -148,6 +111,7 @@ function AppShellInner({
     return () => window.removeEventListener('message', onMessage);
   }, [closeChat, openChatWithPrefill, onNavigate, addElementQuote]);
 
+  /* notify iframes when chat panel opens */
   useEffect(() => {
     if (!chatOpen) return;
     document.querySelectorAll('iframe').forEach((f) => {
@@ -168,7 +132,8 @@ function AppShellInner({
   const handleUserEnter = useCallback(() => {
     if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
     setIsUserInfoOpen(true);
-  }, []);
+    onUserMouseEnter?.();
+  }, [onUserMouseEnter]);
 
   useEffect(() => {
     if (!isUserInfoOpen) return;
@@ -187,7 +152,10 @@ function AppShellInner({
       if (inSafeZone) {
         if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
       } else if (!closeTimer.current) {
-        closeTimer.current = setTimeout(() => setIsUserInfoOpen(false), 150);
+        closeTimer.current = setTimeout(() => {
+          setIsUserInfoOpen(false);
+          onUserMouseLeave?.();
+        }, 150);
       }
     };
 
@@ -196,21 +164,9 @@ function AppShellInner({
       document.removeEventListener('mousemove', onMouseMove);
       if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
     };
-  }, [isUserInfoOpen]);
+  }, [isUserInfoOpen, onUserMouseLeave]);
 
-  const closeUserInfo = useCallback(() => {
-    if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
-    setIsUserInfoOpen(false);
-  }, []);
-
-  const primaryW = sidebarCompact ? PRIMARY_COMPACT_W : PRIMARY_W;
-  const sidebarTotalW = primaryW;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSelectConversation = (id: string) => {
-    setActiveConversation(id);
-    if (!chatOpen) openChat(id !== 'new');
-  };
 
   const onDragStart = useCallback(
     (e: React.MouseEvent) => {
@@ -256,22 +212,15 @@ function AppShellInner({
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--b0-sidebar)' }}>
+    <div className="bg-[var(--b0-sidebar)] flex h-screen overflow-hidden relative w-full">
       {/* Desktop sidebar — hidden below lg */}
       <div className="hidden lg:block">
         <Sidebar
           activePage={activePage}
           onNavigate={onNavigate}
-          chatOpen={triggerMode === 'sidebar' ? chatOpen : undefined}
-          onChatToggle={triggerMode === 'sidebar' ? toggleChat : undefined}
-          activeConversationId={activeConversationId}
-          onSelectConversation={handleSelectConversation}
-          threadsEntryMode={threadsEntryMode}
-          threadsRailOpen={threadsRailOpen}
-          onToggleThreadsRail={() => setThreadsRailOpen(o => !o)}
-          sidebarCompact={sidebarCompact}
-          primaryWidth={primaryW}
+          onOpenSearch={() => setIsSearchOpen(true)}
           onUserMouseEnter={handleUserEnter}
+          onOpenReferral={() => setIsReferralOpen(true)}
         />
       </div>
 
@@ -287,25 +236,17 @@ function AppShellInner({
             <Sidebar
               activePage={activePage}
               onNavigate={(page) => { setMobileMenuOpen(false); onNavigate(page); }}
-              chatOpen={triggerMode === 'sidebar' ? chatOpen : undefined}
-              onChatToggle={triggerMode === 'sidebar' ? toggleChat : undefined}
-              activeConversationId={activeConversationId}
-              onSelectConversation={handleSelectConversation}
-              threadsEntryMode={threadsEntryMode}
-              threadsRailOpen={false}
-              sidebarCompact={false}
-              primaryWidth={264}
+              onOpenSearch={() => { setMobileMenuOpen(false); setIsSearchOpen(true); }}
               onUserMouseEnter={handleUserEnter}
+              onOpenReferral={() => { setMobileMenuOpen(false); setIsReferralOpen(true); }}
             />
           </div>
         </div>
       )}
 
-      <style>{`@media (min-width: 1024px) { [data-app-main] { margin-left: ${sidebarTotalW}px; } }`}</style>
-      <main
-        data-app-main=""
-        className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-white"
-      >
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <ReferralModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} onNavigate={onNavigate} />
+      <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-white lg:ml-[228px]">
         {/* Mobile topbar — shown below lg */}
         <div
           className="flex lg:hidden items-center shrink-0"
@@ -313,7 +254,7 @@ function AppShellInner({
             height: 56,
             padding: '18px 16px',
             gap: 12,
-            background: 'var(--b0-page, #fff)',
+            background: '#fff',
           }}
         >
           <button
@@ -335,7 +276,7 @@ function AppShellInner({
           <div className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
             {children}
           </div>
-          {activePage !== 'home' && contextTag !== null && (
+          {contextTag !== null && (
             <div
               ref={panelWrapperRef}
               className="relative shrink-0"
@@ -355,39 +296,54 @@ function AppShellInner({
             </div>
           )}
         </div>
-        {activePage === 'home' && threadsEntryMode === '3' && <HomeThreadsCorner onNavigate={onNavigate} />}
-        {activePage === 'home' && threadsEntryMode === '4' && <HomeThreadsLeft onToggle={() => setThreadsRailOpen(o => !o)} />}
       </main>
 
-      {activePage !== 'home' && contextTag !== null && triggerMode === 'floating-bar' && <FloatingChatBar />}
-      {activePage !== 'home' && contextTag !== null && triggerMode === 'fab' && <FloatingChatFAB />}
-      {activePage !== 'home' && contextTag !== null && triggerMode === 'inline-composer' && <FloatingChatBarD />}
+      {/* 方案C: FAB trigger */}
+      {contextTag !== null && <FloatingChatFAB />}
 
       {isUserInfoOpen && (
-        <>
-          <div className="fixed inset-0 z-[9998]" onMouseDown={closeUserInfo} />
-          <div
-            ref={popupRef}
-            className="fixed bottom-[56px] left-[8px] z-[9999] w-[360px]"
-          >
-            <UserInfo onNavigate={onNavigate} />
-          </div>
-        </>
+        <div
+          ref={popupRef}
+          className="fixed bottom-[56px] left-[8px] z-[9999] w-[360px]"
+        >
+          <UserInfo />
+        </div>
       )}
     </div>
   );
 }
 
-export function AppShell({ activePage, onNavigate, children }: AppShellProps) {
-  const triggerMode = CHAT_TRIGGER_MODE;
-  const threadsEntryMode: ThreadsEntryMode = '1';
+/**
+ * Mobile-only top nav. Per Figma `Home - Common` 1194:33015 (mobile topbar
+ * pattern), but stripped per latest spec to only the left-side settings
+ * button — no centered logo, no right-side action. The settings button
+ * doubles as the drawer trigger so the full sidebar is still reachable.
+ */
+export function MobileTopBar({ onOpenDrawer }: { onOpenDrawer: () => void }) {
+  return (
+    <div
+      className="sticky top-0 z-[20] flex items-center h-[48px] px-[12px] shrink-0"
+      style={{ background: '#f6f6f6' }}
+    >
+      <button
+        onClick={onOpenDrawer}
+        className="flex items-center justify-center w-[36px] h-[36px] rounded-[8px] hover:bg-[var(--b-r05)] cursor-pointer transition-colors"
+        aria-label="Open navigation"
+      >
+        <CdnIcon name="menu-l" size={20} color="var(--text-n9)" />
+      </button>
+    </div>
+  );
+}
 
+export function AppShell({ activePage, onNavigate, onOpenSearch, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
   return (
     <AppShellInner
       activePage={activePage}
       onNavigate={onNavigate}
-      triggerMode={triggerMode}
-      threadsEntryMode={threadsEntryMode}
+      onOpenSearch={onOpenSearch}
+      onUserMouseEnter={onUserMouseEnter}
+      onUserMouseLeave={onUserMouseLeave}
     >
       {children}
     </AppShellInner>

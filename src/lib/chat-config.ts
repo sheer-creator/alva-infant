@@ -3,7 +3,7 @@ export type ChatTriggerMode = 'floating-bar' | 'sidebar' | 'fab' | 'inline-compo
 /** Change this to switch between the four approaches */
 export const CHAT_TRIGGER_MODE: ChatTriggerMode = 'fab';
 
-/** Threads 入口方案：1=Home 右下角 FAB；2=侧栏 history 展开列表；3=Home 右上角 history 下拉；4=侧栏 history 按钮+覆盖浮层 */
+/** Threads 入口方案 */
 export type ThreadsEntryMode = '1' | '2' | '3' | '4';
 
 export const THREADS_ENTRY_STORAGE_KEY = 'threadsEntryMode';
@@ -31,27 +31,37 @@ export const HOME_CHAT_CONTEXT: ContextTagData = {
   icon: 'sidebar-discover-normal',
 };
 
-/** Fallback for any page not listed in PAGE_CONTEXT_MAP — new playbooks
- *  pick this up automatically until an explicit label is registered. */
-export const DEFAULT_PLAYBOOK_CONTEXT: ContextTagData = {
-  label: 'Playbook',
-  icon: 'sidebar-discover-normal',
+/** Maps each page to its @context tag. null = no chat trigger on that page */
+export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
+  explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
+  'explore-2': { label: 'Explore', icon: 'sidebar-discover-normal' },
+  agent: null,
+  'new-chat': null,
+  'new-chat-opt2': null,
 };
 
-/** Maps each page to its @context tag.
- *  - explicit entry with value → FAB uses that label
- *  - explicit null → opt out (no FAB)
- *  - key absent → falls back to DEFAULT_PLAYBOOK_CONTEXT */
-export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
-  home: null,
-  explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
-  screener: { label: 'Feed Test', icon: 'sidebar-discover-normal' },
-  'template-screener': { label: 'Template-Screener', icon: 'sidebar-discover-normal' },
-  'template-thesis': { label: 'Template-Thesis', icon: 'sidebar-discover-normal' },
-  'template-whatif': { label: 'Template-Whatif', icon: 'sidebar-discover-normal' },
-  'template-notification': { label: 'Template-Notification', icon: 'sidebar-discover-normal' },
-  agent: null,
-  'alva-skills': null,
+/** Page → chrome/topbar title. Used by AppShell for the topbar and by chat
+ *  contextTag to label the playbook chip with the actual playbook name. */
+export const PAGE_TITLES: Record<string, string> = {
+  'new-chat': 'New chat',
+  'explore-2': 'Explore',
+  portfolio: 'Portfolio',
+  agent: 'Agent',
+  'alva-skills': 'Alva Skill',
+  account: 'Account',
+  'user-profile': 'Profile',
+  pricing: 'Pricing',
+  'api-keys': 'API Keys',
+  notifications: 'Notifications',
+  automations: 'Automations',
+  billing: 'Billing',
+  'alva-agent': 'Alva Agent',
+  'portfolio-settings': 'Portfolio',
+  screener: 'Feed Test',
+  'template-screener': 'Template-Screener',
+  'template-thesis': 'Template-Thesis',
+  'template-whatif': 'Template-Whatif',
+  'template-notification': 'Template-Notification',
 };
 
 export interface ConversationItem {
@@ -59,7 +69,7 @@ export interface ConversationItem {
   label: string;
 }
 
-/** Thread / conversation list shown in sidebar and ChatPanel dropdown (sorted by most recent) */
+/** Thread / conversation list */
 export const CONVERSATIONS: ConversationItem[] = [
   { id: 'demo', label: 'Animated Demo Playbook with Mock Data' },
   { id: 'cpi', label: 'US CPI Impact on Fed Rate Cut Odds' },
@@ -75,17 +85,10 @@ export const CONVERSATIONS: ConversationItem[] = [
 ];
 
 /** Default thread to load when opening chat on a specific page */
-export const PAGE_DEFAULT_THREAD: Record<string, string> = {
-  screener: 'demo',
-  'template-screener': 'demo',
-  thesis: 'demo',
-  'template-thesis': 'demo',
-  'template-whatif': 'demo',
-  'template-notification': 'demo',
-};
+export const PAGE_DEFAULT_THREAD: Record<string, string> = {};
 
 /** Pages where the current user is the playbook owner (主态).
- *  Template pages are visitor (客态). */
+ *  Starred / template pages are visitor (客态). */
 const OWNER_PLAYBOOK_PAGES = new Set(['screener']);
 
 export function isPlaybookOwnerPage(page: string): boolean {

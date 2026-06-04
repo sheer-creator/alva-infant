@@ -3,23 +3,6 @@ import { CdnIcon } from '../shared/CdnIcon';
 import DotMatrixWave from '../shared/DotMatrixWave';
 import { useChatContext } from './ChatContext';
 import { StreamingMessages } from './StreamingMessages';
-import { AGENT_CONVERSATION_ID } from '../shared/ThreadSwitcherDropdown';
-import { INITIAL_AGENT_MESSAGE } from '@/pages/Agent';
-
-function AgentConnectedConversation() {
-  return (
-    <div className="flex flex-col gap-[16px] items-start w-full">
-      <img
-        src={`${import.meta.env.BASE_URL}logo-alva-beta-green-black.svg`}
-        alt="Alva"
-        style={{ height: 12, width: 70 }}
-      />
-      <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full">
-        {INITIAL_AGENT_MESSAGE.text}
-      </p>
-    </div>
-  );
-}
 
 /* ── Mock conversation data ── */
 const MOCK_USER_MSG = `Build me an NVDA earnings dashboard — I want to see quarterly revenue, gross margin trends, and a forward P/E comparison with AMD and INTC.`;
@@ -96,31 +79,31 @@ const DASHBOARD_COVER_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns
 <text x="16" y="252" font-size="6" fill="rgba(0,0,0,.15)" font-family="sans-serif" font-weight="500">Alva</text>
 </svg>`)}`;
 
-function PlaybookCard({ sourceThreadId }: { sourceThreadId?: string }) {
+function PlaybookCard({ sourceThreadId, variant = 'default' }: { sourceThreadId?: string; variant?: 'default' | 'drawer' }) {
   const handleClick = () => {
     if (sourceThreadId) {
       sessionStorage.setItem('openChatWithThread', sourceThreadId);
     }
-    window.location.hash = 'screener';
+    window.location.hash = 'trends';
   };
   return (
     <div
       className="flex flex-col items-start overflow-clip w-[360px] shrink-0 cursor-pointer hover:shadow-l transition-shadow"
-      style={{ border: '0.5px solid var(--line-l3)', borderRadius: 12, padding: 4, background: 'white' }}
+      style={{ border: '0.5px solid var(--line-l3)', borderRadius: variant === 'drawer' ? 8 : 12, padding: 4, background: 'white' }}
       onClick={handleClick}
     >
       <div className="relative shrink-0 w-full" style={{ aspectRatio: '472 / 265.5' }}>
-        <div className="absolute inset-0 rounded-[8px] overflow-hidden">
+        <div className="absolute inset-0 rounded-[4px] overflow-hidden">
           <img src={DASHBOARD_COVER_SVG} alt="Dashboard preview" className="absolute top-0 left-0 w-full h-full block" style={{ objectFit: 'cover' }} />
         </div>
       </div>
       <div className="flex flex-col gap-[12px] pt-[16px] pb-[12px] px-[16px] w-full">
         <div className="flex flex-col gap-[4px] w-full">
           <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] overflow-hidden whitespace-nowrap text-ellipsis h-[28px]">
-            Quality Value Stock Screener
+            BTC Ultimate AI Trader
           </p>
           <p className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)] overflow-hidden h-[44px]" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}>
-            Screens US large caps by P/E, ROE, D/E then ranks the top 40 on a Value + Quality + Safety composite score.
+            This strategy intelligently pinpoints BTC's optimal trading sweet spots through dual-engine analysis: RSI oversold alerts + Bollinger Band breakouts.
           </p>
         </div>
       </div>
@@ -133,7 +116,7 @@ function ReasonedStepsDivider() {
   const FONT = "font-['Delight',sans-serif]";
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col py-[4px]">
       <div
         className="flex items-center gap-[8px] w-full cursor-pointer"
         onClick={() => setExpanded(v => !v)}
@@ -152,91 +135,216 @@ function ReasonedStepsDivider() {
         <div className="flex-1 h-0" style={{ borderTop: '1px solid var(--line-l05)' }} />
       </div>
       {expanded && (
-        <div className="flex flex-col gap-[16px] w-full mt-[12px]">
-          {MOCK_REASON_STEPS.map((step, i) => (
-            <div key={i} className="flex gap-[8px] items-start w-full">
-              <div className="relative shrink-0 w-[12px] self-stretch">
-                <div className="absolute left-1/2 top-[2px] bottom-[2px] w-0 -translate-x-1/2"
-                  style={{ borderLeft: '1px dashed var(--line-l12)' }} />
-              </div>
-              <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0">
-                <div className="flex items-center gap-[8px] w-full">
-                  <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n9)] shrink-0`}>
-                    {step.label}
-                  </span>
-                  {step.meta && (
-                    <div className="flex items-center justify-center max-w-[640px] px-[6px] py-[1px] rounded-[2px] min-w-0"
-                      style={{ background: 'var(--b-r03)' }}>
-                      <span className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] truncate`}>
-                        {step.meta}
-                      </span>
+        <>
+          <div className="flex flex-col gap-[16px] w-full mt-[12px]">
+            {MOCK_REASON_STEPS.map((step, i) => (
+              <div key={i} className="flex gap-[8px] items-start w-full">
+                <div className="relative shrink-0 w-[12px] self-stretch">
+                  <div className="absolute left-1/2 top-[2px] bottom-[2px] w-0 -translate-x-1/2"
+                    style={{ borderLeft: '1px dashed var(--line-l12)' }} />
+                </div>
+                <div className="flex flex-col gap-[8px] items-start flex-1 min-w-0">
+                  <div className="flex items-center gap-[8px] w-full">
+                    <span className={`${FONT} text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n9)] shrink-0`}>
+                      {step.label}
+                    </span>
+                    {step.meta && (
+                      <div className="flex items-center justify-center max-w-[640px] px-[6px] py-[1px] rounded-[2px] min-w-0"
+                        style={{ background: 'var(--b-r03)' }}>
+                        <span className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] truncate`}>
+                          {step.meta}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {step.lines && step.lines.length > 0 && (
+                    <div className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] flex-1 min-w-0`}>
+                      {step.lines.map((line, li) => (
+                        <p key={li} className="leading-[16px] mb-0">{line}</p>
+                      ))}
                     </div>
                   )}
                 </div>
-                {step.lines && step.lines.length > 0 && (
-                  <div className={`${MONO} text-[10px] leading-[16px] text-[var(--text-n5)] flex-1 min-w-0`}>
-                    {step.lines.map((line, li) => (
-                      <p key={li} className="leading-[16px] mb-0">{line}</p>
-                    ))}
-                  </div>
-                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="w-full" style={{ paddingTop: 16, paddingBottom: 4 }}>
+            <div className="w-full h-0" style={{ borderTop: '1px solid var(--line-l07)' }} />
+          </div>
+        </>
       )}
     </div>
   );
 }
 
+const MOCK_QA_PAIRS = [
+  { q: 'What difficulty level do you want for the finance quiz?', a: 'The dividend yield of a stock' },
+  { q: 'Which topic area should the questions focus on?', a: 'S&P 500 annual return' },
+  { q: 'In options trading, what does "theta" represent?', a: 'Sensitivity to changes in the underlying asset\'s price' },
+];
+
+const MOCK_TAKEAWAYS = [
+  'NVDA trades at a 15% premium to AMD on forward P/E, but delivered 4.7x the revenue growth',
+  'Gross margin expansion is accelerating — the data center mix shift is structural',
+];
+
+function AlvaBetaLogo() {
+  return <img src={`${import.meta.env.BASE_URL}logo-alva-beta-green-black.svg`} alt="Alva" style={{ height: 12, width: 70 }} />;
+}
+
+function BulletList({ items }: { items: { bold?: string; text: string }[] }) {
+  return (
+    <div className="flex flex-col gap-[4px] w-full">
+      {items.map((b, i) => (
+        <div key={i} className="flex items-start w-full">
+          <div className="w-[20px] h-[22px] flex items-center justify-center shrink-0">
+            <div className="size-[5px] rounded-full bg-[var(--text-n9)]" />
+          </div>
+          <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] flex-1">
+            {b.bold && <span className="font-medium">{b.bold}</span>}{b.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SourceLink({ sourceThreadId }: { sourceThreadId?: string }) {
+  return (
+    <div className="flex items-center gap-[4px]">
+      <span className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]">Source:</span>
+      <div className="flex items-center gap-[2px]">
+        <span
+          className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] underline decoration-dotted cursor-pointer"
+          style={{ textDecorationColor: 'var(--text-n5)' }}
+          onClick={() => { if (sourceThreadId) sessionStorage.setItem('openChatWithThread', sourceThreadId); window.location.hash = 'trends'; }}
+        >
+          BTC Ultimate AI Trader
+        </span>
+        <CdnIcon name="go-l" size={14} />
+      </div>
+    </div>
+  );
+}
+
+function GeneratedLine() {
+  return (
+    <div className="flex items-center gap-[4px] w-full overflow-hidden">
+      <span className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)] truncate">
+        Ran 5 commands, searched code, read a file
+      </span>
+      <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
+    </div>
+  );
+}
+
+function DrawerConversation({ sourceThreadId }: { sourceThreadId?: string }) {
+  const FONT = "font-['Delight',sans-serif]";
+  return (
+    <div className="flex flex-col gap-[16px] items-start w-full">
+      <div className="flex flex-col items-end w-full">
+        <div className="w-full px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
+          <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>{MOCK_USER_MSG}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-[4px] w-full pt-[4px]">
+        <AlvaBetaLogo />
+      </div>
+      <GeneratedLine />
+
+      <div className="flex flex-col gap-[12px] items-start w-full">
+        <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>
+          Building the <span className="font-medium">3-Widget Grid</span> layout:
+        </p>
+        <BulletList items={MOCK_BULLETS.map(b => ({ bold: b.bold, text: b.text }))} />
+        <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>Dashboard is ready. Here's a summary:</p>
+        <SourceLink sourceThreadId={sourceThreadId} />
+        <PlaybookCard sourceThreadId={sourceThreadId} variant="drawer" />
+      </div>
+
+      <div className="flex flex-col items-end w-full">
+        <div
+          className={`${FONT} flex flex-col w-full px-[16px] py-[12px] text-[14px] leading-[22px] tracking-[0.14px]`}
+          style={{ background: 'var(--main-m1-10)', borderRadius: 8, gap: 12 }}
+        >
+          {MOCK_QA_PAIRS.map((pair, i) => (
+            <div key={i} className="flex flex-col gap-[2px]">
+              <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n5)]`}>{pair.q}</p>
+              <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>{pair.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-[4px] w-full pt-[4px]">
+        <AlvaBetaLogo />
+      </div>
+      <GeneratedLine />
+
+      <div className="flex flex-col gap-[12px] items-start w-full">
+        <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>Key takeaways:</p>
+        <BulletList items={MOCK_TAKEAWAYS.map(t => ({ text: t }))} />
+        <SourceLink sourceThreadId={sourceThreadId} />
+        <PlaybookCard sourceThreadId={sourceThreadId} variant="drawer" />
+      </div>
+    </div>
+  );
+}
+
 function MockConversation({ sourceThreadId }: { sourceThreadId?: string }) {
+  const FONT = "font-['Delight',sans-serif]";
   return (
     <>
+      {/* ── Round 1 ── */}
       <div className="flex flex-col items-end w-full">
-        <div className="w-full max-w-[560px] px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
-          <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">{MOCK_USER_MSG}</p>
+        <div className="max-w-[560px] px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
+          <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>{MOCK_USER_MSG}</p>
         </div>
       </div>
       <ReasonedStepsDivider />
-      <div className="flex items-center gap-[4px] shrink-0">
-        <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" style={{ height: 14 }} />
-        <span className="font-['Delight',sans-serif] text-[10px] leading-[14px] px-[4px] py-[1px]" style={{ background: 'var(--main-m1-10)', color: 'var(--main-m1)', borderRadius: 3 }}>Beta</span>
-      </div>
-      <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] w-full">
-        Building the <span className="font-medium text-[14px] leading-[22px] tracking-[0.14px]">3-Widget Grid</span> layout:
+      <AlvaBetaLogo />
+      <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>
+        Building the <span className="font-medium">3-Widget Grid</span> layout:
       </p>
-      <div className="flex flex-col gap-[8px] w-full">
-        {MOCK_BULLETS.map((b) => (
-          <div key={b.bold} className="flex items-start w-full">
-            <div className="w-[24px] h-[26px] flex items-center justify-center shrink-0">
-              <div className="size-[5px] rounded-full bg-[var(--text-n9)]" />
-            </div>
-            <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] flex-1">
-              <span className="font-medium">{b.bold}</span>{b.text}
-            </p>
-          </div>
-        ))}
-      </div>
-      <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)] w-full">Dashboard is ready. Here's a summary:</p>
+      <BulletList items={MOCK_BULLETS.map(b => ({ bold: b.bold, text: b.text }))} />
+      <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>Dashboard is ready. Here's a summary:</p>
       <div className="flex w-full overflow-x-auto">
         {MOCK_TABLE.headers.map((header, ci) => (
-          <div key={header} className="flex flex-col flex-1 min-w-[108px]">
-            <div className="py-[12px] pr-[12px]">
-              <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n7)] truncate">{header}</p>
+          <div key={header} className="flex flex-col flex-1 min-w-[96px]">
+            <div className="py-[10px] pr-[8px]">
+              <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n7)] truncate`}>{header}</p>
             </div>
             {MOCK_TABLE.rows.map((row) => (
-              <div key={row[0]} className="py-[12px] pr-[12px]" style={{ borderTop: '1px solid var(--line-l07)' }}>
-                <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate">{row[ci]}</p>
+              <div key={row[0]} className="py-[10px] pr-[8px]" style={{ borderTop: '1px solid var(--line-l07)' }}>
+                <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate`}>{row[ci]}</p>
               </div>
             ))}
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-[4px]">
-        <span className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">Source:</span>
-        <span className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n7)] underline decoration-dotted cursor-pointer" onClick={() => { if (sourceThreadId) sessionStorage.setItem('openChatWithThread', sourceThreadId); window.location.hash = 'screener'; }}>BTC Ultimate AI Trader</span>
-        <CdnIcon name="go-l" size={16} />
+      <SourceLink sourceThreadId={sourceThreadId} />
+      <PlaybookCard sourceThreadId={sourceThreadId} />
+
+      {/* ── Round 2: Q&A bubble ── */}
+      <div className="flex flex-col items-end w-full">
+        <div
+          className={`${FONT} flex flex-col max-w-[560px] px-[16px] py-[12px] text-[14px] leading-[22px] tracking-[0.14px]`}
+          style={{ background: 'var(--main-m1-10)', borderRadius: 8, gap: 12 }}
+        >
+          {MOCK_QA_PAIRS.map((pair, i) => (
+            <div key={i} className="flex flex-col gap-[2px]">
+              <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n5)]`}>{pair.q}</p>
+              <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>{pair.a}</p>
+            </div>
+          ))}
+        </div>
       </div>
+      <ReasonedStepsDivider />
+      <AlvaBetaLogo />
+      <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>Key takeaways:</p>
+      <BulletList items={MOCK_TAKEAWAYS.map(t => ({ text: t }))} />
+      <SourceLink sourceThreadId={sourceThreadId} />
       <PlaybookCard sourceThreadId={sourceThreadId} />
     </>
   );
@@ -263,31 +371,24 @@ function EmptyState() {
 interface ChatMessagesProps {
   conversationId: string;
   hasContent?: boolean;
+  surface?: 'page' | 'drawer';
 }
 
-export function ChatMessages({ conversationId, hasContent }: ChatMessagesProps) {
+export function ChatMessages({ conversationId, hasContent, surface = 'page' }: ChatMessagesProps) {
   const { streamingState, pendingPrompt } = useChatContext();
   const showContent = hasContent ?? (conversationId !== 'new');
-
-  if (conversationId === AGENT_CONVERSATION_ID) {
-    return (
-      <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">
-        <AgentConnectedConversation />
-      </div>
-    );
-  }
 
   if (!showContent) return <EmptyState />;
 
   // Show streaming conversation
   if (conversationId === 'streaming' && streamingState) {
     return (
-      <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">
+      <div className="flex flex-col flex-1 gap-[12px] items-start min-h-0 w-full">
         {/* User prompt bubble */}
         {pendingPrompt && (
           <div className="flex flex-col items-end w-full">
-            <div className="w-full max-w-[560px] px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
-              <p className="font-['Delight',sans-serif] text-[16px] leading-[26px] tracking-[0.16px] text-[var(--text-n9)]">{pendingPrompt}</p>
+            <div className="max-w-[560px] px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
+              <p className="font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]">{pendingPrompt}</p>
             </div>
           </div>
         )}
@@ -296,8 +397,12 @@ export function ChatMessages({ conversationId, hasContent }: ChatMessagesProps) 
     );
   }
 
+  if (surface === 'drawer') {
+    return <DrawerConversation sourceThreadId={conversationId} />;
+  }
+
   return (
-    <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full">
+    <div className="flex flex-col flex-1 gap-[12px] items-start min-h-0 w-full">
       <MockConversation sourceThreadId={conversationId} />
     </div>
   );

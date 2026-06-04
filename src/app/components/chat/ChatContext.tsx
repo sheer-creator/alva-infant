@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import type { Page } from '@/app/App';
 import {
-  DEFAULT_PLAYBOOK_CONTEXT,
   HOME_CHAT_CONTEXT,
   PAGE_CONTEXT_MAP,
   PAGE_DEFAULT_THREAD,
+  PAGE_TITLES,
   type ChatTriggerMode,
   type ContextTagData,
   type ThreadsEntryMode,
@@ -249,8 +249,6 @@ const ChatCtx = createContext<ChatContextValue | null>(null);
 export function ChatProvider({
   activePage,
   children,
-  threadsEntryMode = '1',
-  chatTriggerMode = 'fab',
 }: {
   activePage: Page;
   children: React.ReactNode;
@@ -275,6 +273,14 @@ export function ChatProvider({
       sessionStorage.removeItem('openChatWithThread');
       setActiveConversationId(threadId);
       setHasInitialInput(true);
+      setChatOpen(true);
+    }
+
+    const autoOpen = sessionStorage.getItem('autoOpenChatPanel');
+    if (autoOpen && activePage === 'new-chat') {
+      sessionStorage.removeItem('autoOpenChatPanel');
+      setActiveConversationId('new');
+      setHasInitialInput(false);
       setChatOpen(true);
     }
   }, [activePage]);
@@ -360,13 +366,15 @@ export function ChatProvider({
   useEffect(() => () => { simRef.current?.cancel(); }, []);
 
   const contextTag = useMemo((): ContextTagData | null => {
-    if (typeof activePage === 'string' && activePage.startsWith('thread/')) return null;
-    if (activePage === 'home') {
-      return threadsEntryMode === '1' && chatTriggerMode === 'fab' ? HOME_CHAT_CONTEXT : null;
-    }
+    // agent 和 thread 页面不显示 Chat FAB
     if (activePage in PAGE_CONTEXT_MAP) return PAGE_CONTEXT_MAP[activePage];
-    return DEFAULT_PLAYBOOK_CONTEXT;
-  }, [activePage, threadsEntryMode, chatTriggerMode]);
+    if (activePage.startsWith('thread/')) return null;
+    // Playbook/template 详情页：chip label 用 playbook 名称
+    const pageTitle = PAGE_TITLES[activePage];
+    if (pageTitle) return { label: pageTitle, icon: 'sidebar-discover-normal' };
+    // 其余页面都显示 Chat FAB
+    return HOME_CHAT_CONTEXT;
+  }, [activePage]);
 
   const value = useMemo(
     () => ({

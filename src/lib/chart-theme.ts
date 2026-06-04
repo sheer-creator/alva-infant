@@ -1,3 +1,11 @@
+/**
+ * [INPUT]: 无外部依赖
+ * [OUTPUT]: ECharts 共享配置 — 调色板、tooltip、轴、系列默认值
+ * [POS]: 所有 Widget 图表的视觉语言统一层
+ */
+
+/* ========== 调色板 ========== */
+
 export const CHART_COLORS = {
   primary: '#49A3A6',
   orange: '#FF9800',
@@ -17,40 +25,51 @@ export const CHART_COLOR_PALETTE = [
   CHART_COLORS.yellow,
 ];
 
+/**
+ * 用户头像专用调色板（15 色）。
+ * sum(charCodes) % 15 对以下全部已知用户保证零碰撞：
+ * Alva Intern(9) · YGGYLL(7) · Harry Zzz(14) · Leo Leo(8)
+ * Sheer YLL YGG(4) · Macro Scope X(1) · Smart Jing(13)
+ */
 export const AVATAR_COLOR_PALETTE = [
-  '#49A3A6', '#FF9800', '#40A544', '#8FC13A', '#3D8BD1',
-  '#0D7498', '#5F75C9', '#7474D8', '#A878DC', '#DC7AA5',
-  '#C76466', '#E6A91A', '#E05357', '#007949', '#838383',
+  '#49A3A6',  // 0  cyan / Alva primary
+  '#FF9800',  // 1  orange
+  '#40A544',  // 2  green1
+  '#8FC13A',  // 3  green2
+  '#3D8BD1',  // 4  blue1
+  '#0D7498',  // 5  blue2
+  '#5F75C9',  // 6  purple1
+  '#7474D8',  // 7  purple2
+  '#A878DC',  // 8  violet
+  '#DC7AA5',  // 9  pink
+  '#C76466',  // 10 red1
+  '#E6A91A',  // 11 yellow
+  '#E05357',  // 12 neg-red
+  '#007949',  // 13 deep-green
+  '#838383',  // 14 grey
 ];
 
+/* ========== 字体 & 图表背景 ========== */
+
 export const CREATOR_AVATARS: Record<string, string> = {
+  Alva: `${import.meta.env.BASE_URL}logo-portrait.svg`,
+  YGGYLL: `${import.meta.env.BASE_URL}portrait.png`,
   'Alva Intern': 'https://api.dicebear.com/9.x/notionists/svg?seed=AlvaIntern&backgroundColor=e8f5e9',
   'Harry Zzz': 'https://api.dicebear.com/9.x/notionists/svg?seed=HarryZzz&backgroundColor=e3f2fd',
   'Smart Jing': 'https://api.dicebear.com/9.x/notionists/svg?seed=SmartJing&backgroundColor=fce4ec',
   'Sheer YLL YGG': 'https://api.dicebear.com/9.x/notionists/svg?seed=SheerYLL&backgroundColor=fff3e0',
-  'YGGYLL':        `${import.meta.env.BASE_URL}portrait.png`,
   'Macro Scope X': 'https://api.dicebear.com/9.x/notionists/svg?seed=MacroScopeX&backgroundColor=ede7f6',
+  'Deep Ledger': 'https://api.dicebear.com/9.x/notionists/svg?seed=DeepLedger&backgroundColor=e3f2fd',
+  WalletWatcher: 'https://api.dicebear.com/9.x/notionists/svg?seed=WalletWatcher&backgroundColor=e0f7fa',
+  'Options Club': 'https://api.dicebear.com/9.x/notionists/svg?seed=OptionsClub&backgroundColor=f3e5f5',
+  'Silicon Cycle': 'https://api.dicebear.com/9.x/notionists/svg?seed=SiliconCycle&backgroundColor=e8f5e9',
+  'Cashflow Club': 'https://api.dicebear.com/9.x/notionists/svg?seed=CashflowClub&backgroundColor=fff8e1',
+  'Market Bento': 'https://api.dicebear.com/9.x/notionists/svg?seed=MarketBento&backgroundColor=ede7f6',
 };
 
 export const FONT = "'Delight', -apple-system, BlinkMacSystemFont, sans-serif";
 
-/** 通用坐标轴样式：隐藏轴线/刻度/分割线 */
-export const AXIS_CLEAN = {
-  axisLine: { show: false },
-  axisTick: { show: false },
-  splitLine: { show: false },
-  axisLabel: {
-    fontSize: 10,
-    color: 'rgba(0,0,0,0.7)',
-    fontFamily: FONT,
-    margin: 8,
-  },
-} as const;
-
-/** 通用紧凑 grid 配置 */
-export const GRID_TIGHT = { top: 4, right: 4, bottom: 4, left: 4, containLabel: true } as const;
-
-/** 点阵背景：图表卡片通用底纹 */
+/** 点阵背景：图表卡片通用底纹（不含 padding，由使用方按需叠加） */
 export const CHART_DOT_BG = {
   backgroundColor: '#ffffff',
   backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.18) 0.6px, transparent 0.6px)',
@@ -76,6 +95,10 @@ export function tooltipConfig(overrides?: Record<string, unknown>) {
   };
 }
 
+/** 标准 tooltip formatter：日期标题 + 彩点系列值
+ * @param valueSuffix - 值前缀（如 '$'）
+ * @param formatValue - 自定义值格式化函数（如 v => v.toFixed(1)）
+ */
 export function tooltipFormatter(
   params: { color: string; seriesName: string; data: [string, number] }[],
   valueSuffix = '',
@@ -93,7 +116,7 @@ export function tooltipFormatter(
   return html;
 }
 
-/* ========== Axes ========== */
+/* ========== 轴 ========== */
 
 export function timeXAxisConfig(overrides?: Record<string, unknown>) {
   return {
@@ -134,7 +157,7 @@ export function valueYAxisConfig(name: string, overrides?: Record<string, unknow
 
 export const GRID_DEFAULT = { left: 36, right: 0, top: 30, bottom: 20, containLabel: false };
 
-/* ========== Series ========== */
+/* ========== 系列 ========== */
 
 export function lineSeriesConfig(name: string, color: string, overrides?: Record<string, unknown>) {
   return {
@@ -151,6 +174,7 @@ export function lineSeriesConfig(name: string, color: string, overrides?: Record
   };
 }
 
+/** 零线虚线标记 */
 export const ZERO_MARK_LINE = {
   silent: true,
   symbol: 'none',
@@ -159,11 +183,16 @@ export const ZERO_MARK_LINE = {
   label: { show: false },
 };
 
-/* ========== Time Formatters ========== */
+/* ========== 时间轴格式化器 ========== */
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 export function monthYearFormatter(value: number) {
   const d = new Date(value);
   return MONTHS[d.getMonth()] + ' ' + String(d.getFullYear()).slice(2);
+}
+
+export function dayOfWeekFormatter(value: number) {
+  return DAYS[new Date(value).getDay()];
 }

@@ -151,7 +151,7 @@ function SpinIcon() {
         <div className="size-[13px] rounded-full"
           style={{
             border: '1.5px solid var(--line-l12)',
-            borderTopColor: 'var(--text-n5)',
+            borderTopColor: 'rgba(0,0,0,0.5)',
             animation: 'spin-step 0.8s linear infinite',
           }} />
       </div>
@@ -383,7 +383,7 @@ export function StreamingMessages({ state }: StreamingMessagesProps) {
         <div className="flex items-center gap-[4px] shrink-0">
           <img src="https://alva-ai-static.b-cdn.net/icons/alva-watermark.svg" alt="Alva" style={{ height: 14 }} />
           <span className={`${FONT} text-[10px] leading-[14px] px-[4px] py-[1px]`}
-            style={{ background: 'rgba(73,163,166,0.1)', color: 'var(--main-m1)', borderRadius: 3 }}>
+            style={{ background: 'var(--main-m1-10)', color: 'var(--main-m1)', borderRadius: 3 }}>
             Beta
           </span>
         </div>

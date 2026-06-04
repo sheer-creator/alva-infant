@@ -9,7 +9,6 @@ import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDr
 import { Dropdown } from '@/app/components/shared/Dropdown';
 import { CONVERSATIONS } from '@/lib/chat-config';
 import DotMatrixWave from '@/app/components/shared/DotMatrixWave';
-import { Tooltip } from '@/app/components/shared/Tooltip';
 import { DiscordConnectModal } from '@/app/components/shared/DiscordConnectModal';
 import { AlertsPopover } from '@/app/components/shared/AlertsPopover';
 import { useAgentPlatforms, type AgentPlatform } from '@/lib/agent-connected';
@@ -144,7 +143,7 @@ const PUSH_PLAYBOOKS: PushPlaybook[] = [
     pulse: 'active',
     stars: 3700,
     remixes: 8,
-    cover: { template: 'general', title: 'Momentum Rebalance', author: 'ivan', tickers: ['AAPL', 'NVDA', 'RKLB'], domain: 'strategy', kind: 'STRATEGY \u{00B7} BI-WEEKLY', anchor: 'Last: May 8', series: 'MOMENTUM \u{00B7} TOP 3' },
+    cover: { template: 'general', title: 'Momentum Rebalance', author: 'ivan', tickers: ['AAPL', 'NVDA', 'RKLB'], domain: 'momentum', kind: 'STRATEGY \u{00B7} BI-WEEKLY', anchor: 'Last: May 8', series: 'MOMENTUM \u{00B7} TOP 3' },
     feeds: [
       {
         time: 'May 8, 12:00 PM',
@@ -220,6 +219,55 @@ export const INITIAL_AGENT_MESSAGE: { role: 'agent' | 'user'; text: string } = {
   text: 'Hey! I\'m your Alva Agent, connected via Telegram. I\'m always-on and ready to help with market analysis, portfolio tracking, and playbook execution. What would you like to work on?',
 };
 
+/* ── Playbook feed preview (mock data; component wired but not yet mounted) ── */
+type FeedPreviewStatus = 'pushed' | 'skipped';
+
+interface FeedPreviewItem {
+  id: string;
+  mode: string;
+  time: string;
+  status: FeedPreviewStatus;
+  headline: string;
+  digest: string;
+  tags: string[];
+}
+
+interface FeedPreviewPlaybook {
+  id: string;
+  title: string;
+  author: string;
+  cadence: string;
+  accent: string;
+  description: string;
+  items: FeedPreviewItem[];
+}
+
+const PLAYBOOK_FEED_PREVIEWS: FeedPreviewPlaybook[] = [
+  {
+    id: 'ai-infra',
+    title: 'AI Infrastructure Tracker',
+    author: 'Alva Intern',
+    cadence: 'Real-time',
+    accent: '#49A3A6',
+    description: 'Pushes when silicon, networking, or hyperscaler names break key levels.',
+    items: [
+      { id: 'a1', mode: 'Signal', time: '2m ago', status: 'pushed', headline: 'NVDA reclaimed its 20D MA on volume', digest: 'Momentum flipped positive; relative strength vs SOX improving.', tags: ['NVDA', 'momentum'] },
+      { id: 'a2', mode: 'Digest', time: '1h ago', status: 'skipped', headline: 'Weekly hyperscaler capex recap', digest: 'No threshold breach \u2014 held back to avoid noise.', tags: ['capex', 'weekly'] },
+    ],
+  },
+  {
+    id: 'btc-macro',
+    title: 'BTC Macro Pulse',
+    author: 'Harry Zzz',
+    cadence: 'Daily',
+    accent: '#E8833A',
+    description: 'Daily read on BTC trend, funding, and macro cross-currents.',
+    items: [
+      { id: 'b1', mode: 'Signal', time: '12m ago', status: 'pushed', headline: 'Funding reset to neutral after the flush', digest: 'OI down 8%, basis normalizing \u2014 squeeze risk easing.', tags: ['BTC', 'funding'] },
+    ],
+  },
+];
+
 function StatusPill({ status }: { status: FeedPreviewStatus }) {
   const pushed = status === 'pushed';
   return (
@@ -239,7 +287,7 @@ function StatusPill({ status }: { status: FeedPreviewStatus }) {
   );
 }
 
-function PlaybookFeedPreview({
+export function PlaybookFeedPreview({
   activeFeed,
   activeFeedId,
   onSelect,
@@ -496,15 +544,7 @@ export function AgentEmptyState({
                   className="min-w-[220px] lg:min-w-0"
                   onClick={() => setActivePlaybook(p.id)}
                 >
-                  <PlaybookCard
-                    title={p.title}
-                    desc={p.description}
-                    author={p.creator}
-                    stars={p.stars}
-                    remixes={p.remixes}
-                    noCover
-                    selected={p.id === activePlaybook}
-                  />
+                  <PlaybookCard p={p} noCover selected={p.id === activePlaybook} />
                 </div>
               ))}
             </div>
@@ -546,7 +586,7 @@ export function AgentEmptyState({
                         setAlertsPopoverOpen(false);
                         setDiscordFlowOpen(true);
                       }}
-                      onManage={() => onNavigate('alva-agent')}
+                      onManage={() => onNavigate?.('alva-agent')}
                     />
                   </div>
                 </div>

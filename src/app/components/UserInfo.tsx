@@ -1,13 +1,13 @@
 /**
  * [INPUT]: AppShell sidebar
- * [OUTPUT]: 用户浮窗 — Basic Info / Usage+Available / 菜单 / Social
+ * [OUTPUT]: 用户浮窗 — Basic Info / Usage / 菜单 / Social
  * [POS]: shell 层 — 用户信息弹出面板
  */
 
-import svgPaths from '@/data/svg-guyqw4in5w';
+import { useLayoutEffect, useRef, useState } from 'react';
+import svgPaths from "@/data/svg-guyqw4in5w";
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { Avatar } from '@/app/components/shared/Avatar';
-import type { Page } from '@/app/App';
 
 /* ========== Constants ========== */
 
@@ -15,19 +15,88 @@ const USER = { name: 'YGGYLL', email: 'sheer@alva.xyz' };
 const FONT = "'Delight', sans-serif";
 
 const CREDITS = {
-  daily:   { remaining: 1000,  label: 'Daily' },
-  monthly: { remaining: 3000,  label: 'Monthly' },
-  pack:    { remaining: 12000, label: 'Pack' },
+  daily:   1000,
+  monthly: 3000,
+  pack:    12000,
 };
-
-const AVAILABLE = CREDITS.daily.remaining + CREDITS.monthly.remaining + CREDITS.pack.remaining;
-
-const SOCIAL_PATHS = [svgPaths.p1705fd00, svgPaths.p30e25500, svgPaths.p1a857180, svgPaths.p1ae3a8f0];
+const AVAILABLE = 12000;
 
 /* ========== Icons ========== */
 
 function ArrowRight() {
   return <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />;
+}
+
+function GoogleLogo() {
+  return (
+    <svg className="w-[14px] h-[14px] shrink-0" viewBox="0 0 14 14" fill="none">
+      <rect width="14" height="14" rx="7" fill="white" />
+      <g transform="translate(0.7 0.7) scale(1)">
+        <path d={svgPaths.p1336a380} fill="#4285F4" />
+        <path d={svgPaths.p1ab03700} fill="#34A853" />
+        <path d={svgPaths.p21044080} fill="#FBBC05" />
+        <path d={svgPaths.p1b002980} fill="#EB4335" />
+      </g>
+    </svg>
+  );
+}
+
+/* ========== Auto-fit number ========== */
+/**
+ * 把 value 渲染在 min-w-0 容器里，超宽时以 1px 为步长从 maxSize 逐步下降到 minSize，
+ * 保证完整展示不截断。容器宽度变化（右列文案变长）会通过 ResizeObserver 重新 fit。
+ */
+function AutoFitValue({
+  value,
+  maxSize,
+  minSize,
+  className,
+  style,
+}: {
+  value: string;
+  maxSize: number;
+  minSize: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [size, setSize] = useState(maxSize);
+
+  useLayoutEffect(() => {
+    const wrap = wrapRef.current;
+    const text = textRef.current;
+    if (!wrap || !text) return;
+
+    const fit = () => {
+      const available = wrap.clientWidth;
+      if (available === 0) return;
+      let next = maxSize;
+      text.style.fontSize = `${next}px`;
+      while (next > minSize && text.scrollWidth > available) {
+        next -= 1;
+        text.style.fontSize = `${next}px`;
+      }
+      setSize(next);
+    };
+
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, [value, maxSize, minSize]);
+
+  return (
+    <div ref={wrapRef} className="min-w-0 overflow-hidden leading-none">
+      <span
+        ref={textRef}
+        className={className}
+        style={{ ...style, fontSize: `${size}px`, whiteSpace: 'nowrap', display: 'block' }}
+      >
+        {value}
+      </span>
+    </div>
+  );
 }
 
 /* ========== Menu item ========== */
@@ -44,7 +113,7 @@ function MenuItem({
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center justify-between py-[12px] px-[20px] -mx-[20px] w-[calc(100%+40px)] text-left transition-colors hover:bg-[rgba(0,0,0,0.05)] cursor-pointer bg-transparent border-none"
+      className="flex items-center justify-between py-[12px] px-[20px] -mx-[20px] w-[calc(100%+40px)] text-left transition-colors hover:bg-black/5 cursor-pointer bg-transparent border-none"
     >
       <div className="flex items-center gap-[8px]">
         {icon}
@@ -60,103 +129,141 @@ function MenuItem({
 
 /* ========== Main ========== */
 
-export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => void }) {
-  const tiers = [CREDITS.daily, CREDITS.monthly, CREDITS.pack] as const;
+export default function UserInfo({ onNavigate }: { onNavigate?: (hash: string) => void } = {}) {
+
+  const go = (hash: string) => {
+    if (onNavigate) onNavigate(hash);
+    else if (hash) window.location.hash = hash;
+  };
 
   return (
     <div className="bg-white relative rounded-[8px] size-full" data-name="User Info">
       <div className="flex flex-col px-[20px] overflow-clip rounded-[inherit] size-full">
 
-        {/* Basic Info — hover 通栏 */}
+        {/* Basic info — hover 通栏 */}
         <div
-          className="flex gap-[12px] items-center py-[20px] -mx-[20px] px-[20px] w-[calc(100%+40px)] cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)]"
+          onClick={() => go('account')}
+          className="flex gap-[12px] items-center py-[20px] -mx-[20px] px-[20px] w-[calc(100%+40px)] cursor-pointer transition-colors hover:bg-black/5"
         >
           <Avatar name={USER.name} size={48} />
-          <div className="flex flex-col min-w-0 flex-1 pb-[4px]">
-            <div className="flex items-center gap-[8px] min-w-0">
+          <div className="flex flex-col gap-[2px] min-w-0 flex-1">
+            <div className="flex items-center gap-[6px] min-w-0">
               <span className="text-[18px] font-medium leading-[28px] tracking-[0.18px] truncate" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{USER.name}</span>
-              <div className="flex items-center gap-[4px] shrink-0">
-                <span
-                  className="inline-flex items-center justify-center text-[11px] leading-[18px] tracking-[0.11px] px-[8px] rounded-[96px] text-white"
-                  style={{ background: 'var(--main-m1)', border: '0.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
-                >
-                  Pro
-                </span>
-                <span
-                  className="inline-flex items-center justify-center h-[18px] text-[11px] leading-[18px] tracking-[0.11px] px-[6px] rounded-full"
-                  style={{ color: 'var(--main-m1)', background: 'var(--main-m1-10)', fontFamily: FONT }}
-                >
-                  Annual
-                </span>
-              </div>
+              <span
+                className="text-[11px] font-medium leading-[18px] tracking-[0.11px] px-[6px] rounded-full shrink-0"
+                style={{ color: '#ffffff', background: 'var(--main-m1)', fontFamily: FONT }}
+              >
+                Pro
+              </span>
+              <span
+                className="text-[11px] leading-[18px] tracking-[0.11px] px-[6px] rounded-full shrink-0"
+                style={{ color: 'var(--main-m1)', background: 'var(--main-m1-10)', fontFamily: FONT }}
+              >
+                Annual
+              </span>
             </div>
-            <div className="flex items-center gap-[4px]">
-              <svg className="w-[14px] h-[14px] shrink-0" viewBox="0 0 14 14" fill="none">
-                <rect width="14" height="14" rx="7" fill="white" />
-                <g transform="translate(0.7 0.7)">
-                  <path d={svgPaths.p1336a380} fill="#4285F4" />
-                  <path d={svgPaths.p1ab03700} fill="#34A853" />
-                  <path d={svgPaths.p21044080} fill="#FBBC05" />
-                  <path d={svgPaths.p1b002980} fill="#EB4335" />
-                </g>
-              </svg>
+            <div className="flex items-center gap-[4px] min-w-0">
+              <GoogleLogo />
               <span className="text-[12px] leading-[20px] tracking-[0.12px] truncate" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{USER.email}</span>
             </div>
           </div>
           <ArrowRight />
         </div>
 
-        {/* Divider — 不通栏，保持在 px-[20px] 内 */}
-        <div style={{ borderTop: '0.5px solid var(--line-l07)' }} />
+        {/* divider — 不通栏 */}
+        <div className="h-[0.5px] w-full" style={{ background: 'var(--line-l07)' }} />
 
-        {/* Menu */}
-        <div className="py-[4px] flex flex-col">
-
-          {/* Usage + Available card — 整块 hover 通栏 */}
-          <button
-            type="button"
-            className="flex flex-col pt-[12px] pb-[12px] -mx-[20px] px-[20px] w-[calc(100%+40px)] text-left transition-colors hover:bg-[rgba(0,0,0,0.05)] cursor-pointer bg-transparent border-none"
-          >
-            <div className="flex items-center gap-[8px] pb-[8px]">
+        {/* Usage — 标题 + 数据卡片共享一个点击区域，hover 通栏 */}
+        <button
+          type="button"
+          onClick={() => go('billing')}
+          className="group flex flex-col gap-[8px] mt-[8px] pt-[12px] pb-[12px] px-[20px] -mx-[20px] w-[calc(100%+40px)] text-left transition-colors hover:bg-black/5 cursor-pointer bg-transparent border-none"
+        >
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-[8px]">
               <CdnIcon name="credit-l" size={20} color="var(--text-n9)" />
-              <span className="flex-1 text-[14px] leading-[22px] tracking-[0.14px] truncate" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>Usage</span>
-              <ArrowRight />
+              <span className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>Usage</span>
             </div>
-
-            <div className="flex items-center gap-[12px] px-[12px] py-[4px] rounded-[8px] w-full" style={{ background: 'var(--b-r03)' }}>
-              <div className="flex flex-col gap-[2px] items-start justify-center flex-1 min-w-0 pt-[4px]">
-                <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Available</span>
-                <span className="text-[24px] leading-[34px] tracking-[0.24px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{AVAILABLE.toLocaleString()}</span>
+            <ArrowRight />
+          </div>
+          <div
+            className="flex items-end justify-between gap-[12px] rounded-[8px] px-[12px] py-[12px] w-full bg-black/[0.03] transition-colors group-hover:bg-black/[0.06]"
+          >
+            <div className="flex flex-col gap-[6px] min-w-0 flex-1">
+              <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Available</span>
+              <AutoFitValue
+                value={AVAILABLE.toLocaleString()}
+                maxSize={24}
+                minSize={14}
+                className="leading-none tracking-[0.24px]"
+                style={{ color: 'var(--text-n9)', fontFamily: FONT }}
+              />
+            </div>
+            <div className="flex flex-col gap-[4px] shrink-0 items-end">
+              <div className="flex items-center gap-[8px]">
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Daily</span>
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>
+                  {CREDITS.daily.toLocaleString()}
+                </span>
               </div>
-              <div className="flex flex-col items-end">
-                {tiers.map((t) => (
-                  <div key={t.label} className="flex items-center gap-[4px]">
-                    <span className="text-[10px] leading-[16px] tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{t.label}</span>
-                    <span className="text-[10px] leading-[16px] tracking-[0.1px] text-right" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>{t.remaining.toLocaleString()}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-[8px]">
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Monthly</span>
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>
+                  {CREDITS.monthly.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center gap-[8px]">
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>Pack</span>
+                <span className="text-[10px] leading-none tracking-[0.1px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>
+                  {CREDITS.pack.toLocaleString()}
+                </span>
               </div>
             </div>
-          </button>
+          </div>
+        </button>
 
-          <MenuItem icon={<CdnIcon name="gift-l" size={20} color="var(--text-n9)" />} label="Referral" />
-          <MenuItem icon={<CdnIcon name="wallet-l" size={20} color="var(--text-n9)" />} label="Creator Earnings" dot />
-          <MenuItem icon={<CdnIcon name="language-l" size={20} color="var(--text-n9)" />} label="Language" />
-          <MenuItem icon={<CdnIcon name="settings-l" size={20} color="var(--text-n9)" />} label="Settings" onClick={() => onNavigate?.('account')} />
-          <MenuItem icon={<CdnIcon name="logout-l" size={20} color="var(--text-n9)" />} label="Log Out" />
+        {/* Menu items — 与 Usage hover 区无间距 */}
+        <div className="pb-[8px] flex flex-col">
+          <MenuItem
+            icon={<CdnIcon name="gift-l" size={20} color="var(--text-n9)" />}
+            label="Referral"
+            onClick={() => go('referral-landing')}
+          />
+          <MenuItem
+            icon={<CdnIcon name="wallet-l" size={20} color="var(--text-n9)" />}
+            label="Creator Earnings"
+            dot
+          />
+          <MenuItem
+            icon={<CdnIcon name="language-l" size={20} color="var(--text-n9)" />}
+            label="Language"
+          />
+          <MenuItem
+            icon={<CdnIcon name="settings-l" size={20} color="var(--text-n9)" />}
+            label="Settings"
+            onClick={() => go('account')}
+          />
+          <MenuItem
+            icon={<CdnIcon name="logout-l" size={20} color="var(--text-n9)" />}
+            label="Log Out"
+          />
         </div>
 
-        {/* Social */}
-        <div className="flex gap-[8px] py-[20px]" style={{ borderTop: '0.5px solid var(--line-l07)' }}>
-          {SOCIAL_PATHS.map((path, i) => (
+        {/* divider — 不通栏 */}
+        <div className="h-[0.5px] w-full" style={{ background: 'var(--line-l07)' }} />
+
+        {/* Social — 四个按钮 hover 不通栏，只高亮按钮本身 */}
+        <div className="flex gap-[8px] py-[20px]">
+          {[svgPaths.p1705fd00, svgPaths.p30e25500, svgPaths.p1a857180, svgPaths.p1ae3a8f0].map((path, i) => (
             <button
               key={i}
               type="button"
-              className="flex-1 h-[32px] rounded-[6px] flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.05)] bg-transparent"
+              className="flex-1 h-[32px] rounded-[6px] flex items-center justify-center cursor-pointer transition-colors hover:bg-black/5 bg-transparent"
               style={{ border: '0.5px solid var(--line-l3)' }}
+              onClick={() => { if (i === 3) go('docs'); }}
             >
               <svg className="w-[16px] h-[16px]" viewBox="0 0 16 16" fill="none">
-                <path d={path} fill="var(--text-n9)" />
+                <path d={path} fill="rgba(0,0,0,0.9)" />
               </svg>
             </button>
           ))}
@@ -164,7 +271,7 @@ export default function UserInfo({ onNavigate }: { onNavigate?: (page: Page) => 
       </div>
 
       {/* Border overlay */}
-      <div aria-hidden="true" className="absolute border-[0.5px] border-[var(--line-l2)] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[var(--shadow-s)]" />
+      <div aria-hidden="true" className="absolute border-[0.5px] border-[rgba(0,0,0,0.2)] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[0px_6px_20px_0px_rgba(0,0,0,0.04)]" />
     </div>
   );
 }

@@ -9,7 +9,11 @@
       "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_variable_defs",
       "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__get_metadata",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
-      "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__whoami"
+      "mcp__9ba32785-f42f-43a2-9ff1-27fc4d5fc730__whoami",
+      "Skill(alva-design)",
+      "Skill(alva-design:*)",
+      "mcp__Figma__get_screenshot",
+      "mcp__Figma__get_design_context"
     ]
   }
 }
