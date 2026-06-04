@@ -4,18 +4,13 @@ import { AppShell } from '@/app/components/shell/AppShell';
 import { Avatar } from '@/app/components/shared/Avatar';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { PlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
+import { POPULAR_RECENT_SORT_OPTIONS, TRENDING_FILTER_CHIPS, TrendingFilterBar, type PopularRecentSort, type TrendingFilterChip } from '@/app/components/shared/TrendingFilterBar';
 import { PlaybookTags, buildTags } from '@/lib/playbook-cover/PlaybookTags';
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}figma/explore/${name}`;
 
-const CATEGORY_CHIPS = [
-  'Smart Screener', 'Theme Tracker', 'Backtest', 'AI Digest', 'Asset Deepdive',
-  'Crypto', 'BTC', 'Thesis', 'Tech', 'Equity', 'What-if', 'NVDA', 'Macro',
-  'Healthcare', 'ETH', 'Energy', 'FX', 'MAG7', 'Financials', 'Commodities',
-] as const;
-
-type CategoryChip = typeof CATEGORY_CHIPS[number];
-type SortOption = 'Popular' | 'Recent';
+type CategoryChip = TrendingFilterChip;
+type SortOption = PopularRecentSort;
 
 const FIGMA_ACTIVE_CHIPS = new Set<CategoryChip>(['Smart Screener', 'Theme Tracker', 'AI Digest']);
 
@@ -299,55 +294,22 @@ function ExploreFilters({
   onChipToggle: (chip: CategoryChip) => void;
   onOpenSearch?: () => void;
 }) {
-  const [sortOpen, setSortOpen] = useState(false);
-
   return (
     <div className="explore-filters">
-      <div className="explore-sort">
-        <button type="button" className="explore-sort-button" onClick={() => setSortOpen((open) => !open)}>
-          <span>{sort}</span>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-            <path d="M3 4.5L6 7.5L9 4.5" stroke="rgba(0,0,0,0.3)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        {sortOpen && (
-          <div className="explore-sort-menu">
-            {(['Popular', 'Recent'] as SortOption[]).map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => {
-                  onSortChange(option);
-                  setSortOpen(false);
-                }}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="explore-divider" />
-      <div className="explore-chip-row">
-        {CATEGORY_CHIPS.map((chip) => {
-          const active = selectedChips.has(chip);
-          return (
-            <button
-              key={chip}
-              type="button"
-              className={active ? 'is-active' : undefined}
-              onClick={() => onChipToggle(chip)}
-            >
-              {chip}
-            </button>
-          );
-        })}
-      </div>
-      <div className="explore-divider" />
-      <button type="button" className="explore-search" onClick={onOpenSearch}>
-        <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
-        <span>Search</span>
-      </button>
+      <TrendingFilterBar
+        sort={sort}
+        sortOptions={POPULAR_RECENT_SORT_OPTIONS}
+        chips={TRENDING_FILTER_CHIPS}
+        selectedChips={selectedChips}
+        onSortChange={onSortChange}
+        onChipToggle={onChipToggle}
+        trailing={
+          <button type="button" className="explore-search" onClick={onOpenSearch}>
+            <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
+            <span>Search</span>
+          </button>
+        }
+      />
     </div>
   );
 }
@@ -505,14 +467,9 @@ export default function Explore({
           height: 28px;
           display: flex;
           align-items: center;
-          gap: 12px;
         }
-        .explore-sort {
-          position: relative;
-          flex: 0 0 100px;
-        }
-        .explore-sort-button,
         .explore-search {
+          flex: 0 0 160px;
           height: 28px;
           border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
           border-radius: var(--radius-btn-s, 4px);
@@ -525,89 +482,9 @@ export default function Explore({
           font-size: 12px;
           line-height: 20px;
           letter-spacing: 0.12px;
-          color: var(--text-n9, rgba(0,0,0,0.9));
-          cursor: pointer;
-        }
-        .explore-sort-button {
-          width: 100%;
-          justify-content: center;
-        }
-        .explore-sort-button span {
-          flex: 1;
-          min-width: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: left;
-        }
-        .explore-sort-menu {
-          position: absolute;
-          top: 32px;
-          left: 0;
-          z-index: 5;
-          width: 120px;
-          padding: 4px;
-          border: 0.5px solid var(--line-l12, rgba(0,0,0,0.12));
-          border-radius: 6px;
-          background: #fff;
-          box-shadow: var(--shadow-xs, 0 4px 15px 0 rgba(0,0,0,0.05));
-        }
-        .explore-sort-menu button {
-          width: 100%;
-          border: 0;
-          border-radius: 4px;
-          background: transparent;
-          padding: 5px 8px;
-          text-align: left;
-          color: var(--text-n9, rgba(0,0,0,0.9));
-          font: inherit;
-          cursor: pointer;
-        }
-        .explore-sort-menu button:hover {
-          background: var(--b-r05, rgba(0,0,0,0.05));
-        }
-        .explore-divider {
-          width: 1px;
-          height: 16px;
-          flex: 0 0 1px;
-          background: var(--line-l07, rgba(0,0,0,0.07));
-        }
-        .explore-chip-row {
-          flex: 1 1 auto;
-          min-width: 0;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          overflow-x: auto;
-          overflow-y: hidden;
-          scrollbar-width: none;
-        }
-        .explore-chip-row::-webkit-scrollbar {
-          display: none;
-        }
-        .explore-chip-row button {
-          height: 28px;
-          flex: 0 0 auto;
-          padding: 4px 10px;
-          border: 0;
-          border-radius: var(--radius-ct-xxl, 16px);
-          background: var(--b-r03, rgba(0,0,0,0.03));
-          color: var(--text-n7, rgba(0,0,0,0.7));
-          font-family: inherit;
-          font-size: 12px;
-          line-height: 20px;
-          letter-spacing: 0.12px;
-          white-space: nowrap;
-          cursor: pointer;
-        }
-        .explore-chip-row button.is-active {
-          background: rgba(0,0,0,0.7);
-          color: rgba(255,255,255,0.9);
-        }
-        .explore-search {
-          flex: 0 0 160px;
           color: var(--text-n3, rgba(0,0,0,0.3));
           text-align: left;
+          cursor: pointer;
         }
         .explore-search span {
           min-width: 0;
@@ -651,12 +528,7 @@ export default function Explore({
         @media (max-width: 720px) {
           .explore-filters {
             height: auto;
-            flex-wrap: wrap;
             margin-top: 28px;
-          }
-          .explore-chip-row {
-            order: 3;
-            flex-basis: 100%;
           }
           .explore-search {
             flex: 1 1 160px;

@@ -4,7 +4,6 @@ import { CHAT_TRIGGER_MODE } from '@/lib/chat-config';
 import SearchModal from '@/app/components/SearchModal';
 
 const NON_ROUTED_PAGES = [
-  'home',
   'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys',
   'skills', 'docs', 'alva-chat-detail', 'referral-landing', 'playbook-referral',
 ] as const;

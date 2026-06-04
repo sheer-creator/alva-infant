@@ -1,7 +1,7 @@
 /**
  * [INPUT]: Page type, AppShell, ChatInput (bottomChip), new-chat-mock, Dropdown
  * [OUTPUT]: New Chat 入口页 — skill 驱动的起手页面
- * [POS]: 与 Home 并列的入口页面（Sidebar 最顶）
+ * [POS]: Sidebar 最顶的入口页面
  */
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -12,15 +12,17 @@ import { ChatInput } from '@/app/components/shared/ChatInput';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { Avatar } from '@/app/components/shared/Avatar';
 import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDropdown';
+import { POPULAR_RECENT_SORT_OPTIONS, TRENDING_FILTER_CHIPS, TrendingFilterBar, type PopularRecentSort, type TrendingFilterChip } from '@/app/components/shared/TrendingFilterBar';
 import { BURST_ICON_PATHS } from '@/app/components/shared/burst-icon-paths';
 import { COMMUNITY_TEMPLATES, PRIMARY_TEMPLATES, OTHERS_TEMPLATES, type CommunitySkillTemplate, type NewChatTemplate, type NewChatPlaybook } from '@/data/new-chat-mock';
 import { generateTypedSuggestions } from '@/data/typed-suggestions';
 import { PlaybookCover } from '@/lib/playbook-cover/PlaybookCover';
 import type { CoverInput, Template as CoverTemplateName, DomainKey } from '@/lib/playbook-cover/types';
 import { PlaybookCard as ExplorePlaybookCard } from '@/app/components/shared/PlaybookCard';
-import { FilterBar, PLAYBOOKS_ORDERED, chipMatchesPlaybook, type CategoryChip } from '@/pages/Explore2';
+import { PLAYBOOKS_ORDERED, chipMatchesPlaybook } from '@/pages/Explore2';
 
 const CHIP_ICON = 'researcher-l1';
+type CategoryChip = TrendingFilterChip;
 
 /** 返回 true 仅当设备支持 hover（即非触屏） */
 function supportsHover(): boolean {
@@ -1532,7 +1534,7 @@ const TRENDING_GRID_COLS_MIN = 340;
 const TRENDING_GRID_GAP = 16;
 
 function TrendingPlaybooksSection({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const [sort, setSort] = useState<string>('Popular');
+  const [sort, setSort] = useState<PopularRecentSort>('Popular');
   const [selectedChips, setSelectedChips] = useState<Set<CategoryChip>>(() => new Set());
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -1609,9 +1611,10 @@ function TrendingPlaybooksSection({ onNavigate }: { onNavigate: (page: Page) => 
             <CdnIcon name="arrow-right-l2" size={14} color="var(--text-n9)" />
           </button>
         </div>
-        {/* Filter bar (chips + Sort select) reused from the Explore utility exports */}
-        <FilterBar
+        <TrendingFilterBar
           sort={sort}
+          sortOptions={POPULAR_RECENT_SORT_OPTIONS}
+          chips={TRENDING_FILTER_CHIPS}
           onSortChange={setSort}
           selectedChips={selectedChips}
           onChipToggle={toggleChip}
