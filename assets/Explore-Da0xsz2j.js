@@ -1,0 +1,183 @@
+import{n as e,s as t}from"./index-DK-SaoUs.js";import{l as n,t as r,u as i}from"./AppShell-BBlSGjgl.js";import{n as a,r as o,t as s}from"./PlaybookCard-CJZxAE42.js";import{n as c,r as l,t as u}from"./TrendingFilterBar-BehRbXh_.js";var d=t(),f=e(),p=e=>`/alva-infant/figma/explore/${e}`,m=new Set([`Smart Screener`,`Theme Tracker`,`AI Digest`]),h={creator:`Macro Scope X`,title:`Inflection Point Screener`,description:`Screens 948 mid-caps daily for margin acceleration, revenue inflection, and profitability crossover. Top decile with 90-day holding period`,tickers:[`BTC`,`ETH`],stars:`12.8K`,remixes:3},g=[{id:`btc-ultimate-ai-trader`,creator:`Alva Intern`,title:`BTC Ultimate AI Trader`,description:`This strategy intelligently pinpoints BTC's optimal trading sweet spots through dual-engine analysis: RSI oversold alerts + Bollinger Band breakouts. Automatically trimming position extremities to capture core price movements, it strategically accumulates during bumpy markets.`,tickers:[`BTC`],pulse:`active`,stars:12800,remixes:3,cover:{template:`screener`,title:`BTC Ultimate AI Trader`,author:`Alva Intern`,tickers:[`BTC`],coverImageUrl:p(`card-btc-ultimate.png`)}},{id:`mag7-equal-weight-monthly-rebalance`,creator:`Alva Intern`,title:`MAG7 Equal-Weight Monthly Rebalance`,description:`Maintains a fully invested equal-weight portfolio of the Magnificent 7 stocks and rebalances monthly`,tickers:[],pulse:`active`,stars:12800,remixes:3,price:`$50`,cover:{template:`what-if`,title:`MAG7 Equal-Weight Monthly Rebalance`,author:`Alva Intern`,tickers:[],coverImageUrl:p(`card-mag7-rebalance.png`)}},{id:`pepe-long-vs-btc-short`,creator:`Alva Intern`,title:`PEPE Long vs BTC Short Monthly Rebalance`,description:`The OI Abnormal Movement Monitoring Strategy tracks selected crypto tokens on a 4-hour timeframe to detect unusually large changes in Open Interest (OI) and trading volume.`,tickers:[`PEPE`,`BTC`],pulse:`active`,stars:12800,remixes:3,cover:{template:`what-if`,title:`PEPE Long vs BTC Short Monthly Rebalance`,author:`Alva Intern`,tickers:[`PEPE`,`BTC`],coverImageUrl:p(`card-pepe-btc.png`)}},{id:`attribution-analysis-price-trends`,creator:`Alva Intern`,title:`Attribution Analysis Strategy for Price Trends`,description:`Monitor selected tokens on a 4-hour timeframe to detect abnormal changes in Open Interest (OI) and trading volume in order to capture unusual market activity and generate alerts.`,tickers:[`BTC`,`ETH`],pulse:`active`,stars:12800,remixes:3,cover:{template:`thesis`,title:`Attribution Analysis Strategy for Price Trends`,author:`Alva Intern`,tickers:[`BTC`,`ETH`],coverImageUrl:p(`card-attribution.png`)}},{id:`btc-macd-1h-simple-crossover`,creator:`Alva Intern`,title:`BTC MACD 1h Simple Crossover`,description:`Trade BTC using MACD(12,26,9) line crossing its signal on 1-hour candles; enter long on bullish cross, exit on bearish cross.`,tickers:[`BTC`],pulse:`active`,stars:12800,remixes:3,cover:{template:`screener`,title:`BTC MACD 1h Simple Crossover`,author:`Alva Intern`,tickers:[`BTC`],coverImageUrl:p(`card-btc-macd.png`)}},{id:`nvda-triggered-tsm`,creator:`Alva Intern`,title:`NVDA +3% Triggered TSM TP/SL`,description:`Buys TSM at the close when NVDA gains >3% close-to-close, then exits on +10% take-profit or -5% stop-loss.`,tickers:[`NVDA`,`TSM`],pulse:`active`,stars:12800,remixes:3,price:`$50`,cover:{template:`what-if`,title:`NVDA +3% Triggered TSM TP/SL`,author:`Alva Intern`,tickers:[`NVDA`,`TSM`],coverImageUrl:p(`card-nvda-tsm.png`)}},{id:`eth-daily-price-change`,creator:`Alva Intern`,title:`ETH Daily Price & Change Tracker`,description:`Tracks daily prices and daily percentage changes for ETH in a single table for quick monitoring.`,tickers:[`ETH`],pulse:`idle`,stars:12800,remixes:3,price:`$50`,cover:{template:`screener`,title:`ETH Daily Price & Change Tracker`,author:`Alva Intern`,tickers:[`ETH`],coverImageUrl:p(`card-eth-daily.png`)}},{id:`short-squeeze-risk-map`,creator:`Alva Intern`,title:`Short-Squeeze Risk Map`,description:`This strategy intelligently pinpoints BTC's optimal trading sweet spots through dual-engine analysis: RSI oversold alerts + Bollinger Band breakouts.`,tickers:[],pulse:`idle`,stars:12800,remixes:3,cover:{template:`thesis`,title:`Short-Squeeze Risk Map`,author:`Alva Intern`,tickers:[],coverImageUrl:p(`card-short-squeeze.png`)}},{id:`nvda-trading-research-dashboard`,creator:`Alva Intern`,title:`NVDA Trading Strategy Research Dashboard`,description:`Multi-timeframe NVDA price/volume context, trend & momentum, relative strength vs market/sector, flow/derivatives proxies, earnings/event stats.`,tickers:[`NVDA`],pulse:`idle`,stars:12800,remixes:3,cover:{template:`thesis`,title:`NVDA Trading Strategy Research Dashboard`,author:`Alva Intern`,tickers:[`NVDA`],coverImageUrl:p(`card-nvda-research.png`)}},{id:`us-crypto-dat-monitor`,creator:`Alva Intern`,title:`US Crypto DAT Companies Monitor`,description:`Feed incorporates both real anomaly signals and reference cases for interpretation. Update frequencies adjusted as new PTR, Form 4, and 10b5-1 filings are parsed.`,tickers:[],pulse:`idle`,stars:12800,remixes:3,price:`$50`,cover:{template:`screener`,title:`US Crypto DAT Companies Monitor`,author:`Alva Intern`,tickers:[],coverImageUrl:p(`card-crypto-dat.png`)}},{id:`google-x-trends-tracker`,creator:`Alva Intern`,title:`Google / X Trends Tracker`,description:`Monitor selected tokens on a 4-hour timeframe to detect abnormal changes in Open Interest (OI) and trading volume in order to capture unusual market activity and generate alerts.`,tickers:[`GOOGL`],pulse:`idle`,stars:12800,remixes:3,cover:{template:`screener`,title:`Google / X Trends Tracker`,author:`Alva Intern`,tickers:[`GOOGL`],coverImageUrl:p(`card-google-trends.png`)}},{id:`qqq-triggers-nvda-take-profit`,creator:`Alva Intern`,title:`QQQ +2% Day Triggers NVDA Take-Profit`,description:`Aggregates real-time data across multiple DEX platforms to identify high-potential Golden Dog meme tokens. Alerts are triggered on sudden volume spikes, KOL mentions, or on-chain activity.`,tickers:[`QQQ`,`SOL`],pulse:`idle`,stars:12800,remixes:3,price:`$50`,cover:{template:`what-if`,title:`QQQ +2% Day Triggers NVDA Take-Profit`,author:`Alva Intern`,tickers:[`QQQ`,`SOL`],coverImageUrl:p(`card-qqq-nvda.png`)}}];function _(e,t){let n=`${t.title} ${t.description} ${t.tickers.join(` `)} ${t.cover.template}`.toLowerCase(),r=e.toLowerCase();return e===`Smart Screener`&&t.cover.template===`screener`||e===`Theme Tracker`&&t.cover.template===`thesis`||e===`What-if`&&t.cover.template===`what-if`||e===`Thesis`&&t.cover.template===`thesis`||t.tickers.some(e=>e.toLowerCase()===r)?!0:n.includes(r)}function v(){let e=o({template:`screener`,tickers:h.tickers});return(0,f.jsxs)(`section`,{className:`explore-featured`,"aria-label":h.title,children:[(0,f.jsxs)(`div`,{className:`explore-featured-copy`,children:[(0,f.jsxs)(`div`,{className:`explore-featured-creator`,children:[(0,f.jsx)(i,{name:h.creator,size:24}),(0,f.jsx)(`span`,{children:h.creator})]}),(0,f.jsxs)(`div`,{className:`explore-featured-text`,children:[(0,f.jsx)(`h2`,{children:h.title}),(0,f.jsx)(`p`,{children:h.description})]}),(0,f.jsx)(`div`,{className:`explore-featured-tags`,children:(0,f.jsx)(a,{tags:e})}),(0,f.jsxs)(`div`,{className:`explore-featured-meta`,children:[(0,f.jsxs)(`span`,{children:[(0,f.jsx)(n,{name:`show-l`,size:16}),h.stars]}),(0,f.jsxs)(`span`,{children:[(0,f.jsx)(n,{name:`remix-l`,size:16}),h.remixes]})]})]}),(0,f.jsx)(`div`,{className:`explore-featured-preview`,children:(0,f.jsx)(`img`,{src:p(`featured-preview.png`),alt:``})})]})}function y({sort:e,onSortChange:t,selectedChips:r,onChipToggle:i,searchQuery:a,onSearchChange:o}){let[s,p]=(0,d.useState)(!1),m=(0,d.useRef)(null);return(0,d.useEffect)(()=>{if(!s)return;let e=requestAnimationFrame(()=>m.current?.focus());return()=>cancelAnimationFrame(e)},[s]),(0,f.jsx)(`div`,{className:`explore-filters`,children:(0,f.jsx)(l,{sort:e,sortOptions:u,chips:c,selectedChips:r,onSortChange:t,onChipToggle:i,trailing:s?(0,f.jsxs)(`div`,{className:`input input-sm explore-search-input`,children:[(0,f.jsx)(`div`,{className:`input-border`}),(0,f.jsx)(n,{name:`search-l`,size:14,color:`var(--text-n3, rgba(0,0,0,0.3))`}),(0,f.jsx)(`input`,{ref:m,type:`text`,className:`input-field`,placeholder:`Search`,value:a,onChange:e=>o(e.target.value),onBlur:()=>{a.trim()||p(!1)},onKeyDown:e=>{e.key===`Escape`&&(o(``),p(!1))}})]}):(0,f.jsxs)(`button`,{type:`button`,className:`btn btn-secondary btn-extra-small explore-search-trigger`,onClick:()=>p(!0),children:[(0,f.jsx)(n,{name:`search-l`,size:14,color:`var(--text-n3, rgba(0,0,0,0.3))`}),(0,f.jsx)(`span`,{children:`Search`})]})})})}function b({onNavigate:e}){let[t,n]=(0,d.useState)(`Popular`),[i,a]=(0,d.useState)(()=>new Set(m)),[o,c]=(0,d.useState)(!1),[l,u]=(0,d.useState)(``),p=(0,d.useMemo)(()=>{let e=t===`Recent`?[...g].reverse():g;o&&i.size>0&&(e=e.filter(e=>{for(let t of i)if(_(t,e))return!0;return!1}));let n=l.trim().toLowerCase();return n&&(e=e.filter(e=>`${e.title} ${e.description} ${e.creator} ${e.tickers.join(` `)} ${e.cover.template}`.toLowerCase().includes(n))),e},[o,l,i,t]);return(0,f.jsxs)(r,{activePage:`explore`,onNavigate:e,children:[(0,f.jsx)(`style`,{children:`
+        .explore-page {
+          min-height: 100%;
+          background: #fff;
+          padding: 56px 28px 48px;
+          font-family: 'Delight', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .explore-inner {
+          width: 100%;
+          max-width: 2048px;
+          margin: 0 auto;
+          container: explore-content / inline-size;
+        }
+        .explore-title {
+          margin: 0;
+          font-size: 28px;
+          line-height: 38px;
+          font-weight: 400;
+          letter-spacing: 0.28px;
+          color: var(--text-n9, rgba(0,0,0,0.9));
+        }
+        .explore-featured {
+          margin-top: 24px;
+          height: 204px;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 368px;
+          border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+          border-radius: var(--radius-ct-l, 8px);
+          overflow: hidden;
+          background: #fff2e1;
+        }
+        .explore-featured-copy {
+          min-width: 0;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+          overflow: hidden;
+        }
+        .explore-featured-creator {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--text-n7, rgba(0,0,0,0.7));
+          font-size: 12px;
+          line-height: 20px;
+          letter-spacing: 0.12px;
+          white-space: nowrap;
+        }
+        .explore-featured-text {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          width: 100%;
+          min-width: 0;
+          margin-top: 12px;
+        }
+        .explore-featured-text h2 {
+          margin: 0;
+          color: var(--text-n9, rgba(0,0,0,0.9));
+          font-size: 20px;
+          line-height: 30px;
+          font-weight: 400;
+          letter-spacing: 0.2px;
+        }
+        .explore-featured-text p {
+          margin: 0;
+          color: var(--text-n5, rgba(0,0,0,0.5));
+          font-size: 12px;
+          line-height: 20px;
+          letter-spacing: 0.12px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .explore-featured-tags {
+          width: 100%;
+          padding-top: 12px;
+        }
+        .explore-featured-meta {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding-top: 12px;
+        }
+        .explore-featured-meta span {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          color: var(--text-n9, rgba(0,0,0,0.9));
+          font-size: 14px;
+          line-height: 22px;
+          letter-spacing: 0.14px;
+        }
+        .explore-featured-preview {
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          padding: 24px 24px 0;
+          overflow: hidden;
+        }
+        .explore-featured-preview img {
+          width: 320px;
+          height: 180px;
+          display: block;
+          object-fit: cover;
+          object-position: center top;
+          border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+          border-bottom: 0;
+          border-radius: 8px 8px 0 0;
+          box-shadow: var(--shadow-xs, 0 4px 15px 0 rgba(0,0,0,0.05));
+        }
+        .explore-filters {
+          margin-top: 48px;
+          width: 100%;
+          height: 28px;
+          display: flex;
+          align-items: center;
+        }
+        .explore-search-trigger,
+        .explore-search-input {
+          flex: 0 0 160px;
+          width: 160px;
+        }
+        .explore-search-trigger {
+          justify-content: flex-start;
+          font-family: inherit;
+        }
+        .explore-search-input {
+          gap: 4px;
+          z-index: 1;
+        }
+        .explore-search-input .input-field {
+          font-size: 12px;
+          line-height: 20px;
+          letter-spacing: 0.12px;
+        }
+        .explore-grid {
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 324px), 1fr));
+          gap: 16px;
+        }
+        @media (max-width: 960px) {
+          .explore-page {
+            padding: 32px 16px 40px;
+          }
+          .explore-featured {
+            height: auto;
+            grid-template-columns: 1fr;
+          }
+          .explore-featured-preview {
+            padding: 0 20px 0;
+            justify-content: flex-start;
+          }
+          .explore-featured-preview img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border-bottom: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+            border-radius: 8px;
+            margin-bottom: 20px;
+          }
+          .explore-featured-text p {
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+        }
+        @media (max-width: 720px) {
+          .explore-filters {
+            height: auto;
+            margin-top: 28px;
+          }
+          .explore-search-trigger,
+          .explore-search-input {
+            flex: 1 1 160px;
+            width: auto;
+          }
+        }
+      `}),(0,f.jsx)(`main`,{className:`explore-page`,children:(0,f.jsxs)(`div`,{className:`explore-inner`,children:[(0,f.jsx)(`h1`,{className:`explore-title`,children:`Explore`}),(0,f.jsx)(v,{}),(0,f.jsx)(y,{sort:t,onSortChange:n,selectedChips:i,onChipToggle:e=>{c(!0),a(t=>{let n=new Set(t);return n.has(e)?n.delete(e):n.add(e),n})},searchQuery:l,onSearchChange:u}),(0,f.jsx)(`section`,{className:`explore-grid`,children:p.map(e=>(0,f.jsx)(s,{p:e},e.id))})]})})]})}export{b as default};
