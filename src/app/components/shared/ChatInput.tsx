@@ -37,6 +37,7 @@ interface ChatInputProps {
   hideSkill?: boolean;
   hideInspector?: boolean;
   allowReferences?: boolean;
+  autoFocus?: boolean;
 }
 
 type PickerKind = 'mention' | 'skill';
@@ -813,7 +814,7 @@ function ChatPickerPreview({
   );
 }
 
-export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / for skills', contextTag, shadow, onSend, bottomChip, injectText, onInputChange, hideSkill, hideInspector, allowReferences = true }: ChatInputProps) {
+export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / for skills', contextTag, shadow, onSend, bottomChip, injectText, onInputChange, hideSkill, hideInspector, allowReferences = true, autoFocus = false }: ChatInputProps) {
   const { inspectorActive, toggleInspector, elementQuotes, removeElementQuote, clearElementQuotes, streamingState, stopStreaming } = useChatContext();
   const [hasText, setHasText] = useState(false);
   const [quoteHover, setQuoteHover] = useState(false);
@@ -891,6 +892,15 @@ export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / f
     sel.removeAllRanges();
     sel.addRange(range);
   }, []);
+
+  useEffect(() => {
+    if (!autoFocus) return;
+    const frame = requestAnimationFrame(() => {
+      editorRef.current?.focus();
+      placeCursorAtEnd();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [autoFocus, placeCursorAtEnd]);
 
   const getCaretRect = useCallback((): DOMRect | null => {
     const editor = editorRef.current;

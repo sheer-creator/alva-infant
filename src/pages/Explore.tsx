@@ -286,13 +286,11 @@ function ExploreFilters({
   onSortChange,
   selectedChips,
   onChipToggle,
-  onOpenSearch,
 }: {
   sort: SortOption;
   onSortChange: (sort: SortOption) => void;
   selectedChips: Set<CategoryChip>;
   onChipToggle: (chip: CategoryChip) => void;
-  onOpenSearch?: () => void;
 }) {
   return (
     <div className="explore-filters">
@@ -303,12 +301,6 @@ function ExploreFilters({
         selectedChips={selectedChips}
         onSortChange={onSortChange}
         onChipToggle={onChipToggle}
-        trailing={
-          <button type="button" className="explore-search" onClick={onOpenSearch}>
-            <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
-            <span>Search</span>
-          </button>
-        }
       />
     </div>
   );
@@ -316,10 +308,8 @@ function ExploreFilters({
 
 export default function Explore({
   onNavigate,
-  onOpenSearch,
 }: {
   onNavigate: (page: Page) => void;
-  onOpenSearch?: () => void;
 }) {
   const [sort, setSort] = useState<SortOption>('Popular');
   const [selectedChips, setSelectedChips] = useState<Set<CategoryChip>>(() => new Set(FIGMA_ACTIVE_CHIPS));
@@ -468,30 +458,6 @@ export default function Explore({
           display: flex;
           align-items: center;
         }
-        .explore-search {
-          flex: 0 0 160px;
-          height: 28px;
-          border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
-          border-radius: var(--radius-btn-s, 4px);
-          background: #fff;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 4px 8px;
-          font-family: inherit;
-          font-size: 12px;
-          line-height: 20px;
-          letter-spacing: 0.12px;
-          color: var(--text-n3, rgba(0,0,0,0.3));
-          text-align: left;
-          cursor: pointer;
-        }
-        .explore-search span {
-          min-width: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
         .explore-grid {
           margin-top: 20px;
           display: grid;
@@ -530,9 +496,6 @@ export default function Explore({
             height: auto;
             margin-top: 28px;
           }
-          .explore-search {
-            flex: 1 1 160px;
-          }
         }
       `}</style>
       <main className="explore-page">
@@ -544,7 +507,6 @@ export default function Explore({
             onSortChange={setSort}
             selectedChips={selectedChips}
             onChipToggle={toggleChip}
-            onOpenSearch={onOpenSearch}
           />
           <section className="explore-grid">
             {filteredPlaybooks.map((playbook) => (

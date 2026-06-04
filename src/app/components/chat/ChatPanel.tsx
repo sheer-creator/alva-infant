@@ -172,7 +172,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
               <div ref={agentScrollRef} className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full px-[16px] pb-[48px]">
                 <AgentConnectedFeed />
               </div>
-              <ChatInput contextTag={inputContextTag} allowReferences={isPlaybookContext} onSend={handleAgentSend} />
+              <ChatInput contextTag={inputContextTag} allowReferences={isPlaybookContext} onSend={handleAgentSend} autoFocus />
             </>
           ) : (
             <>
@@ -213,6 +213,7 @@ export function ChatPanel({ onClose, contextTag }: ChatPanelProps) {
                     allowReferences={isPlaybookContext}
                     onSend={sendPrompt}
                     injectText={injectSignal}
+                    autoFocus
                   />
                 </>
               )}

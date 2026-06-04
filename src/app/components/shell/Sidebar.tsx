@@ -13,7 +13,6 @@ import { CdnIcon } from '@/app/components/shared/CdnIcon';
 interface SidebarProps {
   activePage?: Page;
   onNavigate: (page: Page) => void;
-  onOpenSearch?: () => void;
   onUserMouseEnter?: () => void;
   onUserMouseLeave?: () => void;
   onOpenReferral?: () => void;
@@ -125,8 +124,8 @@ function NewPlaybookButton({ onClick, collapsed, label = 'New Chat' }: { active?
 
 /* ========== 主组件 ========== */
 
-export function Sidebar({ activePage, onNavigate, onOpenSearch, onUserMouseEnter, onUserMouseLeave, onOpenReferral, collapsed = false, onToggleCollapsed }: SidebarProps) {
-  void onOpenSearch; void onOpenReferral; // 保持已有签名
+export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseLeave, onOpenReferral, collapsed = false, onToggleCollapsed }: SidebarProps) {
+  void onOpenReferral; // 保持已有签名
   return (
     <div
       className="antialiased bg-[var(--b0-sidebar)] flex flex-col gap-0 h-screen fixed left-0 top-0 isolate items-start p-[8px] shrink-0 z-[2] overflow-y-auto overflow-x-hidden"

@@ -1636,7 +1636,7 @@ function TrendingPlaybooksSection({ onNavigate }: { onNavigate: (page: Page) => 
 
 const HERO_WIDTH = 960;
 
-export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (page: Page) => void; onOpenSearch?: () => void }) {
+export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [injectSignal, setInjectSignal] = useState<{ text: string; seq: number } | null>(null);
   const [typedText, setTypedText] = useState('');
@@ -1776,7 +1776,7 @@ export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (pag
     );
   }, [selectedId]);
 
-  // 所有 skills 合并到一个池子；2 行内能放下的进 inline，其他塞进 More 下拉
+  // 所有 skills 合并到一个池子；首页 3 行内能放下的进 inline，其他塞进 More 下拉
   const allSkills: NewChatTemplate[] = useMemo(
     () => [...PRIMARY_TEMPLATES, ...OTHERS_TEMPLATES, ...COMMUNITY_TEMPLATES],
     [],
@@ -1784,7 +1784,7 @@ export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (pag
   const morePillRef = useRef<HTMLButtonElement>(null);
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
 
-  // 直接对真实 pill 容器测量：先把所有 pill 设回可见，从尾部迭代隐藏直到 More 在第 1 或第 2 行。
+  // 直接对真实 pill 容器测量：先把所有 pill 设回可见，从尾部迭代隐藏直到 More 落在允许行数内。
   // 隐藏通过 DOM 直接 mutation；hiddenIds state 仅供 More 下拉读取。
   useLayoutEffect(() => {
     const recompute = () => {
@@ -1799,8 +1799,8 @@ export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (pag
       });
       moreWrap.style.display = '';
       const hidden: string[] = [];
-      // 未选中态最多 4 行，选中后收紧为最多 2 行
-      const maxRows = selectedId ? 2 : 4;
+      // 未选中首页最多 3 行，选中后收紧为最多 2 行
+      const maxRows = selectedId ? 2 : 3;
       const fitsRows = () => {
         const tops = [
           ...new Set([
@@ -1873,7 +1873,7 @@ export default function NewChat({ onNavigate, onOpenSearch }: { onNavigate: (pag
   const hoveredTemplate = hover ? PRIMARY_TEMPLATES.find((t) => t.id === hover.id) || OTHERS_TEMPLATES.find((t) => t.id === hover.id) || COMMUNITY_TEMPLATES.find((t) => t.id === hover.id) : null;
 
   return (
-    <AppShell activePage="new-chat" onNavigate={onNavigate} onOpenSearch={onOpenSearch}>
+    <AppShell activePage="new-chat" onNavigate={onNavigate}>
       <style>{`
         @keyframes newchat-fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         @keyframes newchat-fade{from{opacity:0}to{opacity:1}}

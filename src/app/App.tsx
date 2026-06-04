@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useTransition, lazy, Suspense } from 'react';
 import { ChatProvider } from './components/chat/ChatContext';
 import { CHAT_TRIGGER_MODE } from '@/lib/chat-config';
-import SearchModal from '@/app/components/SearchModal';
 
 const NON_ROUTED_PAGES = [
   'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys',
@@ -37,7 +36,6 @@ function getPageFromHash(): Page {
 
 export default function App() {
   const [page, setPage] = useState<Page>(getPageFromHash);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [, startTransition] = useTransition();
 
   useEffect(() => {
@@ -59,13 +57,11 @@ export default function App() {
     window.location.hash = p;
   }, []);
 
-  const openSearch = useCallback(() => setIsSearchOpen(true), []);
-
   return (
     <ChatProvider activePage={page} threadsEntryMode="1" chatTriggerMode={CHAT_TRIGGER_MODE}>
       <Suspense fallback={null}>
-        {page === 'new-chat' && <NewChat onNavigate={navigate} onOpenSearch={openSearch} />}
-        {page === 'explore' && <Explore onNavigate={navigate} onOpenSearch={openSearch} />}
+        {page === 'new-chat' && <NewChat onNavigate={navigate} />}
+        {page === 'explore' && <Explore onNavigate={navigate} />}
         {page === 'screener' && <Screener onNavigate={navigate} />}
         {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
         {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
@@ -74,7 +70,6 @@ export default function App() {
         {page === 'agent' && <Agent onNavigate={navigate} />}
         {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
       </Suspense>
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </ChatProvider>
   );
 }

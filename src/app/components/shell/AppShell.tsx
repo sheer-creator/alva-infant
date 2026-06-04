@@ -13,7 +13,6 @@ import { isPlaybookOwnerPage } from '@/lib/chat-config';
 
 const NARROW_THRESHOLD = 1024;
 const MOBILE_THRESHOLD = 640;
-import SearchModal from '../SearchModal';
 import ReferralModal from '../ReferralModal';
 import UserInfo from '../UserInfo';
 import { useChatContext } from '../chat/ChatContext';
@@ -24,7 +23,6 @@ import alvaLogo from '../chat/logo-green-black.svg';
 interface AppShellProps {
   activePage?: Page;
   onNavigate: (page: Page) => void;
-  onOpenSearch?: () => void;
   onUserMouseEnter?: () => void;
   onUserMouseLeave?: () => void;
   children: React.ReactNode;
@@ -36,7 +34,6 @@ const getMaxPanelW = () =>
   typeof window !== 'undefined' ? Math.max(MIN_PANEL_W, window.innerWidth * 0.6) : DEFAULT_PANEL_W;
 
 function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isReferralOpen, setIsReferralOpen] = useState(false);
   const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -219,7 +216,6 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
         <Sidebar
           activePage={activePage}
           onNavigate={onNavigate}
-          onOpenSearch={() => setIsSearchOpen(true)}
           onUserMouseEnter={handleUserEnter}
           onOpenReferral={() => setIsReferralOpen(true)}
         />
@@ -237,7 +233,6 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
             <Sidebar
               activePage={activePage}
               onNavigate={(page) => { setMobileMenuOpen(false); onNavigate(page); }}
-              onOpenSearch={() => { setMobileMenuOpen(false); setIsSearchOpen(true); }}
               onUserMouseEnter={handleUserEnter}
               onOpenReferral={() => { setMobileMenuOpen(false); setIsReferralOpen(true); }}
             />
@@ -245,7 +240,6 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
         </div>
       )}
 
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       <ReferralModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} onNavigate={onNavigate} />
       <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-white lg:ml-[228px]">
         {/* Mobile topbar — shown below lg */}
@@ -337,12 +331,11 @@ export function MobileTopBar({ onOpenDrawer }: { onOpenDrawer: () => void }) {
   );
 }
 
-export function AppShell({ activePage, onNavigate, onOpenSearch, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
+export function AppShell({ activePage, onNavigate, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
   return (
     <AppShellInner
       activePage={activePage}
       onNavigate={onNavigate}
-      onOpenSearch={onOpenSearch}
       onUserMouseEnter={onUserMouseEnter}
       onUserMouseLeave={onUserMouseLeave}
     >

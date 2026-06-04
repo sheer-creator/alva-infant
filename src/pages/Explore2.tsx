@@ -1227,7 +1227,7 @@ function useContainerWidth() {
   return [ref, w] as const;
 }
 
-export default function Explore2({ onNavigate, onOpenSearch }: { onNavigate?: (page: Page) => void; onOpenSearch?: () => void }) {
+export default function Explore2({ onNavigate }: { onNavigate?: (page: Page) => void }) {
   const [sort, setSort] = useState<string>('Popular');
   const [selectedChips, setSelectedChips] = useState<Set<CategoryChip>>(() => new Set());
   const isMobile = useIsMobile();
@@ -1287,7 +1287,6 @@ export default function Explore2({ onNavigate, onOpenSearch }: { onNavigate?: (p
       <AppShell
         activePage="explore"
         onNavigate={onNavigate!}
-        onOpenSearch={onOpenSearch}
       >
         {/*
           Page bg = var(--background/b0, #f6f6f6) per Figma 2951:34972.
