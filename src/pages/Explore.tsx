@@ -292,6 +292,8 @@ function ExploreFilters({
   selectedChips: Set<CategoryChip>;
   onChipToggle: (chip: CategoryChip) => void;
 }) {
+  const [searchActive, setSearchActive] = useState(false);
+
   return (
     <div className="explore-filters">
       <TrendingFilterBar
@@ -301,6 +303,21 @@ function ExploreFilters({
         selectedChips={selectedChips}
         onSortChange={onSortChange}
         onChipToggle={onChipToggle}
+        trailing={
+          <button
+            type="button"
+            className={`explore-search${searchActive ? ' is-active' : ''}`}
+            aria-pressed={searchActive}
+            onClick={() => setSearchActive(true)}
+          >
+            <CdnIcon
+              name="search-l"
+              size={14}
+              color={searchActive ? 'var(--main-m1, #2A9B7D)' : 'var(--text-n3, rgba(0,0,0,0.3))'}
+            />
+            <span>Search</span>
+          </button>
+        }
       />
     </div>
   );
@@ -458,6 +475,37 @@ export default function Explore({
           display: flex;
           align-items: center;
         }
+        .explore-search {
+          flex: 0 0 160px;
+          height: 28px;
+          border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+          border-radius: var(--radius-btn-s, 4px);
+          background: #fff;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 4px 8px;
+          font-family: inherit;
+          font-size: 12px;
+          line-height: 20px;
+          letter-spacing: 0.12px;
+          color: var(--text-n3, rgba(0,0,0,0.3));
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+        }
+        .explore-search.is-active {
+          border-color: var(--main-m1, #2A9B7D);
+          background: var(--main-m1-10, rgba(42,155,125,0.1));
+          color: var(--main-m1, #2A9B7D);
+          box-shadow: 0 0 0 2px rgba(42,155,125,0.08);
+        }
+        .explore-search span {
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
         .explore-grid {
           margin-top: 20px;
           display: grid;
@@ -495,6 +543,9 @@ export default function Explore({
           .explore-filters {
             height: auto;
             margin-top: 28px;
+          }
+          .explore-search {
+            flex: 1 1 160px;
           }
         }
       `}</style>
