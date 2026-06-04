@@ -316,7 +316,7 @@ function ExploreFilters({
         onChipToggle={onChipToggle}
         trailing={
           searchActive ? (
-            <div className="input input-sm explore-search-input">
+            <div className="input input-xs explore-search-input">
               <div className="input-border" />
               <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
               <input
@@ -339,11 +339,13 @@ function ExploreFilters({
           ) : (
             <button
               type="button"
-              className="btn btn-secondary btn-extra-small explore-search-trigger"
+              className="input input-xs explore-search-trigger"
               onClick={() => setSearchActive(true)}
+              aria-label="Search"
             >
+              <div className="input-border" />
               <CdnIcon name="search-l" size={14} color="var(--text-n3, rgba(0,0,0,0.3))" />
-              <span>Search</span>
+              <span className="input-field explore-search-placeholder">Search</span>
             </button>
           )
         }
@@ -524,17 +526,30 @@ export default function Explore({
           width: 160px;
         }
         .explore-search-trigger {
+          border: 0;
           justify-content: flex-start;
           font-family: inherit;
+          cursor: pointer;
         }
         .explore-search-input {
           gap: 4px;
           z-index: 1;
         }
+        .explore-search-input .input-border {
+          border: 1px solid var(--line-l9, rgba(0,0,0,0.9));
+        }
+        .explore-search-trigger .input-border {
+          border: 0.5px solid var(--line-l3, rgba(0,0,0,0.3));
+        }
         .explore-search-input .input-field {
           font-size: 12px;
           line-height: 20px;
           letter-spacing: 0.12px;
+        }
+        .explore-search-placeholder {
+          color: var(--text-n3, rgba(0,0,0,0.3));
+          text-align: left;
+          pointer-events: none;
         }
         .explore-grid {
           margin-top: 20px;

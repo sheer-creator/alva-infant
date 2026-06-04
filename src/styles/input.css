@@ -28,9 +28,9 @@
   transition: border-color 0.12s ease;
 }
 
-.input:hover .input-border,
 .input:focus-within .input-border {
   border-color: var(--line-l9);
+  border-width: 1px;
 }
 
 .input-field {
@@ -60,6 +60,16 @@
 
 /* Size — Small */
 .input-sm {
+  height: 32px;
+  padding: 6px var(--spacing-s);
+  border-radius: var(--radius-btn-s);
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.12px;
+}
+
+/* Size — Extra Small */
+.input-xs {
   height: 28px;
   padding: var(--spacing-xxs) var(--spacing-xs);
   border-radius: var(--radius-btn-s);
