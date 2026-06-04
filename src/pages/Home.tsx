@@ -672,9 +672,10 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
         }
         .home-trending{
           width:100%;
-          max-width:1372px;
+          max-width:2048px;
           margin:0 auto;
-          padding:40px 28px 24px;
+          padding:40px clamp(16px,1.8vw,40px) 24px;
+          container:home-cards / inline-size;
         }
         .home-trending.with-offset{padding-top:24px}
         .home-section-head{
@@ -876,6 +877,9 @@ export default function Home({ onNavigate }: { onNavigate: (page: Page) => void 
           white-space:nowrap;
         }
         @keyframes home-fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        @container home-cards (min-width: 1728px){
+          .home-card-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+        }
         @media (max-width: 1100px){
           .home-card-grid,.home-selected-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
         }

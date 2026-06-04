@@ -34,7 +34,6 @@ export const HOME_CHAT_CONTEXT: ContextTagData = {
 /** Maps each page to its @context tag. null = no chat trigger on that page */
 export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
   explore: { label: 'Explore', icon: 'sidebar-discover-normal' },
-  'explore-2': { label: 'Explore', icon: 'sidebar-discover-normal' },
   agent: null,
   'new-chat': null,
   'new-chat-opt2': null,
@@ -44,7 +43,7 @@ export const PAGE_CONTEXT_MAP: Record<string, ContextTagData | null> = {
  *  contextTag to label the playbook chip with the actual playbook name. */
 export const PAGE_TITLES: Record<string, string> = {
   'new-chat': 'New chat',
-  'explore-2': 'Explore',
+  explore: 'Explore',
   portfolio: 'Portfolio',
   agent: 'Agent',
   'alva-skills': 'Alva Skill',

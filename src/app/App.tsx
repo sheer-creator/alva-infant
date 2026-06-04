@@ -7,7 +7,7 @@ const VALID_PAGES = [
   // 首页 / 新对话
   'new-chat', 'home',
   // 探索
-  'explore', 'explore-2', 'screener',
+  'explore', 'screener',
   // 模板
   'template-screener', 'template-thesis', 'template-whatif', 'template-notification',
   // 主功能
@@ -25,7 +25,6 @@ const SETTINGS_PAGES: readonly Page[] = [
 
 const NewChat = lazy(() => import('../pages/NewChat'));
 const Explore = lazy(() => import('../pages/Explore'));
-const Explore2 = lazy(() => import('../pages/Explore2'));
 const Screener = lazy(() => import('../pages/Screener'));
 const TemplateScreener = lazy(() => import('../pages/TemplateScreener'));
 const TemplateThesis = lazy(() => import('../pages/TemplateThesis'));
@@ -89,8 +88,7 @@ export default function App() {
     <ChatProvider activePage={page} threadsEntryMode="1" chatTriggerMode={CHAT_TRIGGER_MODE}>
       <Suspense fallback={null}>
         {(page === 'new-chat' || page === 'home') && <NewChat onNavigate={navigate} onOpenSearch={openSearch} />}
-        {page === 'explore' && <Explore onNavigate={navigate} />}
-        {page === 'explore-2' && <Explore2 onNavigate={navigate} onOpenSearch={openSearch} />}
+        {page === 'explore' && <Explore onNavigate={navigate} onOpenSearch={openSearch} />}
         {page === 'screener' && <Screener onNavigate={navigate} />}
         {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
         {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}

@@ -27,7 +27,7 @@ export function FloatingChatFAB() {
           right: 28,
           height: 40,
           padding: '0 12px 0 6px',
-          borderRadius: 8,
+          borderRadius: 'var(--radius-btn-m, 6px)',
           background: 'var(--main-m1)',
           border: '0.5px solid rgba(0,0,0,0.7)',
           animation: 'fabBreathe 3s ease-in-out infinite',
@@ -38,7 +38,7 @@ export function FloatingChatFAB() {
         onClick={() => openChat(false)}
       >
         <div
-          className="shrink-0 flex items-center justify-center size-[28px] rounded-[6px]"
+          className="shrink-0 flex items-center justify-center size-[28px] rounded-[4px]"
           style={{ background: '#2a2a38' }}
         >
           <img src={symbolLogo} width={14} height={14} alt="Alva" />

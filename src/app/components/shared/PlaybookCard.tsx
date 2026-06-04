@@ -15,6 +15,7 @@ export interface ExplorePlaybook {
   stars: number;
   remixes: number;
   annualizedReturn?: string;
+  price?: string;
   cover: CoverInput;
 }
 
@@ -52,13 +53,14 @@ export function PlaybookCard({
       style={{
         borderRadius: 8,
         overflow: 'hidden',
-        background: 'var(--b0-page, #fff)',
+        background: 'var(--b0-container, #fff)',
         border: selected
           ? '1px solid var(--line-l9, rgba(0,0,0,0.9))'
           : '0.5px solid var(--line-l3, rgba(0,0,0,0.3))',
-        padding: selected ? 0 : 0.5,
+        padding: selected ? 0 : 4,
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
         boxShadow: hovered ? 'var(--shadow-l, 0 10px 20px 0 rgba(0,0,0,0.08))' : 'none',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
         transition: 'box-shadow 130ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1)',
@@ -68,10 +70,9 @@ export function PlaybookCard({
       {!noCover && (
         <div
           style={{
-            margin: '4px 4px 0 4px',
-            width: 'calc(100% - 8px)',
-            aspectRatio: '16 / 9',
-            borderRadius: 6,
+            width: '100%',
+            aspectRatio: '472 / 265.5',
+            borderRadius: 4,
             overflow: 'hidden',
             background: simple
               ? 'linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%)'
@@ -86,8 +87,35 @@ export function PlaybookCard({
         </div>
       )}
 
+      {p.price && (
+        <div
+          style={{
+            position: 'absolute',
+            top: -0.5,
+            right: -0.5,
+            height: 28,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '4px 8px',
+            borderTopRightRadius: 6,
+            borderBottomLeftRadius: 6,
+            background: 'linear-gradient(90deg, var(--main-m3, #2a9b7d), var(--main-m1, #49a3a6))',
+            color: '#fff',
+            fontFamily: "'Delight', sans-serif",
+            fontSize: 12,
+            lineHeight: '20px',
+            letterSpacing: 0.12,
+            zIndex: 2,
+          }}
+        >
+          <CdnIcon name="locked-f" size={14} color="#fff" />
+          {p.price}
+        </div>
+      )}
+
       {/* Info */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: noCover ? 8 : 12, padding: noCover ? '16px' : '16px 16px 12px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: noCover ? 8 : 12, padding: noCover ? '16px' : '16px 8px 12px 12px' }}>
         {!simple && !noCover && <PlaybookTags tags={tags} />}
 
         {noCover ? (
@@ -162,8 +190,8 @@ export function PlaybookCard({
               <p
                 style={{
                   fontSize: 16,
-                  lineHeight: simple ? '26px' : '22px',
-                  fontWeight: simple ? 400 : 500,
+                  lineHeight: '26px',
+                  fontWeight: 400,
                   fontFamily: "'Delight', sans-serif",
                   color: 'var(--text-n9, rgba(0,0,0,0.9))',
                   letterSpacing: 0.16,
@@ -185,21 +213,22 @@ export function PlaybookCard({
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
+                  margin: 0,
                 }}
               >
                 {p.description}
               </p>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 6, height: 22 }}>
-                <Avatar name={p.creator} size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 4, height: 20 }}>
+                <Avatar name={p.creator} size={18} />
                 <span
                   style={{
-                    fontSize: 14,
-                    lineHeight: '22px',
+                    fontSize: 12,
+                    lineHeight: '20px',
                     color: 'var(--text-n9, rgba(0,0,0,0.9))',
-                    letterSpacing: 0.14,
+                    letterSpacing: 0.12,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -210,12 +239,12 @@ export function PlaybookCard({
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, lineHeight: '22px', letterSpacing: 0.14 }}>
-                  <CdnIcon name="star-l" size={16} />
-                  {p.stars}
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, lineHeight: '20px', letterSpacing: 0.12 }}>
+                  <CdnIcon name="show-l" size={14} />
+                  {typeof p.stars === 'number' && p.stars > 999 ? `${(p.stars / 1000).toFixed(1)}K` : p.stars}
                 </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, lineHeight: '22px', letterSpacing: 0.14 }}>
-                  <CdnIcon name="remix-l" size={16} />
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, lineHeight: '20px', letterSpacing: 0.12 }}>
+                  <CdnIcon name="remix-l" size={14} />
                   {p.remixes}
                 </span>
               </div>

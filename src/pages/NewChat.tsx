@@ -1596,7 +1596,7 @@ function TrendingPlaybooksSection({ onNavigate }: { onNavigate: (page: Page) => 
           </p>
           <button
             type="button"
-            onClick={() => onNavigate('explore-2')}
+            onClick={() => onNavigate('explore')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 4,
               height: 28, padding: '4px 0',
@@ -1609,7 +1609,7 @@ function TrendingPlaybooksSection({ onNavigate }: { onNavigate: (page: Page) => 
             <CdnIcon name="arrow-right-l2" size={14} color="var(--text-n9)" />
           </button>
         </div>
-        {/* Filter bar (chips + Sort select) reused from Explore2 */}
+        {/* Filter bar (chips + Sort select) reused from the Explore utility exports */}
         <FilterBar
           sort={sort}
           onSortChange={setSort}

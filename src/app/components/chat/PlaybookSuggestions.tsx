@@ -1,7 +1,7 @@
 /**
  * [INPUT]: page (activePage), onPromptClick 回调
  * [OUTPUT]: ChatPanel 在支持的上下文页面空态下渲染 3 条自然语言建议 + 问候
- * [POS]: ChatPanel 空态层 — 支持 workspace / explore-2 / portfolio 等页面
+ * [POS]: ChatPanel 空态层 — 支持 workspace / explore / portfolio 等页面
  */
 
 import { CdnIcon } from '../shared/CdnIcon';
@@ -19,7 +19,7 @@ interface ContextConfig {
 /* ========== 每个页面的上下文建议 ========== */
 
 const CONTEXT_CONFIG: Record<string, ContextConfig> = {
-  'explore-2': {
+  explore: {
     greeting: "Hey YGGYLL, what's next?",
     suggestions: [
       {

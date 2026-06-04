@@ -54,11 +54,11 @@ export const AVATAR_COLOR_PALETTE = [
 export const CREATOR_AVATARS: Record<string, string> = {
   Alva: `${import.meta.env.BASE_URL}logo-portrait.svg`,
   YGGYLL: `${import.meta.env.BASE_URL}portrait.png`,
-  'Alva Intern': 'https://api.dicebear.com/9.x/notionists/svg?seed=AlvaIntern&backgroundColor=e8f5e9',
+  'Alva Intern': `${import.meta.env.BASE_URL}figma/explore/avatar-alva-intern.svg`,
   'Harry Zzz': 'https://api.dicebear.com/9.x/notionists/svg?seed=HarryZzz&backgroundColor=e3f2fd',
   'Smart Jing': 'https://api.dicebear.com/9.x/notionists/svg?seed=SmartJing&backgroundColor=fce4ec',
   'Sheer YLL YGG': 'https://api.dicebear.com/9.x/notionists/svg?seed=SheerYLL&backgroundColor=fff3e0',
-  'Macro Scope X': 'https://api.dicebear.com/9.x/notionists/svg?seed=MacroScopeX&backgroundColor=ede7f6',
+  'Macro Scope X': `${import.meta.env.BASE_URL}figma/explore/avatar-macro.svg`,
   'Deep Ledger': 'https://api.dicebear.com/9.x/notionists/svg?seed=DeepLedger&backgroundColor=e3f2fd',
   WalletWatcher: 'https://api.dicebear.com/9.x/notionists/svg?seed=WalletWatcher&backgroundColor=e0f7fa',
   'Options Club': 'https://api.dicebear.com/9.x/notionists/svg?seed=OptionsClub&backgroundColor=f3e5f5',

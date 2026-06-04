@@ -1285,7 +1285,7 @@ export default function Explore2({ onNavigate, onOpenSearch }: { onNavigate?: (p
         }
       `}</style>
       <AppShell
-        activePage="explore-2"
+        activePage="explore"
         onNavigate={onNavigate!}
         onOpenSearch={onOpenSearch}
       >
