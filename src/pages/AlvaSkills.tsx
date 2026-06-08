@@ -566,9 +566,13 @@ function CopyInstallBtn({ onTry }: { onTry: () => void }) {
         onClick={onTry}
         className="ml-[24px] flex h-[40px] w-[192px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[6px] border-0 bg-[var(--main-m1)] px-[20px] py-[9px] font-['Delight',sans-serif] text-[14px] font-medium leading-[22px] tracking-[0.14px] text-white transition-opacity hover:opacity-90"
       >
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0">
-          <rect x="6.2" y="6.2" width="7.3" height="7.3" rx="1.3" stroke="#fff" strokeWidth="1.2" />
-          <path d="M4.5 11.2H4.1A1.6 1.6 0 0 1 2.5 9.6V4.1A1.6 1.6 0 0 1 4.1 2.5h5.5a1.6 1.6 0 0 1 1.6 1.6v.4" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" />
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0" aria-hidden="true">
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M14.852 5.076C15.3984 5.07636 15.8415 5.51927 15.8417 6.06565V14.8512C15.8416 15.3976 15.3984 15.8405 14.852 15.8408H6.0665C5.51997 15.8406 5.07697 15.3977 5.07685 14.8512V6.06565C5.07704 5.51916 5.52001 5.07619 6.0665 5.076H14.852ZM6.0665 5.976C6.01707 5.97619 5.97704 6.01622 5.97685 6.06565V14.8512C5.97697 14.9007 6.01703 14.9406 6.0665 14.9408H14.852C14.9014 14.9405 14.9416 14.9005 14.9417 14.8512V6.06565C14.9415 6.01632 14.9013 5.97635 14.852 5.976H6.0665ZM12.5449 2.158C13.0912 2.15843 13.5344 2.60131 13.5346 3.14765V3.91757C13.5346 4.16595 13.3329 4.36733 13.0846 4.36757C12.836 4.36757 12.6346 4.1661 12.6346 3.91757V3.14765C12.6344 3.09837 12.5941 3.05842 12.5449 3.058H3.14765C3.09822 3.05819 3.05819 3.09822 3.058 3.14765V12.5449C3.05819 12.5943 3.09822 12.6344 3.14765 12.6346H3.91757C4.1659 12.6348 4.36757 12.8362 4.36757 13.0846C4.36757 13.3329 4.1659 13.5343 3.91757 13.5346H3.14765C2.60117 13.5344 2.15819 13.0914 2.158 12.5449V3.14765C2.15819 2.60117 2.60117 2.15819 3.14765 2.158H12.5449Z"
+            fill="currentColor"
+          />
         </svg>
         Try with your agent
       </button>
