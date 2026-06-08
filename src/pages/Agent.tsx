@@ -356,6 +356,15 @@ export function AgentEmptyState({
       <div className="pointer-events-none absolute left-1/2 top-0 z-0 h-[1080px] w-[1920px] -translate-x-1/2 opacity-30">
         <img src={`${import.meta.env.BASE_URL}agent-bg-pattern.png`} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
       </div>
+      <button
+        type="button"
+        className="absolute right-[28px] top-[20px] z-20 flex size-[32px] cursor-pointer items-center justify-center rounded-[4px] border-none bg-transparent transition-colors hover:bg-[var(--b-r03)]"
+        onClick={() => onNavigate?.('alva-agent')}
+        aria-label="Agent settings"
+        title="Agent settings"
+      >
+        <CdnIcon name="settings-l" size={16} color="var(--text-n7)" />
+      </button>
 
       <div className="relative z-10 min-h-0 flex-1 overflow-y-auto">
         <div className="mx-auto min-h-full w-full max-w-[1212px] px-[28px] pb-[56px] pt-[56px]">
