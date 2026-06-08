@@ -288,7 +288,7 @@ function AgentPreviewCard({
       style={{
         border: 'none',
         borderBottom: '0.5px solid var(--line-l12)',
-        boxShadow: active ? 'inset 0 0 0 0.5px var(--main-m1, #49A3A6)' : 'none',
+        background: active ? 'rgba(73, 163, 166, 0.08)' : undefined,
       }}
     >
       <p className={`${FONT} m-0 w-full text-[14px] font-normal leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>
@@ -353,14 +353,9 @@ export function AgentEmptyState({
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-30"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(73, 163, 166, 0.18) 0.7px, transparent 0.8px)',
-          backgroundPosition: 'center top',
-          backgroundSize: '12px 12px',
-        }}
-      />
+      <div className="pointer-events-none absolute left-1/2 top-0 z-0 h-[1080px] w-[1920px] -translate-x-1/2 opacity-30">
+        <img src={`${import.meta.env.BASE_URL}agent-bg-pattern.png`} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+      </div>
 
       <div className="relative z-10 min-h-0 flex-1 overflow-y-auto">
         <div className="mx-auto min-h-full w-full max-w-[1212px] px-[28px] pb-[56px] pt-[56px]">
@@ -385,7 +380,7 @@ export function AgentEmptyState({
               <div
                 key={feature.title}
                 className="flex min-h-[66px] flex-col gap-[4px] px-[16px] pt-[12px]"
-                style={{ borderLeft: index === 0 ? 'none' : '0.5px solid var(--line-l07)' }}
+                style={{ borderLeft: index === 0 ? 'none' : '0.5px solid var(--line-l2)' }}
               >
                 <div className="flex h-[22px] items-center gap-[8px]">
                   <CdnIcon name={feature.icon} size={20} color="var(--text-n9)" />
@@ -400,22 +395,23 @@ export function AgentEmptyState({
             ))}
           </section>
 
-          <section className="mt-[24px] flex flex-col items-center justify-center gap-[16px] lg:h-[76px] lg:flex-row">
-            <div className="flex w-full max-w-[280px] flex-col">
+          <section className="mt-[24px] flex flex-col items-center justify-center gap-[16px] lg:flex-row lg:items-start">
+            <div
+              className="flex w-full max-w-[280px] flex-col overflow-hidden"
+              style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}
+            >
               <button
                 className={`${FONT} flex h-[48px] w-full cursor-pointer items-center justify-center gap-[8px] px-[20px] py-[11px] text-[16px] font-medium leading-[26px] tracking-[0.16px] text-white transition-opacity hover:opacity-90`}
-                style={{ background: '#2196F3', border: 'none', borderRadius: '6px 6px 0 0' }}
+                style={{ background: '#24a1de', border: 'none', borderRadius: 6 }}
                 onClick={onTelegramConnect}
               >
                 <CdnIcon name="project-telegram-l" size={20} color="#fff" />
                 Connect Telegram
               </button>
-              <div
-                className={`${FONT} flex h-[28px] w-full items-center justify-center gap-[4px] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--main-m1)]`}
-                style={{ background: 'var(--main-m1-10)', borderRadius: '0 0 6px 6px' }}
-              >
+              <div className={`${FONT} flex h-[28px] w-full items-center justify-center gap-[4px] px-[8px] text-[12px] leading-[20px] tracking-[0.12px]`}>
                 <span aria-hidden>🎁</span>
-                <span>+3,000 bonus credits</span>
+                <span style={{ color: 'var(--main-m1)' }}>+3,000</span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.9)' }}>bonus credits</span>
               </div>
             </div>
 

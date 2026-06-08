@@ -26,15 +26,18 @@ export const SIDEBAR_W_COLLAPSED = 56;
 /* ========== 导航项组件 ========== */
 
 function NavItem({ label, icon, badge, active, deprecated, collapsed, onClick }: { label: string; icon?: string; badge?: string | number; active?: boolean; deprecated?: boolean; collapsed?: boolean; onClick?: () => void }) {
+  const interactive = Boolean(onClick);
   const textClass = deprecated
     ? 'text-white/35'
     : active
       ? 'text-white bg-white/5'
-      : 'text-white hover:bg-white/5';
+      : interactive
+        ? 'text-white hover:bg-white/5'
+        : 'text-white';
   const iconColor = deprecated ? 'rgba(255,255,255,0.35)' : '#ffffff';
   return (
     <div
-      className={`content-stretch flex h-[36px] items-center overflow-clip relative rounded-[4px] shrink-0 w-full transition-colors ${collapsed ? 'justify-center px-0' : 'gap-[8px] px-[8px] py-[4px]'} ${textClass} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`content-stretch flex h-[36px] items-center overflow-clip relative rounded-[4px] shrink-0 w-full transition-colors ${collapsed ? 'justify-center px-0' : 'gap-[8px] px-[8px] py-[4px]'} ${textClass} ${interactive ? 'cursor-pointer' : ''}`}
       onClick={onClick}
       title={collapsed ? label : deprecated ? 'Deprecated — use New Chat' : undefined}
     >
@@ -165,8 +168,8 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
       {/* Chats */}
       <div className="content-stretch flex flex-col flex-[1_0_0] gap-0 items-start min-h-px py-[4px] relative w-full z-[4]">
         <SectionHeader label="Chats" collapsed={collapsed} />
-        <NavItem label="Crypto Price + AI Trend Pulse" icon="chat-l1" collapsed={collapsed} onClick={() => onNavigate('new-chat')} />
-        <NavItem label="Heartbeat Run Counter" icon="chat-l1" collapsed={collapsed} onClick={() => onNavigate('new-chat')} />
+        <NavItem label="Crypto Price + AI Trend Pulse" icon="chat-l1" collapsed={collapsed} />
+        <NavItem label="Heartbeat Run Counter" icon="chat-l1" collapsed={collapsed} />
       </div>
 
       {/* Upgrade to Pro card — sits above the user row */}

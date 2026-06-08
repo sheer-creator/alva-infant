@@ -27,6 +27,7 @@ const TemplateThesis = lazy(() => import('../pages/TemplateThesis'));
 const TemplateWhatif = lazy(() => import('../pages/TemplateWhatif'));
 const TemplateNotification = lazy(() => import('../pages/TemplateNotification'));
 const Agent = lazy(() => import('../pages/Agent'));
+const Portfolio = lazy(() => import('../pages/Portfolio'));
 const AlvaSkills = lazy(() => import('../pages/AlvaSkills'));
 
 function getPageFromHash(): Page {
@@ -68,6 +69,7 @@ export default function App() {
         {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
         {page === 'template-notification' && <TemplateNotification onNavigate={navigate} />}
         {page === 'agent' && <Agent onNavigate={navigate} />}
+        {page === 'portfolio' && <Portfolio onNavigate={navigate} />}
         {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
       </Suspense>
     </ChatProvider>
