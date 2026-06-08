@@ -550,13 +550,13 @@ function CopyInstallBtn({ onTry }: { onTry: () => void }) {
 
   return (
     <div
-      className="flex h-[48px] w-full max-w-[608px] items-center rounded-[4px] border border-solid px-[24px] py-[4px]"
-      style={{ background: copied ? 'rgba(73,163,166,0.04)' : 'rgba(255,255,255,0.74)', borderColor: copied ? 'rgba(73,163,166,0.2)' : 'var(--line-l12)' }}
+      className="flex h-[48px] w-[608px] max-w-full items-center overflow-hidden rounded-[8px] py-[4px] pl-[24px] pr-[4px]"
+      style={{ background: 'rgba(255,255,255,0.1)', border: `0.5px solid ${copied ? 'rgba(73,163,166,0.35)' : 'rgba(0,0,0,0.3)'}` }}
     >
       <button
         type="button"
         onClick={handleCopy}
-        className="min-w-0 flex-1 cursor-pointer truncate border-0 bg-transparent p-0 text-left font-['Delight',sans-serif] text-[14px] leading-[28px] tracking-[0.14px] text-[var(--text-n7)]"
+        className="w-[364px] shrink-0 cursor-pointer truncate border-0 bg-transparent p-0 text-left font-['Delight',sans-serif] text-[18px] font-normal leading-[28px] tracking-[0.18px] text-[var(--text-n9)]"
         title={copied ? 'Copied' : 'Copy command'}
       >
         {INSTALL_CMD}
@@ -564,10 +564,11 @@ function CopyInstallBtn({ onTry }: { onTry: () => void }) {
       <button
         type="button"
         onClick={onTry}
-        className="ml-[24px] flex h-[40px] w-[192px] shrink-0 cursor-pointer items-center justify-center gap-[6px] rounded-[4px] border-0 bg-[var(--main-m1)] px-[16px] font-['Delight',sans-serif] text-[14px] font-medium leading-[22px] tracking-[0.14px] text-white transition-opacity hover:opacity-90"
+        className="ml-[24px] flex h-[40px] w-[192px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[6px] border-0 bg-[var(--main-m1)] px-[20px] py-[9px] font-['Delight',sans-serif] text-[14px] font-medium leading-[22px] tracking-[0.14px] text-white transition-opacity hover:opacity-90"
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-          <path d="M3.5 8h8M8.5 5l3 3-3 3" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0">
+          <rect x="6.2" y="6.2" width="7.3" height="7.3" rx="1.3" stroke="#fff" strokeWidth="1.2" />
+          <path d="M4.5 11.2H4.1A1.6 1.6 0 0 1 2.5 9.6V4.1A1.6 1.6 0 0 1 4.1 2.5h5.5a1.6 1.6 0 0 1 1.6 1.6v.4" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
         Try with your agent
       </button>
@@ -628,7 +629,7 @@ export default function AlvaSkills({ onNavigate }: AlvaSkillsProps) {
       <div className="min-h-screen overflow-y-auto bg-white">
         <div className="mx-auto w-full max-w-[1212px]">
           <section className="flex min-h-[1006px] w-full flex-col items-center px-[28px] pt-[80px]">
-            <h1 className="m-0 w-full max-w-[960px] text-center font-['Delight',sans-serif] text-[28px] font-normal leading-[48px] tracking-[0.28px] text-[var(--text-n9)]">
+            <h1 className="m-0 flex h-[96px] w-full max-w-[960px] flex-col justify-center overflow-hidden text-center font-['Delight',sans-serif] text-[36px] font-normal leading-[48px] tracking-[0.36px] text-[var(--text-n9)]">
               Turn Your Agent
               <br />
               into an Alpha Engine
@@ -638,7 +639,7 @@ export default function AlvaSkills({ onNavigate }: AlvaSkillsProps) {
               <CopyInstallBtn onTry={() => onNavigate('agent')} />
             </div>
 
-            <div className="mt-[24px] flex h-[22px] items-center justify-center gap-[10px] font-['Delight',sans-serif] text-[12px] leading-[22px] tracking-[0.12px] text-[var(--text-n5)]">
+            <div className="mt-[24px] flex h-[22px] w-[722px] max-w-full items-center justify-center gap-[16px] font-['Delight',sans-serif] text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n5)]">
               <button
                 type="button"
                 onClick={() => window.open('https://github.com/alva-ai/skills', '_blank')}
@@ -657,7 +658,7 @@ export default function AlvaSkills({ onNavigate }: AlvaSkillsProps) {
             </div>
 
             <div className="mt-[24px] w-full max-w-[1024px]">
-              <AnimatedTerminal className="rounded-[4px]" contentHeight={560} />
+              <AnimatedTerminal contentHeight={560} />
             </div>
 
             <div className="mt-[24px] flex w-full max-w-[1024px] items-center gap-[20px]">
