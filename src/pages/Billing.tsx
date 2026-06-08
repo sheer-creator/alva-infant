@@ -17,7 +17,7 @@ const PLAN = { name: 'Pro', startDate: '01/08/2026', nextBilling: '01/08/2027' }
 
 const CREDITS = {
   daily:   { used: 200,  total: 1000,   color: '#78C26D', expires: 'Reset in 6h',  hasBonus: true  },
-  monthly: { used: 12720, total: 21360, color: '#2196F3', expires: 'Reset in 23d', hasBonus: false },
+  monthly: { used: 12720, total: 21360, color: 'var(--main-m2)', expires: 'Reset in 23d', hasBonus: false },
   pack:    { used: 1080, total: 4000,   color: '#FFBB1C', expires: 'Never expires', hasBonus: false },
 };
 const TOTAL_AVAILABLE =
@@ -58,7 +58,7 @@ function AutoRefillModal({ onClose, onConfirm }: { onClose: () => void; onConfir
             <span className="text-[18px] leading-none" style={{ color: 'var(--text-n5)' }}>&times;</span>
           </button>
         </div>
-        <div className="h-[0.5px] mx-[24px]" style={{ background: 'var(--b-r07)' }} />
+        <div className="h-[0.5px] mx-[24px]" style={{ background: 'var(--line-l07)' }} />
         <div className="px-[24px] pt-[20px] pb-[24px] flex flex-col gap-[20px]">
           <span className="text-[14px] leading-[22px]" style={{ color: 'var(--text-n7)', fontFamily: FONT }}>
             Automatically buy more credits when your Pack balance runs low.
@@ -85,7 +85,7 @@ function AutoRefillModal({ onClose, onConfirm }: { onClose: () => void; onConfir
           ))}
           <div className="flex items-center justify-end gap-[8px]">
             <button className="h-[40px] px-[20px] rounded-[8px] text-[14px] font-medium cursor-pointer" style={{ color: 'var(--text-n7)', border: '0.5px solid var(--line-l2)', background: 'transparent', fontFamily: FONT }} onClick={onClose}>Cancel</button>
-            <button className="h-[40px] px-[20px] rounded-[8px] text-[14px] font-medium cursor-pointer" style={{ color: '#fff', background: valid ? 'var(--main-m1)' : 'var(--line-l12)', border: 'none', opacity: valid ? 1 : 0.6, pointerEvents: valid ? 'auto' : 'none', fontFamily: FONT }} onClick={() => onConfirm(threshold, topUp)}>Turn on</button>
+            <button className="h-[40px] px-[20px] rounded-[8px] text-[14px] font-medium cursor-pointer" style={{ color: '#fff', background: valid ? 'var(--main-m1)' : 'rgba(0,0,0,0.12)', border: 'none', opacity: valid ? 1 : 0.6, pointerEvents: valid ? 'auto' : 'none', fontFamily: FONT }} onClick={() => onConfirm(threshold, topUp)}>Turn on</button>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ function AddCreditsModal({ onClose }: { onClose: () => void }) {
             <span className="text-[18px] leading-none" style={{ color: 'var(--text-n5)' }}>&times;</span>
           </button>
         </div>
-        <div className="h-[0.5px] mx-[24px]" style={{ background: 'var(--b-r07)' }} />
+        <div className="h-[0.5px] mx-[24px]" style={{ background: 'var(--line-l07)' }} />
         {step === 'select' && (
           <div className="px-[24px] pt-[20px] pb-[24px] flex flex-col gap-[20px]">
             <div className="flex flex-col gap-[8px]">
@@ -157,7 +157,7 @@ function AddCreditsModal({ onClose }: { onClose: () => void }) {
               disabled={!valid}
               onClick={() => { if (!valid) return; setStep('processing'); setTimeout(() => setStep('success'), 1500); }}
               className="h-[44px] rounded-[8px] text-[14px] font-medium cursor-pointer"
-              style={{ color: '#fff', background: valid ? 'var(--main-m1)' : 'var(--line-l12)', border: 'none', opacity: valid ? 1 : 0.6, fontFamily: FONT }}
+              style={{ color: '#fff', background: valid ? 'var(--main-m1)' : 'rgba(0,0,0,0.12)', border: 'none', opacity: valid ? 1 : 0.6, fontFamily: FONT }}
             >
               Pay ${amount} with Stripe
             </button>
@@ -172,7 +172,7 @@ function AddCreditsModal({ onClose }: { onClose: () => void }) {
         {step === 'success' && (
           <div className="px-[24px] py-[40px] flex flex-col items-center gap-[16px]">
             <div className="w-[40px] h-[40px] rounded-full flex items-center justify-center" style={{ background: 'rgba(73,163,166,0.12)' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--main-m1)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#49A3A6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
             </div>
             <span className="text-[16px] font-medium" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>Payment successful</span>
             <span className="text-[14px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>{credits.toLocaleString()} credits added to your Pack balance.</span>

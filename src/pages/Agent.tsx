@@ -596,8 +596,11 @@ function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
           </button>
           {isAgent ? (
             <button
+              type="button"
               className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
               onClick={() => onNavigate('alva-agent')}
+              aria-label="Agent settings"
+              title="Agent settings"
             >
               <CdnIcon name="settings-l" size={16} />
             </button>

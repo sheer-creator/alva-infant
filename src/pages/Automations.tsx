@@ -17,7 +17,7 @@ const FONT = "'Delight', sans-serif";
 
 function StatusDot({ status = 'green', size = 12 }: { status?: 'green' | 'grey'; size?: number }) {
   const ringColor = status === 'green' ? '#DBEDED' : 'var(--b-r07)';
-  const dotColor = status === 'green' ? 'var(--main-m1)' : 'rgba(0,0,0,0.3)';
+  const dotColor = status === 'green' ? '#49A3A6' : 'rgba(0,0,0,0.3)';
   return (
     <div className="flex items-center shrink-0" style={{ width: size, height: size }}>
       <div className="flex-1 h-full min-h-px min-w-px overflow-clip relative">
@@ -321,7 +321,7 @@ export default function Automations({ onNavigate }: { onNavigate: (page: Page) =
             onClick={e => e.stopPropagation()}
           >
             <p className="leading-[26px] text-[16px] tracking-[0.16px]" style={{ color: 'var(--text-n9)', fontFamily: FONT }}>
-              Delete &ldquo;{confirmDelete.name}&rdquo;?
+              Delete “{confirmDelete.name}”?
             </p>
             <p className="leading-[20px] text-[12px] tracking-[0.12px]" style={{ color: 'var(--text-n5)', fontFamily: FONT }}>
               This automation will be permanently removed. Playbooks using it will stop receiving data.
