@@ -925,6 +925,10 @@ function TitleHero({ selected, maxWidth }: { selected: NewChatTemplate | null; m
     // On very first paint (prev was empty), no burst — just show
     if (!prev) return;
 
+    // Skill-switch title burst disabled — title swaps text instantly (no dot-burst).
+    const titleBurstEnabled = false as boolean;
+    if (!titleBurstEnabled) return;
+
     animatingRef.current = true;
 
     // Outgoing layer = prev text, live layer = next text (incoming)
@@ -1659,11 +1663,10 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
         .nc-skeleton-anim{animation:newchat-skeleton 1.4s ease-in-out infinite}
         button.nc-pill{display:flex}
         .nc-chatbox-wrap .chat-input-wrapper{
-          min-height:164px;
           box-sizing:border-box;
         }
         .nc-chatbox-wrap .chat-input-editor-shell{
-          flex:1;
+          min-height:48px;
         }
         .nc-sample-cards-grid{
           display:grid;
