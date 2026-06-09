@@ -14,7 +14,8 @@ import { Avatar } from '@/app/components/shared/Avatar';
 import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDropdown';
 import { POPULAR_RECENT_SORT_OPTIONS, TRENDING_FILTER_CHIPS, TrendingFilterBar, type PopularRecentSort, type TrendingFilterChip } from '@/app/components/shared/TrendingFilterBar';
 import { BURST_ICON_PATHS } from '@/app/components/shared/burst-icon-paths';
-import { COMMUNITY_TEMPLATES, PRIMARY_TEMPLATES, OTHERS_TEMPLATES, type CommunitySkillTemplate, type NewChatTemplate, type NewChatPlaybook } from '@/data/new-chat-mock';
+import { COMMUNITY_TEMPLATES, PRIMARY_TEMPLATES, OTHERS_TEMPLATES, type CommunitySkillTemplate, type NewChatTemplate, type NewChatPlaybook, type RecCard } from '@/data/new-chat-mock';
+import { AutomationCard } from '@/app/components/shared/AutomationCard';
 import { generateTypedSuggestions } from '@/data/typed-suggestions';
 import type { CoverInput, Template as CoverTemplateName, DomainKey } from '@/lib/playbook-cover/types';
 import { PlaybookCard as ExplorePlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
@@ -1551,6 +1552,13 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
     );
   }, [selectedId]);
 
+  // 选中态推荐区的卡：skill 配了 recCards 就用，否则用 playbooks 前 3 个包成 playbook 卡
+  const recCards: RecCard[] = useMemo(() => {
+    if (!selected) return [];
+    if (selected.recCards && selected.recCards.length) return selected.recCards;
+    return selected.playbooks.slice(0, 3).map((p) => ({ type: 'playbook', playbook: p }) as RecCard);
+  }, [selected]);
+
   // 所有 skills 合并到一个池子；首页 3 行内能放下的进 inline，其他塞进 More 下拉
   const allSkills: NewChatTemplate[] = useMemo(
     () => [...PRIMARY_TEMPLATES, ...OTHERS_TEMPLATES, ...COMMUNITY_TEMPLATES],
@@ -1674,7 +1682,8 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
           gap:12px;
           overflow-x:auto;
           overflow-y:visible;
-          padding-right:0;
+          /* 给 hover 阴影 + 末卡右侧留出空间，避免 overflow 裁切 */
+          padding:16px 20px 28px 20px;
           overscroll-behavior-x:contain;
           -webkit-overflow-scrolling:touch;
           scrollbar-width:none;
@@ -2509,52 +2518,52 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
               )}
             </div>
           )}
-        </section>
 
-        {/* ══════ 选中态：3 张模拟 playbook —— 先骨架，再淡入真实 ══════ */}
-        {selected && (
-          <section
-            key={selected.id}
-            className="nc-cards-section"
-            style={{
-              width: '100%',
-              maxWidth: HERO_WIDTH + 24,
-              margin: '12px auto 0',
-              padding: '0 0 40px 24px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-              position: 'relative',
-              zIndex: 2,
-            }}
-          >
-            {!cardsReady ? (
-              <div className="nc-sample-cards-grid nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <PlaybookCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : (
-              <div className="nc-sample-cards-grid" style={{ animation: 'newchat-fade 320ms ease-out' }}>
-                {selected.playbooks.slice(0, 3).map((p, i) => (
-                  <div
-                    key={p.id}
-                    onClick={() => {
-                      sessionStorage.setItem('autoOpenChatPanel', '1');
-                      onNavigate('new-chat');
-                    }}
-                    style={{
-                      animation: 'newchat-fadeup 360ms ease-out both',
-                      animationDelay: `${i * 50}ms`,
-                    }}
-                  >
-                    <ExplorePlaybookCard p={toExplorePlaybook(p, selected.id)} staggerMs={i * 1000} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
+          {/* 选中态推荐卡 —— 并入 hero section，共用 gap；overflow 可见不裁切阴影/末卡 */}
+          {selected && (
+            <div
+              key={selected.id}
+              style={{
+                width: '100%',
+                maxWidth: HERO_WIDTH,
+                position: 'relative',
+                zIndex: 2,
+                display: 'grid',
+                gridTemplateColumns: `repeat(${recCards.length || 3}, minmax(0, 1fr))`,
+                gap: 16,
+              }}
+            >
+              {!cardsReady
+                ? Array.from({ length: recCards.length || 3 }).map((_, i) => (
+                    <div key={i} className="nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
+                      <PlaybookCardSkeleton />
+                    </div>
+                  ))
+                : recCards.map((c, i) => {
+                    const key = c.type === 'playbook' ? c.playbook.id : c.push.id;
+                    return (
+                      <div
+                        key={key}
+                        onClick={() => {
+                          sessionStorage.setItem('autoOpenChatPanel', '1');
+                          onNavigate('new-chat');
+                        }}
+                        style={{
+                          animation: 'newchat-fadeup 360ms ease-out both',
+                          animationDelay: `${i * 50}ms`,
+                        }}
+                      >
+                        {c.type === 'playbook' ? (
+                          <ExplorePlaybookCard p={toExplorePlaybook(c.playbook, selected.id)} staggerMs={i * 1000} hideTags />
+                        ) : (
+                          <AutomationCard a={c.push} />
+                        )}
+                      </div>
+                    );
+                  })}
+            </div>
+          )}
+        </section>
 
         {/* ══════ Trending Playbooks ══════ */}
         {!showTypedSuggestions && (

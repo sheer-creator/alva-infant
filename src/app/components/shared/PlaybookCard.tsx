@@ -25,6 +25,7 @@ export function PlaybookCard({
   simple = false,
   noCover = false,
   selected = false,
+  hideTags = false,
 }: {
   p: ExplorePlaybook;
   staggerMs?: number;
@@ -36,6 +37,8 @@ export function PlaybookCard({
   simple?: boolean;
   noCover?: boolean;
   selected?: boolean;
+  /** 隐藏 tag 栏（推荐区与 push 卡混排时用，保持视觉一致） */
+  hideTags?: boolean;
 }) {
   const tags = buildTags({
     template: p.cover.template,
@@ -116,7 +119,7 @@ export function PlaybookCard({
 
       {/* Info */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: noCover ? 8 : 12, padding: noCover ? '16px' : '16px 8px 12px 12px' }}>
-        {!simple && !noCover && <PlaybookTags tags={tags} />}
+        {!simple && !noCover && !hideTags && <PlaybookTags tags={tags} />}
 
         {noCover ? (
           <>

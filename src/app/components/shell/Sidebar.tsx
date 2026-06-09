@@ -86,7 +86,7 @@ function SectionHeader({ label, collapsed }: { label: string; collapsed?: boolea
 
 /* ========== Logo ========== */
 
-function Logo({ collapsed, onDemoClick }: { collapsed?: boolean; onDemoClick?: () => void }) {
+function Logo({ collapsed }: { collapsed?: boolean }) {
   return (
     <div className={`content-stretch flex items-center relative shrink-0 w-full z-[9] ${collapsed ? 'justify-center py-[12px]' : 'justify-between px-[8px] py-[12px]'}`}>
       {!collapsed && (
@@ -95,14 +95,15 @@ function Logo({ collapsed, onDemoClick }: { collapsed?: boolean; onDemoClick?: (
         </div>
       )}
       {!collapsed && (
-        <button
-          type="button"
-          onClick={onDemoClick}
-          className="relative shrink-0 bg-transparent border-none p-0 font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] transition-colors hover:text-white"
+        <a
+          href={`${import.meta.env.BASE_URL}#demo`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative shrink-0 cursor-pointer font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] no-underline transition-colors hover:text-white"
           style={{ color: 'rgba(255, 255, 255, 0.5)' }}
         >
           Demo
-        </button>
+        </a>
       )}
     </div>
   );
@@ -143,7 +144,7 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
         transition: 'width 200ms ease',
       }}
     >
-      <Logo collapsed={collapsed} onDemoClick={() => onNavigate('demo')} />
+      <Logo collapsed={collapsed} />
 
       {/* New Playbook CTA — own group per Figma 2951:34936 */}
       <NewPlaybookButton collapsed={collapsed} onClick={() => onNavigate('new-chat')} />

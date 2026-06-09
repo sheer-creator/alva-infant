@@ -7,8 +7,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
+import { PlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
+import { AutomationCard, type AutomationCardData } from '@/app/components/shared/AutomationCard';
+import { PLAYBOOKS_ORDERED } from '@/pages/Explore2';
 
-type DemoSlug = 'skill-fast-path-actions';
+type DemoSlug = 'skill-fast-path-actions' | 'recommendation-cards';
 type PrivateActionType = 'ask' | 'build' | 'automation';
 
 interface DemoProps {
@@ -41,6 +44,56 @@ const DEMOS: DemoEntry[] = [
     name: 'Skill Fast Path Actions',
     status: 'Draft',
     summary: 'The Ask / Build / Automation entry points offered when a skill is selected.',
+  },
+  {
+    slug: 'recommendation-cards',
+    name: 'Recommendation Cards',
+    status: 'Draft',
+    summary: 'Skill recommendation row mixing Playbook cards with subscribable Automation cards.',
+  },
+];
+
+const SAMPLE_AUTOMATIONS: AutomationCardData[] = [
+  {
+    kind: 'normal',
+    id: 'ai-diaspora',
+    timestamp: 'May 8, 9:00 AM',
+    source: 'ai-diaspora-tracker',
+    feedName: 'nvda-social-feed',
+    title: '【Recursive Superintelligence】· DeepMind + OpenAI + Salesforce alliance, exits Stealth mid-May',
+    bullets: [
+      '🧑 Founders: Tim Rocktäschel (fmr DeepMind), Richard Socher (fmr Salesforce), Josh Tobin & Jeff Clune (both fmr OpenAI)',
+      '🏢 New company: Recursive Superintelligence — automate the full frontier AI R&D pipeline',
+      '💰 Round: $500M / $4B pre-money; expected to close above $1B',
+    ],
+  },
+  {
+    kind: 'trade',
+    id: 'space-rotation',
+    timestamp: 'May 8, 12:00 PM',
+    source: 'space-rotation',
+    feedName: 'momentum-rebalancer',
+    rows: [
+      { ticker: 'AAPL', action: 'Buy', detail: 'weight 33.3%', dir: 'up' },
+      { ticker: 'RKLB', action: 'Buy', detail: 'weight 33.3%', dir: 'up' },
+      { ticker: 'NVDA', action: 'Buy', detail: 'weight 33.3%', dir: 'up' },
+      { ticker: 'TSLA', action: 'Sell', detail: 'exit position', dir: 'down' },
+    ],
+    note: 'Rebalance: Top 3 by 63d momentum: AAPL(78.2%), RKLB(35.1%), NVDA(34.0%)',
+  },
+  {
+    kind: 'kol',
+    id: 'amzn-aws',
+    timestamp: 'May 8, 12:00 PM',
+    source: 'kol-signal-relay',
+    feedName: 'kol-watch',
+    kolName: 'Gavin Baker',
+    headlineTicker: '$AMZN',
+    headlineText: 'AWS CEO: "Compute demand is so excessive that we have never retired old A100s."',
+    quoteTicker: '$NVDA',
+    quoteSide: 'LONG',
+    analysis:
+      'The bet is that excessive compute demand keeps old GPUs in service and supports AI-infra capacity providers. No risk view is stated.',
   },
 ];
 
@@ -226,26 +279,17 @@ function DemoIndex({ onNavigate }: { onNavigate: (page: Page) => void }) {
             key={demo.slug}
             type="button"
             onClick={() => onNavigate(demoPath(demo.slug))}
-            className="group flex min-h-[72px] w-full items-center justify-between gap-[24px] border-0 border-t border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
+            className="group flex min-h-[72px] w-full flex-col items-start gap-[6px] border-0 border-t border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
           >
-            <span className="flex min-w-0 flex-1 flex-col gap-[6px]">
-              <span className="[overflow-wrap:anywhere] font-['Delight',sans-serif] text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)]">
-                {demo.name}
-              </span>
-              <span className="line-clamp-2 font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)]">
-                {demo.summary}
-              </span>
+            <span className="[overflow-wrap:anywhere] font-['Delight',sans-serif] text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)]">
+              {demo.name}
             </span>
-            <span className="shrink-0 text-[var(--text-n3)] transition-transform group-hover:translate-x-[2px]">
-              <IconPath d="M5 12h14M13 6l6 6-6 6" />
+            <span className="line-clamp-2 font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)]">
+              {demo.summary}
             </span>
           </button>
         ))}
       </section>
-
-      <footer className="mt-auto pt-[24px] font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px] text-[var(--text-n5)]">
-        Generated from demo entries.
-      </footer>
     </div>
   );
 }
@@ -309,11 +353,46 @@ function SkillFastPathActionsDemo() {
   );
 }
 
+function RecommendationCardsDemo() {
+  const playbooks = PLAYBOOKS_ORDERED.slice(0, 3);
+  const items: Array<{ type: 'pb'; pb: ExplorePlaybook } | { type: 'auto'; a: AutomationCardData }> = [];
+  const max = Math.max(playbooks.length, SAMPLE_AUTOMATIONS.length);
+  for (let i = 0; i < max; i++) {
+    if (playbooks[i]) items.push({ type: 'pb', pb: playbooks[i] });
+    if (SAMPLE_AUTOMATIONS[i]) items.push({ type: 'auto', a: SAMPLE_AUTOMATIONS[i] });
+  }
+
+  return (
+    <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[8px]">
+        <h2 className="m-0 font-['Delight',sans-serif] text-[22px] font-medium leading-[32px] tracking-[0.22px] text-[var(--text-n9)]">
+          Recommendation cards — Playbook × Automation
+        </h2>
+        <p className="m-0 max-w-[68ch] font-['Delight',sans-serif] text-[14px] leading-[24px] tracking-[0.14px] text-[var(--text-n7)]">
+          The skill recommendation row can be hand-configured as all Playbooks, all Automations, or a mix. Automation cards reuse the Playbook card shell, swap the cover for a push preview, and put Get Alerts (subscribe) in the footer. Playbook cards are unchanged.
+        </p>
+      </div>
+
+      <div className="grid gap-[12px] [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
+        {items.map((it, i) =>
+          it.type === 'pb' ? (
+            <PlaybookCard key={it.pb.id} p={it.pb} staggerMs={i * 200} hideTags />
+          ) : (
+            <AutomationCard key={it.a.id} a={it.a} defaultOn={i === 1} />
+          ),
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Demo({ onNavigate, demoId }: DemoProps) {
   const activeSlug: DemoSlug | undefined =
     demoId === 'skill-fast-path-actions' || demoId === 'skill-intent-cards'
       ? 'skill-fast-path-actions'
-      : undefined;
+      : demoId === 'recommendation-cards'
+        ? 'recommendation-cards'
+        : undefined;
   const activeDemo = DEMOS.find((demo) => demo.slug === activeSlug);
 
   return (
@@ -321,6 +400,8 @@ export default function Demo({ onNavigate, demoId }: DemoProps) {
       <main className="mx-auto flex min-h-screen w-full max-w-[1024px] flex-col px-[20px] py-[28px] sm:px-[40px] sm:py-[40px]">
         {activeDemo?.slug === 'skill-fast-path-actions' ? (
           <SkillFastPathActionsDemo />
+        ) : activeDemo?.slug === 'recommendation-cards' ? (
+          <RecommendationCardsDemo />
         ) : (
           <DemoIndex onNavigate={onNavigate} />
         )}
