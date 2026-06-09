@@ -15,7 +15,8 @@ import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDr
 import { POPULAR_RECENT_SORT_OPTIONS, TRENDING_FILTER_CHIPS, TrendingFilterBar, type PopularRecentSort, type TrendingFilterChip } from '@/app/components/shared/TrendingFilterBar';
 import { BURST_ICON_PATHS } from '@/app/components/shared/burst-icon-paths';
 import { COMMUNITY_TEMPLATES, PRIMARY_TEMPLATES, OTHERS_TEMPLATES, type CommunitySkillTemplate, type NewChatTemplate, type NewChatPlaybook, type RecCard } from '@/data/new-chat-mock';
-import { AutomationCard } from '@/app/components/shared/AutomationCard';
+import { AutomationCard, type PushCardData } from '@/app/components/shared/AutomationCard';
+import { FeedDetailModal } from '@/app/components/community/FeedDetailModal';
 import { generateTypedSuggestions } from '@/data/typed-suggestions';
 import type { CoverInput, Template as CoverTemplateName, DomainKey } from '@/lib/playbook-cover/types';
 import { PlaybookCard as ExplorePlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
@@ -1415,6 +1416,8 @@ const HERO_WIDTH = 960;
 export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [injectSignal, setInjectSignal] = useState<{ text: string; seq: number } | null>(null);
+  // 点击推荐区的 push 卡 → 复用 Automations 的 feed 详情弹窗
+  const [activeFeed, setActiveFeed] = useState<PushCardData | null>(null);
   const [typedText, setTypedText] = useState('');
   const [debouncedTypedText, setDebouncedTypedText] = useState('');
   const [hover, setHover] = useState<{ id: string; rect: DOMRect; placeAbove: boolean; side: 'auto' | 'left' } | null>(null);
@@ -2545,6 +2548,10 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                       <div
                         key={key}
                         onClick={() => {
+                          if (c.type === 'push') {
+                            setActiveFeed(c.push);
+                            return;
+                          }
                           sessionStorage.setItem('autoOpenChatPanel', '1');
                           onNavigate('new-chat');
                         }}
@@ -2637,6 +2644,14 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
           />
         );
       })()}
+
+      {/* 推荐区 push 卡的 feed 详情弹窗（复用 Automations 的 FeedDetailModal） */}
+      <FeedDetailModal
+        open={!!activeFeed}
+        onClose={() => setActiveFeed(null)}
+        feedName={activeFeed?.feedName ?? ''}
+        description="This automation runs on a fixed schedule and publishes new results to its subscribers. Each run pulls the latest data, applies the feed's logic, and writes a signal that powers the cards and alerts above. Open Settings → Automations to view full run logs and manage it."
+      />
     </AppShell>
   );
 }
