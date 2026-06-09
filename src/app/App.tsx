@@ -16,13 +16,14 @@ const VALID_PAGES = [
   'new-chat',
   'explore',
   'agent', 'portfolio', 'alva-skills',
+  'demo',
   'template-screener', 'template-thesis', 'template-whatif', 'template-notification',
   'screener',
   'pricing',
   'user-profile',
 ] as const;
 const ROUTABLE_PAGES = [...VALID_PAGES, ...SETTINGS_PAGES] as const;
-export type Page = (typeof VALID_PAGES)[number] | (typeof NON_ROUTED_PAGES)[number] | `thread/${string}`;
+export type Page = (typeof VALID_PAGES)[number] | (typeof NON_ROUTED_PAGES)[number] | `thread/${string}` | `demo/${string}`;
 
 const NewChat = lazy(() => import('../pages/NewChat'));
 const Account = lazy(() => import('../pages/Account'));
@@ -41,10 +42,12 @@ const TemplateNotification = lazy(() => import('../pages/TemplateNotification'))
 const Agent = lazy(() => import('../pages/Agent'));
 const Portfolio = lazy(() => import('../pages/Portfolio'));
 const AlvaSkills = lazy(() => import('../pages/AlvaSkills'));
+const Demo = lazy(() => import('../pages/Demo'));
 
 function getPageFromHash(): Page {
   const hash = window.location.hash.slice(1);
   if (hash.startsWith('thread/')) return hash as Page;
+  if (hash.startsWith('demo/')) return hash as Page;
   return ROUTABLE_PAGES.includes(hash as (typeof ROUTABLE_PAGES)[number]) ? (hash as Page) : 'new-chat';
 }
 
@@ -95,6 +98,12 @@ export default function App() {
         {page === 'agent' && <Agent onNavigate={navigate} />}
         {page === 'portfolio' && <Portfolio onNavigate={navigate} />}
         {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
+        {(page === 'demo' || page.startsWith('demo/')) && (
+          <Demo
+            onNavigate={navigate}
+            demoId={page.startsWith('demo/') ? page.slice('demo/'.length) : undefined}
+          />
+        )}
       </Suspense>
     </ChatProvider>
   );

@@ -16,9 +16,8 @@ import { POPULAR_RECENT_SORT_OPTIONS, TRENDING_FILTER_CHIPS, TrendingFilterBar, 
 import { BURST_ICON_PATHS } from '@/app/components/shared/burst-icon-paths';
 import { COMMUNITY_TEMPLATES, PRIMARY_TEMPLATES, OTHERS_TEMPLATES, type CommunitySkillTemplate, type NewChatTemplate, type NewChatPlaybook } from '@/data/new-chat-mock';
 import { generateTypedSuggestions } from '@/data/typed-suggestions';
-import { PlaybookCover } from '@/lib/playbook-cover/PlaybookCover';
 import type { CoverInput, Template as CoverTemplateName, DomainKey } from '@/lib/playbook-cover/types';
-import { PlaybookCard as ExplorePlaybookCard } from '@/app/components/shared/PlaybookCard';
+import { PlaybookCard as ExplorePlaybookCard, type ExplorePlaybook } from '@/app/components/shared/PlaybookCard';
 import { PLAYBOOKS_ORDERED, chipMatchesPlaybook } from '@/pages/Explore2';
 
 const CHIP_ICON = 'researcher-l1';
@@ -30,30 +29,6 @@ function supportsHover(): boolean {
   if (typeof window.matchMedia !== 'function') return true;
   return window.matchMedia('(hover: hover)').matches;
 }
-
-/* ========== Skill 标签颜色 — 对应 Figma 的 m1/m2/m5 ========== */
-
-interface SkillColor {
-  bg: string;
-  fg: string;
-}
-const SKILL_COLOR_MAP: Record<string, SkillColor> = {
-  // m1 teal
-  'theme-tracker': { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  'smart-screener': { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  backtest: { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  'crypto-pulse': { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  'yield-hunter': { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  'dividend-diary': { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' },
-  // m2 blue
-  'what-if': { bg: 'var(--main-m2-10)', fg: 'var(--main-m2)' },
-  'deep-dive': { bg: 'var(--main-m2-10)', fg: 'var(--main-m2)' },
-  // m5 yellow
-  valuation: { bg: 'var(--main-m5-10)', fg: 'var(--main-m5)' },
-  'daily-macro-brief': { bg: 'var(--main-m5-10)', fg: 'var(--main-m5)' },
-  'earnings-edge': { bg: 'var(--main-m5-10)', fg: 'var(--main-m5)' },
-};
-const skillColor = (id: string): SkillColor => SKILL_COLOR_MAP[id] ?? { bg: 'var(--main-m1-10)', fg: 'var(--main-m1)' };
 
 /* ========== Skill pill ========== */
 
@@ -465,20 +440,23 @@ function SkillInfoCard({
 
 /* ========== Suggested Prompt 行 ========== */
 
-function InlineSuggestionRow({ text, onClick }: { text: string; onClick?: () => void }) {
+function InlineSuggestionRow({ text, onClick, index = 0 }: { text: string; onClick?: () => void; index?: number }) {
   return (
     <button
+      type="button"
       className="nc-prompt-row"
+      style={{
+        animation: 'newchat-fade 220ms ease-out both',
+        animationDelay: `${index * 70}ms`,
+      }}
       onClick={onClick}
       onMouseEnter={(e) => {
         if (!supportsHover()) return;
         e.currentTarget.style.background = 'var(--b-r03)';
-        e.currentTarget.style.transform = 'translateY(-1px)';
       }}
       onMouseLeave={(e) => {
         if (!supportsHover()) return;
         e.currentTarget.style.background = 'transparent';
-        e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
       <span className="nc-prompt-text">{text}</span>
@@ -490,12 +468,14 @@ function InlineSuggestionRow({ text, onClick }: { text: string; onClick?: () => 
 function PromptRowSkeleton({ widthPct }: { widthPct: number }) {
   return (
     <div
+      className="nc-prompt-skeleton-row"
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: 12,
+        height: 46,
         padding: '12px',
-        borderRadius: 8,
+        boxSizing: 'border-box',
       }}
     >
       <div
@@ -509,64 +489,6 @@ function PromptRowSkeleton({ widthPct }: { widthPct: number }) {
       />
       <div style={{ width: 20, height: 20, background: 'var(--b-r05)', borderRadius: 4 }} />
     </div>
-  );
-}
-
-/* ========== Ticker logo ========== */
-
-const CRYPTO_TICKERS = new Set(['BTC', 'ETH', 'SOL', 'PEPE', 'ARB', 'OP', 'AVAX', 'BNB', 'USDT', 'USDC', 'XRP', 'DOGE']);
-// 已知是 ETF / index 等无 logo 的标的，直接走颜色 fallback 不发请求
-const SKIP_LOGO = new Set([
-  'SPX', 'SPY', 'QQQ', 'R2K', 'IWM', 'AGG', 'TLT', 'VIX', 'EFA', 'EEM',
-  'DXY', 'CL', 'HYG', 'LQD', 'GLD', 'GDX', 'NOBL', 'FXI', 'KWEB', '2330.TW',
-]);
-const TICKER_FALLBACK_COLOR: Record<string, string> = {
-  BTC: '#F7931A',
-  ETH: '#627EEA',
-  SOL: '#14F195',
-  PEPE: '#3FAA3D',
-  SPX: '#94A3B8',
-  SPY: '#94A3B8',
-  QQQ: '#94A3B8',
-  GLD: '#E6A91A',
-  GDX: '#E6A91A',
-  TLT: '#627EEA',
-  VIX: '#EF4444',
-  AGG: '#94A3B8',
-  IWM: '#94A3B8',
-};
-
-function TickerLogo({ ticker }: { ticker: string }) {
-  const [errored, setErrored] = useState(false);
-  let src: string | null = null;
-  if (!errored && !SKIP_LOGO.has(ticker)) {
-    if (CRYPTO_TICKERS.has(ticker)) src = `https://assets.coincap.io/assets/icons/${ticker.toLowerCase()}@2x.png`;
-    else src = `https://financialmodelingprep.com/image-stock/${ticker}.png`;
-  }
-  if (src) {
-    return (
-      <img
-        src={src}
-        alt={ticker}
-        width={12}
-        height={12}
-        style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0, background: '#fff' }}
-        onError={() => setErrored(true)}
-      />
-    );
-  }
-  const fallback = TICKER_FALLBACK_COLOR[ticker] || '#94A3B8';
-  return (
-    <span
-      style={{
-        width: 12,
-        height: 12,
-        borderRadius: '50%',
-        background: fallback,
-        flexShrink: 0,
-        display: 'inline-block',
-      }}
-    />
   );
 }
 
@@ -688,169 +610,18 @@ function buildCoverInput(p: NewChatPlaybook, skillId: string): CoverInput {
 }
 
 
-/* ========== Playbook 卡片（按 Figma 4571:74212 spec 严格实现） ========== */
-
-function PlaybookCard({
-  p,
-  skillLabel,
-  skillIcon,
-  skillKol,
-  skillCreator,
-  skillId,
-  onClick,
-}: {
-  p: NewChatPlaybook;
-  skillLabel: string;
-  skillIcon?: string;
-  skillKol?: boolean;
-  skillCreator?: string;
-  skillId: string;
-  onClick?: () => void;
-}) {
-  const tickers = (p.tickers ?? []).slice(0, 2);
-  const sc = skillColor(skillId);
-  // KOL skill 在卡片里展示灰底黑字（不再用 m1/m5 主题色）
-  const skillChipBg = skillKol ? 'rgba(0,0,0,0.05)' : sc.bg;
-  const skillChipFg = skillKol ? 'rgba(0,0,0,0.9)' : sc.fg;
-  return (
-    <div
-      onClick={onClick}
-      className="cursor-pointer"
-      style={{
-        background: '#ffffff',
-        border: '0.5px solid var(--line-l3)',
-        borderRadius: 12,
-        padding: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        width: '100%',
-        transition: 'box-shadow 180ms ease, transform 180ms ease',
-      }}
-      onMouseEnter={(e) => {
-        if (!supportsHover()) return;
-        e.currentTarget.style.boxShadow = '0 8px 22px rgba(0,0,0,0.06)';
-        e.currentTarget.style.transform = 'translateY(-2px)';
-      }}
-      onMouseLeave={(e) => {
-        if (!supportsHover()) return;
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.transform = 'translateY(0)';
-      }}
-    >
-      {/* Cover — 复用 @/lib/playbook-cover */}
-      <div
-        style={{
-          width: '100%',
-          aspectRatio: '320 / 180',
-          borderRadius: 8,
-          overflow: 'hidden',
-          flexShrink: 0,
-        }}
-      >
-        <PlaybookCover input={buildCoverInput(p, skillId)} />
-      </div>
-      {/* Body */}
-      <div
-        style={{
-          padding: '16px 12px 12px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10,
-        }}
-      >
-        {/* TagRow */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              height: 20,
-              padding: '2px 6px',
-              borderRadius: 4,
-              background: skillChipBg,
-              color: skillChipFg,
-              fontFamily: "'Delight', sans-serif",
-              fontSize: 12,
-              lineHeight: '20px',
-              letterSpacing: 0.12,
-              fontWeight: 400,
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
-          >
-            {skillKol && skillCreator ? (
-              <Avatar name={skillCreator} size={12} />
-            ) : (
-              skillIcon && <CdnIcon name={skillIcon} size={12} color={skillChipFg} />
-            )}
-            {skillLabel}
-          </span>
-          {tickers.map((t) => (
-            <span
-              key={t}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4,
-                height: 20,
-                padding: '2px 8px',
-                borderRadius: 4,
-                background: 'var(--b-r05)',
-                color: 'var(--text-n7)',
-                fontFamily: "'Delight', sans-serif",
-                fontSize: 12,
-                lineHeight: '20px',
-                letterSpacing: 0.12,
-                fontWeight: 400,
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-              }}
-            >
-              <TickerLogo ticker={t} />
-              {t}
-            </span>
-          ))}
-        </div>
-        {/* TextBlock */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <p
-            style={{
-              fontSize: 16,
-              lineHeight: '26px',
-              fontWeight: 400,
-              color: 'var(--text-n9)',
-              letterSpacing: 0.16,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              margin: 0,
-              height: 28,
-            }}
-          >
-            {p.title}
-          </p>
-          <p
-            style={{
-              fontSize: 12,
-              lineHeight: '20px',
-              color: 'var(--text-n5)',
-              letterSpacing: 0.12,
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              margin: 0,
-              height: 44,
-            }}
-          >
-            {p.desc}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+function toExplorePlaybook(p: NewChatPlaybook, skillId: string): ExplorePlaybook {
+  return {
+    id: p.id,
+    creator: p.creator,
+    title: p.title,
+    description: p.desc,
+    tickers: p.tickers,
+    pulse: 'active',
+    stars: p.stars,
+    remixes: p.remixes,
+    cover: buildCoverInput(p, skillId),
+  };
 }
 
 function PlaybookCardSkeleton() {
@@ -1887,21 +1658,59 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
         }
         .nc-skeleton-anim{animation:newchat-skeleton 1.4s ease-in-out infinite}
         button.nc-pill{display:flex}
+        .nc-chatbox-wrap .chat-input-wrapper{
+          min-height:164px;
+          box-sizing:border-box;
+        }
+        .nc-chatbox-wrap .chat-input-editor-shell{
+          flex:1;
+        }
+        .nc-sample-cards-grid{
+          display:grid;
+          grid-template-columns:repeat(3,minmax(240px,1fr));
+          gap:12px;
+          overflow-x:auto;
+          overflow-y:visible;
+          padding-right:0;
+          overscroll-behavior-x:contain;
+          -webkit-overflow-scrolling:touch;
+          scrollbar-width:none;
+        }
+        .nc-sample-cards-grid::-webkit-scrollbar{
+          display:none;
+        }
+        .nc-prompts-list{
+          display:flex;
+          flex-direction:column;
+          width:100%;
+        }
         .nc-prompt-row{
           display:flex;
           align-items:center;
+          justify-content:space-between;
           gap:12px;
+          height:46px;
+          min-height:46px;
+          max-height:46px;
+          flex:0 0 46px;
+          box-sizing:border-box;
           padding:12px;
           background:transparent;
           border:none;
-          border-radius:8px;
+          border-radius:0;
+          overflow:hidden;
           text-align:left;
           cursor:pointer;
           width:100%;
-          transition:background 0.15s, transform 0.15s;
+          transition:background 0.15s;
+        }
+        .nc-prompts-list > .nc-prompt-row:not(:last-child),
+        .nc-prompts-list > .nc-prompt-skeleton-row:not(:last-child){
+          border-bottom:0.5px solid var(--line-l12);
         }
         .nc-prompt-text{
           flex:1;
+          min-width:0;
           font-family:'Delight',sans-serif;
           font-size:14px;
           line-height:22px;
@@ -1943,6 +1752,12 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
             padding:12px !important;
             gap:8px !important;
           }
+          .nc-chatbox-wrap .chat-input-wrapper{
+            min-height:0;
+          }
+          .nc-chatbox-wrap .chat-input-editor-shell{
+            flex:initial;
+          }
           .nc-prompts-container{
             margin-top:0 !important;
             max-width:none !important;
@@ -1953,21 +1768,13 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
             border-radius:0;
             margin-bottom:0;
           }
-          /* 每个 prompt 被包了一层 div 用于动画，所以 :last-child 总是匹配。
-             改为给非最后一个的"包装层"加底边（向下挂分割线）。 */
-          .nc-prompts-container > div > div:not(:last-child){
-            border-bottom:0.5px solid var(--line-l07);
-          }
           .nc-prompt-text{
             font-size:13px;
             line-height:20px;
-            white-space:normal;
-            display:-webkit-box;
-            -webkit-line-clamp:2;
-            -webkit-box-orient:vertical;
           }
           .nc-cards-section{
-            padding:12px 16px 80px !important;
+            padding:12px 0 80px 16px !important;
+            margin-top:24px !important;
           }
         }
         @media (hover: hover){
@@ -2524,7 +2331,7 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
           <TitleHero selected={selected} maxWidth={HERO_WIDTH} />
 
           {/* 输入框 */}
-          <div style={{ width: '100%', maxWidth: HERO_WIDTH, position: 'relative', zIndex: 1 }}>
+          <div className="nc-chatbox-wrap" style={{ width: '100%', maxWidth: HERO_WIDTH, position: 'relative', zIndex: 1 }}>
             <ChatInput
               shadow
               hideSkill
@@ -2558,22 +2365,21 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                 maxWidth: HERO_WIDTH,
                 position: 'relative',
                 zIndex: 1,
-                marginTop: -16,
+                marginTop: 0,
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
-              {typedSuggestions.map((p, i) => (
-                <div
-                  key={i}
-                  style={{
-                    animation: 'newchat-fadeup 320ms ease-out both',
-                    animationDelay: `${i * 110}ms`,
-                  }}
-                >
-                  <InlineSuggestionRow text={p} onClick={() => handlePromptClick(p)} />
-                </div>
-              ))}
+              <div className="nc-prompts-list">
+                {typedSuggestions.map((p, i) => (
+                  <InlineSuggestionRow
+                    key={i}
+                    text={p}
+                    index={i}
+                    onClick={() => handlePromptClick(p)}
+                  />
+                ))}
+              </div>
             </div>
           )}
 
@@ -2587,6 +2393,7 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                 flexWrap: 'wrap',
                 gap: 12,
                 justifyContent: 'center',
+                paddingTop: 12,
                 position: 'relative',
                 zIndex: 1,
                 width: '100%',
@@ -2674,29 +2481,26 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                 maxWidth: HERO_WIDTH,
                 position: 'relative',
                 zIndex: 1,
-                marginTop: -16,
+                marginTop: 0,
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
               {!promptsReady ? (
-                <div className="nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
+                <div className="nc-prompts-list nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
                   <PromptRowSkeleton widthPct={92} />
                   <PromptRowSkeleton widthPct={70} />
                   <PromptRowSkeleton widthPct={82} />
                 </div>
               ) : (
-                <div style={{ animation: 'newchat-fade 280ms ease-out' }}>
+                <div className="nc-prompts-list" style={{ animation: 'newchat-fade 280ms ease-out' }}>
                   {selected.prompts.slice(0, 3).map((p, i) => (
-                    <div
+                    <InlineSuggestionRow
                       key={i}
-                      style={{
-                        animation: 'newchat-fadeup 320ms ease-out both',
-                        animationDelay: `${i * 70}ms`,
-                      }}
-                    >
-                      <InlineSuggestionRow text={p} onClick={() => handlePromptClick(p)} />
-                    </div>
+                      text={p}
+                      index={i}
+                      onClick={() => handlePromptClick(p)}
+                    />
                   ))}
                 </div>
               )}
@@ -2704,22 +2508,16 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
           )}
         </section>
 
-        {/* ══════ Trending Playbooks ══════ */}
-        {!selected && !showTypedSuggestions && (
-          <TrendingPlaybooksSection onNavigate={onNavigate} />
-        )}
-
-
-        {/* ══════ 选中态：6 张 playbook（3×2）—— 先骨架，再淡入真实 ══════ */}
+        {/* ══════ 选中态：3 张模拟 playbook —— 先骨架，再淡入真实 ══════ */}
         {selected && (
           <section
             key={selected.id}
             className="nc-cards-section"
             style={{
               width: '100%',
-              maxWidth: HERO_WIDTH + 48,
-              margin: '0 auto',
-              padding: '0 24px 80px',
+              maxWidth: HERO_WIDTH + 24,
+              margin: '12px auto 0',
+              padding: '0 0 40px 24px',
               display: 'flex',
               flexDirection: 'column',
               gap: 12,
@@ -2728,38 +2526,36 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
             }}
           >
             {!cardsReady ? (
-              <div className="nc-skeleton-anim" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, animation: 'newchat-fade 200ms ease-out' }}>
-                {Array.from({ length: 6 }).map((_, i) => (
+              <div className="nc-sample-cards-grid nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
+                {Array.from({ length: 3 }).map((_, i) => (
                   <PlaybookCardSkeleton key={i} />
                 ))}
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, animation: 'newchat-fade 320ms ease-out' }}>
-                {selected.playbooks.slice(0, 6).map((p, i) => (
+              <div className="nc-sample-cards-grid" style={{ animation: 'newchat-fade 320ms ease-out' }}>
+                {selected.playbooks.slice(0, 3).map((p, i) => (
                   <div
                     key={p.id}
+                    onClick={() => {
+                      sessionStorage.setItem('autoOpenChatPanel', '1');
+                      onNavigate('new-chat');
+                    }}
                     style={{
                       animation: 'newchat-fadeup 360ms ease-out both',
                       animationDelay: `${i * 50}ms`,
                     }}
                   >
-                    <PlaybookCard
-                      p={p}
-                      skillId={selected.id}
-                      skillLabel={selected.label}
-                      skillIcon={selected.icon}
-                      skillKol={selected.kol}
-                      skillCreator={selected.creator}
-                      onClick={() => {
-                        sessionStorage.setItem('autoOpenChatPanel', '1');
-                        onNavigate('new-chat');
-                      }}
-                    />
+                    <ExplorePlaybookCard p={toExplorePlaybook(p, selected.id)} staggerMs={i * 1000} />
                   </div>
                 ))}
               </div>
             )}
           </section>
+        )}
+
+        {/* ══════ Trending Playbooks ══════ */}
+        {!showTypedSuggestions && (
+          <TrendingPlaybooksSection onNavigate={onNavigate} />
         )}
       </div>
 

@@ -463,7 +463,8 @@ export function ChatProvider({
   useEffect(() => () => { simRef.current?.cancel(); }, []);
 
   const contextTag = useMemo((): ContextTagData | null => {
-    // agent 和 thread 页面不显示 Chat FAB
+    // agent、thread 和 demo 页面不显示 Chat FAB
+    if (activePage === 'demo' || activePage.startsWith('demo/')) return null;
     if (activePage in PAGE_CONTEXT_MAP) return PAGE_CONTEXT_MAP[activePage];
     if (activePage.startsWith('thread/')) return null;
     // Playbook/template 详情页：chip label 用 playbook 名称

@@ -129,9 +129,9 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     creator: 'Alva',
     description: 'Build a live tracker for any market theme — surfaces sentiment, earnings, and policy catalysts across the basket weekly.',
     prompts: [
-      'Build a theme tracker for AI infrastructure covering NVDA, AVGO, TSM, and power grid names',
-      'Track the obesity drug theme (LLY, NVO, AMGN) and surface weekly sentiment shifts',
-      'Watch nuclear-renaissance equities and flag any catalyst from the DOE / regulators',
+      'Which AI-infrastructure names (NVDA, AVGO, TSM) have the strongest momentum right now?',
+      'What’s driving the obesity-drug basket — LLY, NVO, AMGN — this week?',
+      'Build a live tracker for nuclear-renaissance equities with catalyst alerts',
     ],
     playbooks: padTo6([
       { id: 'ai-infra-theme', title: 'AI Infra Theme Radar', creator: 'Alva Intern', desc: 'Tracks NVDA / AVGO / TSM + power grid enablers. Surfaces weekly sentiment + rev-beat signals and rebalances exposure to the strongest relative performers.', tickers: ['NVDA', 'AVGO', 'TSM', 'VST'], color: C.primary, stars: 312, remixes: 48 },
@@ -146,9 +146,9 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     creator: 'Alva',
     description: 'Rank stocks by any factor combo, daily.',
     prompts: [
-      'Screen for US large-caps with rising earnings estimates and positive 20-day price momentum',
-      'Find cash-rich small-caps trading below 10x forward earnings with expanding gross margins',
-      'Build a dividend-growth screener with 10+ years of growth and sub-60% payout ratio',
+      'Which US large-caps have rising earnings estimates and positive momentum today?',
+      'Find cash-rich small-caps under 10x forward earnings with expanding margins',
+      'Build a dividend-growth screener I can rerun daily',
     ],
     playbooks: padTo6([
       { id: 'momentum-quality', title: 'Momentum × Quality Screen', creator: 'Smart Jing', desc: 'Daily screen ranking SPX names by 6M momentum × ROIC. Top decile goes long, rebalances weekly with 2% stop-loss band.', tickers: ['SPX', 'QQQ'], color: C.green, stars: 241, remixes: 37 },
@@ -163,9 +163,9 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     creator: 'Alva',
     description: 'A complete research package on any ticker. Pulls revenue segmentation from filings, builds a peer comparable set, traces the supply chain up and downstream, then drafts a bull and bear thesis with scenario-weighted price targets. Output is a single read-once briefing — no skimming required, no follow-up questions left dangling.',
     prompts: [
-      'Give me a deep-dive on NVDA — revenue segmentation, peer valuation, supply chain, and bull/bear thesis',
-      'Deep-dive TSMC: capacity, customer mix, geopolitical risk, and long-term margin trajectory',
-      'Full research on Solana: ecosystem activity, token economics, validator health, and competition vs ETH L2s',
+      'Give me a deep-dive on NVDA — revenue segments, peer valuation, supply chain, bull/bear thesis',
+      'Deep-dive TSMC: capacity, customer mix, geopolitical risk, and margin trajectory',
+      'Turn a Solana deep-dive into a Playbook I can keep tracking',
     ],
     playbooks: padTo6([
       { id: 'nvda-deepdive', title: 'NVDA 360° Deep Dive', creator: 'Sheer YLL YGG', desc: 'End-to-end NVDA research — revenue segmentation, hyperscaler capex correlation, peer valuation, and scenario-based price targets.', tickers: ['NVDA', 'AMD', 'AVGO'], color: C.primary, stars: 412, remixes: 58 },
@@ -180,9 +180,9 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     creator: 'Macro Scope X',
     description: 'A daily breakdown of macro flows — rates, FX, and cross-asset signals — distilled into a 5-minute brief.',
     prompts: [
-      'Daily macro brief covering US rates, DXY, oil, and credit spreads with LLM commentary',
-      'Weekly China macro digest — credit impulse, property indicators, and policy shifts',
-      'Morning global risk dashboard for Asia → Europe → US cross-asset flows',
+      'What are this morning’s key macro flows — rates, DXY, oil, credit spreads?',
+      'Give me a 5-minute China macro digest — credit impulse, property, policy',
+      'Build a daily macro brief that posts every US open',
     ],
     playbooks: padTo6([
       { id: 'daily-macro', title: 'Daily Macro Brief', creator: 'Macro Scope X', desc: 'Auto-generated macro snapshot every US open — rates, DXY, oil, credit spreads, and LLM-authored summary of overnight drivers.', tickers: ['DXY', 'CL', 'HYG'], color: C.deepBlue, stars: 211, remixes: 34 },
@@ -198,8 +198,8 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     description: 'Whisper numbers and post-print drift, weekly.',
     prompts: [
       'Summarize the latest NVDA earnings call and compare guidance to consensus',
-      'Whisper numbers + post-earnings drift scanner for next week’s MAG7 reports',
-      'Aggregate semis earnings read-across from TSM → ASML → Applied Materials → NVDA',
+      'What are the whisper numbers for next week’s MAG7 reports?',
+      'Build a weekly post-earnings drift scanner for semis (TSM → ASML → NVDA)',
     ],
     playbooks: padTo6([
       { id: 'earnings-whisper', title: 'Earnings Whisper Board', creator: 'Smart Jing', desc: 'Crowdsourced + LLM whisper numbers + post-earnings drift tracker. Ranks names by whisper-vs-consensus gap for upcoming reports.', tickers: ['AAPL', 'MSFT', 'NVDA', 'META'], color: C.primary, stars: 182, remixes: 27 },
