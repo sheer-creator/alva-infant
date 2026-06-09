@@ -1,9 +1,9 @@
-import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";import{t as n}from"./inlinePlaybookHeader-Dlss_MxH.js";var r=`<!DOCTYPE html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{o as t}from"./index-BKsoEBzY.js";import{t as n}from"./AppShell-BXqwE70x.js";import{t as r}from"./inlinePlaybookHeader-BsETeJNn.js";var i=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI Chip Supply Chain — Notification Playbook</title>
+<title>Short-Squeeze Risk Map - Alva</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="https://alva-ai-static.b-cdn.net/design-system/design-tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
@@ -476,11 +476,11 @@ import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";im
 
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
 <playbook-header
-    title="Template-Notification"
+    title="Short-Squeeze Risk Map"
     freq="1d"
     last-updated="15 minutes ago"
-    owner="YGGYLL"
-    owner-seed="YGGYLL"
+    owner="Vega Zhou"
+    owner-seed="Vega Zhou"
     built-on="@leo/BTC Ultimate AI Trader"
     built-on-seed="leo"
     readme-modal="methodology-modal"
@@ -745,4 +745,4 @@ Push goes to **\${c.audience === "followers" ? "Telegram followers" : "owner onl
 <\/script>
 </body>
 </html>
-`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Template-Notification`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`template-notification`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
+`,a=e(),o=r(i);function s(){return(0,a.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,a.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,a.jsx)(`iframe`,{srcDoc:o,title:t[`template-notification`],className:`block h-full w-full border-0`})})})}function c({onNavigate:e}){return(0,a.jsx)(n,{activePage:`template-notification`,onNavigate:e,children:(0,a.jsx)(s,{})})}export{c as default};

@@ -1412,8 +1412,12 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 
   function avatarUrl(seed) {
     if (seed === 'YGGYLL') return '/alva-infant/portrait.png';
+    var backgroundBySeed = {
+      'Mira Chen': 'e3f2fd',
+      'Vega Zhou': 'f3e5f5'
+    };
     var s = encodeURIComponent(seed || 'user');
-    return 'https://api.dicebear.com/9.x/notionists/svg?seed=' + s + '&backgroundColor=fff3e0';
+    return 'https://api.dicebear.com/9.x/notionists/svg?seed=' + s + '&backgroundColor=' + (backgroundBySeed[seed] || 'fff3e0');
   }
 
   function readFeeds(host) {

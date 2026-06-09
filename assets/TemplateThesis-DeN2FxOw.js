@@ -1,9 +1,9 @@
-import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";import{t as n}from"./inlinePlaybookHeader-Dlss_MxH.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{o as t}from"./index-BKsoEBzY.js";import{t as n}from"./AppShell-BXqwE70x.js";import{t as r}from"./inlinePlaybookHeader-BsETeJNn.js";var i=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Template-Thesis - Alva</title>
+<title>NVDA Price Fetcher - Alva</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
 <link rel="stylesheet" href="./components/discussion-panel.css" />
@@ -699,11 +699,11 @@ import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";im
 </head>
 <body>
 <playbook-header
-    title="Template-Thesis"
+    title="NVDA Price Fetcher"
     freq="15m"
     last-updated="15 minutes ago"
-    owner="YGGYLL"
-    owner-seed="YGGYLL"
+    owner="Mira Chen"
+    owner-seed="Mira Chen"
     readme-modal="methodology-modal"
     get-alerts
     alerts-label="Alert On"
@@ -2257,4 +2257,4 @@ function renderValScatter(funds) {
 <\/script>
 </body>
 </html>
-`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Template-Thesis`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`template-thesis`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
+`,a=e(),o=r(i);function s(){return(0,a.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,a.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,a.jsx)(`iframe`,{srcDoc:o,title:t[`template-thesis`],className:`block h-full w-full border-0`})})})}function c({onNavigate:e}){return(0,a.jsx)(n,{activePage:`template-thesis`,onNavigate:e,children:(0,a.jsx)(s,{})})}export{c as default};

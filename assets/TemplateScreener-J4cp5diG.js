@@ -1,9 +1,9 @@
-import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";import{t as n}from"./inlinePlaybookHeader-Dlss_MxH.js";var r=`<!doctype html>
+import{t as e}from"./jsx-runtime-Bg_NI1en.js";import{o as t}from"./index-BKsoEBzY.js";import{t as n}from"./AppShell-BXqwE70x.js";import{t as r}from"./inlinePlaybookHeader-BsETeJNn.js";var i=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Template-Screener - Alva</title>
+<title>Attribution Analysis Strategy for Price Trends - Alva</title>
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./components/playbook-header.css" />
 <link rel="stylesheet" href="./components/discussion-panel.css" />
@@ -1129,7 +1129,7 @@ import{n as e}from"./index-DBaOS0SP.js";import{t}from"./AppShell-B7v2zALY.js";im
 
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
 <playbook-header
-    title="Template-Screener"
+    title="Attribution Analysis Strategy for Price Trends"
     freq="15m"
     last-updated="15 minutes ago"
     owner="YGGYLL"
@@ -2644,4 +2644,4 @@ window.__ALVA_OFFLINE_DATA__ = {
 <\/script>
 
 </body>
-`,i=e(),a=n(r);function o(){return(0,i.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,i.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,i.jsx)(`iframe`,{srcDoc:a,title:`Template-Screener`,className:`block h-full w-full border-0`})})})}function s({onNavigate:e}){return(0,i.jsx)(t,{activePage:`template-screener`,onNavigate:e,children:(0,i.jsx)(o,{})})}export{s as default};
+`,a=e(),o=r(i);function s(){return(0,a.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,a.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,a.jsx)(`iframe`,{srcDoc:o,title:t[`template-screener`],className:`block h-full w-full border-0`})})})}function c({onNavigate:e}){return(0,a.jsx)(n,{activePage:`template-screener`,onNavigate:e,children:(0,a.jsx)(s,{})})}export{c as default};
