@@ -41,13 +41,15 @@
   }
 
   function avatarUrl(seed) {
-    if (seed === 'YGGYLL') return '/alva-infant/portrait.png';
-    var backgroundBySeed = {
-      'Mira Chen': 'e3f2fd',
-      'Vega Zhou': 'f3e5f5'
+    var photoBySeed = {
+      'YGGYLL': '/alva-infant/portrait.png',
+      'Caleb Frost': '/alva-infant/avatars/caleb-frost.png',
+      'Asha Bello': '/alva-infant/avatars/asha-bello.png',
+      'Nina Reyes': '/alva-infant/avatars/nina-reyes.png'
     };
+    if (photoBySeed[seed]) return photoBySeed[seed];
     var s = encodeURIComponent(seed || 'user');
-    return 'https://api.dicebear.com/9.x/notionists/svg?seed=' + s + '&backgroundColor=' + (backgroundBySeed[seed] || 'fff3e0');
+    return 'https://api.dicebear.com/9.x/notionists/svg?seed=' + s + '&backgroundColor=fff3e0';
   }
 
   function readFeeds(host) {

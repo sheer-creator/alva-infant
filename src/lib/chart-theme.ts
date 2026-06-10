@@ -54,6 +54,9 @@ export const AVATAR_COLOR_PALETTE = [
 export const CREATOR_AVATARS: Record<string, string> = {
   Alva: `${import.meta.env.BASE_URL}logo-portrait.svg`,
   YGGYLL: `${import.meta.env.BASE_URL}portrait.png`,
+  'Caleb Frost': `${import.meta.env.BASE_URL}avatars/caleb-frost.png`,
+  'Asha Bello': `${import.meta.env.BASE_URL}avatars/asha-bello.png`,
+  'Nina Reyes': `${import.meta.env.BASE_URL}avatars/nina-reyes.png`,
   'Mira Chen': 'https://api.dicebear.com/9.x/notionists/svg?seed=MiraChen&backgroundColor=e3f2fd',
   'Vega Zhou': 'https://api.dicebear.com/9.x/notionists/svg?seed=VegaZhou&backgroundColor=f3e5f5',
   'Alva Intern': `${import.meta.env.BASE_URL}figma/explore/avatar-alva-intern.svg`,

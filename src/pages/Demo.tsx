@@ -24,6 +24,7 @@ interface DemoEntry {
   name: string;
   status: string;
   summary: string;
+  author: string;
 }
 
 interface PrivateActionEntry {
@@ -44,12 +45,14 @@ const DEMOS: DemoEntry[] = [
     name: 'Skill Fast Path Actions',
     status: 'Draft',
     summary: 'The Ask / Build / Automation entry points offered when a skill is selected.',
+    author: 'sheer-creator',
   },
   {
     slug: 'recommendation-cards',
     name: 'Recommendation Cards',
     status: 'Draft',
     summary: 'Skill recommendation row mixing Playbook cards with subscribable Automation cards.',
+    author: 'sheer-creator',
   },
 ];
 
@@ -279,13 +282,18 @@ function DemoIndex({ onNavigate }: { onNavigate: (page: Page) => void }) {
             key={demo.slug}
             type="button"
             onClick={() => onNavigate(demoPath(demo.slug))}
-            className="group flex min-h-[72px] w-full flex-col items-start gap-[6px] border-0 border-t border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
+            className="group flex min-h-[72px] w-full items-center justify-between gap-[24px] border-0 border-t border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
           >
-            <span className="[overflow-wrap:anywhere] font-['Delight',sans-serif] text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)]">
-              {demo.name}
+            <span className="flex min-w-0 flex-col items-start gap-[6px]">
+              <span className="[overflow-wrap:anywhere] font-['Delight',sans-serif] text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)]">
+                {demo.name}
+              </span>
+              <span className="line-clamp-2 font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)]">
+                {demo.summary}
+              </span>
             </span>
-            <span className="line-clamp-2 font-['Delight',sans-serif] text-[13px] leading-[20px] tracking-[0.13px] text-[var(--text-n7)]">
-              {demo.summary}
+            <span className="shrink-0 font-['Delight',sans-serif] text-[12px] leading-[18px] tracking-[0.12px] text-[var(--text-n5)]">
+              @{demo.author}
             </span>
           </button>
         ))}
