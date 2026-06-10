@@ -17,6 +17,7 @@ const VALID_PAGES = [
   'explore',
   'agent', 'portfolio', 'alva-skills',
   'demo',
+  'creator-earnings',
   'template-screener', 'template-thesis', 'template-whatif', 'template-notification',
   'screener',
   'pricing',
@@ -31,6 +32,7 @@ const ApiKeys = lazy(() => import('../pages/ApiKeys'));
 const AlvaAgentSettings = lazy(() => import('../pages/AlvaAgentSettings'));
 const Automations = lazy(() => import('../pages/Automations'));
 const Billing = lazy(() => import('../pages/Billing'));
+const CreatorEarnings = lazy(() => import('../pages/CreatorEarnings'));
 const Explore = lazy(() => import('../pages/Explore'));
 const Notifications = lazy(() => import('../pages/Notifications'));
 const PortfolioSettings = lazy(() => import('../pages/PortfolioSettings'));
@@ -87,6 +89,7 @@ export default function App() {
         {page === 'alva-agent' && <AlvaAgentSettings onNavigate={navigate} />}
         {page === 'automations' && <Automations onNavigate={navigate} />}
         {page === 'billing' && <Billing onNavigate={navigate} />}
+        {page === 'creator-earnings' && <CreatorEarnings onNavigate={navigate} />}
         {page === 'explore' && <Explore onNavigate={navigate} />}
         {page === 'notifications' && <Notifications onNavigate={navigate} />}
         {page === 'portfolio-settings' && <PortfolioSettings onNavigate={navigate} />}
