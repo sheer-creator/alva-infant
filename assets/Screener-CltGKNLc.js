@@ -1,4 +1,4 @@
-import{n as e,s as t}from"./index-AjDkixDP.js";import{t as n}from"./AppShell-DrKFClOm.js";import{t as r}from"./inlinePlaybookHeader-B_sbJJZ2.js";var i=`<!doctype html>
+import{n as e,s as t}from"./index-B4-DE2BE.js";import{t as n}from"./AppShell-P5jSbUq_.js";import{t as r}from"./inlinePlaybookHeader-cy2KrgVc.js";var i=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -1081,8 +1081,8 @@ import{n as e,s as t}from"./index-AjDkixDP.js";import{t as n}from"./AppShell-DrK
     creator
     freq="15m"
     last-updated="15 minutes ago"
-    owner="YGGYLL"
-    owner-seed="YGGYLL"
+    owner="Caleb Frost"
+    owner-seed="Caleb Frost"
     readme-modal="methodology-modal"
     star="12" remix="56" comments="6"
     description="Tracks the AI infrastructure investment thesis across silicon, networking, hyperscalers, power, and data centers. 17-stock basket with daily quant analysis and ADK-driven narrative.">

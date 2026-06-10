@@ -1,4 +1,4 @@
-import{n as e,s as t}from"./index-AjDkixDP.js";import{t as n}from"./AppShell-DrKFClOm.js";import{t as r}from"./inlinePlaybookHeader-B_sbJJZ2.js";var i=`<!DOCTYPE html>
+import{n as e,s as t}from"./index-B4-DE2BE.js";import{t as n}from"./AppShell-P5jSbUq_.js";import{t as r}from"./inlinePlaybookHeader-cy2KrgVc.js";var i=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -279,7 +279,7 @@ import{n as e,s as t}from"./index-AjDkixDP.js";import{t as n}from"./AppShell-DrK
 
 <!-- ═══════════════ PLAYBOOK INFO ═══════════════ -->
 <playbook-header
-    title="Google / X Trends Tracker"
+    title="Optical AI Infrastructure Thesis"
     freq="15m"
     last-updated="15 minutes ago"
     owner="YGGYLL"
