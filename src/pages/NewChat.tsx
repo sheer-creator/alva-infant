@@ -2523,6 +2523,7 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
           )}
 
           {/* 选中态推荐卡 —— 并入 hero section，共用 gap；overflow 可见不裁切阴影/末卡 */}
+          {/* 两行布局（Figma 7825:70590）：第一行 3 张 playbook 卡，第二行 2 张 push 卡 */}
           {selected && (
             <div
               key={selected.id}
@@ -2531,27 +2532,26 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                 maxWidth: HERO_WIDTH,
                 position: 'relative',
                 zIndex: 2,
-                display: 'grid',
-                gridTemplateColumns: `repeat(${recCards.length || 3}, minmax(0, 1fr))`,
+                display: 'flex',
+                flexDirection: 'column',
                 gap: 16,
               }}
             >
-              {!cardsReady
-                ? Array.from({ length: recCards.length || 3 }).map((_, i) => (
+              {!cardsReady ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 }}>
+                  {Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="nc-skeleton-anim" style={{ animation: 'newchat-fade 200ms ease-out' }}>
                       <PlaybookCardSkeleton />
                     </div>
-                  ))
-                : recCards.map((c, i) => {
-                    const key = c.type === 'playbook' ? c.playbook.id : c.push.id;
-                    return (
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 }}>
+                    {recCards.flatMap((c) => (c.type === 'playbook' ? [c.playbook] : [])).slice(0, 3).map((p, i) => (
                       <div
-                        key={key}
+                        key={p.id}
                         onClick={() => {
-                          if (c.type === 'push') {
-                            setActiveFeed(c.push);
-                            return;
-                          }
                           sessionStorage.setItem('autoOpenChatPanel', '1');
                           onNavigate('new-chat');
                         }}
@@ -2560,14 +2560,31 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
                           animationDelay: `${i * 50}ms`,
                         }}
                       >
-                        {c.type === 'playbook' ? (
-                          <ExplorePlaybookCard p={toExplorePlaybook(c.playbook, selected.id)} staggerMs={i * 1000} hideTags />
-                        ) : (
-                          <AutomationCard a={c.push} />
-                        )}
+                        <ExplorePlaybookCard p={toExplorePlaybook(p, selected.id)} staggerMs={i * 1000} />
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
+                  {recCards.some((c) => c.type === 'push') && (
+                    /* push 卡内容区绝对定位不撑高，行高按 Figma 固定 281.5 */
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16, gridAutoRows: 281.5 }}>
+                      {recCards.flatMap((c) => (c.type === 'push' ? [c.push] : [])).slice(0, 2).map((push, i) => (
+                        <div
+                          key={push.id}
+                          onClick={() => setActiveFeed(push)}
+                          style={{
+                            height: '100%',
+                            cursor: 'pointer',
+                            animation: 'newchat-fadeup 360ms ease-out both',
+                            animationDelay: `${(i + 3) * 50}ms`,
+                          }}
+                        >
+                          <AutomationCard a={push} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
         </section>
