@@ -136,9 +136,9 @@ const PRIVATE_ACTIONS: PrivateActionEntry[] = [
   },
 ];
 
-function IconPath({ d }: { d: string }) {
+function IconPath({ d, size = 16 }: { d: string; size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d={d} stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -175,7 +175,7 @@ function DemoFloatingSwitcher({ activeSlug, onNavigate }: { activeSlug?: string;
   }, [open]);
 
   return (
-    <div ref={containerRef} className="fixed bottom-[24px] right-[24px] z-[99999] flex flex-col items-end gap-[10px] font-['Delight',sans-serif] max-sm:bottom-[16px] max-sm:right-[16px]">
+    <div ref={containerRef} className="fixed bottom-[16px] right-[16px] z-[99999] flex flex-col items-end gap-[8px] font-['Delight',sans-serif]">
       {open && (
         <div
           className="w-[520px] max-w-[calc(100vw_-_32px)] rounded-[8px] border border-[rgba(0,0,0,0.12)] bg-white p-[8px] shadow-[0_12px_32px_rgba(0,0,0,0.16)]"
@@ -240,15 +240,15 @@ function DemoFloatingSwitcher({ activeSlug, onNavigate }: { activeSlug?: string;
         </div>
       )}
 
-      <div className="flex flex-col items-stretch gap-[10px]">
+      <div className="flex flex-col items-end gap-[8px]">
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="flex h-[40px] w-[228px] max-w-[calc(100vw_-_32px)] items-center justify-center gap-[8px] rounded-[8px] border border-[rgba(0,0,0,0.9)] bg-[rgba(0,0,0,0.9)] px-[14px] font-['Delight',sans-serif] text-[13px] font-medium leading-[22px] tracking-[0.13px] text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-transform hover:-translate-y-[1px]"
+          className="flex h-[30px] w-auto max-w-[min(210px,calc(100vw_-_32px))] items-center justify-center gap-[6px] rounded-full border border-[rgba(0,0,0,0.9)] bg-[rgba(0,0,0,0.9)] px-[11px] font-['Delight',sans-serif] text-[12px] font-medium leading-[18px] tracking-[0.12px] text-white shadow-[0_4px_12px_rgba(0,0,0,0.10)] transition-transform hover:-translate-y-[1px]"
           aria-expanded={open}
           aria-pressed={open}
         >
-          <IconPath d="M5 7h14M5 12h14M5 17h14" />
+          <IconPath d="M5 7h14M5 12h14M5 17h14" size={13} />
           <span className="min-w-0 truncate">{activeDemo?.name ?? 'Demos'}</span>
         </button>
         <button
@@ -257,9 +257,9 @@ function DemoFloatingSwitcher({ activeSlug, onNavigate }: { activeSlug?: string;
             setOpen(false);
             onNavigate('new-chat');
           }}
-          className="flex h-[40px] w-[228px] max-w-[calc(100vw_-_32px)] items-center justify-center gap-[8px] rounded-[8px] border border-[rgba(0,0,0,0.12)] bg-white px-[14px] font-['Delight',sans-serif] text-[13px] font-medium leading-[22px] tracking-[0.13px] text-[var(--text-n9)] shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-transform hover:-translate-y-[1px]"
+          className="flex h-[30px] w-auto max-w-[min(210px,calc(100vw_-_32px))] items-center justify-center gap-[6px] rounded-full border border-[rgba(0,0,0,0.12)] bg-white px-[11px] font-['Delight',sans-serif] text-[12px] font-medium leading-[18px] tracking-[0.12px] text-[var(--text-n9)] shadow-[0_4px_12px_rgba(0,0,0,0.10)] transition-transform hover:-translate-y-[1px]"
         >
-          <IconPath d="M19 12H5M11 6l-6 6 6 6" />
+          <IconPath d="M19 12H5M11 6l-6 6 6 6" size={13} />
           <span className="min-w-0 truncate">Back to Alva</span>
         </button>
       </div>
@@ -282,7 +282,7 @@ function DemoIndex({ onNavigate }: { onNavigate: (page: Page) => void }) {
             key={demo.slug}
             type="button"
             onClick={() => onNavigate(demoPath(demo.slug))}
-            className="group flex min-h-[72px] w-full items-center justify-between gap-[24px] border-0 border-t border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
+            className="group flex min-h-[72px] w-full items-center justify-between gap-[24px] border-0 border-t-[0.5px] border-solid border-[var(--line-l2)] bg-transparent px-0 py-[20px] text-left text-[inherit] transition-opacity first:border-t-0 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--main-m1)]"
           >
             <span className="flex min-w-0 flex-col items-start gap-[6px]">
               <span className="[overflow-wrap:anywhere] font-['Delight',sans-serif] text-[18px] leading-[28px] tracking-[0.18px] text-[var(--text-n9)]">
