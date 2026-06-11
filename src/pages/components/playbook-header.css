@@ -527,22 +527,20 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     z-index: 50;
     display: none;
     flex-direction: column;
-    width: 520px;
+    width: 600px;
     background: #fff;
-    border: 0.5px solid rgba(0,0,0,0.2);
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    border-radius: var(--radius-pop-popover, 6px);
+    box-shadow: var(--shadow-s, 0 6px 20px rgba(0,0,0,0.04));
     overflow: hidden;
 }
 .feeds-popover.open { display: flex; }
-.feeds-popover-header,
 .feeds-popover-row {
     position: relative;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 12px;
     padding: 10px 20px;
     white-space: nowrap;
 }
-.feeds-popover-header::after,
 .feeds-popover-row::after {
     content: '';
     position: absolute;
@@ -551,15 +549,12 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: rgba(0,0,0,0.07);
     pointer-events: none;
 }
-.feeds-popover-header {
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
-}
 .feeds-popover-meta {
     position: relative;
-    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 16px 20px 12px;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
+    color: var(--text-n5, rgba(0,0,0,0.5));
     white-space: nowrap;
 }
 .feeds-popover-meta::after {
@@ -570,13 +565,37 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: rgba(0,0,0,0.07);
     pointer-events: none;
 }
+.feeds-popover-pauseall {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: none; background: transparent; padding: 0;
+    cursor: pointer; font-family: inherit;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n9, rgba(0,0,0,0.9));
+    transition: opacity .15s;
+}
+.feeds-popover-pauseall:hover { opacity: 0.7; }
+.feeds-popover-pauseall-icon {
+    width: 16px; height: 16px; flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.feeds-popover-pauseall.is-resume .feeds-popover-pauseall-icon {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+}
 .feeds-popover-row {
     font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
     color: rgba(0,0,0,0.9);
 }
 .feeds-popover-row:last-child { border-bottom: none; }
 .feeds-popover-row.clickable { cursor: pointer; transition: background 0.15s; }
-.feeds-popover-row.clickable:hover { background: var(--b-r03); }
+.feeds-popover-row.clickable:hover { background: rgba(0,0,0,0.02); }
+.feeds-popover-row.is-paused .pb-freq-dot::before { background: var(--b-r07, rgba(0,0,0,0.07)); }
+.feeds-popover-row.is-paused .pb-freq-dot::after { background: rgba(0,0,0,0.3); }
 .feeds-popover-row-chev {
     width: 12px; height: 12px; flex-shrink: 0;
     background-color: var(--text-n5);
@@ -586,15 +605,49 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-size: contain; mask-size: contain;
 }
-.feeds-popover-row-chev.is-placeholder { visibility: hidden; }
-.feeds-popover-cell-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.feeds-popover-cell-interval { width: 100px; flex-shrink: 0; }
-.feeds-popover-cell-last { width: 120px; flex-shrink: 0; }
+.feeds-popover-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.feeds-popover-row-name { display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 18px = dot 14px + gap 4px — meta 与名称文字左对齐 */
+.feeds-popover-row-meta {
+    display: flex; align-items: center; gap: 8px;
+    padding-left: 18px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
+    white-space: nowrap;
+}
+.feeds-popover-row-meta .sep { color: var(--text-n2, rgba(0,0,0,0.2)); }
+.feeds-popover-row-pausedflag { display: none; color: var(--text-n7, rgba(0,0,0,0.7)); }
+.feeds-popover-row.is-paused .feeds-popover-row-pausedflag { display: inline; }
+.feeds-popover-row-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.feeds-popover-row-pause {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; flex-shrink: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0; cursor: pointer;
+    color: var(--text-n9, rgba(0,0,0,0.9));
+    transition: background .15s;
+}
+.feeds-popover-row-pause:hover { background: var(--b-r05, rgba(0,0,0,0.05)); }
+.feeds-popover-row-pause-icon {
+    width: 16px; height: 16px;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.feeds-popover-row.is-paused .feeds-popover-row-pause-icon {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+}
 .feeds-popover-viewall {
     display: flex; align-items: center; gap: 8px;
-    padding: 10px 20px;
+    padding: 8px 20px 10px;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
+    color: var(--text-n5, rgba(0,0,0,0.5));
     cursor: pointer;
     transition: background .15s;
     white-space: nowrap;
@@ -602,7 +655,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 .feeds-popover-viewall:hover { background: rgba(0,0,0,0.02); }
 .feeds-popover-viewall-label { flex: 1; min-width: 0; }
 .feeds-popover-viewall-chev {
-    width: 12px; height: 12px; flex-shrink: 0;
+    width: 10px; height: 10px; flex-shrink: 0;
     background-color: rgba(0,0,0,0.5);
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');

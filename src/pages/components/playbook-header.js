@@ -64,35 +64,56 @@
     }
   }
 
+  function formatInterval(interval) {
+    var s = String(interval == null ? '' : interval).trim();
+    if (!s) return '';
+    // "20 Minutes" / "1 hour" → "Every 20 minutes" / "Every 1 hour"; "Daily" / "Weekly" stay as-is
+    return /^\d/.test(s) ? 'Every ' + s.toLowerCase() : s;
+  }
+
   function renderFeeds(feeds, lastUpdated) {
     if (!feeds.length) return '';
     var metaRow = lastUpdated
-      ? '<div class="feeds-popover-meta">Last Updated: ' + esc(lastUpdated) + '</div>'
+      ? '<div class="feeds-popover-meta">' +
+          '<span class="feeds-popover-meta-label">Last Updated: ' + esc(lastUpdated) + '</span>' +
+          '<button class="feeds-popover-pauseall" type="button" data-feeds-pauseall>' +
+            '<span class="feeds-popover-pauseall-icon" aria-hidden="true"></span>' +
+            '<span class="feeds-popover-pauseall-label">Pause all</span>' +
+          '</button>' +
+        '</div>'
       : '';
     var rows = feeds.map(function (f) {
-      var cls = 'feeds-popover-row clickable';
+      var paused = f.status === 'paused';
+      var cls = 'feeds-popover-row clickable' + (paused ? ' is-paused' : '');
       var extra = ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"';
-      var chev = '<span class="feeds-popover-row-chev" aria-hidden="true"></span>';
+      var intervalText = formatInterval(f.interval);
       return (
         '<div class="' + cls + '"' + extra + '>' +
-          '<div class="feeds-popover-cell-name">' +
-            '<span class="pb-freq-dot" aria-hidden="true"></span>' +
-            '<span>' + esc(f.name) + '</span>' +
+          '<div class="feeds-popover-row-body">' +
+            '<div class="feeds-popover-row-name">' +
+              '<span class="pb-freq-dot" aria-hidden="true"></span>' +
+              '<span>' + esc(f.name) + '</span>' +
+            '</div>' +
+            '<div class="feeds-popover-row-meta">' +
+              '<span class="feeds-popover-row-pausedflag">Paused ·</span>' +
+              '<span>Last Run: ' + esc(f.lastRun) + '</span>' +
+              (intervalText
+                ? '<span class="sep">|</span>' +
+                  '<span>' + esc(intervalText) + '</span>'
+                : '') +
+            '</div>' +
           '</div>' +
-          '<div class="feeds-popover-cell-interval">' + esc(f.interval) + '</div>' +
-          '<div class="feeds-popover-cell-last">' + esc(f.lastRun) + '</div>' +
-          chev +
+          '<div class="feeds-popover-row-actions">' +
+            '<button class="feeds-popover-row-pause" type="button" data-feed-pause aria-label="' + (paused ? 'Resume' : 'Pause') + '" title="' + (paused ? 'Resume' : 'Pause') + '">' +
+              '<span class="feeds-popover-row-pause-icon" aria-hidden="true"></span>' +
+            '</button>' +
+            '<span class="feeds-popover-row-chev" aria-hidden="true"></span>' +
+          '</div>' +
         '</div>'
       );
     }).join('');
     return (
       metaRow +
-      '<div class="feeds-popover-header">' +
-        '<div class="feeds-popover-cell-name">Automation</div>' +
-        '<div class="feeds-popover-cell-interval">Interval</div>' +
-        '<div class="feeds-popover-cell-last">Last Run</div>' +
-        '<span class="feeds-popover-row-chev is-placeholder" aria-hidden="true"></span>' +
-      '</div>' +
       rows +
       '<div class="feeds-popover-viewall" role="button" tabindex="0">' +
         '<span class="feeds-popover-viewall-label">View all automations in Settings</span>' +
@@ -729,6 +750,49 @@
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
       });
     });
+
+    function setRowPaused(row, paused) {
+      row.classList.toggle('is-paused', paused);
+      var btn = row.querySelector('[data-feed-pause]');
+      if (btn) {
+        btn.setAttribute('aria-label', paused ? 'Resume' : 'Pause');
+        btn.setAttribute('title', paused ? 'Resume' : 'Pause');
+      }
+    }
+    function updatePauseAll() {
+      var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
+      if (!pauseAllBtn) return;
+      var rows = popover.querySelectorAll('.feeds-popover-row');
+      var allPaused = rows.length > 0;
+      rows.forEach(function (r) { if (!r.classList.contains('is-paused')) allPaused = false; });
+      pauseAllBtn.classList.toggle('is-resume', allPaused);
+      var label = pauseAllBtn.querySelector('.feeds-popover-pauseall-label');
+      if (label) label.textContent = allPaused ? 'Resume all' : 'Pause all';
+    }
+    popover.querySelectorAll('[data-feed-pause]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var row = btn.closest('.feeds-popover-row');
+        if (!row) return;
+        setRowPaused(row, !row.classList.contains('is-paused'));
+        updatePauseAll();
+      });
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') e.stopPropagation();
+      });
+    });
+    var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
+    if (pauseAllBtn) {
+      pauseAllBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var resume = pauseAllBtn.classList.contains('is-resume');
+        popover.querySelectorAll('.feeds-popover-row').forEach(function (row) {
+          setRowPaused(row, !resume);
+        });
+        updatePauseAll();
+      });
+    }
+    updatePauseAll();
 
     var viewAll = popover.querySelector('.feeds-popover-viewall');
     if (viewAll) {
