@@ -527,22 +527,20 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     z-index: 50;
     display: none;
     flex-direction: column;
-    width: 520px;
+    width: 600px;
     background: #fff;
-    border: 0.5px solid rgba(0,0,0,0.2);
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+    border: 0.5px solid var(--line-l2, rgba(0,0,0,0.2));
+    border-radius: var(--radius-pop-popover, 6px);
+    box-shadow: var(--shadow-s, 0 6px 20px rgba(0,0,0,0.04));
     overflow: hidden;
 }
 .feeds-popover.open { display: flex; }
-.feeds-popover-header,
 .feeds-popover-row {
     position: relative;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 12px;
     padding: 10px 20px;
     white-space: nowrap;
 }
-.feeds-popover-header::after,
 .feeds-popover-row::after {
     content: '';
     position: absolute;
@@ -551,15 +549,12 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: rgba(0,0,0,0.07);
     pointer-events: none;
 }
-.feeds-popover-header {
-    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
-}
 .feeds-popover-meta {
     position: relative;
-    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 16px 20px 12px;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
+    color: var(--text-n5, rgba(0,0,0,0.5));
     white-space: nowrap;
 }
 .feeds-popover-meta::after {
@@ -570,13 +565,37 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     background: rgba(0,0,0,0.07);
     pointer-events: none;
 }
+.feeds-popover-pauseall {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: none; background: transparent; padding: 0;
+    cursor: pointer; font-family: inherit;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n9, rgba(0,0,0,0.9));
+    transition: opacity .15s;
+}
+.feeds-popover-pauseall:hover { opacity: 0.7; }
+.feeds-popover-pauseall-icon {
+    width: 16px; height: 16px; flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.feeds-popover-pauseall.is-resume .feeds-popover-pauseall-icon {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+}
 .feeds-popover-row {
     font-size: 14px; line-height: 22px; letter-spacing: 0.14px;
     color: rgba(0,0,0,0.9);
 }
 .feeds-popover-row:last-child { border-bottom: none; }
 .feeds-popover-row.clickable { cursor: pointer; transition: background 0.15s; }
-.feeds-popover-row.clickable:hover { background: var(--b-r03); }
+.feeds-popover-row.clickable:hover { background: rgba(0,0,0,0.02); }
+.feeds-popover-row.is-paused .pb-freq-dot::before { background: var(--b-r07, rgba(0,0,0,0.07)); }
+.feeds-popover-row.is-paused .pb-freq-dot::after { background: rgba(0,0,0,0.3); }
 .feeds-popover-row-chev {
     width: 12px; height: 12px; flex-shrink: 0;
     background-color: var(--text-n5);
@@ -586,15 +605,49 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-size: contain; mask-size: contain;
 }
-.feeds-popover-row-chev.is-placeholder { visibility: hidden; }
-.feeds-popover-cell-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.feeds-popover-cell-interval { width: 100px; flex-shrink: 0; }
-.feeds-popover-cell-last { width: 120px; flex-shrink: 0; }
+.feeds-popover-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.feeds-popover-row-name { display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 18px = dot 14px + gap 4px — meta 与名称文字左对齐 */
+.feeds-popover-row-meta {
+    display: flex; align-items: center; gap: 8px;
+    padding-left: 18px;
+    font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
+    color: var(--text-n5, rgba(0,0,0,0.5));
+    white-space: nowrap;
+}
+.feeds-popover-row-meta .sep { color: var(--text-n2, rgba(0,0,0,0.2)); }
+.feeds-popover-row-pausedflag { display: none; color: var(--text-n7, rgba(0,0,0,0.7)); }
+.feeds-popover-row.is-paused .feeds-popover-row-pausedflag { display: inline; }
+.feeds-popover-row-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.feeds-popover-row-pause {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; flex-shrink: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0; cursor: pointer;
+    color: var(--text-n9, rgba(0,0,0,0.9));
+    transition: background .15s;
+}
+.feeds-popover-row-pause:hover { background: var(--b-r05, rgba(0,0,0,0.05)); }
+.feeds-popover-row-pause-icon {
+    width: 16px; height: 16px;
+    background-color: currentColor;
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/pause-l2.svg');
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+}
+.feeds-popover-row.is-paused .feeds-popover-row-pause-icon {
+    -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+            mask-image: url('https://alva-ai-static.b-cdn.net/icons/play-f.svg');
+}
 .feeds-popover-viewall {
     display: flex; align-items: center; gap: 8px;
-    padding: 10px 20px;
+    padding: 8px 20px 10px;
     font-size: 12px; line-height: 20px; letter-spacing: 0.12px;
-    color: rgba(0,0,0,0.5);
+    color: var(--text-n5, rgba(0,0,0,0.5));
     cursor: pointer;
     transition: background .15s;
     white-space: nowrap;
@@ -602,7 +655,7 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
 .feeds-popover-viewall:hover { background: rgba(0,0,0,0.02); }
 .feeds-popover-viewall-label { flex: 1; min-width: 0; }
 .feeds-popover-viewall-chev {
-    width: 12px; height: 12px; flex-shrink: 0;
+    width: 10px; height: 10px; flex-shrink: 0;
     background-color: rgba(0,0,0,0.5);
     -webkit-mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
             mask-image: url('https://alva-ai-static.b-cdn.net/icons/arrow-right-l2.svg');
@@ -1434,35 +1487,56 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
     }
   }
 
+  function formatInterval(interval) {
+    var s = String(interval == null ? '' : interval).trim();
+    if (!s) return '';
+    // "20 Minutes" / "1 hour" → "Every 20 minutes" / "Every 1 hour"; "Daily" / "Weekly" stay as-is
+    return /^\\d/.test(s) ? 'Every ' + s.toLowerCase() : s;
+  }
+
   function renderFeeds(feeds, lastUpdated) {
     if (!feeds.length) return '';
     var metaRow = lastUpdated
-      ? '<div class="feeds-popover-meta">Last Updated: ' + esc(lastUpdated) + '</div>'
+      ? '<div class="feeds-popover-meta">' +
+          '<span class="feeds-popover-meta-label">Last Updated: ' + esc(lastUpdated) + '</span>' +
+          '<button class="feeds-popover-pauseall" type="button" data-feeds-pauseall>' +
+            '<span class="feeds-popover-pauseall-icon" aria-hidden="true"></span>' +
+            '<span class="feeds-popover-pauseall-label">Pause all</span>' +
+          '</button>' +
+        '</div>'
       : '';
     var rows = feeds.map(function (f) {
-      var cls = 'feeds-popover-row clickable';
+      var paused = f.status === 'paused';
+      var cls = 'feeds-popover-row clickable' + (paused ? ' is-paused' : '');
       var extra = ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"';
-      var chev = '<span class="feeds-popover-row-chev" aria-hidden="true"></span>';
+      var intervalText = formatInterval(f.interval);
       return (
         '<div class="' + cls + '"' + extra + '>' +
-          '<div class="feeds-popover-cell-name">' +
-            '<span class="pb-freq-dot" aria-hidden="true"></span>' +
-            '<span>' + esc(f.name) + '</span>' +
+          '<div class="feeds-popover-row-body">' +
+            '<div class="feeds-popover-row-name">' +
+              '<span class="pb-freq-dot" aria-hidden="true"></span>' +
+              '<span>' + esc(f.name) + '</span>' +
+            '</div>' +
+            '<div class="feeds-popover-row-meta">' +
+              '<span class="feeds-popover-row-pausedflag">Paused ·</span>' +
+              '<span>Last Run: ' + esc(f.lastRun) + '</span>' +
+              (intervalText
+                ? '<span class="sep">|</span>' +
+                  '<span>' + esc(intervalText) + '</span>'
+                : '') +
+            '</div>' +
           '</div>' +
-          '<div class="feeds-popover-cell-interval">' + esc(f.interval) + '</div>' +
-          '<div class="feeds-popover-cell-last">' + esc(f.lastRun) + '</div>' +
-          chev +
+          '<div class="feeds-popover-row-actions">' +
+            '<button class="feeds-popover-row-pause" type="button" data-feed-pause aria-label="' + (paused ? 'Resume' : 'Pause') + '" title="' + (paused ? 'Resume' : 'Pause') + '">' +
+              '<span class="feeds-popover-row-pause-icon" aria-hidden="true"></span>' +
+            '</button>' +
+            '<span class="feeds-popover-row-chev" aria-hidden="true"></span>' +
+          '</div>' +
         '</div>'
       );
     }).join('');
     return (
       metaRow +
-      '<div class="feeds-popover-header">' +
-        '<div class="feeds-popover-cell-name">Automation</div>' +
-        '<div class="feeds-popover-cell-interval">Interval</div>' +
-        '<div class="feeds-popover-cell-last">Last Run</div>' +
-        '<span class="feeds-popover-row-chev is-placeholder" aria-hidden="true"></span>' +
-      '</div>' +
       rows +
       '<div class="feeds-popover-viewall" role="button" tabindex="0">' +
         '<span class="feeds-popover-viewall-label">View all automations in Settings</span>' +
@@ -2099,6 +2173,49 @@ button.pb-pill--readme:hover .pb-meta-icon { background-color: var(--text-n9); }
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
       });
     });
+
+    function setRowPaused(row, paused) {
+      row.classList.toggle('is-paused', paused);
+      var btn = row.querySelector('[data-feed-pause]');
+      if (btn) {
+        btn.setAttribute('aria-label', paused ? 'Resume' : 'Pause');
+        btn.setAttribute('title', paused ? 'Resume' : 'Pause');
+      }
+    }
+    function updatePauseAll() {
+      var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
+      if (!pauseAllBtn) return;
+      var rows = popover.querySelectorAll('.feeds-popover-row');
+      var allPaused = rows.length > 0;
+      rows.forEach(function (r) { if (!r.classList.contains('is-paused')) allPaused = false; });
+      pauseAllBtn.classList.toggle('is-resume', allPaused);
+      var label = pauseAllBtn.querySelector('.feeds-popover-pauseall-label');
+      if (label) label.textContent = allPaused ? 'Resume all' : 'Pause all';
+    }
+    popover.querySelectorAll('[data-feed-pause]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var row = btn.closest('.feeds-popover-row');
+        if (!row) return;
+        setRowPaused(row, !row.classList.contains('is-paused'));
+        updatePauseAll();
+      });
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') e.stopPropagation();
+      });
+    });
+    var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
+    if (pauseAllBtn) {
+      pauseAllBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var resume = pauseAllBtn.classList.contains('is-resume');
+        popover.querySelectorAll('.feeds-popover-row').forEach(function (row) {
+          setRowPaused(row, !resume);
+        });
+        updatePauseAll();
+      });
+    }
+    updatePauseAll();
 
     var viewAll = popover.querySelector('.feeds-popover-viewall');
     if (viewAll) {
