@@ -7,9 +7,10 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { AutomationPopoverDemo } from '@/app/components/demo/AutomationPopoverDemo';
+import { AgentChannelNewUserDemo } from '@/app/components/demo/AgentChannelNewUserDemo';
 import { DEMO_AUTHORS } from '@/data/demo-authors.generated';
 
-type DemoSlug = 'automation-popover';
+type DemoSlug = 'automation-popover' | 'agent-channel-new-user';
 
 interface DemoProps {
   onNavigate: (page: Page) => void;
@@ -25,6 +26,13 @@ interface DemoEntry {
 }
 
 const DEMOS: DemoEntry[] = [
+  {
+    slug: 'agent-channel-new-user',
+    name: 'Agent Channel — New User First Open',
+    status: 'Draft',
+    summary: 'Plan B concept A redrawn with Alva tokens — Channel-first IA, IM decoupled from chat, skill previews with instant subscribe.',
+    author: DEMO_AUTHORS['agent-channel-new-user'] ?? 'sheer-creator',
+  },
   {
     slug: 'automation-popover',
     name: 'Automation Popover Layouts',
@@ -201,7 +209,7 @@ function DemoIndex({ onNavigate }: { onNavigate: (page: Page) => void }) {
 }
 
 export default function Demo({ onNavigate, demoId }: DemoProps) {
-  const activeSlug: DemoSlug | undefined = demoId === 'automation-popover' ? 'automation-popover' : undefined;
+  const activeSlug: DemoSlug | undefined = DEMOS.find((demo) => demo.slug === demoId)?.slug;
   const activeDemo = DEMOS.find((demo) => demo.slug === activeSlug);
 
   return (
@@ -209,6 +217,8 @@ export default function Demo({ onNavigate, demoId }: DemoProps) {
       <main className="mx-auto flex min-h-screen w-full max-w-[1024px] flex-col px-[20px] py-[28px] sm:px-[40px] sm:py-[40px]">
         {activeDemo?.slug === 'automation-popover' ? (
           <AutomationPopoverDemo />
+        ) : activeDemo?.slug === 'agent-channel-new-user' ? (
+          <AgentChannelNewUserDemo />
         ) : (
           <DemoIndex onNavigate={onNavigate} />
         )}
