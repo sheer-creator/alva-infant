@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { AutomationPopoverDemo } from '@/app/components/demo/AutomationPopoverDemo';
+import { DEMO_AUTHORS } from '@/data/demo-authors.generated';
 
 type DemoSlug = 'automation-popover';
 
@@ -29,7 +30,7 @@ const DEMOS: DemoEntry[] = [
     name: 'Automation Popover Layouts',
     status: 'Draft',
     summary: 'Three layout options for the automations hover card on the playbook header pill.',
-    author: 'sheer-creator',
+    author: DEMO_AUTHORS['automation-popover'] ?? 'sheer-creator',
   },
 ];
 
