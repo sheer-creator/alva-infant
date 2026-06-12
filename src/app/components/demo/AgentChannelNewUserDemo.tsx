@@ -6,8 +6,11 @@
 
 import { useCallback, useRef, useState } from 'react';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
+import { ConnectAppsModal } from '@/app/components/shared/ConnectAppsModal';
 import { Avatar } from '@/app/components/shared/Avatar';
 import { ChatInput } from '@/app/components/shared/ChatInput';
+import { SkillsLibraryPanel } from '@/app/components/shared/SkillsLibraryPanel';
+import { COMMUNITY_TEMPLATES, OTHERS_TEMPLATES, PRIMARY_TEMPLATES, type NewChatTemplate } from '@/data/new-chat-mock';
 
 const FONT = "'Delight', sans-serif";
 
@@ -210,14 +213,77 @@ const SKILLS: SkillData[] = [
   },
 ];
 
-/* ready-made KOL skills(Figma chips 第 4-6、8 位)— 点击即订阅 */
-interface KolSkill { id: string; label: string; avatarBg?: string; avatarChar?: string }
+/* ready-made KOL skills(Figma chips 第 4-6、8 位)— 与平台 skill 同为单选展开 preview,订阅走卡片按钮 */
+interface KolSkill { id: string; label: string; /** public/avatars/ 下文件名,Figma 7887:112461 切图 */ avatarSrc: string; kind: SkillData['kind']; previews: SkillPreviewData[] }
 
 const KOL_SKILLS: KolSkill[] = [
-  { id: 'daily-macro-brief', label: 'Daily Macro Brief' },
-  { id: 'earnings-edge', label: 'Earnings Edge' },
-  { id: 'crypto-pulse', label: 'Crypto Pulse' },
-  { id: 'yield-hunter', label: 'Yield Hunter', avatarBg: '#458ce8', avatarChar: 'S' },
+  {
+    id: 'daily-macro-brief', label: 'Daily Macro Brief', avatarSrc: 'skill-daily-macro-brief.png', kind: 'automation',
+    previews: [{
+      t: 'Daily Macro Brief', creator: 'Macro Scope X', subscribers: '2.1k', tone: 'blue', cadence: 'daily',
+      rule: 'Every weekday 7:30 AM — overnight moves, the macro calendar, what actually matters today',
+      lastRun: 'Delivered today 7:30 AM',
+      matches: [
+        { t: 'CPI 8:30', note: 'Consensus 3.3% — a hot print pressures duration', tag: 'New' },
+        { t: 'DXY +0.6%', note: 'Dollar bid overnight — exporters exposed', tag: 'Watch' },
+        { t: '10Y 4.42%', note: '+6bp — rate-sensitives soft pre-open', tag: 'Watch' },
+      ],
+      push: "Today's brief: CPI at 8:30, dollar bid, 10Y backing up",
+    }],
+  },
+  {
+    id: 'earnings-edge', label: 'Earnings Edge', avatarSrc: 'skill-earnings-edge.png', kind: 'automation',
+    previews: [{
+      t: 'Earnings Edge', creator: 'Earnings Edge', subscribers: '1.4k', tone: 'green', cadence: 'on earnings',
+      rule: 'Pre- and post-ER setups on covered names, implied move vs 8-quarter average',
+      lastRun: 'Triggered 1h ago',
+      matches: [
+        { t: 'NVDA', note: 'Reports May 22 — options imply ±7.8% vs 5.1% avg', tag: 'New' },
+        { t: 'COST', note: 'Beat + raise — gapping +3% pre-market', tag: 'New' },
+        { t: 'ADBE', note: 'In-line guide — implied move looks overpriced', tag: 'Watch' },
+      ],
+      push: 'NVDA ER May 22 — implied ±7.8%, history says ±5.1%',
+    }],
+  },
+  {
+    id: 'crypto-pulse', label: 'Crypto Pulse', avatarSrc: 'skill-crypto-pulse.png', kind: 'playbook',
+    previews: [{
+      t: 'Crypto Pulse', creator: 'Crypto Pulse', subscribers: '976', tone: 'orange', cadence: 'daily',
+      chart: { label: 'BTC · 30d', value: '+9.6%', points: [30, 28, 33, 31, 36, 34, 39, 37, 42, 40, 45, 48, 46, 52, 50, 55] },
+      rows: [
+        { t: 'BTC', v: '$104,200', c: '+2.4%', up: true },
+        { t: 'ETH', v: '$3,890', c: '+3.1%', up: true },
+        { t: 'SOL', v: '$216', c: '−1.2%', up: false },
+      ],
+      stats: [['Regime', 'Risk-on'], ['Funding', 'Neutral'], ['Next catalyst', 'FOMC']],
+    }],
+  },
+  {
+    id: 'yield-hunter', label: 'Yield Hunter', avatarSrc: 'skill-yield-hunter.png', kind: 'playbook',
+    previews: [{
+      t: 'Yield Hunter', creator: 'Sheer YLL', subscribers: '318', tone: 'teal', cadence: 'weekly',
+      chart: { label: 'Blended portfolio yield', value: '6.8%', points: [52, 54, 53, 56, 58, 57, 60, 59, 62, 64, 63, 66, 65, 68, 67, 68] },
+      rows: [
+        { t: 'JEPI', v: '7.4%', c: 'covered-call', up: true },
+        { t: 'O', v: '5.6%', c: 'monthly REIT', up: true },
+        { t: 'MO', v: '8.1%', c: 'payout 80%', up: false },
+      ],
+      stats: [['Holdings', '12'], ['Blended yield', '6.8%'], ['Next ex-div', 'O · Jun 28']],
+    }],
+  },
+  {
+    id: 'dividend-diary', label: 'Dividend Diary', avatarSrc: 'skill-dividend-diary.png', kind: 'playbook',
+    previews: [{
+      t: 'Dividend Diary', creator: 'Dividend Diary', subscribers: '512', tone: 'green', cadence: 'monthly',
+      chart: { label: 'Income collected · YTD', value: '$3,184', points: [6, 9, 14, 18, 21, 26, 30, 34, 39, 44, 48, 53, 57, 62, 66, 71] },
+      rows: [
+        { t: 'SCHD', v: '3.4%', c: 'core sleeve', up: true },
+        { t: 'O', v: '5.6%', c: 'monthly REIT', up: true },
+        { t: 'VZ', v: '6.4%', c: 'payout 62%', up: false },
+      ],
+      stats: [['Holdings', '18'], ['Yield on cost', '4.9%'], ['Next ex-div', 'SCHD · Jun 25']],
+    }],
+  },
 ];
 
 /* chips 渲染顺序按 Figma:平台 skill 与 KOL 混排 */
@@ -230,7 +296,11 @@ const CHIP_ORDER: { type: 'skill' | 'kol'; id: string }[] = [
   { type: 'kol', id: 'crypto-pulse' },
   { type: 'skill', id: 'what-if' },
   { type: 'kol', id: 'yield-hunter' },
+  { type: 'kol', id: 'dividend-diary' },
 ];
+
+/* More 浮层的全量 skills 池 — 与 NewChat 首页同源 */
+const ALL_LIBRARY_SKILLS: NewChatTemplate[] = [...PRIMARY_TEMPLATES, ...OTHERS_TEMPLATES, ...COMMUNITY_TEMPLATES];
 
 const DEFAULT_PROMPTS = [
   'Build a theme tracker for AI infrastructure covering NVDA, AVGO, TSM, and power grid names',
@@ -251,7 +321,7 @@ const NAV_CHATS = ['Crypto Price + AI Trend Pulse', 'Heartbeat Run Counter'];
 interface ImEntry { id: string; label: string; logo: string; handle: string; sub: string }
 
 const IMS: ImEntry[] = [
-  { id: 'telegram', label: 'Telegram', logo: 'logo-telegram.svg', handle: '@yggyll_tg', sub: 'Bot DM — instant pushes' },
+  { id: 'telegram', label: 'Telegram', logo: 'logo-social-telegram.svg', handle: '@yggyll_tg', sub: 'Bot DM — instant pushes' },
   { id: 'discord', label: 'Discord', logo: 'logo-social-discord.svg', handle: 'yggyll#0882', sub: 'Bot DM — switch channels with /channel' },
   { id: 'whatsapp', label: "WhatsApp", logo: 'logo-social-whatsapp.svg', handle: '+1 ··· 4821', sub: 'Business account DM' },
   { id: 'slack', label: 'Slack', logo: 'logo-social-slack.svg', handle: '@yggyll · alva-hq', sub: 'Alva app in your workspace' },
@@ -498,27 +568,29 @@ function TypingDots() {
 
 /* ========== Skill chips(Figma Tab/Home:h-40 胶囊)========== */
 
-function SkillChip({ icon, avatar, label, active, trailing, onClick }: {
+function SkillChip({ icon, avatar, label, active, trailing, style, onClick }: {
   icon?: React.ReactNode;
   avatar?: React.ReactNode;
   label: string;
   active?: boolean;
   trailing?: React.ReactNode;
+  style?: React.CSSProperties;
   onClick?: () => void;
 }) {
   return (
     <button
-      className="flex h-[40px] cursor-pointer items-center gap-[8px] rounded-full bg-white px-[16px] py-[9px] transition-colors"
+      className="flex h-[38px] cursor-pointer items-center gap-[8px] rounded-full bg-white px-[16px] py-[8px] transition-colors"
       style={{
         fontFamily: FONT,
-        border: active ? '0.5px solid var(--main-m1, #49A3A6)' : '0.5px solid var(--line-l2, rgba(0,0,0,0.2))',
-        background: active ? 'var(--main-m1-10, rgba(73,163,166,0.1))' : '#fff',
+        border: active ? '0.5px solid rgba(0,0,0,0.7)' : '0.5px solid var(--line-l2, rgba(0,0,0,0.2))',
+        background: active ? 'rgba(0,0,0,0.7)' : '#fff',
+        ...style,
       }}
       onClick={onClick}
     >
-      {icon && <span style={{ color: 'var(--text-n9, rgba(0,0,0,0.9))' }}><Ic size={18}>{icon}</Ic></span>}
+      {icon && <span style={{ color: active ? '#fff' : 'var(--text-n9, rgba(0,0,0,0.9))' }}><Ic size={18}>{icon}</Ic></span>}
       {avatar}
-      <span className="whitespace-nowrap text-[14px] leading-[22px] tracking-[0.14px]" style={{ color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{label}</span>
+      <span className="whitespace-nowrap text-[14px] leading-[22px] tracking-[0.14px]" style={{ color: active ? 'rgba(255,255,255,0.9)' : 'var(--text-n9, rgba(0,0,0,0.9))' }}>{label}</span>
       {trailing}
     </button>
   );
@@ -534,7 +606,7 @@ function PreviewCard({ p, skillKind, subscribed, onSubscribe, onRemix }: {
   const isAuto = skillKind === 'automation';
   return (
     <div
-      className="flex w-[392px] shrink-0 flex-col overflow-hidden rounded-[8px] bg-white"
+      className="flex w-[392px] shrink-0 flex-col overflow-hidden rounded-[8px] bg-white transition-shadow hover:shadow-l"
       style={{ border: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' }}
     >
       <div className="flex h-[44px] items-center gap-[8px] px-[12px]">
@@ -644,83 +716,6 @@ function PreviewCard({ p, skillKind, subscribed, onSubscribe, onRemix }: {
   );
 }
 
-/* ========== IM 连接 modal(解耦后的唯一连接入口)========== */
-
-function ImConnectModal({ links, onClose, onConnect, onDisconnect }: {
-  links: Record<string, boolean>;
-  onClose: () => void;
-  onConnect: (id: string) => void;
-  onDisconnect: (id: string) => void;
-}) {
-  const base = import.meta.env.BASE_URL;
-  const [pending, setPending] = useState<string | null>(null);
-  const start = (id: string) => {
-    setPending(id);
-    setTimeout(() => {
-      setPending(null);
-      onConnect(id);
-    }, 900);
-  };
-  return (
-    <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/40" onClick={onClose}>
-      <div
-        className="w-[420px] rounded-[12px] bg-white"
-        style={{ boxShadow: 'var(--shadow-l, 0 10px 20px 0 rgba(0,0,0,0.08))' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-start justify-between px-[20px] pb-[8px] pt-[18px]">
-          <div className="flex min-w-0 flex-col gap-[2px]">
-            <p className="text-[16px] font-medium leading-[24px] tracking-[0.16px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Connect Alva Agent</p>
-            <p className="text-[12px] leading-[18px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-              Mirror this agent to your IM — pushes land there, replies sync back.
-            </p>
-          </div>
-          <button className="mt-[2px] shrink-0 cursor-pointer border-none bg-transparent p-0 transition-opacity hover:opacity-60" style={{ color: 'var(--text-n5, rgba(0,0,0,0.5))' }} onClick={onClose} aria-label="Close">
-            <Ic size={16}>{P.x}</Ic>
-          </button>
-        </div>
-        <div className="flex flex-col px-[12px] pb-[8px] pt-[6px]">
-          {IMS.map((im) => {
-            const on = !!links[im.id];
-            const busy = pending === im.id;
-            return (
-              <div key={im.id} className="flex h-[56px] items-center gap-[11px] rounded-[8px] px-[10px] transition-colors hover:bg-[var(--b-r02)]">
-                <img src={`${base}${im.logo}`} alt="" className="size-[26px] shrink-0 rounded-full" />
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="text-[13px] leading-[20px] tracking-[0.13px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{im.label}</span>
-                  <span className="truncate text-[11px] leading-[16px] tracking-[0.11px]" style={{ fontFamily: FONT, color: on ? 'var(--main-m3, #2a9b7d)' : 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-                    {on ? `Connected · ${im.handle}` : im.sub}
-                  </span>
-                </div>
-                {on ? (
-                  <button
-                    className="h-[28px] shrink-0 cursor-pointer rounded-[6px] bg-transparent px-[10px] text-[12px] leading-[18px] tracking-[0.12px] transition-colors hover:bg-[var(--b-r03)]"
-                    style={{ fontFamily: FONT, border: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))', color: 'var(--text-n5, rgba(0,0,0,0.5))' }}
-                    onClick={() => onDisconnect(im.id)}
-                  >
-                    Disconnect
-                  </button>
-                ) : (
-                  <button
-                    className="h-[28px] shrink-0 cursor-pointer rounded-[6px] bg-transparent px-[12px] text-[12px] leading-[18px] tracking-[0.12px] transition-colors hover:bg-[var(--b-r03)]"
-                    style={{ fontFamily: FONT, border: '0.5px solid var(--line-l3, rgba(0,0,0,0.3))', color: 'var(--text-n9, rgba(0,0,0,0.9))' }}
-                    onClick={() => !busy && start(im.id)}
-                  >
-                    {busy ? 'Connecting…' : 'Connect'}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        <p className="px-[22px] pb-[16px] text-[11px] leading-[16px] tracking-[0.11px]" style={{ fontFamily: FONT, color: 'var(--text-n3, rgba(0,0,0,0.3))' }}>
-          Connections are per agent — pushes mirror the moment they fire.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 /* ========== 互动消息流(respond 模拟)========== */
 
 type ExtraMsg =
@@ -740,7 +735,10 @@ export function AgentChannelNewUserDemo() {
   const [subscribed, setSubscribed] = useState<Record<string, boolean>>({});
   const [extra, setExtra] = useState<ExtraMsg[]>([]);
   const [imLinks, setImLinks] = useState<Record<string, boolean>>({});
+  /* 谁接收 IM 推送 — 单 active channel,绑定/解绑随动 */
+  const [imActive, setImActive] = useState<string | null>(null);
   const [imModalOpen, setImModalOpen] = useState(false);
+  const [skillsLibOpen, setSkillsLibOpen] = useState(false);
   const idRef = useRef(0);
   const imRecShownRef = useRef(false);
   const imLinksRef = useRef(imLinks);
@@ -748,7 +746,15 @@ export function AgentChannelNewUserDemo() {
   const stageRef = useRef<HTMLDivElement>(null);
 
   const sel = openSkill ? SKILLS.find((s) => s.id === openSkill) : null;
-  const telegramOn = !!imLinks.telegram;
+  const selKol = openSkill && !sel ? KOL_SKILLS.find((k) => k.id === openSkill) : null;
+  const opened = sel ?? selKol;
+  /* More 浮层选中的池内 skill(含 KOL chips 同 id 项):prompts 从池里取 */
+  const selPool = openSkill && !sel ? ALL_LIBRARY_SKILLS.find((t) => t.id === openSkill) ?? null : null;
+  const openedLabel = sel?.label ?? selKol?.label ?? selPool?.label ?? null;
+  const promptList = sel ? sel.prompts : selPool ? selPool.prompts.slice(0, 3) : DEFAULT_PROMPTS;
+  /* 选中的 skill 不在外露 chips 里(来自 More 浮层)→ More chip 走选中态 */
+  const moreActive = !sel && !selKol && !!selPool;
+  const activeIm = imActive ? IMS.find((i) => i.id === imActive) ?? null : null;
 
   const scrollToEnd = useCallback(() => {
     requestAnimationFrame(() => {
@@ -796,20 +802,14 @@ export function AgentChannelNewUserDemo() {
     }, 700);
   }, [scrollToEnd]);
 
-  const onSubscribePreview = useCallback((skill: SkillData, p: SkillPreviewData) => {
+  const onSubscribePreview = useCallback((kind: SkillData['kind'], p: SkillPreviewData) => {
     setSubscribed((prev) => ({ ...prev, [p.t]: true }));
-    pushSubscribe(p.t, skill.kind === 'automation' ? p.push : p.chart && `${p.chart.label} · ${p.chart.value}`, skill.kind === 'automation' ? p.t : `${p.cadence}-run`);
+    pushSubscribe(p.t, kind === 'automation' ? p.push : p.chart && `${p.chart.label} · ${p.chart.value}`, kind === 'automation' ? p.t : `${p.cadence}-run`);
   }, [pushSubscribe]);
-
-  /* ready-made KOL skill:点击即订阅 */
-  const onKolChip = useCallback((k: KolSkill) => {
-    if (subscribed[k.label]) return;
-    setSubscribed((prev) => ({ ...prev, [k.label]: true }));
-    pushSubscribe(k.label, undefined, k.label.replace(/\s+/g, '-'));
-  }, [pushSubscribe, subscribed]);
 
   const connectIm = useCallback((imId: string) => {
     setImLinks((prev) => ({ ...prev, [imId]: true }));
+    setImActive((prev) => prev ?? imId);
     const im = IMS.find((i) => i.id === imId);
     if (!im) return;
     setExtra((prev) => [...prev, {
@@ -820,6 +820,12 @@ export function AgentChannelNewUserDemo() {
     scrollToEnd();
   }, [scrollToEnd]);
 
+  const disconnectIm = useCallback((imId: string) => {
+    const next = { ...imLinksRef.current, [imId]: false };
+    setImLinks(next);
+    setImActive((prev) => (prev === imId ? IMS.find((i) => next[i.id])?.id ?? null : prev));
+  }, []);
+
   return (
     <div className="flex flex-col gap-[24px]">
       <div className="flex flex-col gap-[8px]">
@@ -827,7 +833,7 @@ export function AgentChannelNewUserDemo() {
           Agent — new user first open
         </h2>
         <p className="m-0 max-w-[68ch] text-[14px] leading-[24px] tracking-[0.14px]" style={{ color: 'var(--text-n7, rgba(0,0,0,0.7))', fontFamily: FONT }}>
-          Figma Page/Agent/New structure: product sidebar, agent header with Telegram select and settings, four workspace tabs, then the main session — greeting, skill chips (platform + ready-made KOL), prompt suggestions, composer. Chat works without any IM connected; try a prompt, subscribe to a chip, or connect Telegram from the header.
+          Figma Page/Agent/New structure: product sidebar, agent header with Telegram select and settings, four workspace tabs, then the main session — greeting, skill chips (platform + ready-made KOL), prompt suggestions, composer. Chat works without any IM connected; try a prompt, open a chip to preview and subscribe, or connect Telegram from the header.
         </p>
       </div>
 
@@ -847,21 +853,17 @@ export function AgentChannelNewUserDemo() {
                 Your always-on investing co-pilot — turn any idea into a live playbook.
               </p>
             </div>
-            {/* IM Select — 解耦后的连接入口;点击打开连接 modal */}
+            {/* IM Select — Figma 7887:111979:hug 宽 gap-4 px-12 py-6,尾部 6px 状态点;点击打开连接 modal */}
             <button
-              className="flex h-[32px] w-[112px] shrink-0 cursor-pointer items-center gap-[4px] rounded-[4px] bg-transparent px-[12px] py-[6px] transition-colors hover:bg-[var(--b-r02)]"
+              className="flex h-[32px] shrink-0 cursor-pointer items-center justify-center gap-[4px] rounded-[4px] bg-transparent px-[12px] py-[6px] transition-colors hover:bg-[var(--b-r02)]"
               style={{ fontFamily: FONT, border: '0.5px solid var(--line-l3, rgba(0,0,0,0.3))' }}
               onClick={() => setImModalOpen(true)}
             >
-              <img src={`${base}logo-telegram.svg`} alt="" className="size-[16px] shrink-0 rounded-full" style={{ filter: telegramOn ? undefined : 'grayscale(1)', opacity: telegramOn ? 1 : 0.55 }} />
-              <span className="min-w-0 flex-1 truncate text-left text-[12px] leading-[20px] tracking-[0.12px]" style={{ color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-                Telegram
+              <img src={`${base}${activeIm?.logo ?? 'logo-social-telegram.svg'}`} alt="" className="size-[16px] shrink-0 rounded-full" />
+              <span className="whitespace-nowrap text-[12px] leading-[20px] tracking-[0.12px]" style={{ color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                {activeIm?.label ?? 'Telegram'}
               </span>
-              {telegramOn ? (
-                <span className="size-[6px] shrink-0 rounded-full" style={{ background: 'var(--main-m3, #2a9b7d)' }} />
-              ) : (
-                <CdnIcon name="arrow-down-f2" size={12} color="var(--text-n5, rgba(0,0,0,0.5))" />
-              )}
+              <span className="size-[6px] shrink-0 rounded-full" style={{ background: activeIm ? 'var(--main-m3, #2a9b7d)' : 'var(--text-n2, rgba(0,0,0,0.2))' }} />
             </button>
             <button
               className="flex size-[32px] shrink-0 cursor-pointer items-center justify-center rounded-[4px] bg-transparent transition-colors hover:bg-[var(--b-r02)]"
@@ -879,7 +881,7 @@ export function AgentChannelNewUserDemo() {
               return (
                 <button
                   key={t.id}
-                  className="flex cursor-pointer items-center gap-[4px] bg-transparent px-0 pb-[6px]"
+                  className="mb-[-1px] flex cursor-pointer items-center gap-[4px] bg-transparent px-0 pb-[6px]"
                   style={{ border: 'none', borderBottom: active ? '2px solid var(--main-m1, #49A3A6)' : '2px solid transparent' }}
                   onClick={() => setTab(t.id)}
                 >
@@ -898,7 +900,7 @@ export function AgentChannelNewUserDemo() {
           {tab === 'chat' ? (
             <>
               <div ref={stageRef} className="min-h-0 flex-1 overflow-y-auto">
-                <div className="mx-auto flex w-full max-w-[840px] flex-col gap-[28px] px-[28px] pb-[16px] pt-[28px]">
+                <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[28px] px-[28px] pb-[60px] pt-[28px]">
                   <AgentMsg>
                     <div>
                       <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Hi. I am Alva</p>
@@ -932,36 +934,32 @@ export function AgentChannelNewUserDemo() {
                         return (
                           <SkillChip
                             key={k.id}
-                            avatar={
-                              k.avatarBg ? (
-                                <span className="flex size-[22px] shrink-0 items-center justify-center rounded-full" style={{ background: k.avatarBg }}>
-                                  <span className="text-[11px] font-medium leading-[18px] tracking-[0.11px] text-white" style={{ fontFamily: FONT }}>{k.avatarChar}</span>
-                                </span>
-                              ) : (
-                                <Avatar name={k.label} size={22} />
-                              )
-                            }
+                            avatar={<img src={`${import.meta.env.BASE_URL}avatars/${k.avatarSrc}`} alt="" className="size-[22px] shrink-0 rounded-full object-cover" />}
                             label={k.label}
-                            active={!!subscribed[k.label]}
-                            onClick={() => onKolChip(k)}
+                            active={openSkill === k.id}
+                            onClick={() => setOpenSkill(openSkill === k.id ? null : k.id)}
                           />
                         );
                       })}
+                      {/* More — 与 NewChat 一致:打开全量 skills 浮层(open 态浅 teal,同 NewChat More pill) */}
                       <SkillChip
                         label="More"
-                        trailing={<CdnIcon name="arrow-right-l2" size={14} color="var(--text-n9, rgba(0,0,0,0.9))" />}
+                        active={moreActive}
+                        trailing={<CdnIcon name="arrow-right-l2" size={14} color={moreActive ? '#fff' : 'var(--text-n9, rgba(0,0,0,0.9))'} />}
+                        style={skillsLibOpen && !moreActive ? { background: '#f3f8f8', border: '0.5px solid rgba(73,163,166,0.45)' } : undefined}
+                        onClick={() => setSkillsLibOpen(true)}
                       />
                     </div>
-                    {sel && (
-                      <div className="-mr-[28px] flex gap-[10px] overflow-x-auto pb-[4px] pr-[28px] pt-[2px]" style={{ scrollbarWidth: 'none' }}>
-                        {sel.previews.map((p) => (
+                    {opened && (
+                      <div className="-mb-[30px] -mr-[28px] flex gap-[10px] overflow-x-auto pb-[34px] pr-[28px] pt-[2px]" style={{ scrollbarWidth: 'none' }}>
+                        {opened.previews.map((p) => (
                           <PreviewCard
                             key={p.t}
                             p={p}
-                            skillKind={sel.kind}
+                            skillKind={opened.kind}
                             subscribed={!!subscribed[p.t]}
-                            onSubscribe={() => onSubscribePreview(sel, p)}
-                            onRemix={() => respond(`Build my own version of ${p.t} — keep the idea, let me tweak the ${sel.kind === 'automation' ? 'rule and schedule' : 'basket and rules'}`, sel.kind, `${sel.kind === 'automation' ? 'Automation' : 'Build'}: ${p.t} (remix)`)}
+                            onSubscribe={() => onSubscribePreview(opened.kind, p)}
+                            onRemix={() => respond(`Build my own version of ${p.t} — keep the idea, let me tweak the ${opened.kind === 'automation' ? 'rule and schedule' : 'basket and rules'}`, opened.kind, `${opened.kind === 'automation' ? 'Automation' : 'Build'}: ${p.t} (remix)`)}
                           />
                         ))}
                       </div>
@@ -970,16 +968,20 @@ export function AgentChannelNewUserDemo() {
 
                   <AgentMsg>
                     <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-                      {sel ? <>Or build your own <span style={{ fontWeight: 500 }}>{sel.label}</span> — try one of these:</> : 'Or try one of these:'}
+                      {openedLabel ? <>Or build your own <span style={{ fontWeight: 500 }}>{openedLabel}</span> — try one of these:</> : 'Or try one of these:'}
                     </p>
                     {/* Prompt Suggestions — Figma 7885:111793:单容器,行间分隔线 */}
                     <div className="flex w-full flex-col overflow-hidden rounded-[8px]" style={{ border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}>
-                      {(sel ? sel.prompts : DEFAULT_PROMPTS).map((t, i, arr) => (
+                      {promptList.map((t, i, arr) => (
                         <button
                           key={t}
                           className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent px-[16px] py-[13px] text-left transition-colors hover:bg-[var(--b-r02)]"
                           style={{ border: 'none', borderBottom: i < arr.length - 1 ? '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' : 'none' }}
-                          onClick={() => (sel ? respond(t, sel.kind, `${sel.kind === 'automation' ? 'Automation' : 'Build'}: ${sel.label}`) : onPrompt(t))}
+                          onClick={() => {
+                            if (sel) respond(t, sel.kind, `${sel.kind === 'automation' ? 'Automation' : 'Build'}: ${sel.label}`);
+                            else if (selKol) respond(t, selKol.kind, `${selKol.kind === 'automation' ? 'Automation' : 'Build'}: ${selKol.label}`);
+                            else onPrompt(t);
+                          }}
                         >
                           <span className="min-w-0 flex-1 truncate text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{t}</span>
                           <CdnIcon name="enter-l" size={16} color="var(--text-n5, rgba(0,0,0,0.5))" />
@@ -1051,7 +1053,7 @@ export function AgentChannelNewUserDemo() {
                             style={{ fontFamily: FONT, border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))', color: 'var(--text-n9, rgba(0,0,0,0.9))' }}
                             onClick={() => setImModalOpen(true)}
                           >
-                            <img src={`${base}logo-telegram.svg`} alt="" className="size-[15px] rounded-full" />
+                            <img src={`${base}logo-social-telegram.svg`} alt="" className="size-[15px] rounded-full" />
                             Connect Telegram
                           </button>
                           <button
@@ -1069,9 +1071,9 @@ export function AgentChannelNewUserDemo() {
                 </div>
               </div>
 
-              <div className="shrink-0 px-[28px] pb-[28px] pt-[8px]">
-                <div className="mx-auto w-full max-w-[840px]">
-                  <ChatInput shadow allowReferences={false} placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
+              <div className="shrink-0 px-[28px] pb-[28px]">
+                <div className="mx-auto w-full max-w-[960px]">
+                  <ChatInput shadow allowReferences={false} hideInspector placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
                 </div>
               </div>
             </>
@@ -1093,20 +1095,37 @@ export function AgentChannelNewUserDemo() {
         </div>
 
         {imModalOpen && (
-          <ImConnectModal
-            links={imLinks}
+          <ConnectAppsModal
+            overlay="absolute"
+            rows={IMS.map((im) => ({ id: im.id, name: im.label, sub: im.sub, handle: im.handle, logo: `${base}${im.logo}` }))}
+            connectedIds={IMS.filter((im) => imLinks[im.id]).map((im) => im.id)}
+            activeId={imActive}
             onClose={() => setImModalOpen(false)}
             onConnect={connectIm}
-            onDisconnect={(id) => setImLinks((prev) => ({ ...prev, [id]: false }))}
+            onDisconnect={disconnectIm}
+            onSetActive={setImActive}
+          />
+        )}
+
+        {skillsLibOpen && (
+          <SkillsLibraryPanel
+            skills={ALL_LIBRARY_SKILLS}
+            selectedId={openSkill}
+            onSelect={(id) => {
+              setOpenSkill(openSkill === id ? null : id);
+              setSkillsLibOpen(false);
+            }}
+            onClose={() => setSkillsLibOpen(false)}
           />
         )}
       </div>
 
       <ul className="m-0 flex list-disc flex-col gap-[2px] pl-[18px]">
         {[
-          '结构对齐 Figma Page/Agent/New:产品 Sidebar(New Chat / Agent 置顶)+ Agent Header(Telegram Select + Settings)+ Chat / Tasks / Memory / Artifacts 四 tab + 840px 内容列。',
+          '结构对齐 Figma Page/Agent/New:产品 Sidebar(New Chat / Agent 置顶)+ Agent Header(Telegram Select + Settings)+ Chat / Tasks / Memory / Artifacts 四 tab + 960px 内容列。',
           'IM 解耦:未连接也能聊和收 push;header 的 Telegram select 打开连接面板,首个任务完成后 Alva 在消息流里一次性软推荐。',
-          '价值先行:平台 skill chip 点开成品 preview(Subscribe 即时生效并收到首条带归因的 push);KOL chip(Daily Macro Brief 等)点击即订阅。',
+          '价值先行:所有 chip 单选切换 — 平台与 KOL chip 都点开成品 preview,订阅统一走卡片 Subscribe(即时生效并收到首条带归因的 push)。',
+          'More 与 NewChat 一致:打开同源全量 Skills 浮层,选中即单选该 skill;chips 之外的 skill 选中后联动替换 prompt suggestions。',
           'Prompt suggestions 为单容器三行(Figma 结构),选中 skill 时联动替换为该 skill 的建议。',
         ].map((t) => (
           <li key={t} className="text-[13px] leading-[22px] tracking-[0.13px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{t}</li>

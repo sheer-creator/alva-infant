@@ -7,10 +7,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Page } from '@/app/App';
 import { AutomationPopoverDemo } from '@/app/components/demo/AutomationPopoverDemo';
+import { AutomationDetailModalDemo } from '@/app/components/demo/AutomationDetailModalDemo';
 import { AgentChannelNewUserDemo } from '@/app/components/demo/AgentChannelNewUserDemo';
 import { DEMO_AUTHORS } from '@/data/demo-authors.generated';
 
-type DemoSlug = 'automation-popover' | 'agent-channel-new-user';
+type DemoSlug = 'automation-popover' | 'automation-detail-modal' | 'agent-channel-new-user';
 
 interface DemoProps {
   onNavigate: (page: Page) => void;
@@ -39,6 +40,13 @@ const DEMOS: DemoEntry[] = [
     status: 'Draft',
     summary: 'Three layout options for the automations hover card on the playbook header pill.',
     author: DEMO_AUTHORS['automation-popover'] ?? 'sheer-creator',
+  },
+  {
+    slug: 'automation-detail-modal',
+    name: 'Automation Detail Modal IA',
+    status: 'Draft',
+    summary: 'Three classification structures for the automation detail modal: overview-first, inspector split, and run debugger.',
+    author: DEMO_AUTHORS['automation-detail-modal'] ?? 'sheer-creator',
   },
 ];
 
@@ -217,6 +225,8 @@ export default function Demo({ onNavigate, demoId }: DemoProps) {
       <main className="mx-auto flex min-h-screen w-full max-w-[1024px] flex-col px-[20px] py-[28px] sm:px-[40px] sm:py-[40px]">
         {activeDemo?.slug === 'automation-popover' ? (
           <AutomationPopoverDemo />
+        ) : activeDemo?.slug === 'automation-detail-modal' ? (
+          <AutomationDetailModalDemo />
         ) : activeDemo?.slug === 'agent-channel-new-user' ? (
           <AgentChannelNewUserDemo />
         ) : (

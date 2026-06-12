@@ -32,6 +32,8 @@ export interface NewChatTemplate {
   /** 当为 true，pill 用 creator 头像；否则用 icon */
   kol?: boolean;
   icon?: string;
+  /** public/avatars/ 下文件名(Figma 7887:112461 切图);kol pill 优先用它,缺省退回 Avatar(creator) */
+  avatarSrc?: string;
   prompts: string[];
   playbooks: NewChatPlaybook[];
   /** 选中态推荐区的手动配置卡（缺省时用 playbooks 前 3 个） */
@@ -199,6 +201,7 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     id: 'daily-macro-brief',
     label: 'Daily Macro Brief',
     kol: true,
+    avatarSrc: 'skill-daily-macro-brief.png',
     creator: 'Macro Scope X',
     description: 'A daily breakdown of macro flows — rates, FX, and cross-asset signals — distilled into a 5-minute brief.',
     prompts: [
@@ -216,6 +219,7 @@ export const PRIMARY_TEMPLATES: NewChatTemplate[] = [
     id: 'earnings-edge',
     label: 'Earnings Edge',
     kol: true,
+    avatarSrc: 'skill-earnings-edge.png',
     creator: 'Smart Jing',
     description: 'Whisper numbers and post-print drift, weekly.',
     prompts: [
@@ -238,6 +242,7 @@ export const OTHERS_TEMPLATES: NewChatTemplate[] = [
     id: 'crypto-pulse',
     label: 'Crypto Pulse',
     kol: true,
+    avatarSrc: 'skill-crypto-pulse.png',
     creator: 'Harry Zzz',
     description: 'Spot tradable signal in noisy crypto. Aggregates news flow, on-chain activity, ETF flows, exchange balances, and stablecoin issuance into a single morning pulse — flags the names with statistically meaningful deviations and explains *why* in plain English so you can move before the desk does.',
     prompts: [
@@ -271,6 +276,7 @@ export const OTHERS_TEMPLATES: NewChatTemplate[] = [
     id: 'yield-hunter',
     label: 'Yield Hunter',
     kol: true,
+    avatarSrc: 'skill-yield-hunter.png',
     creator: 'Sheer YLL YGG',
     description: 'Hunts the highest risk-adjusted yield wherever it lives — Treasuries, IG and HY credit, preferreds, MLPs, REITs, and on-chain stablecoin lending. Normalizes spreads to common units, attaches default-probability and smart-contract-risk overlays where relevant, and ladders the result so you can rotate up or down the curve as regimes shift. Includes a tax-equivalent comparison across muni / corporate / pass-through structures.',
     prompts: [
@@ -287,6 +293,7 @@ export const OTHERS_TEMPLATES: NewChatTemplate[] = [
     id: 'dividend-diary',
     label: 'Dividend Diary',
     kol: true,
+    avatarSrc: 'skill-dividend-diary.png',
     creator: 'Lily Lou',
     description: 'A weekly diary of dividend hikes, cuts, and special distributions across SPX and global aristocrats.',
     prompts: [

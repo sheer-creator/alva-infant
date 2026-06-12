@@ -2,5 +2,6 @@
 // 每个 demo 组件文件的创建者 GitHub login，slug 与 Demo.tsx 中的 DemoSlug 对应。
 export const DEMO_AUTHORS: Record<string, string> = {
   'agent-channel-new-user': 'sheer-creator',
+  'automation-detail-modal': 'sheer-creator',
   'automation-popover': 'sheer-creator',
 };

@@ -39,6 +39,8 @@ interface TradePush extends PushBase {
 interface KolPush extends PushBase {
   kind: 'kol';
   kolName: string;
+  /** public/ 下头像文件名;缺省回落字母 Avatar */
+  kolAvatar?: string;
   headlineTicker: string;
   headlineText: string;
   quoteTicker: string;
@@ -71,11 +73,12 @@ function StatusDot() {
 
 function TrendArrow({ dir }: { dir: 'up' | 'down' }) {
   const up = dir === 'up';
+  /* Figma 资源原色:bullish #2A9B7D(m3) / bearish #E05357(m4) */
   return (
     <CdnIcon
       name={up ? 'bullish-l' : 'bearish-l'}
       size={20}
-      color={up ? 'var(--main-m1)' : '#E5484D'}
+      color={up ? 'var(--main-m3, #2a9b7d)' : 'var(--main-m4, #e05357)'}
     />
   );
 }
@@ -98,19 +101,26 @@ function NormalBody({ d }: { d: NormalPush }) {
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {d.bullets.map((b, i) => (
-          <p
-            key={i}
-            style={{
-              margin: 0,
-              fontFamily: FONT,
-              fontSize: 14,
-              lineHeight: '22px',
-              letterSpacing: 0.14,
-              color: 'var(--text-n9, rgba(0,0,0,0.9))',
-            }}
-          >
-            {b}
-          </p>
+          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', width: '100%' }}>
+            {/* Figma:20px bullet 列 */}
+            <span style={{ display: 'inline-flex', width: 20, height: 22, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ width: 3, height: 3, borderRadius: 999, background: 'var(--text-n9, rgba(0,0,0,0.9))' }} />
+            </span>
+            <p
+              style={{
+                margin: 0,
+                flex: 1,
+                minWidth: 0,
+                fontFamily: FONT,
+                fontSize: 14,
+                lineHeight: '22px',
+                letterSpacing: 0.14,
+                color: 'var(--text-n9, rgba(0,0,0,0.9))',
+              }}
+            >
+              {b}
+            </p>
+          </div>
         ))}
       </div>
     </>
@@ -148,7 +158,15 @@ function KolBody({ d }: { d: KolPush }) {
       {/* 原帖：头像 + X 角标 + 文本 */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
         <span style={{ position: 'relative', flexShrink: 0, width: 22, height: 22 }}>
-          <Avatar name={d.kolName} size={22} />
+          {d.kolAvatar ? (
+            <img
+              src={`${import.meta.env.BASE_URL}${d.kolAvatar}`}
+              alt=""
+              style={{ display: 'block', width: 22, height: 22, borderRadius: 999, objectFit: 'cover' }}
+            />
+          ) : (
+            <Avatar name={d.kolName} size={22} />
+          )}
           <span
             style={{
               position: 'absolute',
@@ -162,13 +180,11 @@ function KolBody({ d }: { d: KolPush }) {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontFamily: FONT,
-              fontSize: 7,
-              lineHeight: 1,
-              color: '#fff',
             }}
           >
-            𝕏
+            <svg width={7} height={7} viewBox="0 0 24 24" fill="#fff" aria-hidden style={{ display: 'block' }}>
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
           </span>
         </span>
         <p style={{ margin: 0, flex: 1, minWidth: 0, fontFamily: FONT, fontSize: 14, lineHeight: '22px', letterSpacing: 0.14, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
@@ -190,7 +206,7 @@ function KolBody({ d }: { d: KolPush }) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Avatar name={d.quoteTicker} size={20} />
+          <TickerLogo ticker={d.quoteTicker.replace(/^\$/, '')} size={20} />
           <span style={{ fontFamily: FONT, fontSize: 14, fontWeight: 500, lineHeight: '22px', letterSpacing: 0.14, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
             {d.quoteTicker}
           </span>
@@ -209,12 +225,10 @@ function KolBody({ d }: { d: KolPush }) {
             {d.quoteSide}
           </span>
         </div>
-        <div style={{ height: 1, background: 'var(--line-l07, rgba(0,0,0,0.07))', width: '100%' }} />
+        <div style={{ height: 0.5, background: 'var(--line-l12, rgba(0,0,0,0.12))', width: '100%' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontFamily: FONT, fontSize: 12, fontWeight: 500, lineHeight: '20px', letterSpacing: 0.12, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-              Alva
-            </span>
+            <img src="https://alva-ai-static.b-cdn.net/icons/logo-alva-horizontal-green-black.svg" alt="Alva" style={{ display: 'block', height: 10, width: 40 }} />
             <span style={{ fontFamily: FONT, fontSize: 12, lineHeight: '20px', letterSpacing: 0.12, color: 'var(--main-m1, #49a3a6)' }}>
               Analysis
             </span>
@@ -251,9 +265,16 @@ export function PushContent({ a }: { a: PushCardData }) {
   );
 }
 
-export function AutomationCard({ a, defaultOn = false }: { a: PushCardData; defaultOn?: boolean }) {
+export function AutomationCard({ a, defaultOn = false, on: onProp, onToggleOn }: {
+  a: PushCardData;
+  defaultOn?: boolean;
+  /** 受控订阅态(传入则忽略内部 state) */
+  on?: boolean;
+  onToggleOn?: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
-  const [on, setOn] = useState(defaultOn);
+  const [onState, setOnState] = useState(defaultOn);
+  const on = onProp ?? onState;
 
   return (
     <div
@@ -269,8 +290,7 @@ export function AutomationCard({ a, defaultOn = false }: { a: PushCardData; defa
         borderRadius: 8,
         overflow: 'hidden',
         boxShadow: hovered ? 'var(--shadow-l, 0 10px 20px 0 rgba(0,0,0,0.08))' : 'none',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'box-shadow 130ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1)',
+        transition: 'box-shadow 130ms cubic-bezier(0.2, 0, 0, 1)',
       }}
     >
       {/* body —— 内容绝对定位，不撑高卡片：行高由同行的 playbook 卡决定，内容超出由渐隐 mask 裁切 */}
@@ -286,6 +306,10 @@ export function AutomationCard({ a, defaultOn = false }: { a: PushCardData; defa
             overflow: 'hidden',
           }}
         >
+          <PushContent a={a} />
+
+          {/* 第二时间组(Figma:分隔线后内容重复一段,被固定高 + 渐隐 mask 裁切) */}
+          <div style={{ height: 0.5, background: 'var(--line-l12, rgba(0,0,0,0.12))', width: '100%', flexShrink: 0 }} />
           <PushContent a={a} />
 
           {/* 底部渐隐 mask */}
@@ -309,8 +333,7 @@ export function AutomationCard({ a, defaultOn = false }: { a: PushCardData; defa
           display: 'flex',
           alignItems: 'center',
           gap: 4,
-          padding: '12px 16px',
-          borderTop: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))',
+          padding: '12px 16px 16px',
         }}
       >
         <StatusDot />
@@ -335,7 +358,8 @@ export function AutomationCard({ a, defaultOn = false }: { a: PushCardData; defa
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            setOn((v) => !v);
+            if (onToggleOn) onToggleOn();
+            else setOnState((v) => !v);
           }}
           style={{
             display: 'inline-flex',

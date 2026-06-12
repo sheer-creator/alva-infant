@@ -53,7 +53,6 @@ export interface FeedDetailModalProps {
   feedName: string;
   lastRun?: string;        // "15m"
   runEvery?: string;       // "Every 5 minutes"
-  totalRuns?: number;      // 142
   description: string;
   stats?: FeedDetailStats;
   history?: FeedRunHistoryItem[];
@@ -90,14 +89,11 @@ const DEFAULT_HISTORY: FeedRunHistoryItem[] = Array.from({ length: 10 }, (_, i) 
   log: i === 0 ? DEFAULT_LOG_142 : undefined,
 }));
 
-/* ========== Stat 卡片 ========== */
+/* ========== Stat 数据项 ========== */
 
-function StatCard({ label, value, valueColor }: { label: string; value: string | number; valueColor?: string }) {
+function StatItem({ label, value, valueColor }: { label: string; value: string | number; valueColor?: string }) {
   return (
-    <div
-      className="flex flex-1 min-w-0 flex-col gap-[2px] justify-center items-start px-[16px] py-[12px] rounded-[8px]"
-      style={{ background: '#fafafa' }}
-    >
+    <div className="flex flex-1 min-w-0 flex-col gap-[2px] justify-center items-start">
       <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] w-full">
         {label}
       </p>
@@ -111,6 +107,12 @@ function StatCard({ label, value, valueColor }: { label: string; value: string |
   );
 }
 
+function StatDivider() {
+  return (
+    <div className="self-stretch shrink-0" style={{ width: 0.5, background: 'var(--line-l12, rgba(0,0,0,0.12))' }} />
+  );
+}
+
 /* ========== 组件 ========== */
 
 export function FeedDetailModal({
@@ -119,7 +121,6 @@ export function FeedDetailModal({
   feedName,
   lastRun = '15m',
   runEvery = 'Every 5 minutes',
-  totalRuns = 142,
   description,
   stats = DEFAULT_STATS,
   history = DEFAULT_HISTORY,
@@ -127,12 +128,10 @@ export function FeedDetailModal({
   onManage,
 }: FeedDetailModalProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'runs'>('overview');
   const [descExpanded, setDescExpanded] = useState(false);
   const [descOverflows, setDescOverflows] = useState(false);
   const descRef = useRef<HTMLDivElement>(null);
-  const [alertExpanded, setAlertExpanded] = useState(false);
-  const [alertOverflows, setAlertOverflows] = useState(false);
-  const alertRef = useRef<HTMLDivElement>(null);
 
   // ESC 关闭
   useEffect(() => {
@@ -143,19 +142,13 @@ export function FeedDetailModal({
   }, [open, onClose]);
 
   // Modal 关闭时重置展开状态
-  useEffect(() => { if (!open) { setExpandedId(null); setDescExpanded(false); setAlertExpanded(false); } }, [open]);
+  useEffect(() => { if (!open) { setExpandedId(null); setActiveTab('overview'); setDescExpanded(false); } }, [open]);
 
   // 检测描述块是否溢出 280px
   useEffect(() => {
-    if (!open || !descRef.current) return;
+    if (!open || activeTab !== 'overview' || !descRef.current) return;
     setDescOverflows(descRef.current.scrollHeight > 280);
-  }, [open, description]);
-
-  // 检测 alert 块是否溢出 280px（agent 推送可能很长）
-  useEffect(() => {
-    if (!open || !alertRef.current) return;
-    setAlertOverflows(alertRef.current.scrollHeight > 280);
-  }, [open, alerts]);
+  }, [open, activeTab, description]);
 
   if (!open) return null;
 
@@ -167,7 +160,7 @@ export function FeedDetailModal({
       onClick={onClose}
     >
       <div
-        className="relative flex w-[600px] max-w-[720px] max-h-full flex-col rounded-[12px]"
+        className="relative flex w-[600px] max-w-[720px] max-h-full flex-col rounded-[var(--radius-pop-dialog,8px)]"
         style={{
           background: '#fff',
           border: '0.5px solid var(--line-l2)',
@@ -187,233 +180,239 @@ export function FeedDetailModal({
 
         {/* 可滚动主体 — 内容超出 dialog 高度时整体滚动 */}
         <div className="flex flex-col gap-[16px] items-start p-[28px] overflow-y-auto min-h-0">
-        {/* Header */}
+        {/* Header — Figma 29828:19534:dot + 标题 + pause-l2 / settings-l 18px icon */}
         <div className="shrink-0 flex flex-col gap-[4px] items-start w-full">
           <div className="flex items-center gap-[8px] w-full">
             <StatusDot size={14} />
             <p className="font-['Delight',sans-serif] leading-[30px] text-[20px] text-[rgba(0,0,0,0.9)] tracking-[0.2px] whitespace-nowrap">
               {feedName}
             </p>
+            <button
+              type="button"
+              aria-label="Pause feed"
+              className="size-[18px] shrink-0 flex items-center justify-center cursor-pointer bg-transparent border-none outline-none p-0 hover:opacity-70 transition-opacity"
+            >
+              <CdnIcon name="pause-l2" size={18} color="var(--text-n9, rgba(0,0,0,0.9))" />
+            </button>
+            <button
+              type="button"
+              aria-label="Feed settings"
+              onClick={onManage}
+              className="size-[18px] shrink-0 flex items-center justify-center cursor-pointer bg-transparent border-none outline-none p-0 hover:opacity-70 transition-opacity"
+            >
+              <CdnIcon name="settings-l" size={18} color="var(--text-n9, rgba(0,0,0,0.9))" />
+            </button>
           </div>
-          <div className="flex gap-[8px] items-center w-full whitespace-nowrap">
-            <div className="flex gap-[8px] items-start font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-              <p>Last Run: {lastRun}</p>
-              <p style={{ color: 'var(--text-n2)' }}>|</p>
-              <p>{runEvery}</p>
-              <p style={{ color: 'var(--text-n2)' }}>|</p>
-              <p>{totalRuns} Runs</p>
-            </div>
-            {onManage && (
-              <>
-                <div className="flex-1" />
-                <button
-                  type="button"
-                  onClick={onManage}
-                  className="flex items-center gap-[2px] cursor-pointer bg-transparent border-none outline-none p-0 hover:opacity-70 transition-opacity"
-                >
-                  <span className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-                    Manage feed
-                  </span>
-                  <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
-                </button>
-              </>
-            )}
+          <div className="flex gap-[8px] items-center w-full whitespace-nowrap font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
+            <p>Last Run: {lastRun}</p>
+            <p style={{ color: 'var(--text-n2)' }}>|</p>
+            <p>{runEvery}</p>
           </div>
         </div>
 
-        {/* Latest Alerts — 点开来源的推送完整内容；超长（如 agent 推送）折叠到 280px，箭头展开收起 */}
-        {alerts && alerts.length > 0 && (
-          <div
-            ref={alertRef}
-            className={`shrink-0 relative flex flex-col gap-[8px] items-start w-full rounded-[8px] px-[16px] py-[12px] overflow-hidden ${alertOverflows ? 'pb-[31px]' : ''}`}
-            style={{
-              background: 'var(--grey-g01, #fafafa)',
-              maxHeight: alertExpanded ? (alertRef.current?.scrollHeight ?? 9999) : 280,
-              transition: 'max-height 0.3s ease-out',
-            }}
-          >
-            <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[var(--text-n5)] tracking-[0.12px] w-full">
-              Latest Alert
-            </p>
-            {alerts.map((a, i) => (
-              <div key={a.id} className="flex flex-col gap-[8px] w-full">
-                {i > 0 && <div className="h-px w-full" style={{ background: 'var(--line-l07, rgba(0,0,0,0.07))' }} />}
-                <PushContent a={a} />
-              </div>
-            ))}
-            {alertOverflows && (
-              <div className="absolute bottom-0 left-0 right-0 flex flex-col items-stretch">
-                {!alertExpanded && (
-                  <div className="h-[32px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(250,250,250,0), #fafafa)' }} />
-                )}
-                <button
-                  type="button"
-                  onClick={() => setAlertExpanded(prev => !prev)}
-                  className="w-full flex items-start justify-center h-[19px] cursor-pointer border-none outline-none p-0"
-                  style={{ background: 'var(--grey-g01, #fafafa)' }}
-                >
-                  <div
-                    className="transition-transform duration-200 ease-out"
-                    style={{ transform: alertExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                  >
-                    <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2, rgba(0,0,0,0.2))" />
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Description — grey block, collapsed 280px / expanded full height with animation */}
+        {/* Tab — Figma 30585:66256:gap 16 / pb 6,active Medium + b-2 m1 */}
         <div
-          ref={descRef}
-          className={`shrink-0 relative flex flex-col gap-[8px] items-start w-full rounded-[8px] px-[16px] py-[12px] overflow-hidden ${descOverflows ? 'pb-[31px]' : ''}`}
-          style={{
-            background: '#fafafa',
-            maxHeight: descExpanded ? (descRef.current?.scrollHeight ?? 9999) : 280,
-            transition: 'max-height 0.3s ease-out',
-          }}
+          className="shrink-0 flex gap-[16px] items-end w-full"
+          style={{ borderBottom: '1px solid var(--line-l07)' }}
         >
-          <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] w-full">
-            What This Feed Does
-          </p>
-          {/* Markdown/M — split paragraphs on blank lines, render **bold** as headings */}
-          {description.split('\n\n').map((block, i) => {
-            const boldMatch = block.match(/^\*\*(.+?)\*\*\n?([\s\S]*)$/);
-            if (boldMatch) {
-              return (
-                <div key={i} className="flex flex-col gap-[4px] w-full">
-                  <p className="font-['Delight',sans-serif] font-medium leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
-                    {boldMatch[1]}
-                  </p>
-                  {boldMatch[2] && (
-                    <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
-                      {boldMatch[2]}
-                    </p>
-                  )}
-                </div>
-              );
-            }
+          {(['overview', 'runs'] as const).map((tab) => {
+            const active = activeTab === tab;
             return (
-              <p key={i} className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
-                {block}
-              </p>
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className="border-0 bg-transparent cursor-pointer p-0 pb-[6px]"
+                style={{
+                  borderBottom: active ? '2px solid var(--main-m1, #49A3A6)' : '2px solid transparent',
+                  marginBottom: '-1px',
+                }}
+              >
+                <span className="font-['Delight',sans-serif] leading-[22px] text-[14px] tracking-[0.14px]" style={{ color: active ? 'var(--text-n9, rgba(0,0,0,0.9))' : 'var(--text-n7, rgba(0,0,0,0.7))', fontWeight: active ? 500 : 400 }}>
+                  {tab === 'overview' ? 'Overview' : 'Runs'}
+                </span>
+              </button>
             );
           })}
-          {/* Expand / Collapse — 渐变遮罩 + 箭头按钮 */}
-          {descOverflows && (
-            <div className="absolute bottom-0 left-0 right-0 flex flex-col items-stretch">
-              {!descExpanded && (
-                <div className="h-[32px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(250,250,250,0), #fafafa)' }} />
-              )}
-              <button
-                type="button"
-                onClick={() => setDescExpanded(prev => !prev)}
-                className="w-full flex items-start justify-center h-[19px] cursor-pointer border-none outline-none p-0"
-                style={{ background: '#fafafa' }}
+        </div>
+
+        {activeTab === 'overview' ? (
+          <>
+            <div className="shrink-0 flex flex-col gap-[12px] items-start w-full">
+              <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] w-full">
+                What This Feed Does
+              </p>
+              {/* Description — grey block, collapsed 280px / expanded full height with animation */}
+              <div
+                ref={descRef}
+                className={`shrink-0 relative flex flex-col gap-[8px] items-start w-full rounded-[8px] px-[16px] py-[12px] overflow-hidden ${descOverflows ? 'pb-[31px]' : ''}`}
+                style={{
+                  background: '#fafafa',
+                  maxHeight: descExpanded ? (descRef.current?.scrollHeight ?? 9999) : 280,
+                  transition: 'max-height 0.3s ease-out',
+                }}
               >
-                <div
-                  className="transition-transform duration-200 ease-out"
-                  style={{ transform: descExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                >
-                  <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
-                </div>
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Stats (3 cards) */}
-        <div className="shrink-0 flex gap-[16px] items-center w-full">
-          <StatCard label={stats.totalLabel} value={stats.totalValue} />
-          <StatCard label="Success" value={stats.successCount} valueColor="var(--main-m3)" />
-          <StatCard label="Failed" value={stats.failedCount} valueColor="#e6a91a" />
-        </div>
-
-        {/* Run History */}
-        <div className="shrink-0 flex flex-col items-start w-full">
-          {/* 表头 */}
-          <div
-            className="flex gap-[8px] items-center pb-[10px] w-full"
-            style={{ borderBottom: '1px solid var(--line-l07)' }}
-          >
-            <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-              Recent 10 Runs
-            </p>
-            <div className="size-[12px] opacity-0 shrink-0" />
-          </div>
-          {/* 行 */}
-          <div className="flex flex-col w-full">
-            {history.map((run) => {
-              const expandable = !!run.log;
-              const expanded = expandable && expandedId === run.id;
-              const toggle = () => {
-                if (!expandable) return;
-                setExpandedId(prev => prev === run.id ? null : run.id);
-              };
-              return (
-                <div
-                  key={run.id}
-                  className="flex flex-col w-full"
-                  style={{ borderBottom: '1px solid var(--line-l07)' }}
-                >
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    aria-expanded={expanded}
-                    onClick={toggle}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
-                    className="flex gap-[12px] items-center py-[10px] w-full cursor-pointer"
-                  >
-                    <div
-                      className="size-[12px] shrink-0 flex items-center justify-center transition-transform duration-200 ease-out"
-                      style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                {/* Markdown/M — split paragraphs on blank lines, render **bold** as headings */}
+                {description.split('\n\n').map((block, i) => {
+                  const boldMatch = block.match(/^\*\*(.+?)\*\*\n?([\s\S]*)$/);
+                  if (boldMatch) {
+                    return (
+                      <div key={i} className="flex flex-col gap-[4px] w-full">
+                        <p className="font-['Delight',sans-serif] font-medium leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
+                          {boldMatch[1]}
+                        </p>
+                        {boldMatch[2] && (
+                          <p className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
+                            {boldMatch[2]}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  }
+                  return (
+                    <p key={i} className="font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px] w-full">
+                      {block}
+                    </p>
+                  );
+                })}
+                {/* Expand / Collapse — 渐变遮罩 + 箭头按钮 */}
+                {descOverflows && (
+                  <div className="absolute bottom-0 left-0 right-0 flex flex-col items-stretch">
+                    {!descExpanded && (
+                      <div className="h-[32px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(250,250,250,0), #fafafa)' }} />
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setDescExpanded(prev => !prev)}
+                      className="w-full flex items-start justify-center h-[19px] cursor-pointer border-none outline-none p-0"
+                      style={{ background: '#fafafa' }}
                     >
-                      <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
-                    </div>
-                    <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px]">
-                      {run.id}
-                    </p>
-                    <p className="w-[120px] font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px]">
-                      {run.duration}
-                    </p>
-                    <p className="w-[120px] font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
-                      {run.timestamp}
-                    </p>
-                    {/* 状态图标 — check-f2 成功 / alert-f2 失败 */}
-                    <div className="size-[16px] shrink-0 flex items-center justify-center">
-                      {run.status === 'failed' ? (
-                        <CdnIcon name="alert-f2" size={16} color="#e6a91a" />
-                      ) : (
-                        <CdnIcon name="check-f2" size={16} color="var(--main-m3)" />
-                      )}
-                    </div>
+                      <div
+                        className="transition-transform duration-200 ease-out"
+                        style={{ transform: descExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                      >
+                        <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
+                      </div>
+                    </button>
                   </div>
-                  {/* 展开面板 — 用 grid-rows 做高度动画 */}
-                  {expandable && (
+                )}
+              </div>
+            </div>
+
+            {/* Recent Alerts — Figma 30585:66695:每条 alert 独立灰卡(p-16 gap-8 rounded-8) */}
+            {alerts && alerts.length > 0 && (
+              <div className="shrink-0 flex flex-col gap-[12px] items-start w-full">
+                <p className="font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] w-full">
+                  Recent Alerts
+                </p>
+                {alerts.map((a) => (
+                  <div
+                    key={a.id}
+                    className="shrink-0 flex flex-col gap-[8px] items-start w-full rounded-[8px] p-[16px] overflow-hidden"
+                    style={{ background: 'var(--grey-g01, #fafafa)' }}
+                  >
+                    <PushContent a={a} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {/* Stats — Figma 30585:66515:gap 16,Success m3 / Failed m5 */}
+            <div className="shrink-0 flex items-stretch gap-[16px] w-full">
+              <StatItem label={stats.totalLabel} value={stats.totalValue} />
+              <StatDivider />
+              <StatItem label="Success" value={stats.successCount} valueColor="var(--main-m3, #2a9b7d)" />
+              <StatDivider />
+              <StatItem label="Failed" value={stats.failedCount} valueColor="var(--main-m5, #e6a91a)" />
+            </div>
+
+            {/* Run History */}
+            <div className="shrink-0 flex flex-col items-start w-full">
+              {/* 表头 — Figma 30585:66528 */}
+              <div
+                className="flex gap-[8px] items-center pb-[10px] w-full"
+                style={{ borderBottom: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' }}
+              >
+                <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
+                  Recent 10 Runs
+                </p>
+              </div>
+              {/* 行 */}
+              <div className="flex flex-col w-full">
+                {history.map((run) => {
+                  const expandable = !!run.log;
+                  const expanded = expandable && expandedId === run.id;
+                  const toggle = () => {
+                    if (!expandable) return;
+                    setExpandedId(prev => prev === run.id ? null : run.id);
+                  };
+                  return (
                     <div
-                      className={`grid transition-[grid-template-rows] duration-300 ease-out ${expanded ? 'grid-rows-[1fr] pb-[10px]' : 'grid-rows-[0fr]'}`}
+                      key={run.id}
+                      className="flex flex-col w-full"
+                      style={{ borderBottom: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' }}
                     >
-                      <div className="min-h-0 overflow-hidden">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        aria-expanded={expanded}
+                        onClick={toggle}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+                        className="flex gap-[12px] items-center py-[10px] w-full cursor-pointer"
+                      >
                         <div
-                          className="rounded-[8px] p-[16px] w-full"
-                          style={{ background: 'var(--b-r02)' }}
+                          className="size-[12px] shrink-0 flex items-center justify-center transition-transform duration-200 ease-out"
+                          style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
                         >
-                          <pre
-                            className="font-mono text-[12px] leading-[20px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] whitespace-pre-wrap m-0"
-                            style={{ fontFamily: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" }}
-                          >
-                            {run.log}
-                          </pre>
+                          <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n5)" />
+                        </div>
+                        <p className="flex-1 min-w-0 font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px]">
+                          {run.id}
+                        </p>
+                        <p className="w-[120px] font-['Delight',sans-serif] leading-[22px] text-[14px] text-[rgba(0,0,0,0.9)] tracking-[0.14px]">
+                          {run.duration}
+                        </p>
+                        <p className="w-[120px] font-['Delight',sans-serif] leading-[20px] text-[12px] text-[rgba(0,0,0,0.5)] tracking-[0.12px]">
+                          {run.timestamp}
+                        </p>
+                        {/* 状态图标 — check-f2 成功 / alert-f2 失败 */}
+                        <div className="size-[16px] shrink-0 flex items-center justify-center">
+                          {run.status === 'failed' ? (
+                            <CdnIcon name="alert-f2" size={16} color="var(--main-m5, #e6a91a)" />
+                          ) : (
+                            <CdnIcon name="check-f2" size={16} color="var(--main-m3, #2a9b7d)" />
+                          )}
                         </div>
                       </div>
+                      {/* 展开面板 — 用 grid-rows 做高度动画 */}
+                      {expandable && (
+                        <div
+                          className={`grid transition-[grid-template-rows] duration-300 ease-out ${expanded ? 'grid-rows-[1fr] pb-[10px]' : 'grid-rows-[0fr]'}`}
+                        >
+                          <div className="min-h-0 overflow-hidden">
+                            <div
+                              className="rounded-[8px] p-[16px] w-full"
+                              style={{ background: 'var(--b-r02)' }}
+                            >
+                              <pre
+                                className="font-mono text-[12px] leading-[20px] text-[rgba(0,0,0,0.5)] tracking-[0.12px] whitespace-pre-wrap m-0"
+                                style={{ fontFamily: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" }}
+                              >
+                                {run.log}
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
         </div>
       </div>
     </div>,

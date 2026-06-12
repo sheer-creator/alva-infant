@@ -1,24 +1,9 @@
-import { useState, useRef, useCallback } from 'react';
 import type { Page } from '@/app/App';
 import { AppShell } from '@/app/components/shell/AppShell';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
-import { Avatar } from '@/app/components/shared/Avatar';
-import { ChatInput } from '@/app/components/shared/ChatInput';
-import { ChatMessages } from '@/app/components/chat/ChatMessages';
-import { ThreadSwitcherDropdown } from '@/app/components/shared/ThreadSwitcherDropdown';
-import { Dropdown } from '@/app/components/shared/Dropdown';
-import { CONVERSATIONS } from '@/lib/chat-config';
 import { AgentNewSession } from '@/app/components/agent/AgentNewSession';
-import { useAgentPlatforms } from '@/lib/agent-connected';
-import alvaLogo from '@/app/components/chat/logo-green-black.svg';
 
 const FONT = "font-['Delight',sans-serif]";
-
-/* ── Mock agent messages ── */
-export const INITIAL_AGENT_MESSAGE: { role: 'agent' | 'user'; text: string } = {
-  role: 'agent',
-  text: 'Hey! I\'m your Alva Agent, connected via Telegram. I\'m always-on and ready to help with market analysis, portfolio tracking, and playbook execution. What would you like to work on?',
-};
 
 /* ── Playbook feed preview (mock data; component wired but not yet mounted) ── */
 type FeedPreviewStatus = 'pushed' | 'skipped';
@@ -234,167 +219,12 @@ export function PlaybookFeedPreview({
   );
 }
 
-/* ── Connected chat UI (supports agent view + inline thread view) ── */
-function AgentChat({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const [activeView, setActiveView] = useState<'__agent__' | string>('__agent__');
-  const [messages, setMessages] = useState([INITIAL_AGENT_MESSAGE]);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const isAgent = activeView === '__agent__';
-  const threadTitle = !isAgent ? (CONVERSATIONS.find(c => c.id === activeView)?.label ?? 'New Chat') : '';
-  const hasThreadContent = !isAgent && activeView !== 'new' && CONVERSATIONS.some(c => c.id === activeView);
-
-  const handleSwitcherSelect = useCallback((id: string) => {
-    setActiveView(id);
-  }, []);
-
-  const handleSend = useCallback((text: string) => {
-    setMessages(prev => [...prev, { role: 'user', text }]);
-    setTimeout(() => {
-      setMessages(prev => [
-        ...prev,
-        { role: 'agent', text: `I'll look into "${text}" right away. I've also logged this as a new chat in your history for reference.` },
-      ]);
-      setTimeout(() => {
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-      }, 50);
-    }, 1200);
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-    }, 50);
-  }, []);
-
-  return (
-    <div className="flex flex-col h-full bg-white">
-      {/* Topbar */}
-      <div className="flex items-center gap-[16px] h-[56px] px-[28px] shrink-0">
-        <div className="flex-1 min-w-0">
-          <ThreadSwitcherDropdown
-            activeId={activeView}
-            onSelect={handleSwitcherSelect}
-            trigger={
-              isAgent ? (
-                <div className="flex items-center gap-[8px] min-w-0 cursor-pointer">
-                  <div className="relative shrink-0">
-                    <img src={`${import.meta.env.BASE_URL}logo-portrait.svg`} alt="Alva Agent" className="rounded-full" style={{ width: 24, height: 24 }} />
-                    <div
-                      className="absolute -bottom-[1px] right-[-3px] size-[10px] rounded-full border-[1.5px] border-white"
-                      style={{ background: 'var(--main-m1, #49A3A6)' }}
-                    />
-                  </div>
-                  <div className="flex gap-[4px] items-center min-w-0">
-                    <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate`}>
-                      Alva Agent
-                    </p>
-                    <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
-                  </div>
-                </div>
-              ) : (
-                <div className="flex gap-[4px] items-center min-w-0 cursor-pointer">
-                  <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] truncate`}>
-                    {threadTitle}
-                  </p>
-                  <CdnIcon name="arrow-down-f2" size={14} color="var(--text-n2)" />
-                </div>
-              )
-            }
-          />
-        </div>
-        <div className="flex items-center gap-[16px] shrink-0">
-          <button className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity" onClick={() => onNavigate('thread/new' as Page)}>
-            <CdnIcon name="chat-new-l" size={16} />
-          </button>
-          {isAgent ? (
-            <button
-              type="button"
-              className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
-              onClick={() => onNavigate('alva-agent')}
-              aria-label="Agent settings"
-              title="Agent settings"
-            >
-              <CdnIcon name="settings-l" size={16} />
-            </button>
-          ) : (
-            <Dropdown
-              items={[{ id: 'rename', label: 'Rename', icon: 'edit-l1' }, { id: 'delete', label: 'Delete', icon: 'delete-l' }]}
-              onSelect={() => {}}
-              width={180}
-              align="right"
-              trigger={
-                <div className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity">
-                  <CdnIcon name="more-l1" size={16} />
-                </div>
-              }
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center min-h-0 overflow-hidden">
-        <div className="flex flex-col flex-1 min-h-0 w-full" style={{ maxWidth: 896 }}>
-          {isAgent ? (
-            <>
-              <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-[28px] pb-[120px]">
-                <div className="flex flex-col flex-1 gap-[16px] items-start min-h-0 w-full pt-[16px]">
-                  {messages.map((msg, i) =>
-                    msg.role === 'user' ? (
-                      <div key={i} className="flex flex-col items-end w-full">
-                        <div className="max-w-[560px] px-[16px] py-[12px]" style={{ background: 'var(--main-m1-10)', borderRadius: 8 }}>
-                          <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)]`}>
-                            {msg.text}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div key={i} className="flex flex-col gap-[16px] items-start w-full">
-                        <img src={alvaLogo} alt="Alva" style={{ height: 12, width: 47 }} />
-                        <p className={`${FONT} text-[14px] leading-[22px] tracking-[0.14px] text-[var(--text-n9)] w-full`}>
-                          {msg.text}
-                        </p>
-                      </div>
-                    ),
-                  )}
-                </div>
-              </div>
-              <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow allowReferences={false} onSend={handleSend} placeholder="Message your Alva Agent..." />
-              </div>
-            </>
-          ) : hasThreadContent ? (
-            <>
-              <div className="flex-1 min-h-0 overflow-y-auto px-[28px] pb-[120px]">
-                <ChatMessages conversationId={activeView} />
-              </div>
-              <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow allowReferences={false} />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex-1 flex min-h-0">
-                <ChatMessages conversationId="new" />
-              </div>
-              <div className="px-[28px] pb-[24px] shrink-0">
-                <ChatInput shadow allowReferences={false} />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Main Agent page ── */
 export default function Agent({ onNavigate }: { onNavigate: (page: Page) => void }) {
-  const { platforms } = useAgentPlatforms();
-  const connected = platforms.length > 0;
-
   return (
     <AppShell activePage="agent" onNavigate={onNavigate}>
       <div className="h-screen flex flex-col bg-white">
-        {connected ? <AgentChat onNavigate={onNavigate} /> : <AgentNewSession onNavigate={onNavigate} />}
+        <AgentNewSession onNavigate={onNavigate} />
       </div>
     </AppShell>
   );

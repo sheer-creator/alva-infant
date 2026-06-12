@@ -1,12 +1,20 @@
 /**
  * [INPUT]: ticker symbol + size
- * [OUTPUT]: 真实标的 logo —— 股票走 financialmodelingprep，加密走 coincap，
- *           失败回落到字母 Avatar（与卡片其它位置一致）
+ * [OUTPUT]: 真实标的 logo —— 优先本地设计稿资源，其次股票走 financialmodelingprep，
+ *           加密走 coincap，失败回落到字母 Avatar（与卡片其它位置一致）
  * [POS]: Component — push 卡 trade 行 / 任何需要标的 logo 的位置
  */
 
 import { useState } from 'react';
 import { Avatar } from './Avatar';
+
+// 设计稿同款品牌 logo（Figma Alva-Library 导出，public/ 下静态资源）
+const LOCAL_LOGOS: Record<string, string> = {
+  AAPL: `${import.meta.env.BASE_URL}logo-stock-aapl.svg`,
+  NVDA: `${import.meta.env.BASE_URL}logo-stock-nvda.png`,
+  TSLA: `${import.meta.env.BASE_URL}logo-stock-tsla.svg`,
+  RKLB: `${import.meta.env.BASE_URL}logo-stock-rklb.svg`,
+};
 
 const CRYPTO_TICKERS = new Set([
   'BTC', 'ETH', 'SOL', 'PEPE', 'ARB', 'OP', 'AVAX', 'BNB', 'USDT', 'USDC', 'XRP', 'DOGE',
@@ -21,7 +29,9 @@ export function TickerLogo({ ticker, size = 20 }: { ticker: string; size?: numbe
   const [errored, setErrored] = useState(false);
   let src: string | null = null;
   if (!errored && !SKIP_LOGO.has(ticker)) {
-    if (CRYPTO_TICKERS.has(ticker)) {
+    if (LOCAL_LOGOS[ticker]) {
+      src = LOCAL_LOGOS[ticker];
+    } else if (CRYPTO_TICKERS.has(ticker)) {
       src = `https://assets.coincap.io/assets/icons/${ticker.toLowerCase()}@2x.png`;
     } else {
       src = `https://financialmodelingprep.com/image-stock/${ticker}.png`;

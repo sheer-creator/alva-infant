@@ -252,7 +252,6 @@ export default function Automations({ onNavigate }: { onNavigate: (page: Page) =
         description={activeFeed?.description ?? DEFAULT_DESCRIPTION}
         lastRun={activeFeed?.lastRun ?? ''}
         runEvery={activeFeed?.runEvery ?? ''}
-        totalRuns={Number((activeFeed?.totalRuns ?? '0').replace(/,/g, ''))}
       />
     </SettingsLayout>
   );

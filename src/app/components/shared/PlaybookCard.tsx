@@ -65,8 +65,7 @@ export function PlaybookCard({
         flexDirection: 'column',
         position: 'relative',
         boxShadow: hovered ? 'var(--shadow-l, 0 10px 20px 0 rgba(0,0,0,0.08))' : 'none',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'box-shadow 130ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1)',
+        transition: 'box-shadow 130ms cubic-bezier(0.2, 0, 0, 1)',
       }}
     >
       {/* Cover */}
