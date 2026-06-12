@@ -192,17 +192,17 @@ function parseMarkdown(src: string): MemoryBlock[] {
 /* ========== md 块渲染(Figma Markdown/M:H1 18/28 H2 16/26 H3 14/22 Medium / 正文 14/22 / bullet 20px 位宽) ========== */
 
 function MdBlock({ block }: { block: MemoryBlock }) {
-  if (block.type === 'h1' || block.type === 'h2' || block.type === 'h3') {
+  if (block.type !== 'bullets') {
+    if (block.type === 'p') {
+      return (
+        <p className="w-full text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+          {block.text}
+        </p>
+      );
+    }
     const size = block.type === 'h1' ? 'pt-[2px] text-[18px] leading-[28px] tracking-[0.18px]' : block.type === 'h2' ? 'pt-[2px] text-[16px] leading-[26px] tracking-[0.16px]' : 'text-[14px] leading-[22px] tracking-[0.14px]';
     return (
       <p className={`w-full font-medium ${size}`} style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-        {block.text}
-      </p>
-    );
-  }
-  if (block.type === 'p') {
-    return (
-      <p className="w-full text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
         {block.text}
       </p>
     );
