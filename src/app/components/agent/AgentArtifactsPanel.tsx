@@ -49,9 +49,19 @@ function ArtifactRow({ artifact }: { artifact: AgentArtifact }) {
         <CdnIcon name={artifact.kind === 'image' ? 'photo-l' : 'clip-l'} size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
-        <p className="w-full truncate text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-          {artifact.name}
-        </p>
+        {/* 文件名行 — Figma 7975:136943:gap 4 / 名称 flex-1 truncate,右侧 download-l 16 */}
+        <div className="flex w-full items-center gap-[4px]">
+          <p className="min-w-0 flex-1 truncate text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+            {artifact.name}
+          </p>
+          <button
+            type="button"
+            aria-label={`Download ${artifact.name}`}
+            className="flex size-[16px] shrink-0 cursor-pointer items-center justify-center border-none bg-transparent p-0"
+          >
+            <CdnIcon name="download-l" size={16} color="var(--text-n7, rgba(0,0,0,0.7))" />
+          </button>
+        </div>
         <p className="w-full truncate text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
           {artifact.detail}
         </p>
