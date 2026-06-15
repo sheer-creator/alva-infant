@@ -22,7 +22,7 @@ export interface AgentArtifact {
 export const AGENT_ARTIFACTS: AgentArtifact[] = [
   {
     id: 'a1',
-    name: 'Type=Logo Horizontal, Color=Black + Green.png',
+    name: 'logo-horizontal-color-black-green.png',
     detail: 'Generated from your Theme Tracker run · 2.4 MB',
     kind: 'image',
   },
@@ -41,8 +41,9 @@ export const AGENT_ARTIFACTS: AgentArtifact[] = [
 ];
 
 function ArtifactRow({ artifact }: { artifact: AgentArtifact }) {
+  /* 卡片 — Figma 7930:185482:border 0.5 l2 / 圆角 8 / p-20 / gap 10 */
   return (
-    <div className="flex w-full items-start gap-[8px] py-[16px]" style={{ borderBottom: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' }}>
+    <div className="flex w-full items-start gap-[10px] rounded-[8px] p-[20px]" style={{ border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}>
       {/* Icon — Figma 7919:176487:28px 方容器 br03 圆角 2,内嵌 16px icon */}
       <div className="flex size-[28px] shrink-0 items-center justify-center rounded-[2px]" style={{ background: 'var(--b-r03, rgba(0,0,0,0.03))' }}>
         <CdnIcon name={artifact.kind === 'image' ? 'photo-l' : 'clip-l'} size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
@@ -73,8 +74,8 @@ export function AgentArtifactsPanel() {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto p-[28px]">
-      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[8px]">
-        {/* 过滤 pills — 同 Tasks tab 口径:h-28 px-10 py-4 rounded-full,active 深底白字;与列表为兄弟组,继承父级 gap-8 */}
+      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[16px]">
+        {/* 过滤 pills — 同 Tasks tab 口径:h-28 px-10 py-4 rounded-full,active 深底白字;与卡片为兄弟组,继承父级 gap-16 */}
         <div className="flex flex-wrap gap-[8px]">
           {FILTERS.map((f) => {
             const active = filter === f.id;
@@ -94,11 +95,9 @@ export function AgentArtifactsPanel() {
             );
           })}
         </div>
-        <div className="flex w-full flex-col">
-          {artifacts.map((a) => (
-            <ArtifactRow key={a.id} artifact={a} />
-          ))}
-        </div>
+        {artifacts.map((a) => (
+          <ArtifactRow key={a.id} artifact={a} />
+        ))}
       </div>
     </div>
   );

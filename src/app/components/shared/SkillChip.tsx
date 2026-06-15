@@ -29,6 +29,7 @@ export const SkillChip = forwardRef<HTMLButtonElement, SkillChipProps>(function 
       style={{
         fontFamily: "'Delight', sans-serif",
         fontSize: 14,
+        fontWeight: 400,
         lineHeight: '22px',
         letterSpacing: 0.14,
         whiteSpace: 'nowrap',

@@ -278,31 +278,35 @@ export function AgentMemory() {
             <p className="min-w-0 flex-1 text-[20px] leading-[30px] tracking-[0.2px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
               {active.name}
             </p>
-            <p className="whitespace-nowrap text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-              Last Updated: {active.lastUpdated}
-            </p>
             {editing ? (
+              /* 编辑态:仅保留实心 Save 按钮,隐藏 Last Updated 与删除(Figma 7930:185393)*/
               <button
-                className="flex cursor-pointer items-center gap-[4px] border-none bg-transparent p-0"
+                className="flex shrink-0 cursor-pointer items-center justify-center gap-[4px] rounded-[4px] border-none px-[12px] py-[4px]"
+                style={{ background: 'var(--main-m1, #49A3A6)' }}
                 onClick={save}
               >
-                <CdnIcon name="check-l2" size={16} color="var(--main-m1, #49A3A6)" />
-                <span className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--main-m1, #49A3A6)' }}>
+                <CdnIcon name="check-f2" size={12} color="#fff" />
+                <span className="text-[12px] font-medium leading-[20px] tracking-[0.12px] text-white" style={{ fontFamily: FONT }}>
                   Save
                 </span>
               </button>
             ) : (
-              <button
-                className="flex size-[16px] cursor-pointer items-center justify-center border-none bg-transparent p-0"
-                aria-label="Edit memory"
-                onClick={() => setDraft(activeContent)}
-              >
-                <CdnIcon name="edit-l1" size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
-              </button>
+              <>
+                <p className="whitespace-nowrap text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
+                  Last Updated: {active.lastUpdated}
+                </p>
+                <button
+                  className="flex size-[16px] cursor-pointer items-center justify-center border-none bg-transparent p-0"
+                  aria-label="Edit memory"
+                  onClick={() => setDraft(activeContent)}
+                >
+                  <CdnIcon name="edit-l1" size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
+                </button>
+                <button className="flex size-[16px] cursor-pointer items-center justify-center border-none bg-transparent p-0" aria-label="Delete memory">
+                  <CdnIcon name="delete-l" size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
+                </button>
+              </>
             )}
-            <button className="flex size-[16px] cursor-pointer items-center justify-center border-none bg-transparent p-0" aria-label="Delete memory">
-              <CdnIcon name="delete-l" size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
-            </button>
           </div>
 
           {editing ? (
