@@ -9,9 +9,10 @@ import type { Page } from '@/app/App';
 import { AutomationPopoverDemo } from '@/app/components/demo/AutomationPopoverDemo';
 import { AutomationDetailModalDemo } from '@/app/components/demo/AutomationDetailModalDemo';
 import { AgentChannelNewUserDemo } from '@/app/components/demo/AgentChannelNewUserDemo';
+import { PortfolioWatchlistAgentDemo } from '@/app/components/demo/PortfolioWatchlistAgentDemo';
 import { DEMO_AUTHORS } from '@/data/demo-authors.generated';
 
-type DemoSlug = 'automation-popover' | 'automation-detail-modal' | 'agent-channel-new-user';
+type DemoSlug = 'automation-popover' | 'automation-detail-modal' | 'agent-channel-new-user' | 'portfolio-watchlist-agent';
 
 interface DemoProps {
   onNavigate: (page: Page) => void;
@@ -27,6 +28,13 @@ interface DemoEntry {
 }
 
 const DEMOS: DemoEntry[] = [
+  {
+    slug: 'portfolio-watchlist-agent',
+    name: 'Portfolio / Watchlist — Agent Onboarding',
+    status: 'Draft',
+    summary: 'New-user first open of the Watchlist + Portfolio digest channel — preset baskets, ticker candidates, covered tray, and Generate digest, modeled on the FinTwit digest onboarding.',
+    author: DEMO_AUTHORS['portfolio-watchlist-agent'] ?? 'sheer-creator',
+  },
   {
     slug: 'agent-channel-new-user',
     name: 'Agent Channel — New User First Open',
@@ -223,7 +231,9 @@ export default function Demo({ onNavigate, demoId }: DemoProps) {
   return (
     <div className="min-h-screen bg-white">
       <main className="mx-auto flex min-h-screen w-full max-w-[1024px] flex-col px-[20px] py-[28px] sm:px-[40px] sm:py-[40px]">
-        {activeDemo?.slug === 'automation-popover' ? (
+        {activeDemo?.slug === 'portfolio-watchlist-agent' ? (
+          <PortfolioWatchlistAgentDemo />
+        ) : activeDemo?.slug === 'automation-popover' ? (
           <AutomationPopoverDemo />
         ) : activeDemo?.slug === 'automation-detail-modal' ? (
           <AutomationDetailModalDemo />

@@ -8,6 +8,7 @@ import type { Page } from '@/app/App';
 import { Avatar } from '@/app/components/shared/Avatar';
 import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { PLAYBOOK_NAV_ITEMS } from '@/data/playbooks';
+import type { ReactNode } from 'react';
 
 /* ========== 类型 ========== */
 
@@ -25,17 +26,40 @@ export const SIDEBAR_W_COLLAPSED = 56;
 
 /* ========== 导航项组件 ========== */
 
-function NavItem({ label, icon, avatarName, badge, active, deprecated, collapsed, channelAccent, onClick }: { label: string; icon?: string; avatarName?: string; badge?: string | number; active?: boolean; deprecated?: boolean; collapsed?: boolean; channelAccent?: boolean; onClick?: () => void }) {
+const ICON_CDN = 'https://alva-ai-static.b-cdn.net/icons';
+const FINTWIT_GRADIENT = 'linear-gradient(90deg, #6BDBD5 0%, #8FAFFF 42%, #C092F6 74%, #F5C579 100%)';
+
+function GradientCdnIcon({ name, size = 16 }: { name: string; size?: number }) {
+  const url = `${ICON_CDN}/${name}.svg`;
+  return (
+    <span
+      aria-hidden
+      className="block shrink-0"
+      style={{
+        width: size,
+        height: size,
+        backgroundImage: FINTWIT_GRADIENT,
+        WebkitMaskImage: `url(${url})`,
+        WebkitMaskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskImage: `url(${url})`,
+        maskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        maskPosition: 'center',
+      }}
+    />
+  );
+}
+
+function NavItem({ label, icon, iconNode, avatarName, badge, active, deprecated, collapsed, gradient, onClick }: { label: string; icon?: string; iconNode?: ReactNode; avatarName?: string; badge?: string | number; active?: boolean; deprecated?: boolean; collapsed?: boolean; gradient?: boolean; onClick?: () => void }) {
   const interactive = Boolean(onClick);
-  // channelAccent：Alva Agent 频道款 — 青色图标 + 青色 active/hover 底（参考 Baby）
-  const activeBg = channelAccent ? 'bg-[rgba(73,163,166,0.16)]' : 'bg-white/5';
-  const hoverBg = channelAccent ? 'hover:bg-[rgba(73,163,166,0.11)]' : 'hover:bg-white/5';
   const textClass = deprecated
     ? 'text-white/35'
     : active
-      ? `text-white ${activeBg}`
+      ? 'text-white bg-white/5'
       : interactive
-        ? `text-white ${hoverBg}`
+        ? 'text-white hover:bg-white/5'
         : 'text-white';
   // 仅选中态图标转绿(文字保持白);未选中为白
   const iconColor = deprecated ? 'rgba(255,255,255,0.35)' : active ? 'var(--main-m1, #49A3A6)' : '#ffffff';
@@ -49,14 +73,24 @@ function NavItem({ label, icon, avatarName, badge, active, deprecated, collapsed
         <div className="overflow-clip relative shrink-0 size-[16px] flex items-center justify-center">
           {avatarName ? (
             <Avatar name={avatarName} size={16} />
+          ) : icon && gradient ? (
+            <GradientCdnIcon name={icon} size={16} />
           ) : icon ? (
             <CdnIcon name={icon} size={16} color={iconColor} />
           ) : null}
         </div>
       )}
+      {iconNode && (
+        <div className="relative shrink-0 size-[16px] flex items-center justify-center">
+          {iconNode}
+        </div>
+      )}
       {!collapsed && (
         <>
-          <p className={`font-['Delight',sans-serif] leading-[22px] overflow-hidden relative text-[13px] text-ellipsis tracking-[0.13px] whitespace-nowrap ${badge != null ? 'shrink-0' : 'flex-[1_0_0] min-w-px'}`}>
+          <p
+            className={`font-['Delight',sans-serif] leading-[22px] overflow-hidden relative text-[13px] text-ellipsis tracking-[0.13px] whitespace-nowrap ${badge != null ? 'shrink-0' : 'flex-[1_0_0] min-w-px'} ${gradient ? 'text-transparent bg-clip-text' : ''}`}
+            style={gradient ? { backgroundImage: FINTWIT_GRADIENT } : undefined}
+          >
             {label}
           </p>
           {badge != null && (
@@ -75,15 +109,16 @@ function NavItem({ label, icon, avatarName, badge, active, deprecated, collapsed
   );
 }
 
-function SectionHeader({ label, collapsed }: { label: string; collapsed?: boolean }) {
+function SectionHeader({ label, collapsed, action }: { label: string; collapsed?: boolean; action?: ReactNode }) {
   if (collapsed) {
     return <div className="h-[12px] shrink-0 w-full" aria-hidden />;
   }
   return (
-    <div className="content-stretch flex gap-0 h-[36px] items-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-full">
-      <p className="font-['Delight',sans-serif] font-normal leading-[20px] opacity-50 overflow-hidden relative shrink-0 text-[12px] text-ellipsis text-white tracking-[0.12px] whitespace-nowrap">
+    <div className="content-stretch flex gap-[4px] h-[36px] items-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-full">
+      <p className="font-['Delight',sans-serif] font-normal leading-[20px] opacity-50 overflow-hidden relative flex-[1_0_0] min-w-px text-[12px] text-ellipsis text-white tracking-[0.12px] whitespace-nowrap">
         {label}
       </p>
+      {action && <div className="relative shrink-0 opacity-50">{action}</div>}
     </div>
   );
 }
@@ -91,23 +126,16 @@ function SectionHeader({ label, collapsed }: { label: string; collapsed?: boolea
 /* ========== Logo ========== */
 
 function Logo({ collapsed }: { collapsed?: boolean }) {
+  const base = import.meta.env.BASE_URL;
   return (
     <div className={`content-stretch flex items-center relative shrink-0 w-full z-[9] ${collapsed ? 'justify-center py-[12px]' : 'justify-between px-[8px] py-[12px]'}`}>
       {!collapsed && (
         <div className="h-[14px] relative shrink-0 w-[56px]">
-          <img src={`${import.meta.env.BASE_URL}logo-alva.svg`} alt="Alva" className="absolute inset-0 block size-full object-contain object-left" />
+          <img src={`${base}logo-alva.svg`} alt="Alva" className="absolute inset-0 block size-full object-contain object-left" />
         </div>
       )}
       {!collapsed && (
-        <a
-          href={`${import.meta.env.BASE_URL}#demo`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative shrink-0 cursor-pointer font-['Delight',sans-serif] text-[12px] leading-[16px] tracking-[0.12px] no-underline transition-colors hover:text-white"
-          style={{ color: 'rgba(255, 255, 255, 0.5)' }}
-        >
-          Demo
-        </a>
+        <CdnIcon name="sidebar-onoff" size={16} />
       )}
     </div>
   );
@@ -121,11 +149,9 @@ function NewPlaybookButton({ onClick, collapsed, label = 'New Chat' }: { active?
       <button
         onClick={onClick}
         title={collapsed ? label : undefined}
-        className={`bg-transparent border-[0.5px] border-[rgba(255,255,255,0.3)] border-solid content-stretch flex h-[32px] items-center justify-center overflow-clip relative rounded-[4px] shrink-0 w-full transition-colors cursor-pointer hover:bg-white/5 ${collapsed ? 'px-0' : 'gap-[6px] px-[16px] py-[6px]'}`}
+        className={`bg-transparent border-[0.5px] border-[rgba(255,255,255,0.3)] border-solid content-stretch flex h-[32px] items-center justify-center overflow-clip relative rounded-[4px] shrink-0 w-full transition-colors cursor-pointer hover:bg-white/5 ${collapsed ? 'px-0' : 'gap-[6px] px-[12px] py-[6px]'}`}
       >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-          <path d="M7 1.75V12.25M1.75 7H12.25" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
+        <CdnIcon name="add-l2" size={14} color="#ffffff" />
         {!collapsed && (
           <span className="font-['Delight',sans-serif] font-medium leading-[20px] text-[12px] text-white tracking-[0.12px] whitespace-nowrap">
             {label}
@@ -155,10 +181,18 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
 
       {/* 主导航 */}
       <div className="content-stretch flex flex-col gap-0 items-start py-[4px] relative shrink-0 w-full z-[7]">
-        <NavItem label="Alva Agent" icon="sidebar-agent-normal" channelAccent active={activePage === 'agent'} collapsed={collapsed} onClick={() => onNavigate('agent')} />
         <NavItem label="Explore" icon="sidebar-discover-normal" active={activePage === 'explore'} collapsed={collapsed} onClick={() => onNavigate('explore')} />
         <NavItem label="Portfolio" icon="sidebar-portfolio-normal" active={activePage === 'portfolio' || activePage === 'portfolio-settings'} collapsed={collapsed} onClick={() => onNavigate('portfolio')} />
         <NavItem label="Alva Skill" icon="sidebar-skills-normal" active={activePage === 'alva-skills'} collapsed={collapsed} onClick={() => onNavigate('alva-skills')} />
+        <NavItem label="FinTwit Alpha League" icon="smart-money-l" gradient collapsed={collapsed} />
+      </div>
+
+      {/* Channels */}
+      <div className="content-stretch flex flex-col gap-0 items-start py-[4px] relative shrink-0 w-full z-[6]">
+        <SectionHeader label="Channels" collapsed={collapsed} action={<CdnIcon name="add-l2" size={12} color="#ffffff" />} />
+        <NavItem label="Alva Agent" icon="sidebar-agent-normal" active={activePage === 'agent'} collapsed={collapsed} onClick={() => onNavigate('agent')} />
+        <NavItem label="Alva To The Moon" icon="sidebar-channel-normal" collapsed={collapsed} />
+        <NavItem label="Alva To The Mars" icon="sidebar-channel-normal" collapsed={collapsed} />
       </div>
 
       {/* Playbooks */}
@@ -179,8 +213,8 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
       {/* Chats */}
       <div className="content-stretch flex flex-col flex-[1_0_0] gap-0 items-start min-h-px py-[4px] relative w-full z-[4]">
         <SectionHeader label="Chats" collapsed={collapsed} />
-        <NavItem label="Crypto Price + AI Trend Pulse" icon="chat-l1" collapsed={collapsed} />
-        <NavItem label="Heartbeat Run Counter" icon="chat-l1" collapsed={collapsed} />
+        <NavItem label="Crypto Price + AI Trend Pulse" icon="sidebar-thread-normal" collapsed={collapsed} />
+        <NavItem label="Heartbeat Run Counter" icon="sidebar-thread-normal" collapsed={collapsed} />
       </div>
 
       {/* Upgrade to Pro card — sits above the user row */}
@@ -202,33 +236,28 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
               aria-hidden
               className="pointer-events-none absolute z-[1]"
               style={{
-                right: -46,
-                top: -46,
+                right: -46.5,
+                top: -47.5,
                 width: 93,
                 height: 93,
                 background: 'radial-gradient(circle, rgba(42,155,125,0.45) 0%, rgba(42,155,125,0) 70%)',
               }}
             />
-            <div className="relative z-[2] flex items-start gap-[8px]">
+            <span className="pointer-events-none absolute bottom-[7.5px] right-[7.5px] z-[1] flex size-[32px] items-center justify-center opacity-50">
+              <CdnIcon name="arrow-up-f1" size={32} color="var(--main-m3, #2A9B7D)" />
+            </span>
+            <div className="relative z-[2] flex min-w-0 flex-col items-start">
               <span
-                className="flex items-center justify-center shrink-0 rounded-[4px]"
-                style={{ width: 20, height: 20, background: 'rgba(42, 155, 125, 0.20)', marginTop: 4 }}
+                className="w-full font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px]"
+                style={{ color: '#fff' }}
               >
-                <CdnIcon name="arrow-up-f1" size={14} color="var(--main-m3, #2A9B7D)" />
+                Upgrade to Pro
               </span>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span
-                  className="font-['Delight',sans-serif] text-[12px] leading-[20px] tracking-[0.12px]"
-                  style={{ color: '#fff' }}
-                >
-                  Upgrade to Pro
-                </span>
-                <span
-                  className="font-['Delight',sans-serif] text-[10px] leading-[16px] tracking-[0.1px]"
-                  style={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                >
-                  Unlock unlimited playbooks with 7-day free trial
-                </span>
+              <span
+                className="w-full pr-[40px] font-['Delight',sans-serif] text-[10px] leading-[16px] tracking-[0.1px]"
+                style={{ color: 'rgba(255, 255, 255, 0.5)' }}
+              >
+                Unlock unlimited playbooks with 7-day free trial
               </span>
             </div>
           </button>

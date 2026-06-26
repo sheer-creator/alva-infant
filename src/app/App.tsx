@@ -3,12 +3,12 @@ import { ChatProvider } from './components/chat/ChatContext';
 import { CHAT_TRIGGER_MODE } from '@/lib/chat-config';
 
 const NON_ROUTED_PAGES = [
-  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys',
+  'account', 'billing', 'portfolio-settings', 'alva-agent', 'notifications', 'api-keys',
   'skills', 'docs', 'alva-chat-detail', 'referral-landing', 'playbook-referral',
 ] as const;
 
 const SETTINGS_PAGES = [
-  'account', 'billing', 'portfolio-settings', 'alva-agent', 'automations', 'notifications', 'api-keys',
+  'account', 'billing', 'portfolio-settings', 'alva-agent', 'notifications', 'api-keys',
 ] as const;
 
 const VALID_PAGES = [
@@ -30,7 +30,6 @@ const NewChat = lazy(() => import('../pages/NewChat'));
 const Account = lazy(() => import('../pages/Account'));
 const ApiKeys = lazy(() => import('../pages/ApiKeys'));
 const AlvaAgentSettings = lazy(() => import('../pages/AlvaAgentSettings'));
-const Automations = lazy(() => import('../pages/Automations'));
 const Billing = lazy(() => import('../pages/Billing'));
 const CreatorEarnings = lazy(() => import('../pages/CreatorEarnings'));
 const Explore = lazy(() => import('../pages/Explore'));
@@ -87,7 +86,6 @@ export default function App() {
         {page === 'account' && <Account onNavigate={navigate} />}
         {page === 'api-keys' && <ApiKeys onNavigate={navigate} />}
         {page === 'alva-agent' && <AlvaAgentSettings onNavigate={navigate} />}
-        {page === 'automations' && <Automations onNavigate={navigate} />}
         {page === 'billing' && <Billing onNavigate={navigate} />}
         {page === 'creator-earnings' && <CreatorEarnings onNavigate={navigate} />}
         {page === 'explore' && <Explore onNavigate={navigate} />}

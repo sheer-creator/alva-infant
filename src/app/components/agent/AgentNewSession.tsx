@@ -57,6 +57,7 @@ const P = {
   target: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /></>,
   bell: <><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" /><path d="M10.5 19a1.5 1.5 0 0 0 3 0" /></>,
   x: <path d="M7 7l10 10M17 7 7 17" />,
+  send: <><path d="M21 3 10.5 13.5" /><path d="M21 3 14.5 21l-4-7.5L3 9.5z" /></>,
 };
 
 /* ========== 数据(同 demo,语义不变)========== */
@@ -74,7 +75,7 @@ interface SkillData {
 
 const SKILLS: SkillData[] = [
   {
-    id: 'theme-tracker', label: 'Theme Tracker', icon: 'buld-l', kind: 'playbook',
+    id: 'theme-tracker', label: 'Theme Tracker', icon: 'bulb-l', kind: 'playbook',
     prompts: [
       'Build a theme tracker for AI infrastructure — NVDA, AVGO, TSM, and power-grid names',
       'Track the GLP-1 / obesity theme — LLY, NVO, and the supply chain around them',
@@ -314,6 +315,36 @@ const DEFAULT_PROMPTS = [
   'Watch nuclear-renaissance equities and flag any catalyst from the DOE / regulators',
 ];
 
+/* Onboard Card/Default — Figma 9428:49614:未连接态 3 条引导,点击直接发起对应 automation 流 */
+interface OnboardCard { id: string; emoji: string; title: string; desc: string; prompt: string; taskTitle: string }
+
+const ONBOARD_CARDS: OnboardCard[] = [
+  {
+    id: 'portfolio-digest',
+    emoji: '💼',
+    title: 'Set up your daily portfolio digest',
+    desc: 'Add your holdings so Alva can brief you on the moves, risks, and catalysts that matter to your positions.',
+    prompt: 'Set up my daily portfolio digest — brief me on the moves, risks, and catalysts across my holdings',
+    taskTitle: 'Automation: Daily Portfolio Digest',
+  },
+  {
+    id: 'market-watchlist',
+    emoji: '👀',
+    title: 'Build a market watchlist',
+    desc: 'Track the tickers you care about and get updates when price moves, news, or catalysts are worth attention.',
+    prompt: 'Build a market watchlist and update me when price, news, or catalysts are worth attention',
+    taskTitle: 'Automation: Market Watchlist',
+  },
+  {
+    id: 'fintwit-digest',
+    emoji: '📣',
+    title: 'Set up a daily FinTwit digest',
+    desc: 'Follow key market voices and get a daily summary of the posts, tickers, and themes moving the conversation.',
+    prompt: 'Set up a daily FinTwit digest — summarize the posts, tickers, and themes moving the conversation',
+    taskTitle: 'Automation: Daily FinTwit Digest',
+  },
+];
+
 interface ImEntry { id: string; label: string; logo: string; handle: string; sub: string }
 
 const IMS: ImEntry[] = [
@@ -388,7 +419,7 @@ function AgentMsg({ pushed, time = 'Thursday 7:22 PM', children }: { pushed?: bo
       {/* name 行与内容整体 gap 8;内容 div 内部(Markdown / widget 块之间)gap 12 */}
       <div className="flex min-w-0 flex-1 flex-col gap-[8px]">
         <div className="flex items-center gap-[8px]">
-          <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
+          <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
           {pushed && (
             <span
               className="rounded-[4px] px-[5px] text-[10px] leading-[16px] tracking-[0.3px]"
@@ -397,7 +428,7 @@ function AgentMsg({ pushed, time = 'Thursday 7:22 PM', children }: { pushed?: bo
               pushed
             </span>
           )}
-          <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{time}</p>
+          {time && <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{time}</p>}
         </div>
         <div className="flex min-w-0 w-full flex-col gap-[12px]">
           {children}
@@ -497,9 +528,9 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   const [openSkill, setOpenSkill] = useState<string | null>(null);
   const [subscribed, setSubscribed] = useState<Record<string, boolean>>({});
   const [extra, setExtra] = useState<ExtraMsg[]>([]);
-  const [imLinks, setImLinks] = useState<Record<string, boolean>>({ telegram: true });
+  const [imLinks, setImLinks] = useState<Record<string, boolean>>({});
   /* 谁接收 IM 推送 — 单 active channel,绑定/解绑随动(spec: 解绑 active 回退最早绑定) */
-  const [imActive, setImActive] = useState<string | null>('telegram');
+  const [imActive, setImActive] = useState<string | null>(null);
   /* 推送类卡片点击 → feed 详情弹窗(复用 NewChat / Automations 的 FeedDetailModal) */
   const [activeFeed, setActiveFeed] = useState<PushCardData | null>(null);
   const [imModalOpen, setImModalOpen] = useState(false);
@@ -520,6 +551,8 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   /* 选中的 skill 不在外露 chips 里(来自 More 浮层)→ More chip 走选中态 */
   const moreActive = !sel && !selKol && !!selPool;
   const activeIm = imActive ? IMS.find((i) => i.id === imActive) ?? null : null;
+  /* 未连接 IM = onboarding 态:无 tab、chat 显示引导卡片(Figma Onboard/Default) */
+  const connected = Object.values(imLinks).some(Boolean);
 
   const scrollToEnd = useCallback(() => {
     requestAnimationFrame(() => {
@@ -596,8 +629,11 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
-      {/* Agent Header — Figma 7885:108604 */}
-      <div className="flex shrink-0 items-center gap-[12px] px-[28px] py-[16px]">
+      {/* Agent Header — Figma 7885:108604;未连接(无 tab)时头部自带底分割线,连接后由 tab 栏提供 */}
+      <div
+        className="flex shrink-0 items-center gap-[12px] px-[28px] py-[16px]"
+        style={!connected ? { borderBottom: '1px solid var(--line-l07, rgba(0,0,0,0.07))' } : undefined}
+      >
         <AlvaPortrait />
         <div className="flex min-w-0 flex-1 flex-col">
           <p className="truncate text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
@@ -620,13 +656,14 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
           </button>
         ) : (
           <button
-            className="flex h-[32px] shrink-0 cursor-pointer items-center justify-center rounded-[4px] border-none px-[12px] py-[6px] transition-opacity hover:opacity-90"
+            className="flex h-[32px] shrink-0 cursor-pointer items-center justify-center gap-[6px] rounded-[4px] border-none px-[12px] py-[6px] transition-opacity hover:opacity-90"
             style={{ fontFamily: FONT, background: 'var(--main-m1, #49A3A6)' }}
             onClick={() => setImModalOpen(true)}
           >
             <span className="whitespace-nowrap text-[12px] font-medium leading-[20px] tracking-[0.12px] text-white">
-              Connect
+              Connect Your IM
             </span>
+            <span className="text-white"><Ic size={14}>{P.send}</Ic></span>
           </button>
         )}
         <button
@@ -639,7 +676,8 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
         </button>
       </div>
 
-      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1 */}
+      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1;未连接 IM(onboarding 态)不出 tab */}
+      {connected && (
       <div className="flex shrink-0 items-start gap-[16px] px-[28px]" style={{ borderBottom: '1px solid var(--line-l07, rgba(0,0,0,0.07))' }}>
         {TABS.map((t) => {
           const active = tab === t.id;
@@ -662,12 +700,15 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
           );
         })}
       </div>
+      )}
 
       {tab === 'chat' ? (
         <>
           <div ref={stageRef} className="min-h-0 flex-1 overflow-y-auto px-[28px]">
             <style>{MSG_IN_CSS}</style>
             <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[28px] pb-[60px] pt-[28px]">
+              {connected ? (
+              <>
               <MsgIn>
               <AgentMsg>
                 <div>
@@ -765,6 +806,38 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                 </div>
               </AgentMsg>
               </MsgIn>
+              </>
+              ) : (
+              <MsgIn>
+              <AgentMsg time="">
+                <div>
+                  <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Tell Alva what to watch</p>
+                  <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                    Start with your holdings, tickers, or FinTwit voices. Alva will send a daily brief on what moved and why.
+                  </p>
+                </div>
+                {/* Onboard Card/Default — Figma 9428:49614:3 行引导,行间分隔线,尾部箭头 */}
+                <div className="flex w-full flex-col overflow-hidden rounded-[8px]" style={{ border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}>
+                  {ONBOARD_CARDS.map((c, i, arr) => (
+                    <button
+                      key={c.id}
+                      className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent p-[16px] text-left transition-colors hover:bg-[var(--b-r02)]"
+                      style={{ border: 'none', borderBottom: i < arr.length - 1 ? '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' : 'none' }}
+                      onClick={() => respond(c.prompt, 'automation', c.taskTitle)}
+                    >
+                      <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
+                        <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                          <span className="mr-[8px]">{c.emoji}</span>{c.title}
+                        </p>
+                        <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{c.desc}</p>
+                      </div>
+                      <CdnIcon name="arrow-right-l1" size={14} color="var(--text-n5, rgba(0,0,0,0.5))" />
+                    </button>
+                  ))}
+                </div>
+              </AgentMsg>
+              </MsgIn>
+              )}
 
               {extra.map((m) => {
                 if (m.role === 'user') return <MsgIn key={m.id}><UserMsg text={m.text} /></MsgIn>;
