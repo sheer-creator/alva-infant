@@ -57,7 +57,6 @@ const P = {
   target: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /></>,
   bell: <><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" /><path d="M10.5 19a1.5 1.5 0 0 0 3 0" /></>,
   x: <path d="M7 7l10 10M17 7 7 17" />,
-  send: <><path d="M21 3 10.5 13.5" /><path d="M21 3 14.5 21l-4-7.5L3 9.5z" /></>,
 };
 
 /* ========== 数据(同 demo,语义不变)========== */
@@ -322,26 +321,26 @@ const ONBOARD_CARDS: OnboardCard[] = [
   {
     id: 'portfolio-digest',
     emoji: '💼',
-    title: 'Set up your daily portfolio digest',
-    desc: 'Add your holdings so Alva can brief you on the moves, risks, and catalysts that matter to your positions.',
-    prompt: 'Set up my daily portfolio digest — brief me on the moves, risks, and catalysts across my holdings',
-    taskTitle: 'Automation: Daily Portfolio Digest',
-  },
-  {
-    id: 'market-watchlist',
-    emoji: '👀',
-    title: 'Build a market watchlist',
-    desc: 'Track the tickers you care about and get updates when price moves, news, or catalysts are worth attention.',
-    prompt: 'Build a market watchlist and update me when price, news, or catalysts are worth attention',
-    taskTitle: 'Automation: Market Watchlist',
+    title: 'Watch your portfolio 24/7',
+    desc: "Tell me what you hold. I'll check it every hour and message you only when a move, risk, catalyst, or breaking story is worth your attention.",
+    prompt: "Watch my portfolio 24/7 — tell me what you hold and I'll flag the moves, risks, and catalysts worth your attention",
+    taskTitle: 'Automation: Portfolio Watch',
   },
   {
     id: 'fintwit-digest',
     emoji: '📣',
-    title: 'Set up a daily FinTwit digest',
-    desc: 'Follow key market voices and get a daily summary of the posts, tickers, and themes moving the conversation.',
-    prompt: 'Set up a daily FinTwit digest — summarize the posts, tickers, and themes moving the conversation',
-    taskTitle: 'Automation: Daily FinTwit Digest',
+    title: 'Track FinTwit for alpha signals',
+    desc: "I'll scan X posts, filter out the noise, and send you a daily digest on alpha signals, conviction shifts, and debates that matter.",
+    prompt: 'Track FinTwit for alpha signals — scan X, filter the noise, and send me a daily digest',
+    taskTitle: 'Automation: FinTwit Digest',
+  },
+  {
+    id: 'custom-automation',
+    emoji: '⚙️',
+    title: 'Build your own automations',
+    desc: "Describe any rule in plain English — a price trigger, a screener, a scheduled digest — and I'll run it for you and push every result here.",
+    prompt: 'Help me build my own automation — I want to describe a rule and have you run it on a schedule',
+    taskTitle: 'Automation: Custom',
   },
 ];
 
@@ -630,15 +629,12 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
       {/* Agent Header — Figma 7885:108604;未连接(无 tab)时头部自带底分割线,连接后由 tab 栏提供 */}
-      <div
-        className="flex shrink-0 items-center gap-[12px] px-[28px] py-[16px]"
-        style={!connected ? { borderBottom: '1px solid var(--line-l07, rgba(0,0,0,0.07))' } : undefined}
-      >
+      <div className="flex shrink-0 items-center gap-[12px] px-[28px] py-[16px]">
         <AlvaPortrait />
         <div className="flex min-w-0 flex-1 flex-col">
           <p className="truncate text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
           <p className="truncate text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-            Your always-on investing co-pilot — turn any idea into a live playbook.
+            Your AI investing agent. Ask me to research markets, build live Playbooks, or set up automations that watch the market for you.
           </p>
         </div>
         {/* IM Select — Figma 7887:111979:hug 宽 gap-4 px-12 py-6,尾部 6px 状态点;未连接态(7904:195614)为主色实心 Connect;点击都打开连接 modal */}
@@ -663,7 +659,12 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
             <span className="whitespace-nowrap text-[12px] font-medium leading-[20px] tracking-[0.12px] text-white">
               Connect Your IM
             </span>
-            <span className="text-white"><Ic size={14}>{P.send}</Ic></span>
+            {/* stacked IM logos — Figma 31041:15488/89/90:16px 圆形,白描边,-8px 叠压,telegram 在前 */}
+            <span className="flex shrink-0 items-center">
+              <img src={`${base}logo-social-telegram.svg`} alt="" className="relative z-[3] size-[16px] rounded-full border-[0.5px] border-white" />
+              <img src={`${base}logo-social-discord.svg`} alt="" className="relative z-[2] -ml-[8px] size-[16px] rounded-full border-[0.5px] border-white" />
+              <img src={`${base}logo-social-slack.svg`} alt="" className="relative z-[1] -ml-[8px] size-[16px] rounded-full border-[0.5px] border-white bg-white" />
+            </span>
           </button>
         )}
         <button
@@ -676,8 +677,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
         </button>
       </div>
 
-      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1;未连接 IM(onboarding 态)不出 tab */}
-      {connected && (
+      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1;未连接态也出 tab(Figma 9428:49606) */}
       <div className="flex shrink-0 items-start gap-[16px] px-[28px]" style={{ borderBottom: '1px solid var(--line-l07, rgba(0,0,0,0.07))' }}>
         {TABS.map((t) => {
           const active = tab === t.id;
@@ -700,7 +700,6 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
           );
         })}
       </div>
-      )}
 
       {tab === 'chat' ? (
         <>
@@ -811,9 +810,9 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
               <MsgIn>
               <AgentMsg time="">
                 <div>
-                  <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Tell Alva what to watch</p>
+                  <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Hey, I'm Alva, your AI investing agent.</p>
                   <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-                    Start with your holdings, tickers, or FinTwit voices. Alva will send a daily brief on what moved and why.
+                    Ask me for market research, or set up live automations to watch your portfolio, tickers, and market voices. Pick what you want me to help with first.
                   </p>
                 </div>
                 {/* Onboard Card/Default — Figma 9428:49614:3 行引导,行间分隔线,尾部箭头 */}
