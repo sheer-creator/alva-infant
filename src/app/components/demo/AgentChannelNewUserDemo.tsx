@@ -1073,7 +1073,7 @@ export function AgentChannelNewUserDemo() {
 
               <div className="shrink-0 px-[28px] pb-[28px]">
                 <div className="mx-auto w-full max-w-[960px]">
-                  <ChatInput shadow allowReferences={false} hideInspector placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
+                  <ChatInput shadow allowReferences={false} hideInspector voiceInput placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
                 </div>
               </div>
             </>

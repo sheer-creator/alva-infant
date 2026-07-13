@@ -1729,6 +1729,7 @@ export default function NewChat({ onNavigate }: { onNavigate: (page: Page) => vo
               shadow
               hideSkill
               hideInspector
+              voiceInput
               allowReferences={false}
               bottomChip={
                 selected
