@@ -40,6 +40,8 @@ interface ChatInputProps {
   autoFocus?: boolean;
   /** 描边降级为 L2(默认深框 n7) — task 详情页底部 composer 用 */
   subtleBorder?: boolean;
+  /** shadow 尺寸(默认 s);seeded 频道 composer 用 xs — 同 Baby */
+  shadowSize?: 'xs' | 's';
 }
 
 type PickerKind = 'mention' | 'skill';
@@ -816,7 +818,7 @@ function ChatPickerPreview({
   );
 }
 
-export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / for skills', contextTag, shadow, onSend, bottomChip, injectText, onInputChange, hideSkill, hideInspector, allowReferences = true, autoFocus = false, subtleBorder = false }: ChatInputProps) {
+export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / for skills', contextTag, shadow, onSend, bottomChip, injectText, onInputChange, hideSkill, hideInspector, allowReferences = true, autoFocus = false, subtleBorder = false, shadowSize = 's' }: ChatInputProps) {
   const { inspectorActive, toggleInspector, elementQuotes, removeElementQuote, clearElementQuotes, streamingState, stopStreaming } = useChatContext();
   const [hasText, setHasText] = useState(false);
   const [quoteHover, setQuoteHover] = useState(false);
@@ -1310,7 +1312,7 @@ export function ChatInput({ placeholder = 'Ask Alva anything. @ for context, / f
       <div
         ref={wrapperRef}
         className="relative w-full shrink-0 flex flex-col gap-[12px] p-[16px] chat-input-wrapper"
-        style={{ background: 'var(--b0-container, #fff)', border: `0.5px solid ${subtleBorder ? 'var(--line-l2, rgba(0,0,0,0.2))' : 'rgba(0,0,0,0.7)'}`, borderRadius: 8, boxShadow: shadow ? 'var(--shadow-s)' : undefined }}
+        style={{ background: 'var(--b0-container, #fff)', border: `0.5px solid ${subtleBorder ? 'var(--line-l2, rgba(0,0,0,0.2))' : 'rgba(0,0,0,0.7)'}`, borderRadius: 8, boxShadow: shadow ? `var(--shadow-${shadowSize})` : undefined }}
       >
       <input
         ref={fileInputRef}

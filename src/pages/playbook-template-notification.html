@@ -54,13 +54,6 @@
     .playbook-container { padding: var(--spacing-m); }
   }
 
-  /* ── Topic meta row (single header bar) ── */
-  .topic-meta-row {
-    display:flex; flex-wrap:wrap; gap:var(--spacing-xs);
-    align-items:center; margin-bottom:var(--spacing-l);
-  }
-  .topic-meta-spacer { flex: 1 1 auto; min-width: 0; }
-
   /* README chip — secondary, tab-bar style */
   .readme-btn {
     display: inline-flex; align-items: center; gap: var(--spacing-xxs);
@@ -483,9 +476,17 @@
     owner-seed="Nina Reyes"
     built-on="@leo/BTC Ultimate AI Trader"
     built-on-seed="leo"
+    built-with="Theme Tracker"
+    built-with-avatar="/logo-portrait.svg"
+    built-with-creator="Alva"
+    built-with-creator-avatar="/logo-portrait.svg"
+    built-with-updated="2d ago"
+    built-with-desc="Bilingual macro and tech analyst whose calls concentrate on AI-infrastructure names like NVDA and INTC. Holds through volatility."
+    built-with-tags="Catalyst,Risk Off"
+    built-with-socials="discord,telegram,x"
     readme-modal="methodology-modal"
     get-alerts
-    star="12" remix="56" comments="6"
+    views="6" remix="56" comments="6"
     description="Daily AI chip supply-chain digest — fetch from news, social, podcast → relevance filter → dedupe → opinionated push to Telegram followers with inline citations.">
     <script type="application/json" class="pb-feeds-data">
 [
@@ -497,7 +498,6 @@
 </playbook-header>
 
 <div class="playbook-container">
-
 
   <div id="timeline">
     <div class="loading">Loading timeline...</div>

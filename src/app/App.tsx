@@ -49,7 +49,9 @@ function getPageFromHash(): Page {
   const hash = window.location.hash.slice(1);
   if (hash.startsWith('thread/')) return hash as Page;
   if (hash.startsWith('demo/')) return hash as Page;
-  return ROUTABLE_PAGES.includes(hash as (typeof ROUTABLE_PAGES)[number]) ? (hash as Page) : 'new-chat';
+  // 频道深链形如 #agent?flow=portfolio / #agent?tab=tasks,路由只认 ? 之前的部分(同 Baby)
+  const base = hash.split('?')[0];
+  return ROUTABLE_PAGES.includes(base as (typeof ROUTABLE_PAGES)[number]) ? (base as Page) : 'new-chat';
 }
 
 export default function App() {

@@ -76,30 +76,23 @@
   --spacing-xxxxxl: 48px;
   --spacing-xxxxxxl: 56px;
 
-  /* ── Radius ── */
-  /* Content */
-  --radius-ct-min: 2px;
+  /* ── Radius ──(对齐 alva-design skill,同 Baby)── */
+  --radius-ct-xs: 2px;
+  --radius-ct-min: 2px; /* 旧名兼容 alias(ChatInput 在用),新代码用 ct-xs */
   --radius-ct-s: 4px;
   --radius-ct-m: 6px;
   --radius-ct-l: 8px;
   --radius-ct-xl: 12px;
-  --radius-ct-xxl: 16px;
-  --radius-ct-xxxl: 20px;
-  --radius-ct-max: 960px;
-  /* Popup */
-  --radius-pop-dialog: 8px;
-  --radius-pop-action-sheets: 8px;
+  --radius-pop-dialog: 12px;
+  --radius-pop-action-sheets: 12px;
   --radius-pop-dropdown: 6px;
   --radius-pop-popover: 6px;
-  --radius-pop-toast: 6px;
-  --radius-pop-tips: 4px;
-  /* Button */
-  --radius-btn-min: 0px;
+  --radius-pop-toast: 8px;
+  --radius-pop-tips: 8px;
   --radius-btn-xs: 2px;
   --radius-btn-s: 4px;
   --radius-btn-m: 6px;
   --radius-btn-l: 8px;
-  --radius-btn-round: 96px;
 
   /* ── Text (Light) ── */
   --text-n9: rgba(0, 0, 0, 0.9);
@@ -130,6 +123,7 @@
   --line-l12: rgba(0, 0, 0, 0.12);
   --line-l2:  rgba(0, 0, 0, 0.2);
   --line-l3:  rgba(0, 0, 0, 0.3);
+  --line-l7:  rgba(0, 0, 0, 0.7);
   --line-l9:  rgba(0, 0, 0, 0.9);
 
   /* ── Shadow ── */
@@ -166,10 +160,10 @@
   --sp-xl:  var(--spacing-xl);
   --sp-xxl: var(--spacing-xxl);
   --sp-xxxl:var(--spacing-xxxl);
-  --r-xs: 2px;
-  --r-s:  4px;
-  --r-m:  6px;
-  --r-l:  8px;
+  --r-xs: var(--radius-ct-xs);
+  --r-s:  var(--radius-ct-s);
+  --r-m:  var(--radius-btn-s);
+  --r-l:  var(--radius-ct-l);
 }
 
 /* Dark Mode (disabled — kept for future use) */
@@ -203,6 +197,7 @@
   --line-l12: rgba(255, 255, 255, 0.12);
   --line-l2: rgba(255, 255, 255, 0.2);
   --line-l3: rgba(255, 255, 255, 0.3);
+  --line-l7: rgba(255, 255, 255, 0.7);
   --line-l9: rgba(255, 255, 255, 0.9);
 
   /* Shadow */

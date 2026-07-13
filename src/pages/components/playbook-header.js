@@ -13,7 +13,7 @@
        last-updated="15 minutes ago"
        owner="YGGYLL"
        owner-seed="YGGYLL"
-       star="12" remix="56" comments="6"
+       views="6" remix="56" comments="6"
        description="...">
        <script type="application/json" class="pb-feeds-data">
          [
@@ -73,42 +73,47 @@
 
   function renderFeeds(feeds, lastUpdated) {
     if (!feeds.length) return '';
-    var metaRow = lastUpdated
-      ? '<div class="feeds-popover-meta">' +
-          '<span class="feeds-popover-meta-label">Last Updated: ' + esc(lastUpdated) + '</span>' +
-          '<button class="feeds-popover-pauseall" type="button" data-feeds-pauseall>' +
-            '<span class="feeds-popover-pauseall-icon" aria-hidden="true"></span>' +
-            '<span class="feeds-popover-pauseall-label">Pause all</span>' +
-          '</button>' +
-        '</div>'
-      : '';
+    var allPaused = feeds.every(function (f) { return f.paused; });
+    var bulkLabel = allPaused ? 'Resume all' : 'Pause all';
+    var bulkIcon = allPaused ? 'feeds-popover-bulk-icon ic-play' : 'feeds-popover-bulk-icon ic-pause';
+    var metaText = lastUpdated
+      ? '<span class="feeds-popover-meta-text">Last Updated: ' + esc(lastUpdated) + '</span>'
+      : '<span class="feeds-popover-meta-text"></span>';
+    var metaRow =
+      '<div class="feeds-popover-meta">' +
+        metaText +
+        '<button type="button" class="feeds-popover-bulk' + (allPaused ? ' is-paused' : '') + '" data-feeds-bulk aria-pressed="' + (allPaused ? 'true' : 'false') + '">' +
+          '<span class="' + bulkIcon + '" aria-hidden="true"></span>' +
+          '<span class="feeds-popover-bulk-label">' + bulkLabel + '</span>' +
+        '</button>' +
+      '</div>';
     var rows = feeds.map(function (f) {
-      var paused = f.status === 'paused';
+      var paused = !!f.paused;
       var cls = 'feeds-popover-row clickable' + (paused ? ' is-paused' : '');
       var extra = ' data-feed="' + esc(f.id || '') + '" role="button" tabindex="0"';
+      var lastRunText = 'Last Run: ' + String(f.lastRun == null ? '' : f.lastRun);
       var intervalText = formatInterval(f.interval);
+      var toggleIcon = paused ? 'feeds-popover-row-toggle-icon ic-play' : 'feeds-popover-row-toggle-icon ic-pause';
+      var toggleLabel = paused ? 'Resume' : 'Pause';
       return (
         '<div class="' + cls + '"' + extra + '>' +
-          '<div class="feeds-popover-row-body">' +
+          '<div class="feeds-popover-row-main">' +
             '<div class="feeds-popover-row-name">' +
               '<span class="pb-freq-dot" aria-hidden="true"></span>' +
-              '<span>' + esc(f.name) + '</span>' +
+              '<span class="feeds-popover-name-text">' + esc(f.name) + '</span>' +
             '</div>' +
-            '<div class="feeds-popover-row-meta">' +
-              '<span class="feeds-popover-row-pausedflag">Paused ·</span>' +
-              '<span>Last Run: ' + esc(f.lastRun) + '</span>' +
+            '<div class="feeds-popover-row-sub">' +
+              '<span class="feeds-popover-cell-last" data-last-run="' + esc(lastRunText) + '">' + (paused ? 'Paused' : esc(lastRunText)) + '</span>' +
               (intervalText
-                ? '<span class="sep">|</span>' +
-                  '<span>' + esc(intervalText) + '</span>'
+                ? '<span class="feeds-popover-sub-sep" aria-hidden="true"></span>' +
+                  '<span class="feeds-popover-cell-interval">' + esc(intervalText) + '</span>'
                 : '') +
             '</div>' +
           '</div>' +
-          '<div class="feeds-popover-row-actions">' +
-            '<button class="feeds-popover-row-pause" type="button" data-feed-pause aria-label="' + (paused ? 'Resume' : 'Pause') + '" title="' + (paused ? 'Resume' : 'Pause') + '">' +
-              '<span class="feeds-popover-row-pause-icon" aria-hidden="true"></span>' +
-            '</button>' +
-            '<span class="feeds-popover-row-chev" aria-hidden="true"></span>' +
-          '</div>' +
+          '<button type="button" class="feeds-popover-row-toggle" data-feed-toggle aria-label="' + toggleLabel + '" title="' + toggleLabel + '" aria-pressed="' + (paused ? 'true' : 'false') + '">' +
+            '<span class="' + toggleIcon + '" aria-hidden="true"></span>' +
+          '</button>' +
+          '<span class="feeds-popover-row-chev" aria-hidden="true"></span>' +
         '</div>'
       );
     }).join('');
@@ -175,19 +180,81 @@
       '3. If I don\'t specify what to change, ask me what I\'d like to customize.';
   }
 
+  /* 频道选择 mock 数据（Figma 8869:68755）：Alva agent 会话 + channel 列表，默认选 sheer-test-1 */
+  var ALERT_CHANNELS = [
+    { name: 'Alva', kind: 'agent' },
+    { name: 'sheer-test-1', kind: 'channel' },
+    { name: 'sheer-test-2', kind: 'channel' },
+    { name: 'sheer-test-3', kind: 'channel' },
+    { name: 'sheer-test-4', kind: 'channel' }
+  ];
+  var DEFAULT_CHANNEL = 'sheer-test-1';
+
+  function renderChannelOptions(selectedName) {
+    var sel = selectedName || DEFAULT_CHANNEL;
+    return ALERT_CHANNELS.map(function (ch) {
+      var selected = ch.name === sel;
+      return '<button class="channel-dropdown-item' + (selected ? ' is-selected' : '') + '" type="button" role="option"' +
+          ' aria-selected="' + (selected ? 'true' : 'false') + '"' +
+          ' data-channel-option="' + esc(ch.name) + '" data-channel-kind="' + ch.kind + '">' +
+          '<span class="channel-dropdown-item-icon' + (ch.kind === 'agent' ? ' ic-agent' : '') + '" aria-hidden="true"></span>' +
+          '<span class="channel-dropdown-item-name">' + esc(ch.name) + '</span>' +
+        '</button>';
+    }).join('');
+  }
+
+  /* 单条 automation 行：独立开关（默认 ON）+ 名称 + 独立频道下拉（默认推到 Alva 站内 channel）
+     产品口径：有了 channel 后不连 social 也能在 Alva 站内收 Alerts；每条可单独设频道（Figma 29686:30891） */
+  function renderAutomationRow(name) {
+    return '<div class="alerts-automation-row">' +
+        '<button type="button" class="switch on is-on" data-alerts-automation-switch role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
+        '<span class="alerts-automation-name">' + esc(name) + '</span>' +
+        '<div class="channel-select-menu">' +
+          '<button class="channel-select" type="button" data-channel-trigger aria-haspopup="listbox" aria-expanded="false">' +
+            '<span class="channel-select-logo is-agent" data-channel-logo>' +
+              '<img class="channel-select-logo-img" src="/alva-infant/logo-portrait.svg" alt="" />' +
+              '<span class="channel-select-logo-icon"></span>' +
+            '</span>' +
+            '<span class="channel-select-name" data-channel-name>Alva</span>' +
+            '<span class="channel-select-arrow" aria-hidden="true"></span>' +
+          '</button>' +
+          '<div class="channel-dropdown" data-channel-dropdown role="listbox" aria-hidden="true">' +
+            '<div class="channel-dropdown-title">Send alerts to</div>' +
+            renderChannelOptions('Alva') +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Recent Alerts 卡片（mock，Figma 29686:30891）——正文可滚，footer 吸底靠数量撑出滚动 */
+  function renderSignalCard() {
+    return '<div class="alerts-signal-card">' +
+        '<p class="alerts-signal-date">May 8, 12:00 PM &middot; ai-chip-supply-chain</p>' +
+        '<p class="alerts-signal-headline"><strong>AMD to Entrust 2nm Production to Samsung Foundry Samsung Electronics has entered into substantive discussions with AMD</strong></p>' +
+        '<ul class="alerts-signal-bullets">' +
+          '<li>Top of basket: ALL (Allstate) holds #1 at Score 95 &mdash; ROE 39.5%, P/E 5.64; leadership in Insurance &mdash; Property &amp; Casualty continues.</li>' +
+          '<li>New entries: BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
+          '<li>Dropouts: TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
+        '</ul>' +
+      '</div>';
+  }
+
   function render(host) {
     var title = host.getAttribute('title') || '';
     var freq = host.getAttribute('freq') || '';
     var lastUpdated = host.getAttribute('last-updated') || '';
     var owner = host.getAttribute('owner') || '';
     var ownerSeed = host.getAttribute('owner-seed') || owner;
-    var star = host.getAttribute('star') || '';
+    var views = host.getAttribute('views') || '';
     var remix = host.getAttribute('remix') || '';
     var alertsEnabled = host.hasAttribute('get-alerts')
       && host.getAttribute('get-alerts') !== 'false';
-    var alertsLabel = host.getAttribute('alerts-label') || 'Get Alerts';
+    var alertsLabel = host.getAttribute('alerts-label') || 'Subscribe';
     var alertsStartConnected = host.hasAttribute('alerts-connected')
       && host.getAttribute('alerts-connected') !== 'false';
+    /* social 连接态：默认未连（显示 Connect Telegram/Discord 吸底区）；连了则仅剩 Unsubscribe（Figma 29686:30915） */
+    var socialConnected = host.hasAttribute('social-connected')
+      && host.getAttribute('social-connected') !== 'false';
     var comments = host.getAttribute('comments') || '';
     var description = host.getAttribute('description') || '';
     var creator = host.hasAttribute('creator')
@@ -201,6 +268,7 @@
     var builtWithCreatorAvatar = host.getAttribute('built-with-creator-avatar') || builtWithAvatar;
     var builtWithUpdated = host.getAttribute('built-with-updated') || '';
     var builtWithDesc = host.getAttribute('built-with-desc') || '';
+    var builtWithTags = (host.getAttribute('built-with-tags') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     var builtWithSocials = (host.getAttribute('built-with-socials') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     var feeds = readFeeds(host);
 
@@ -262,7 +330,7 @@
     var CDN = 'https://alva-ai-static.b-cdn.net/icons';
     var socialIcons = {
       discord: '<img src="' + CDN + '/logo-social-discord.svg" alt="" />',
-      telegram: '<img src="' + CDN + '/logo-social-telegram.svg" alt="" />',
+      telegram: '<img src="/alva-infant/logo-social-telegram.svg" alt="" />',
       x: '<img src="' + CDN + '/logo-feed-x.svg" alt="" />',
       instagram: '<img src="' + CDN + '/logo-social-instagram.svg" alt="" />'
     };
@@ -271,24 +339,30 @@
       if (!icon) return '';
       return '<span class="pb-bw-social" aria-label="' + esc(k) + '">' + icon + '</span>';
     }).join('');
+    var builtWithTagsHtml = builtWithTags.map(function (tag) {
+      return '<span class="pb-bw-tag">' + esc(tag) + '</span>';
+    }).join('');
     var builtWithCard = (builtWithCreator || builtWithDesc)
       ? '<div class="pb-built-with-popover" data-built-with-popover role="tooltip" aria-hidden="true">' +
-          '<div class="pb-bw-row">' +
-            '<div class="pb-bw-col">' +
-              '<span class="pb-bw-caps">Created by</span>' +
-              '<div class="pb-bw-creator">' +
-                '<img class="pb-bw-avatar" src="' + esc(builtWithCreatorAvatar) + '" alt="" />' +
-                '<span class="pb-bw-creator-name">' + esc(builtWithCreator || builtWith) + '</span>' +
+          '<div class="pb-bw-info">' +
+            '<div class="pb-bw-header">' +
+              '<h2 class="pb-bw-title">' + esc(builtWith) + '</h2>' +
+              (builtWithUpdated ? '<span class="pb-bw-time">' + esc(builtWithUpdated) + '</span>' : '') +
+            '</div>' +
+            (builtWithDesc ? '<p class="pb-bw-desc">' + esc(builtWithDesc) + '</p>' : '') +
+            (builtWithTagsHtml ? '<div class="pb-bw-tags">' + builtWithTagsHtml + '</div>' : '') +
+          '</div>' +
+          '<div class="pb-bw-divider"></div>' +
+          '<div class="pb-bw-creator-row">' +
+            '<div class="pb-bw-creator">' +
+              '<img class="pb-bw-creator-avatar" src="' + esc(builtWithCreatorAvatar) + '" alt="" />' +
+              '<div class="pb-bw-creator-text">' +
+                '<div class="pb-bw-caps">Created by</div>' +
+                '<div class="pb-bw-creator-name">' + esc(builtWithCreator || builtWith) + '</div>' +
               '</div>' +
             '</div>' +
-            (builtWithUpdated || builtWithSocialsHtml
-              ? '<div class="pb-bw-col pb-bw-col-right">' +
-                  (builtWithUpdated ? '<span class="pb-bw-caps">Last updated ' + esc(builtWithUpdated) + '</span>' : '') +
-                  (builtWithSocialsHtml ? '<div class="pb-bw-socials">' + builtWithSocialsHtml + '</div>' : '') +
-                '</div>'
-              : '') +
+            (builtWithSocialsHtml ? '<div class="pb-bw-socials">' + builtWithSocialsHtml + '</div>' : '') +
           '</div>' +
-          (builtWithDesc ? '<div class="pb-bw-divider"></div><p class="pb-bw-desc">' + esc(builtWithDesc) + '</p>' : '') +
         '</div>'
       : '';
     var builtWithBlock = builtWith
@@ -354,7 +428,10 @@
             '<div class="share-menu">' +
               '<button class="pb-action pb-action--icon-only" type="button" aria-label="Share" data-share-trigger aria-haspopup="dialog" aria-expanded="false"><span class="pb-action-icon ic-share"></span></button>' +
               '<div class="share-popover" data-share-popover role="dialog" aria-label="Share" aria-hidden="true">' +
-                '<h2 class="share-popover-title">Share</h2>' +
+                '<div class="share-popover-titlebar">' +
+                  '<h2 class="share-popover-title">Share</h2>' +
+                  '<button type="button" class="share-popover-close" data-share-close aria-label="Close"></button>' +
+                '</div>' +
                 '<div class="share-popover-group" role="radiogroup" aria-label="Share visibility">' +
                   '<button class="share-popover-row is-disabled" type="button" role="radio" aria-checked="false" aria-disabled="true" disabled data-share-option="private">' +
                     '<span class="share-popover-icon-badge"><span class="share-popover-icon ic-hide"></span></span>' +
@@ -389,30 +466,9 @@
                 '</button>' +
               '</div>' +
             '</div>' +
-            '<div class="star-menu">' +
-              '<button class="pb-action" type="button" aria-label="Star" data-star-trigger aria-haspopup="dialog" aria-expanded="false">' +
-                '<span class="pb-action-icon ic-star"></span>' +
-                (star ? '<span class="pb-action-count">' + esc(star) + '</span>' : '') +
-              '</button>' +
-              '<div class="star-popover" data-star-popover role="dialog" aria-label="Connect Agents to Get Notified" aria-hidden="true">' +
-                '<div class="star-popover-card">' +
-                  '<div class="star-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
-                  '<p class="star-popover-title">Connect Agents to Get Notified</p>' +
-                  '<a href="https://t.me/alva_ai_bot" target="_blank" rel="noopener" class="star-popover-cta">' +
-                    '<img class="star-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
-                    '<span>Connect Telegram</span>' +
-                  '</a>' +
-                  '<div class="star-popover-socials">' +
-                    '<span class="star-popover-chip"><img src="/alva-infant/logo-social-discord.svg" alt="" /><span>Discord</span></span>' +
-                    '<span class="star-popover-chip is-disabled"><img src="/alva-infant/logo-social-slack.svg" alt="" /><span>Slack</span></span>' +
-                    '<span class="star-popover-chip is-disabled"><img src="/alva-infant/logo-social-whatsapp.svg" alt="" /><span>WhatsApp</span></span>' +
-                  '</div>' +
-                '</div>' +
-                '<button class="star-popover-footer" type="button" data-star-footer>' +
-                  '<span class="star-popover-footer-icon" aria-hidden="true"></span>' +
-                  '<span>Starred</span>' +
-                '</button>' +
-              '</div>' +
+            '<div class="pb-action pb-action--static" aria-label="Views">' +
+              '<span class="pb-action-icon ic-show"></span>' +
+              (views ? '<span class="pb-action-count">' + esc(views) + '</span>' : '') +
             '</div>' +
             '<button class="pb-action" type="button" aria-label="Comments" data-discuss-trigger aria-pressed="false"><span class="pb-action-icon ic-chat"></span>' + (comments ? '<span class="pb-action-count">' + esc(comments) + '</span>' : '') + '</button>' +
             '<div class="remix-menu pb-remix-wrap">' +
@@ -421,7 +477,10 @@
                 (remix ? '<span class="pb-remix-count">' + esc(remix) + '</span>' : '') +
               '</button>' +
               '<div class="remix-popover" data-remix-popover role="dialog" aria-label="Remix this Playbook" aria-hidden="true">' +
-                '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
+                '<div class="remix-popover-titlebar">' +
+                  '<h2 class="remix-popover-title">Remix this Playbook</h2>' +
+                  '<button type="button" class="remix-popover-close" data-remix-close aria-label="Close"></button>' +
+                '</div>' +
                 '<p class="remix-popover-desc">Create your own version — customize the data, layout, and style to fit your needs. Your remix will be published under your account.</p>' +
                 '<button class="remix-popover-cta" type="button" data-remix-cta>' +
                   '<span class="remix-popover-cta-icon"></span>' +
@@ -446,83 +505,52 @@
                 '</div>' +
               '</div>' +
             '</div>' +
-            (alertsEnabled
-              ? '<div class="alerts-menu">' +
-                  '<button class="pb-alerts-btn' + (alertsStartConnected ? ' is-on' : '') + '" type="button" aria-label="' + esc(alertsLabel) + '" data-alerts-trigger aria-haspopup="dialog" aria-expanded="false">' +
-                    '<span class="pb-alerts-label">' + esc(alertsLabel) + '</span>' +
-                  '</button>' +
-                  '<div class="alerts-popover' + (alertsStartConnected ? ' is-connected' : '') + '" data-alerts-popover role="dialog" aria-label="' + esc(alertsLabel) + '" aria-hidden="true">' +
-                    '<div class="alerts-popover-initial" data-alerts-initial>' +
-                      '<p class="alerts-popover-title">Get Alerts</p>' +
-                      '<div class="alerts-popover-card">' +
-                        '<div class="alerts-popover-logo"><img src="/alva-infant/logo-portrait.svg" alt="" /></div>' +
-                        '<p class="alerts-popover-subtitle">Connect Agents to Get Notified</p>' +
-                        '<div class="alerts-popover-ctas">' +
-                          '<button type="button" class="alerts-popover-cta alerts-popover-cta--primary" data-connect-platform="telegram">' +
-                            '<span class="alerts-popover-cta-inner">' +
-                              '<img class="alerts-popover-cta-icon" src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg" alt="" />' +
-                              '<span>Connect Telegram</span>' +
-                            '</span>' +
-                            '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
-                          '</button>' +
-                          '<button type="button" class="alerts-popover-cta alerts-popover-cta--secondary" data-connect-platform="discord">' +
-                            '<span class="alerts-popover-cta-inner">' +
-                              '<img class="alerts-popover-cta-icon" src="/alva-infant/logo-social-discord.svg" alt="" />' +
-                              '<span>Connect Discord</span>' +
-                            '</span>' +
-                            '<span class="alerts-popover-cta-spinner" aria-hidden="true"></span>' +
-                          '</button>' +
-                        '</div>' +
+            // Subscribe 按钮所有 playbook 都有；弹窗/铃铛只在有推送（get-alerts）时出现
+            '<div class="alerts-menu">' +
+              '<button class="pb-alerts-btn' + (alertsStartConnected ? ' is-on' : '') + '" type="button" aria-label="' + (alertsStartConnected ? 'Subscribed' : esc(alertsLabel)) + '" data-alerts-trigger' + (alertsEnabled ? ' aria-haspopup="dialog" aria-expanded="false"' : '') + '>' +
+                (alertsEnabled ? '<span class="pb-alerts-bell" aria-hidden="true"></span>' : '') +
+                '<span class="pb-alerts-label">' + (alertsStartConnected ? 'Subscribed' : esc(alertsLabel)) + '</span>' +
+                '<span class="pb-alerts-count">16</span>' +
+              '</button>' +
+              (alertsEnabled
+                // Figma 29686:30891/30915：顶部不吸顶，标题 + A&C + Recent Alerts 一起滚动，仅 footer 吸底
+                ? '<div class="alerts-popover' + (socialConnected ? ' is-agent-connected' : '') + '" data-alerts-popover role="dialog" aria-label="' + esc(alertsLabel) + '" aria-hidden="true">' +
+                    // 可滚区：标题栏 + Alerts & Channels + Recent Alerts 全部一起滚动
+                    '<div class="alerts-popover-body">' +
+                      '<div class="alerts-popover-titlebar">' +
+                        '<p class="alerts-popover-title">Subscribe</p>' +
+                        '<button type="button" class="alerts-popover-close" data-alerts-close aria-label="Close"></button>' +
                       '</div>' +
-                    '</div>' +
-                    '<div class="alerts-popover-connected" data-alerts-connected>' +
-                      '<p class="alerts-popover-title">Get Alerts</p>' +
                       '<div class="alerts-connected-section">' +
-                        '<div class="alerts-connected-head">' +
-                          '<span class="alerts-connected-head-label">Automations</span>' +
-                          '<div class="alerts-connected-toggle">' +
-                            '<span class="alerts-connected-toggle-label">Receive Alerts</span>' +
-                            '<button type="button" class="switch" data-alerts-switch role="switch" aria-checked="false"><span class="switch-thumb"></span></button>' +
-                          '</div>' +
-                        '</div>' +
+                        '<span class="alerts-connected-head-label">Alerts &amp; Channels</span>' +
                         '<div class="alerts-automations-list" data-alerts-automations>' +
-                          '<div class="alerts-automation-row">' +
-                            '<span class="alerts-automation-name">ai-chip-supply-chain</span>' +
-                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
-                          '</div>' +
-                          '<div class="alerts-automation-row">' +
-                            '<span class="alerts-automation-name">space-rotation-prices</span>' +
-                            '<button type="button" class="switch is-on" role="switch" aria-checked="true"><span class="switch-thumb"></span></button>' +
-                          '</div>' +
-                        '</div>' +
-                        '<div class="alerts-connected-account" data-alerts-account>' +
-                          '<img class="alerts-connected-avatar" data-alerts-avatar src="https://alva-ai-static.b-cdn.net/icons/logo-social-telegram.svg" alt="" />' +
-                          '<span class="alerts-connected-name-label">Connected:</span>' +
-                          '<span class="alerts-connected-name" data-alerts-name>Sheer Ruan</span>' +
-                          '<button class="alerts-connected-manage" type="button" data-alerts-manage>' +
-                            '<span>Manage</span>' +
-                            '<span class="alerts-connected-manage-chev" aria-hidden="true"></span>' +
-                          '</button>' +
+                          renderAutomationRow('ai-chip-supply-chain') +
+                          renderAutomationRow('space-rotation-prices') +
                         '</div>' +
                       '</div>' +
                       '<div class="alerts-signals-section">' +
                         '<p class="alerts-signals-title">Recent Alerts</p>' +
                         '<div class="alerts-signals-list">' +
-                          '<div class="alerts-signal-card">' +
-                            '<p class="alerts-signal-date">May 8, 12:00 PM &middot; ai-chip-supply-chain</p>' +
-                            '<p class="alerts-signal-headline"><strong>AMD to Entrust 2nm Production to Samsung Foundry Samsung Electronics has entered into substantive discussions with AMD</strong></p>' +
-                            '<ul class="alerts-signal-bullets">' +
-                              '<li>Top of basket: ALL (Allstate) holds #1 at Score 95 &mdash; ROE 39.5%, P/E 5.64; leadership in Insurance &mdash; Property &amp; Casualty continues.</li>' +
-                              '<li>New entries: BBVA (+7), PDD (+6), PBR (+3) rejoin the Top 20 on improved P/E and ROE reads.</li>' +
-                              '<li>Dropouts: TFC, SFNC fall out of Top 40 after D/E flags near 2.0 threshold.</li>' +
-                            '</ul>' +
-                          '</div>' +
+                          renderSignalCard() + renderSignalCard() + renderSignalCard() +
                         '</div>' +
                       '</div>' +
                     '</div>' +
-                  '</div>' +
-                '</div>'
-              : '') +
+                    // 吸底：未连 social 显示 Connect 区 + 分隔线；Unsubscribe 恒在（文字链）
+                    '<div class="alerts-popover-foot">' +
+                      '<div class="alerts-connect" data-alerts-connect>' +
+                        '<p class="alerts-connect-title">Connect Agents to Get Notified</p>' +
+                        '<div class="alerts-connect-btns">' +
+                          '<button type="button" class="alerts-connect-btn is-telegram" data-alerts-connect-social="telegram"><img class="alerts-connect-btn-icon" src="/alva-infant/logo-im-telegram.svg" alt="" /><span>Telegram</span></button>' +
+                          '<button type="button" class="alerts-connect-btn is-discord" data-alerts-connect-social="discord"><img class="alerts-connect-btn-icon" src="/alva-infant/logo-im-discord.svg" alt="" /><span>Discord</span></button>' +
+                          '<button type="button" class="alerts-connect-btn is-imessage" data-alerts-connect-social="imessage"><img class="alerts-connect-btn-icon" src="/alva-infant/logo-im-imessage.svg" alt="" /><span>iMessage</span></button>' +
+                        '</div>' +
+                      '</div>' +
+                      '<div class="alerts-foot-divider" data-alerts-connect-divider aria-hidden="true"></div>' +
+                      '<button type="button" class="alerts-unsubscribe" data-alerts-unsubscribe>Unsubscribe</button>' +
+                    '</div>' +
+                  '</div>'
+                : '') +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -717,9 +745,26 @@
     }
     registerPopover(host, close);
 
+    // Hover 自动浮现：指针进入 trigger 或 popover 即展开；离开后短延迟收起，
+    // 用延迟兜底跨越 trigger→popover 之间 6px 间隙时的瞬时 mouseleave，避免闪烁。
+    var hideTimer = null;
+    function cancelHide() {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    }
+    function scheduleHide() {
+      cancelHide();
+      hideTimer = setTimeout(function () { hideTimer = null; close(); }, 140);
+    }
+    trigger.addEventListener('mouseenter', function () { cancelHide(); open(); });
+    trigger.addEventListener('mouseleave', scheduleHide);
+    popover.addEventListener('mouseenter', cancelHide);
+    popover.addEventListener('mouseleave', scheduleHide);
+
+    // 点按/键盘仍可展开（触屏 / Enter），收起交给移开指针、外部点击或 Esc。
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (popover.classList.contains('open')) close(); else open();
+      cancelHide();
+      open();
     });
 
     var onDocClick = function (e) {
@@ -735,9 +780,47 @@
     host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKeydown);
+      cancelHide();
     });
 
-    popover.querySelectorAll('[data-feed]').forEach(function (row) {
+    function syncBulkButton() {
+      var bulk = popover.querySelector('[data-feeds-bulk]');
+      if (!bulk) return;
+      var rows = popover.querySelectorAll('.feeds-popover-row[data-feed]');
+      if (!rows.length) return;
+      var allPaused = true;
+      rows.forEach(function (r) { if (!r.classList.contains('is-paused')) allPaused = false; });
+      bulk.classList.toggle('is-paused', allPaused);
+      bulk.setAttribute('aria-pressed', allPaused ? 'true' : 'false');
+      var label = bulk.querySelector('.feeds-popover-bulk-label');
+      var icon = bulk.querySelector('.feeds-popover-bulk-icon');
+      if (label) label.textContent = allPaused ? 'Resume all' : 'Pause all';
+      if (icon) {
+        icon.classList.toggle('ic-play', allPaused);
+        icon.classList.toggle('ic-pause', !allPaused);
+      }
+    }
+
+    function setRowPaused(row, paused) {
+      row.classList.toggle('is-paused', paused);
+      var lastCell = row.querySelector('.feeds-popover-cell-last');
+      if (lastCell) {
+        lastCell.textContent = paused ? 'Paused' : (lastCell.getAttribute('data-last-run') || '');
+      }
+      var toggleBtn = row.querySelector('[data-feed-toggle]');
+      if (toggleBtn) {
+        toggleBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        toggleBtn.setAttribute('aria-label', paused ? 'Resume' : 'Pause');
+        toggleBtn.setAttribute('title', paused ? 'Resume' : 'Pause');
+        var ti = toggleBtn.querySelector('.feeds-popover-row-toggle-icon');
+        if (ti) {
+          ti.classList.toggle('ic-play', paused);
+          ti.classList.toggle('ic-pause', !paused);
+        }
+      }
+    }
+
+    popover.querySelectorAll('.feeds-popover-row[data-feed]').forEach(function (row) {
       var activate = function () {
         close();
         host.dispatchEvent(new CustomEvent('playbook-feed-click', {
@@ -749,50 +832,44 @@
       row.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
       });
+
+      var toggleBtn = row.querySelector('[data-feed-toggle]');
+      if (toggleBtn) {
+        var togglePause = function (e) {
+          if (e) { e.stopPropagation(); e.preventDefault(); }
+          var nextPaused = !row.classList.contains('is-paused');
+          setRowPaused(row, nextPaused);
+          syncBulkButton();
+          host.dispatchEvent(new CustomEvent('playbook-feed-pause-toggle', {
+            bubbles: true,
+            detail: { id: row.getAttribute('data-feed'), paused: nextPaused }
+          }));
+        };
+        toggleBtn.addEventListener('click', togglePause);
+        toggleBtn.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') togglePause(e);
+        });
+      }
     });
 
-    function setRowPaused(row, paused) {
-      row.classList.toggle('is-paused', paused);
-      var btn = row.querySelector('[data-feed-pause]');
-      if (btn) {
-        btn.setAttribute('aria-label', paused ? 'Resume' : 'Pause');
-        btn.setAttribute('title', paused ? 'Resume' : 'Pause');
-      }
-    }
-    function updatePauseAll() {
-      var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
-      if (!pauseAllBtn) return;
-      var rows = popover.querySelectorAll('.feeds-popover-row');
-      var allPaused = rows.length > 0;
-      rows.forEach(function (r) { if (!r.classList.contains('is-paused')) allPaused = false; });
-      pauseAllBtn.classList.toggle('is-resume', allPaused);
-      var label = pauseAllBtn.querySelector('.feeds-popover-pauseall-label');
-      if (label) label.textContent = allPaused ? 'Resume all' : 'Pause all';
-    }
-    popover.querySelectorAll('[data-feed-pause]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
+    var bulkBtn = popover.querySelector('[data-feeds-bulk]');
+    if (bulkBtn) {
+      bulkBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var row = btn.closest('.feeds-popover-row');
-        if (!row) return;
-        setRowPaused(row, !row.classList.contains('is-paused'));
-        updatePauseAll();
-      });
-      btn.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') e.stopPropagation();
-      });
-    });
-    var pauseAllBtn = popover.querySelector('[data-feeds-pauseall]');
-    if (pauseAllBtn) {
-      pauseAllBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var resume = pauseAllBtn.classList.contains('is-resume');
-        popover.querySelectorAll('.feeds-popover-row').forEach(function (row) {
-          setRowPaused(row, !resume);
-        });
-        updatePauseAll();
+        var rows = popover.querySelectorAll('.feeds-popover-row[data-feed]');
+        var anyActive = false;
+        rows.forEach(function (r) { if (!r.classList.contains('is-paused')) anyActive = true; });
+        var nextPaused = anyActive; // if any active → pause all; else resume all
+        rows.forEach(function (r) { setRowPaused(r, nextPaused); });
+        syncBulkButton();
+        host.dispatchEvent(new CustomEvent('playbook-feeds-pause-all', {
+          bubbles: true,
+          detail: { paused: nextPaused }
+        }));
       });
     }
-    updatePauseAll();
+
+    syncBulkButton();
 
     var viewAll = popover.querySelector('.feeds-popover-viewall');
     if (viewAll) {
@@ -849,6 +926,14 @@
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKeydown);
     });
+
+    var remixCloseBtn = popover.querySelector('[data-remix-close]');
+    if (remixCloseBtn) {
+      remixCloseBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        close();
+      });
+    }
 
     var agentToggle = popover.querySelector('[data-remix-agent-toggle]');
     if (agentToggle) {
@@ -952,6 +1037,14 @@
       document.removeEventListener('keydown', onKeydown);
     });
 
+    var shareCloseBtn = popover.querySelector('[data-share-close]');
+    if (shareCloseBtn) {
+      shareCloseBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        close();
+      });
+    }
+
     var rows = popover.querySelectorAll('[data-share-option]');
     rows.forEach(function (row) {
       row.addEventListener('click', function (e) {
@@ -992,39 +1085,64 @@
     }
   }
 
-  function setupStarPopover(host) {
-    var trigger = host.querySelector('[data-star-trigger]');
-    if (!trigger) return;
-    var alertsEnabled = host.hasAttribute('get-alerts')
-      && host.getAttribute('get-alerts') !== 'false';
-    var popover = host.querySelector('[data-star-popover]');
-    if (popover && popover.parentNode) popover.parentNode.removeChild(popover);
-    trigger.removeAttribute('aria-haspopup');
-    trigger.removeAttribute('aria-expanded');
-
-    if (alertsEnabled) return; // alerts variant handles star click in setupAlertsPopover
-
-    trigger.addEventListener('click', function (e) {
-      e.stopPropagation();
-      trigger.classList.toggle('is-starred');
-      trigger.setAttribute('aria-pressed', trigger.classList.contains('is-starred') ? 'true' : 'false');
-    });
-  }
-
   function setupAlertsPopover(host) {
-    var popover = host.querySelector('[data-alerts-popover]');
-    if (!popover) return;
     var alertsBtn = host.querySelector('[data-alerts-trigger]');
-    var starBtn = host.querySelector('[data-star-trigger]');
+    if (!alertsBtn) return;
+    var alertsBtnLabel = alertsBtn.querySelector('.pb-alerts-label');
+    var popover = host.querySelector('[data-alerts-popover]');
+
+    var setSubscribed = function (on) {
+      alertsBtn.classList.toggle('is-on', on);
+      alertsBtn.setAttribute('aria-label', on ? 'Subscribed' : 'Subscribe');
+      if (alertsBtnLabel) alertsBtnLabel.textContent = on ? 'Subscribed' : 'Subscribe';
+    };
+
+    // 无推送 playbook：Subscribe ↔ Subscribed 直接切换，无弹层无铃铛
+    if (!popover) {
+      alertsBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setSubscribed(!alertsBtn.classList.contains('is-on'));
+      });
+      return;
+    }
+
+    // 有推送 playbook：每条 automation 独立开关（各自推送频道）；铃铛 muted = 全部关闭；退订走 Unsubscribe
+    var getRowSwitches = function () {
+      return Array.prototype.slice.call(popover.querySelectorAll('[data-alerts-automation-switch]'));
+    };
+    var updateBell = function () {
+      var anyOn = getRowSwitches().some(function (s) {
+        return s.classList.contains('on') || s.classList.contains('is-on');
+      });
+      alertsBtn.classList.toggle('is-muted', !anyOn);
+    };
+    var setAllRows = function (on) {
+      getRowSwitches().forEach(function (s) {
+        s.classList.toggle('on', on);
+        s.classList.toggle('is-on', on);
+        s.setAttribute('aria-checked', on ? 'true' : 'false');
+      });
+      updateBell();
+    };
+
+    function closeAllChannelDropdowns() {
+      Array.prototype.slice.call(popover.querySelectorAll('[data-channel-dropdown]')).forEach(function (dd) {
+        dd.classList.remove('open');
+        dd.setAttribute('aria-hidden', 'true');
+      });
+      Array.prototype.slice.call(popover.querySelectorAll('[data-channel-trigger]')).forEach(function (t) {
+        t.setAttribute('aria-expanded', 'false');
+      });
+    }
 
     function close() {
+      closeAllChannelDropdowns();
       popover.classList.remove('open');
       popover.setAttribute('aria-hidden', 'true');
       if (alertsBtn) {
         alertsBtn.setAttribute('aria-expanded', 'false');
         alertsBtn.classList.remove('is-open');
       }
-      if (starBtn) starBtn.setAttribute('aria-expanded', 'false');
     }
     function open() {
       closeOtherPopovers(host, close);
@@ -1034,103 +1152,105 @@
         alertsBtn.setAttribute('aria-expanded', 'true');
         alertsBtn.classList.add('is-open');
       }
-      if (starBtn) starBtn.setAttribute('aria-expanded', 'true');
     }
     registerPopover(host, close);
 
-    if (alertsBtn) {
-      alertsBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (popover.classList.contains('open')) close(); else open();
-      });
-    }
-    if (starBtn) {
-      var starOpenTimer = null;
-      starBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var nowStarred = !starBtn.classList.contains('is-starred');
-        starBtn.classList.toggle('is-starred', nowStarred);
-        starBtn.setAttribute('aria-pressed', nowStarred ? 'true' : 'false');
-        if (starOpenTimer) { clearTimeout(starOpenTimer); starOpenTimer = null; }
-        if (nowStarred) {
-          // Small delay so the star fill animates first, then the popover eases in.
-          starOpenTimer = setTimeout(function () { open(); starOpenTimer = null; }, 240);
-        } else {
-          close();
-        }
-      });
-      host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
-        if (starOpenTimer) { clearTimeout(starOpenTimer); starOpenTimer = null; }
-      });
-    }
-
-    // ── Connect buttons: fake loading → connected state ──
-    var connectTimer = null;
-    var connectBtns = popover.querySelectorAll('[data-connect-platform]');
-    connectBtns.forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (btn.classList.contains('is-loading')) return;
-        if (popover.classList.contains('is-connected')) return;
-        // mark loading + disable all connect buttons
-        connectBtns.forEach(function (b) { b.classList.add('is-disabled'); });
-        btn.classList.remove('is-disabled');
-        btn.classList.add('is-loading');
-        btn.setAttribute('aria-busy', 'true');
-        if (connectTimer) clearTimeout(connectTimer);
-        connectTimer = setTimeout(function () {
-          // transition to connected state
-          var platform = btn.getAttribute('data-connect-platform') || 'telegram';
-          var avatarEl = popover.querySelector('[data-alerts-avatar]');
-          if (avatarEl) {
-            avatarEl.setAttribute('data-platform', platform);
-            var iconSrc = platform === 'discord'
-              ? '/alva-infant/logo-social-discord.svg'
-              : 'https://alva-ai-static.b-cdn.net/icons/logo-social-telegram2.svg';
-            if (avatarEl.tagName === 'IMG') avatarEl.setAttribute('src', iconSrc);
-          }
-          popover.classList.add('is-connected');
-          // reset loading (so if user re-opens, buttons are fresh)
-          btn.classList.remove('is-loading');
-          btn.removeAttribute('aria-busy');
-          connectBtns.forEach(function (b) { b.classList.remove('is-disabled'); });
-          connectTimer = null;
-        }, 1500);
-      });
+    alertsBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!alertsBtn.classList.contains('is-on')) {
+        // 首次订阅：置 Subscribed + 所有 automation 默认推到 Alva（全开）+ 弹出弹层
+        setSubscribed(true);
+        setAllRows(true);
+        open();
+      } else if (popover.classList.contains('open')) {
+        close();
+      } else {
+        open();
+      }
     });
-
-    // Manage Accounts → navigate parent to Alva Agent settings
-    var manageBtn = popover.querySelector('[data-alerts-manage]');
-    if (manageBtn) {
-      manageBtn.addEventListener('click', function (e) {
+    // 标题栏 × 关闭
+    var closeBtn = popover.querySelector('[data-alerts-close]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        try {
-          (window.parent || window).postMessage({ type: 'alva:navigate', page: 'alva-agent' }, '*');
-        } catch (_) {}
         close();
       });
     }
 
-    // Receive Alerts toggle switch
-    var switchBtn = popover.querySelector('[data-alerts-switch]');
-    if (switchBtn) {
-      switchBtn.addEventListener('click', function (e) {
+    // Unsubscribe：退订（按钮回 Subscribe，automations 全关）后收起弹层
+    var unsubscribeBtn = popover.querySelector('[data-alerts-unsubscribe]');
+    if (unsubscribeBtn) {
+      unsubscribeBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var on = !switchBtn.classList.contains('on');
-        switchBtn.classList.toggle('on', on);
-        switchBtn.setAttribute('aria-checked', on ? 'true' : 'false');
+        setSubscribed(false);
+        setAllRows(false);
+        close();
       });
     }
 
-    host._pbHeaderCleanup = (host._pbHeaderCleanup || []).concat(function () {
-      if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
+    // Connect Telegram / Discord → 连接 social 后切「已连接」态（隐藏 Connect 区，仅剩 Unsubscribe）
+    Array.prototype.slice.call(popover.querySelectorAll('[data-alerts-connect-social]')).forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.getAttribute('data-alerts-connect-social') === 'telegram') {
+          try { window.open('https://t.me/alva_ai_bot', '_blank', 'noopener'); } catch (_) {}
+        }
+        popover.classList.add('is-agent-connected');
+      });
     });
+
+    // 每行频道选择：各自独立展开 / 选中回填（互斥展开，同一时刻只开一个）
+    Array.prototype.slice.call(popover.querySelectorAll('.channel-select-menu')).forEach(function (menu) {
+      var trigger = menu.querySelector('[data-channel-trigger]');
+      var dropdown = menu.querySelector('[data-channel-dropdown]');
+      if (!trigger || !dropdown) return;
+      var channelName = menu.querySelector('[data-channel-name]');
+      var channelLogo = menu.querySelector('[data-channel-logo]');
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = dropdown.classList.contains('open');
+        closeAllChannelDropdowns();
+        if (!wasOpen) {
+          dropdown.classList.add('open');
+          dropdown.setAttribute('aria-hidden', 'false');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+      Array.prototype.slice.call(dropdown.querySelectorAll('[data-channel-option]')).forEach(function (opt) {
+        opt.addEventListener('click', function (e) {
+          e.stopPropagation();
+          Array.prototype.slice.call(dropdown.querySelectorAll('[data-channel-option]')).forEach(function (o) {
+            o.classList.toggle('is-selected', o === opt);
+            o.setAttribute('aria-selected', o === opt ? 'true' : 'false');
+          });
+          if (channelName) channelName.textContent = opt.getAttribute('data-channel-option');
+          if (channelLogo) channelLogo.classList.toggle('is-agent', opt.getAttribute('data-channel-kind') === 'agent');
+          closeAllChannelDropdowns();
+        });
+      });
+    });
+    // 点弹层空白处只收起频道下拉，不关弹层（trigger/option/switch 均 stopPropagation）
+    popover.addEventListener('click', function () { closeAllChannelDropdowns(); });
+
+    // 每行 automation 开关：独立切换 + 同步铃铛（不再有主开关，铃铛跟随「是否还有开着的行」）
+    getRowSwitches().forEach(function (rowSwitch) {
+      rowSwitch.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var on = !(rowSwitch.classList.contains('on') || rowSwitch.classList.contains('is-on'));
+        rowSwitch.classList.toggle('on', on);
+        rowSwitch.classList.toggle('is-on', on);
+        rowSwitch.setAttribute('aria-checked', on ? 'true' : 'false');
+        updateBell();
+      });
+    });
+    // 初始态：已订阅 → 保持默认全开；未订阅 → 全关且铃铛静音（首次点 Subscribe 再全开）
+    if (alertsBtn.classList.contains('is-on')) updateBell();
+    else setAllRows(false);
 
     var onDocClick = function (e) {
       if (!popover.classList.contains('open')) return;
       if (popover.contains(e.target)) return;
       if (alertsBtn && alertsBtn.contains(e.target)) return;
-      if (starBtn && starBtn.contains(e.target)) return;
       close();
     };
     var onKeydown = function (e) { if (e.key === 'Escape') close(); };
@@ -1160,7 +1280,6 @@
         setupDescToggle(self);
         setupFeedsPopover(self);
         setupRemixPopover(self);
-        setupStarPopover(self);
         setupAlertsPopover(self);
         setupSharePopover(self);
         setupSettingsPopover(self);

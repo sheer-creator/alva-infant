@@ -1,7 +1,9 @@
 /**
- * [INPUT]: Figma Page/Agent/New(7885:108600)+ demo/AgentChannelNewUserDemo(目标形态参照)
- * [OUTPUT]: Agent 页 empty 态 — Agent Header(Telegram Select / Settings)+ 4 tab + skill chips + prompt 容器 + composer;聊天与 IM 解耦
- * [POS]: pages/Agent.tsx 统一渲染本组件,连接态不再切换到独立 AgentChat 页面
+ * [INPUT]: Figma Page/Agent/New(7885:108600)+ Page/Agent/Chat(8111:9397 / 8160:82896 / 8166:84016)
+ * [OUTPUT]: Agent 页 — Header(频道感知)+ 5 tab + onboard 引导 + Portfolio/AlphaRadar builder 流
+ *           + seeded 频道预置对话;默认 Alva 连接 IM 后保留 skill chips + 预览卡体验(Infant 侧)
+ *           聊天与 IM 解耦;连接 IM 点亮 Tasks/Files + 推 Connected 消息
+ * [POS]: pages/Agent.tsx 统一渲染本组件;channel prop 由 state/channels 提供
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,7 +12,7 @@ import { CdnIcon } from '@/app/components/shared/CdnIcon';
 import { AgentMemory } from '@/app/components/agent/AgentMemory';
 import { AgentTasksPanel, AGENT_TASKS } from '@/app/components/agent/AgentTasksPanel';
 import { AgentArtifactsPanel, AGENT_ARTIFACTS } from '@/app/components/agent/AgentArtifactsPanel';
-import { AgentAlertsPanel, AGENT_ALERTS } from '@/app/components/agent/AgentAlertsPanel';
+import { AgentAlertsPanel, AGENT_ALERTS, type AgentAlert } from '@/app/components/agent/AgentAlertsPanel';
 import { ConnectAppsModal } from '@/app/components/shared/ConnectAppsModal';
 import { ChatInput } from '@/app/components/shared/ChatInput';
 import { SkillChip } from '@/app/components/shared/SkillChip';
@@ -19,6 +21,12 @@ import { SkillPreviewCard, previewCardKey, toPushCardData, type SkillPreviewCard
 import { FeedDetailModal } from '@/app/components/community/FeedDetailModal';
 import type { PushCardData } from '@/app/components/shared/AutomationCard';
 import { COMMUNITY_TEMPLATES, OTHERS_TEMPLATES, PRIMARY_TEMPLATES, type NewChatTemplate } from '@/data/new-chat-mock';
+import { PortfolioBuilder } from '@/app/components/agent/PortfolioBuilder';
+import { AlphaRadarBuilder, type AlphaRadarSummary } from '@/app/components/agent/AlphaRadarBuilder';
+import { ChannelSeedThread } from '@/app/components/agent/ChannelSeedThread';
+import { EMPTY_PROMPTS, EmptyPromptPill } from '@/app/components/chat/PlaybookSuggestions';
+import { SEED_CHANNEL_ID, channelsStore } from '@/app/state/channels';
+import { EditChannelModal } from '@/app/components/shared/EditChannelModal';
 
 const FONT = "'Delight', sans-serif";
 
@@ -56,7 +64,6 @@ const P = {
   automation: <path d="M13 3 5 13.5h5L9 21l8-10.5h-5z" />,
   target: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /></>,
   bell: <><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" /><path d="M10.5 19a1.5 1.5 0 0 0 3 0" /></>,
-  x: <path d="M7 7l10 10M17 7 7 17" />,
 };
 
 /* ========== 数据(同 demo,语义不变)========== */
@@ -314,7 +321,7 @@ const DEFAULT_PROMPTS = [
   'Watch nuclear-renaissance equities and flag any catalyst from the DOE / regulators',
 ];
 
-/* Onboard Card/Default — Figma 9428:49614:未连接态 3 条引导,点击直接发起对应 automation 流 */
+/* Onboard Card/Default — Figma 9428:49614:未开始会话的 3 条引导;portfolio/fintwit 进独立 builder 流 */
 interface OnboardCard { id: string; emoji: string; title: string; desc: string; prompt: string; taskTitle: string }
 
 const ONBOARD_CARDS: OnboardCard[] = [
@@ -344,6 +351,40 @@ const ONBOARD_CARDS: OnboardCard[] = [
   },
 ];
 
+/* Alerts tab「Get Started」5 卡 — Figma 10845:71203(For Alert 变体);portfolio/fintwit 两张接现有 flow,其余回 Chat */
+const ALERT_GET_STARTED_CARDS: { id: string; emoji: string; title: string; desc: string }[] = [
+  {
+    id: 'gs-portfolio',
+    emoji: '💼',
+    title: 'Watch your portfolio 24/7',
+    desc: "I'll check it every hour and message you only when a move, risk, catalyst, or breaking story is worth your attention.",
+  },
+  {
+    id: 'gs-fintwit',
+    emoji: '📣',
+    title: 'Track FinTwit for alpha signals',
+    desc: "I'll scan X posts, filter out the noise, and send you a daily digest on alpha signals, conviction shifts, and debates that matter.",
+  },
+  {
+    id: 'gs-tickers',
+    emoji: '👀',
+    title: 'Follow tickers you care about',
+    desc: "Give me tickers you're curious about. I'll scan for meaningful moves, catalysts, and news so you don't have to keep checking.",
+  },
+  {
+    id: 'gs-screen',
+    emoji: '🔍',
+    title: 'Screen the market on your rules',
+    desc: "Set your criteria once — momentum, insider buying, deep value, anything. I'll watch the market and message you only when new names qualify.",
+  },
+  {
+    id: 'gs-automations',
+    emoji: '⚙️',
+    title: 'Build you own automations',
+    desc: "Tell me what you want Alva to monitor and when it should run. I'll help shape it into a reliable automation.",
+  },
+];
+
 interface ImEntry { id: string; label: string; logo: string; handle: string; sub: string }
 
 const IMS: ImEntry[] = [
@@ -353,14 +394,55 @@ const IMS: ImEntry[] = [
   { id: 'slack', label: 'Slack', logo: 'logo-social-slack.svg', handle: '@yggyll · alva-hq', sub: 'Alva app in your workspace' },
 ];
 
-/* Tab — Figma 7911:134921:5 tab,计数为 n3 后缀 */
-const TABS: { id: string; label: string; icon: string; count?: number }[] = [
-  { id: 'chat', label: 'Chat', icon: 'chat-l1' },
-  { id: 'tasks', label: 'Tasks', icon: 'step-l', count: AGENT_TASKS.length },
-  { id: 'memory', label: 'Memory', icon: 'brain-l' },
-  { id: 'alerts', label: 'Alerts', icon: 'notification-l', count: AGENT_ALERTS.length },
-  { id: 'artifacts', label: 'Files', icon: 'folder-l', count: AGENT_ARTIFACTS.length },
+/* IMS 之外的渠道（如 alerts 卡里的 iMessage）连接时的兜底元数据，供连接消息复用 */
+const IM_FALLBACK: Record<string, { label: string; handle: string }> = {
+  imessage: { label: 'iMessage', handle: '+1 ··· 4821' },
+};
+
+/* Start Watching 建立的 portfolio watch automation → 一条自建 alert(driving Alerts tab 计数 + 面板内容) */
+const PORTFOLIO_WATCH_ALERT: AgentAlert = {
+  id: 'portfolio-watch-24-7', name: 'portfolio-watch-24-7', creator: 'YGGYLL',
+  lastRun: 'now', runEvery: 'Every hour', runs: 0, status: 'active', source: 'created',
+};
+
+const ALPHA_RADAR_ALERT: AgentAlert = {
+  id: 'fintwit-alpha-radar', name: 'fintwit-alpha-radar', creator: 'YGGYLL',
+  lastRun: 'now', runEvery: 'Every day at 8:00 AM ET', runs: 0, status: 'active', source: 'created',
+};
+
+/* 「Where should I send you alerts?」快捷渠道(Figma 10038:117496-8):品牌底色 + 白字 logo */
+const ALERT_CHANNELS: { id: string; label: string; logo: string; bg: string }[] = [
+  { id: 'telegram', label: 'Telegram', logo: 'logo-im-telegram.svg', bg: '#229ed9' },
+  { id: 'discord', label: 'Discord', logo: 'logo-im-discord.svg', bg: '#5865f2' },
+  { id: 'imessage', label: 'iMessage', logo: 'logo-im-imessage.svg', bg: '#0cbd2a' },
 ];
+
+/* Tab — Figma 7911:134921:5 tab,计数为 n3 后缀(count 由会话产出驱动，0 时不显示) */
+const TABS: { id: string; label: string; icon: string }[] = [
+  { id: 'chat', label: 'Chat', icon: 'chat-l1' },
+  { id: 'tasks', label: 'Tasks', icon: 'step-l' },
+  { id: 'alerts', label: 'Alerts', icon: 'notification-l' },
+  { id: 'memory', label: 'Memory', icon: 'brain-l' },
+  { id: 'artifacts', label: 'Files', icon: 'folder-l' },
+];
+
+/* 各 tab 空态占位（全新会话 agent 尚未产出任何 task/alert/file） */
+const EMPTY_COPY: Record<string, { icon: string; title: string; desc: string }> = {
+  tasks: { icon: 'step-l', title: 'No tasks yet', desc: 'Tasks Alva runs for you will show up here.' },
+  alerts: { icon: 'notification-l', title: 'No alerts yet', desc: 'Alerts from your automations will land here.' },
+  artifacts: { icon: 'folder-l', title: 'No files yet', desc: 'Playbooks and reports Alva builds will be saved here.' },
+};
+
+function EmptyPanel({ tabId }: { tabId: string }) {
+  const c = EMPTY_COPY[tabId];
+  return (
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-[6px]">
+      <CdnIcon name={c.icon} size={28} color="var(--text-n2, rgba(0,0,0,0.2))" />
+      <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n7, rgba(0,0,0,0.7))' }}>{c.title}</p>
+      <p className="text-[13px] leading-[20px] tracking-[0.13px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{c.desc}</p>
+    </div>
+  );
+}
 
 /* ========== 原子组件 ========== */
 
@@ -411,14 +493,26 @@ function AlvaPortrait({ size = 32 }: { size?: number }) {
   );
 }
 
-function AgentMsg({ pushed, time = 'Thursday 7:22 PM', children }: { pushed?: boolean; time?: string; children: React.ReactNode }) {
+/* 频道头像：与 Alva 同款深色圆角方块，内嵌白色 channel 图标 */
+function ChannelPortrait({ size = 32 }: { size?: number }) {
+  return (
+    <span
+      className="flex shrink-0 items-center justify-center rounded-[4px]"
+      style={{ width: size, height: size, background: 'var(--b0-sidebar, #2a2a38)' }}
+    >
+      <CdnIcon name="sidebar-channel-normal" size={Math.round(size * 0.6)} color="#ffffff" />
+    </span>
+  );
+}
+
+function AgentMsg({ pushed, time = 'Thursday 7:22 PM', portrait, name = 'Alva', children }: { pushed?: boolean; time?: string; portrait?: React.ReactNode; name?: string; children: React.ReactNode }) {
   return (
     <div className="flex w-full items-start gap-[8px]">
-      <AlvaPortrait size={22} />
+      {portrait ?? <AlvaPortrait size={22} />}
       {/* name 行与内容整体 gap 8;内容 div 内部(Markdown / widget 块之间)gap 12 */}
       <div className="flex min-w-0 flex-1 flex-col gap-[8px]">
         <div className="flex items-center gap-[8px]">
-          <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
+          <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{name}</p>
           {pushed && (
             <span
               className="rounded-[4px] px-[5px] text-[10px] leading-[16px] tracking-[0.3px]"
@@ -517,11 +611,23 @@ type ExtraMsg =
   | { id: number; role: 'task'; title: string; kind: 'playbook' | 'automation'; state: 'running' | 'done' }
   | { id: number; role: 'imrec' }
   | { id: number; role: 'subpush'; title: string; push?: string; automation: string }
-  | { id: number; role: 'answer'; text: string };
+  | { id: number; role: 'answer'; text: string }
+  /* Start Watching 的 Alva 确认回复:正文 + (未连接时)内嵌「选择推送渠道」卡片(Figma 8341:126245) */
+  | { id: number; role: 'watchreply'; text: string };
+
+/* Onboard 两个独立 flow 的 URL 后缀：#agent?flow=portfolio / #agent?flow=fintwit，
+   支持刷新 / 深链直达；沿用本仓 #agent?tab= 的 query 后缀约定（App 路由只认 ? 之前的 agent） */
+type AgentFlow = 'portfolio' | 'fintwit';
+function getAgentFlow(): AgentFlow | null {
+  const query = window.location.hash.slice(1).split('?')[1];
+  if (!query) return null;
+  const flow = new URLSearchParams(query).get('flow');
+  return flow === 'portfolio' || flow === 'fintwit' ? flow : null;
+}
 
 /* ========== 主组件 ========== */
 
-export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => void }) {
+export function AgentNewSession({ onNavigate, channel }: { onNavigate: (page: Page) => void; channel?: { id: string; name: string; description?: string } | null }) {
   const base = import.meta.env.BASE_URL;
   const [tab, setTab] = useState('chat');
   const [openSkill, setOpenSkill] = useState<string | null>(null);
@@ -534,7 +640,39 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   const [activeFeed, setActiveFeed] = useState<PushCardData | null>(null);
   const [imModalOpen, setImModalOpen] = useState(false);
   const [skillsLibOpen, setSkillsLibOpen] = useState(false);
+  /* 频道态右上角 settings → Edit Channel 弹窗(Figma 9732:448009);仅默认 Alva 跳设置页 */
+  const [editChannelOpen, setEditChannelOpen] = useState(false);
+  /* 会话是否已开始（Start Watching / 发过 prompt）：true 则收起 onboard 空态，进入真实对话 */
+  const [started, setStarted] = useState(false);
+  /* 会话产出的 alert（Start Watching 建一条 portfolio watch）→ 驱动 Alerts tab 计数 + 面板 */
+  const [sessionAlerts, setSessionAlerts] = useState<AgentAlert[]>([]);
+  /* Onboard「Watch your portfolio 24/7」→ 进入 portfolio builder 视图（无 composer）；初值由 URL 后缀决定，支持深链直达 */
+  const [portfolioOpen, setPortfolioOpen] = useState(() => getAgentFlow() === 'portfolio');
+  /* Onboard「Track FinTwit for alpha signals」→ 进入 Alpha Radar builder 视图（无 composer）；初值由 URL 后缀决定 */
+  const [alphaRadarOpen, setAlphaRadarOpen] = useState(() => getAgentFlow() === 'fintwit');
+  /* flow 开关以 URL hash 后缀为准：open/close 同步改 hash + 本地 state（避免异步 hashchange 造成闪烁），
+     浏览器返回 / 前进即回到 onboard；hashchange 监听覆盖深链刷新与前进后退 */
+  const openFlow = useCallback((flow: AgentFlow) => {
+    window.location.hash = `agent?flow=${flow}`;
+    setPortfolioOpen(flow === 'portfolio');
+    setAlphaRadarOpen(flow === 'fintwit');
+  }, []);
+  const closeFlow = useCallback(() => {
+    if (getAgentFlow()) window.location.hash = 'agent';
+    setPortfolioOpen(false);
+    setAlphaRadarOpen(false);
+  }, []);
+  useEffect(() => {
+    const sync = () => {
+      const flow = getAgentFlow();
+      setPortfolioOpen(flow === 'portfolio');
+      setAlphaRadarOpen(flow === 'fintwit');
+    };
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
   const idRef = useRef(0);
+  const didMountRef = useRef(false);
   const imRecShownRef = useRef(false);
   const imLinksRef = useRef(imLinks);
   imLinksRef.current = imLinks;
@@ -550,8 +688,27 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   /* 选中的 skill 不在外露 chips 里(来自 More 浮层)→ More chip 走选中态 */
   const moreActive = !sel && !selKol && !!selPool;
   const activeIm = imActive ? IMS.find((i) => i.id === imActive) ?? null : null;
-  /* 未连接 IM = onboarding 态:无 tab、chat 显示引导卡片(Figma Onboard/Default) */
+  /* 是否连过 IM（驱动 imrec 软推荐是否出现 + Tasks/Files 是否点亮 + 默认 Alva 的 chips 体验） */
   const connected = Object.values(imLinks).some(Boolean);
+  /* 预置演示频道（alva-to-the-moon）：聊天区显示预置对话（Figma 10998:50677），tabs 直接用连接后的产出 */
+  const seeded = channel?.id === SEED_CHANNEL_ID;
+  /* 默认 Alva + 已连接 → Infant 侧 skill chips + 预览卡体验 */
+  const chipsMode = !channel && connected;
+
+  /* 切换频道（含默认 Alva）时，视图与会话产出回到该频道的空态 onboard；
+     连接状态(imLinks/imActive)刻意不重置——右上角连接态在所有频道间与 Alva 同步 */
+  useEffect(() => {
+    // 首次挂载不重置：尊重 URL 里的 flow 深链（#agent?flow=...）；真正切换频道才回到该频道空态
+    if (!didMountRef.current) { didMountRef.current = true; return; }
+    setTab('chat');
+    closeFlow();
+    setExtra([]);
+    setSessionAlerts([]);
+    setStarted(false);
+    setOpenSkill(null);
+    imRecShownRef.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channel?.id]);
 
   const scrollToEnd = useCallback(() => {
     requestAnimationFrame(() => {
@@ -563,14 +720,16 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   const respond = useCallback((userText: string, kind: 'playbook' | 'automation', title: string) => {
     setTab('chat');
     setOpenSkill(null);
-    const uid = ++idRef.current;
-    setExtra((prev) => [...prev, { id: uid, role: 'user', text: userText }, { id: uid + 1, role: 'typing' }]);
+    const userId = ++idRef.current;
+    const typingId = ++idRef.current;
+    setExtra((prev) => [...prev, { id: userId, role: 'user', text: userText }, { id: typingId, role: 'typing' }]);
     scrollToEnd();
     setTimeout(() => {
-      setExtra((prev) => prev.filter((m) => m.id !== uid + 1).concat({ id: uid + 2, role: 'task', title, kind, state: 'running' }));
+      const taskId = ++idRef.current;
+      setExtra((prev) => prev.filter((m) => m.id !== typingId).concat({ id: taskId, role: 'task', title, kind, state: 'running' }));
       scrollToEnd();
       setTimeout(() => {
-        setExtra((prev) => prev.map((m) => (m.id === uid + 2 && m.role === 'task' ? { ...m, state: 'done' } : m)));
+        setExtra((prev) => prev.map((m) => (m.id === taskId && m.role === 'task' ? { ...m, state: 'done' } : m)));
         if (!Object.values(imLinksRef.current).some(Boolean) && !imRecShownRef.current) {
           imRecShownRef.current = true;
           setTimeout(() => {
@@ -583,6 +742,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   }, [scrollToEnd]);
 
   const onPrompt = useCallback((text: string) => {
+    setStarted(true);
     const kind: 'playbook' | 'automation' = /screen|alert|monitor|watch|what if/i.test(text) ? 'automation' : 'playbook';
     respond(text, kind, kind === 'automation' ? 'Automation: Smart Screener' : `Build: ${text.slice(0, 42)}…`);
   }, [respond]);
@@ -590,11 +750,12 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
   /* 订阅:即时生效,Alva 立刻推首条 run(价值先行,不要求连接)*/
   const pushSubscribe = useCallback((title: string, push: string | undefined, automation: string) => {
     setTab('chat');
-    const uid = ++idRef.current;
-    setExtra((prev) => [...prev, { id: uid, role: 'typing' }]);
+    const typingId = ++idRef.current;
+    setExtra((prev) => [...prev, { id: typingId, role: 'typing' }]);
     scrollToEnd();
     setTimeout(() => {
-      setExtra((prev) => prev.filter((m) => m.id !== uid).concat({ id: uid + 1, role: 'subpush', title, push, automation }));
+      const pushId = ++idRef.current;
+      setExtra((prev) => prev.filter((m) => m.id !== typingId).concat({ id: pushId, role: 'subpush', title, push, automation }));
       scrollToEnd();
     }, 700);
   }, [scrollToEnd]);
@@ -607,10 +768,39 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
     else pushSubscribe(c.feed, `${c.ticker} ${c.side} — ${c.quote.slice(0, 72)}…`, c.source);
   }, [pushSubscribe]);
 
+  /* Start Watching → 收起 builder + onboard 空态 → 一条 Alva 确认回复(内嵌「选择推送渠道」卡片,未连接才显示),无用户气泡 */
+  const onStartWatching = useCallback((_picks: { symbol: string; qty: string }[]) => {
+    closeFlow();
+    setStarted(true);
+    /* mock 成 populated 列表:整套 AGENT_ALERTS + 末尾追加本次新建的 portfolio watch */
+    setSessionAlerts((prev) => (prev.length ? prev : [...AGENT_ALERTS, PORTFOLIO_WATCH_ALERT]));
+    setTab('chat');
+    const typingId = ++idRef.current;
+    setExtra((prev) => [...prev, { id: typingId, role: 'typing' }]);
+    scrollToEnd();
+    setTimeout(() => {
+      setExtra((prev) => prev.filter((m) => m.id !== typingId).concat({
+        id: ++idRef.current,
+        role: 'watchreply',
+        text: "All set. I'm on watch now. I'll check for breaking news, macro/rate shifts, analyst changes, unusual price or volume moves, and important technical setups across your holdings. I'll only message when something looks worth your attention — share your thesis, key risks, or levels you care about and I'll watch the portfolio through that lens.",
+      }));
+      scrollToEnd();
+    }, 900);
+  }, [scrollToEnd, closeFlow]);
+
+  const onAlphaRadarLive = useCallback((summary: AlphaRadarSummary) => {
+    setStarted(true);
+    setSessionAlerts((prev) => {
+      if (prev.some((alert) => alert.id === ALPHA_RADAR_ALERT.id)) return prev;
+      return [...prev, { ...ALPHA_RADAR_ALERT, runEvery: `Every day at ${summary.digestTime}` }];
+    });
+  }, []);
+
   const connectIm = useCallback((imId: string) => {
     setImLinks((prev) => ({ ...prev, [imId]: true }));
     setImActive((prev) => prev ?? imId);
-    const im = IMS.find((i) => i.id === imId);
+    // iMessage 只出现在 alerts 快捷渠道、不在 IMS 列表 → 兜底一条元数据保证连接消息一致
+    const im = IMS.find((i) => i.id === imId) ?? IM_FALLBACK[imId];
     if (!im) return;
     setExtra((prev) => [...prev, {
       id: ++idRef.current,
@@ -626,21 +816,41 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
     setImActive((prev) => (prev === imId ? IMS.find((i) => next[i.id])?.id ?? null : prev));
   }, []);
 
+  /* 全新 onboarding 会话：agent 还没产出任何 task/alert/file → 计数为 0(不显示数字)、面板显示空态。
+     连接任一 social 后，Tasks / Files 变非空（mock 产出）；Alerts 仍只由 sessionAlerts 驱动。
+     预置演示频道恒为已产出态：直接复用连接后的 Tasks/Alerts/Files 内容。 */
+  const populated = seeded;
+  const tabCounts: Record<string, number> = {
+    tasks: seeded || connected ? AGENT_TASKS.length : 0,
+    alerts: sessionAlerts.length || (populated ? AGENT_ALERTS.length : 0),
+    artifacts: seeded || connected ? AGENT_ARTIFACTS.length : 0,
+  };
+
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
-      {/* Agent Header — Figma 7885:108604;未连接(无 tab)时头部自带底分割线,连接后由 tab 栏提供 */}
+      {/* Agent Header — Figma 7885:108604；频道态：# 头像 + 频道名 + (有描述才显示描述行) */}
       <div className="flex shrink-0 items-center gap-[12px] px-[28px] py-[16px]">
-        <AlvaPortrait />
+        {channel ? <ChannelPortrait /> : <AlvaPortrait />}
         <div className="flex min-w-0 flex-1 flex-col">
-          <p className="truncate text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva Agent</p>
-          <p className="truncate text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-            Your AI investing agent. Ask me to research markets, build live Playbooks, or set up automations that watch the market for you.
+          <p className="truncate text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+            {channel ? channel.name : 'Alva'}
           </p>
+          {channel ? (
+            channel.description && (
+              <p className="truncate text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
+                {channel.description}
+              </p>
+            )
+          ) : (
+            <p className="truncate text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
+              Your AI investing agent. Ask me to research markets, build live Playbooks, or set up automations that watch the market for you.
+            </p>
+          )}
         </div>
         {/* IM Select — Figma 7887:111979:hug 宽 gap-4 px-12 py-6,尾部 6px 状态点;未连接态(7904:195614)为主色实心 Connect;点击都打开连接 modal */}
         {activeIm ? (
           <button
-            className="flex h-[32px] shrink-0 cursor-pointer items-center justify-center gap-[4px] rounded-[4px] bg-transparent px-[12px] py-[6px] transition-colors hover:bg-[var(--b-r02)]"
+            className="flex h-[32px] shrink-0 cursor-pointer items-center justify-center gap-[4px] rounded-[4px] bg-transparent px-[12px] py-[6px] transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
             style={{ fontFamily: FONT, border: '0.5px solid var(--line-l3, rgba(0,0,0,0.3))' }}
             onClick={() => setImModalOpen(true)}
           >
@@ -668,17 +878,17 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
           </button>
         )}
         <button
-          className="flex size-[32px] shrink-0 cursor-pointer items-center justify-center rounded-[4px] bg-transparent transition-colors hover:bg-[var(--b-r02)]"
+          className="flex size-[32px] shrink-0 cursor-pointer items-center justify-center rounded-[4px] bg-transparent transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
           style={{ border: '0.5px solid var(--line-l3, rgba(0,0,0,0.3))' }}
           aria-label="Agent settings"
-          onClick={() => onNavigate('alva-agent')}
+          onClick={() => (channel ? setEditChannelOpen(true) : onNavigate('alva-agent'))}
         >
           <CdnIcon name="settings-l" size={16} color="var(--text-n9, rgba(0,0,0,0.9))" />
         </button>
       </div>
 
-      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1;未连接态也出 tab(Figma 9428:49606) */}
-      <div className="flex shrink-0 items-start gap-[16px] px-[28px]" style={{ borderBottom: '1px solid var(--line-l07, rgba(0,0,0,0.07))' }}>
+      {/* Tab — Figma 7885:108611:icon 16 + 14px,active Medium + b-2 m1 */}
+      <div className="flex shrink-0 items-start gap-[16px] px-[28px]" style={{ borderBottom: '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' }}>
         {TABS.map((t) => {
           const active = tab === t.id;
           return (
@@ -686,7 +896,11 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
               key={t.id}
               className="mb-[-1px] flex cursor-pointer items-center gap-[4px] bg-transparent px-0 pb-[6px]"
               style={{ border: 'none', borderBottom: active ? '2px solid var(--main-m1, #49A3A6)' : '2px solid transparent' }}
-              onClick={() => setTab(t.id)}
+              onClick={() => {
+                setTab(t.id);
+                // 点 Chat 从独立 flow 回到默认引导：清掉 URL 后缀回到 #agent
+                if (t.id === 'chat' && (portfolioOpen || alphaRadarOpen)) closeFlow();
+              }}
             >
               <CdnIcon name={t.icon} size={16} color={active ? 'var(--text-n9, rgba(0,0,0,0.9))' : 'var(--text-n7, rgba(0,0,0,0.7))'} />
               <span
@@ -694,7 +908,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                 style={{ fontFamily: FONT, color: active ? 'var(--text-n9, rgba(0,0,0,0.9))' : 'var(--text-n7, rgba(0,0,0,0.7))', fontWeight: active ? 500 : 400 }}
               >
                 {t.label}
-                {t.count != null && <span style={{ color: 'var(--text-n3, rgba(0,0,0,0.3))', fontWeight: 400 }}> ({t.count})</span>}
+                {tabCounts[t.id] > 0 && <span style={{ color: 'var(--text-n3, rgba(0,0,0,0.3))', fontWeight: 400 }}> ({tabCounts[t.id]})</span>}
               </span>
             </button>
           );
@@ -702,11 +916,49 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
       </div>
 
       {tab === 'chat' ? (
+        portfolioOpen ? (
+          /* Watch your portfolio 24/7 — 建仓向导视图（无 composer，可返回上一步） */
+          <div className="min-h-0 flex-1 overflow-y-auto px-[28px]">
+            <style>{MSG_IN_CSS}</style>
+            <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[28px] pb-[60px] pt-[28px]">
+              <MsgIn>
+                <AgentMsg time="" portrait={channel ? <ChannelPortrait size={22} /> : undefined} name={channel ? channel.name : undefined}>
+                  <div>
+                    <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Hey, tell me what you hold and I'll help watch your portfolio 24/7.</p>
+                    <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                      I'll check it every hour and message you only when a move, risk, catalyst, or breaking story is worth your attention.
+                    </p>
+                  </div>
+                  <PortfolioBuilder onStart={onStartWatching} />
+                </AgentMsg>
+              </MsgIn>
+            </div>
+          </div>
+        ) : alphaRadarOpen ? (
+          /* Track FinTwit for alpha signals — Alpha Radar setup 视图（无 composer，可返回上一步） */
+          <div className="min-h-0 flex-1 overflow-y-auto px-[28px]">
+            <style>{MSG_IN_CSS}</style>
+            <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[28px] pb-[60px] pt-[28px]">
+              <MsgIn>
+                <AgentMsg time="" portrait={channel ? <ChannelPortrait size={22} /> : undefined} name={channel ? channel.name : undefined}>
+                  <AlphaRadarBuilder onLive={onAlphaRadarLive} />
+                </AgentMsg>
+              </MsgIn>
+            </div>
+          </div>
+        ) : (
         <>
           <div ref={stageRef} className="min-h-0 flex-1 overflow-y-auto px-[28px]">
             <style>{MSG_IN_CSS}</style>
             <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[28px] pb-[60px] pt-[28px]">
-              {connected ? (
+              {/* 预置演示频道：聊天区为预置对话历史（恒显，Figma 10998:50677）；其余频道走 onboard 空态 */}
+              {seeded && (
+                <MsgIn>
+                  <ChannelSeedThread onOpenTasks={() => setTab('tasks')} />
+                </MsgIn>
+              )}
+              {/* 默认 Alva + 已连接:skill chips + 预览卡体验(Infant 侧保留) */}
+              {chipsMode && (
               <>
               <MsgIn>
               <AgentMsg>
@@ -790,7 +1042,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                   {promptList.map((t, i, arr) => (
                     <button
                       key={t}
-                      className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent px-[16px] py-[13px] text-left transition-colors hover:bg-[var(--b-r02)]"
+                      className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent px-[16px] py-[13px] text-left transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
                       style={{ border: 'none', borderBottom: i < arr.length - 1 ? '0.5px solid var(--line-l12, rgba(0,0,0,0.12))' : 'none' }}
                       onClick={() => {
                         if (sel) respond(t, sel.kind, `${sel.kind === 'automation' ? 'Automation' : 'Build'}: ${sel.label}`);
@@ -806,11 +1058,13 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
               </AgentMsg>
               </MsgIn>
               </>
-              ) : (
+              )}
+              {/* onboard 引导（未开始会话且不在 chips 体验时；频道态带频道头像/名） */}
+              {!seeded && !started && !chipsMode && (
               <MsgIn>
-              <AgentMsg time="">
+              <AgentMsg time="" portrait={channel ? <ChannelPortrait size={22} /> : undefined} name={channel ? channel.name : undefined}>
                 <div>
-                  <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Hey, I'm Alva, your AI investing agent.</p>
+                  <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Hey, I'm Alva, your AI investing agent.</p>
                   <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
                     Ask me for market research, or set up live automations to watch your portfolio, tickers, and market voices. Pick what you want me to help with first.
                   </p>
@@ -820,9 +1074,13 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                   {ONBOARD_CARDS.map((c, i, arr) => (
                     <button
                       key={c.id}
-                      className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent p-[16px] text-left transition-colors hover:bg-[var(--b-r02)]"
+                      className="flex w-full cursor-pointer items-center gap-[8px] bg-transparent p-[16px] text-left transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
                       style={{ border: 'none', borderBottom: i < arr.length - 1 ? '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' : 'none' }}
-                      onClick={() => respond(c.prompt, 'automation', c.taskTitle)}
+                      onClick={() => {
+                        if (c.id === 'portfolio-digest') openFlow('portfolio');
+                        else if (c.id === 'fintwit-digest') openFlow('fintwit');
+                        else { setStarted(true); respond(c.prompt, 'automation', c.taskTitle); }
+                      }}
                     >
                       <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
                         <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
@@ -846,6 +1104,40 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                     <MsgIn key={m.id}>
                     <AgentMsg time="now">
                       <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{m.text}</p>
+                    </AgentMsg>
+                    </MsgIn>
+                  );
+                }
+                /* watchreply — Start Watching 的确认回复:正文 + 未连接时内嵌「选择推送渠道」卡片(连接后反应式隐藏) */
+                if (m.role === 'watchreply') {
+                  return (
+                    <MsgIn key={m.id}>
+                    <AgentMsg time="now">
+                      <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{m.text}</p>
+                      {!connected && (
+                        <div
+                          className="flex w-full flex-col gap-[8px] rounded-[8px] py-[12px] pl-[16px] pr-[12px]"
+                          style={{ background: 'var(--content-br03, rgba(0,0,0,0.03))', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}
+                        >
+                          <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                            Where should I send you alerts?
+                          </p>
+                          <div className="flex flex-wrap gap-[8px]">
+                            {ALERT_CHANNELS.map((ch) => (
+                              <button
+                                key={ch.id}
+                                type="button"
+                                onClick={() => connectIm(ch.id)}
+                                className="flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-[8px] rounded-[6px] border-none px-[20px] py-[9px] transition-opacity hover:opacity-90"
+                                style={{ background: ch.bg }}
+                              >
+                                <img src={`${base}${ch.logo}`} alt="" className="size-[18px] shrink-0" />
+                                <span className="whitespace-nowrap text-[14px] font-medium leading-[22px] tracking-[0.14px] text-white" style={{ fontFamily: FONT }}>{ch.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </AgentMsg>
                     </MsgIn>
                   );
@@ -904,7 +1196,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                     </p>
                     <div className="flex flex-wrap gap-[8px]">
                       <button
-                        className="flex h-[32px] cursor-pointer items-center gap-[6px] rounded-full bg-white px-[12px] text-[13px] leading-[20px] tracking-[0.13px] transition-colors hover:bg-[var(--b-r02)]"
+                        className="flex h-[32px] cursor-pointer items-center gap-[6px] rounded-full bg-white px-[12px] text-[13px] leading-[20px] tracking-[0.13px] transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
                         style={{ fontFamily: FONT, border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))', color: 'var(--text-n9, rgba(0,0,0,0.9))' }}
                         onClick={() => setImModalOpen(true)}
                       >
@@ -912,7 +1204,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
                         Connect Telegram
                       </button>
                       <button
-                        className="flex h-[32px] cursor-pointer items-center gap-[6px] rounded-full bg-white px-[12px] text-[13px] leading-[20px] tracking-[0.13px] transition-colors hover:bg-[var(--b-r02)]"
+                        className="flex h-[32px] cursor-pointer items-center gap-[6px] rounded-full bg-white px-[12px] text-[13px] leading-[20px] tracking-[0.13px] transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
                         style={{ fontFamily: FONT, border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))', color: 'var(--text-n9, rgba(0,0,0,0.9))' }}
                         onClick={() => setImModalOpen(true)}
                       >
@@ -927,20 +1219,42 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
             </div>
           </div>
 
+          {/* composer 常显：onboard / 已开始对话都可继续聊天 */}
           <div className="shrink-0 px-[28px] pb-[28px]">
             <div className="mx-auto w-full max-w-[960px]">
-              <ChatInput shadow allowReferences={false} hideInspector placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
+              {/* 预置演示频道：composer 上方常驻 3 条 prompt chips — Figma 10998:50699:p-16 gap-8 */}
+              {seeded && (
+                <div className="flex w-full flex-wrap items-center gap-[8px] p-[16px]">
+                  {EMPTY_PROMPTS.map((prompt) => (
+                    <EmptyPromptPill key={prompt.text} icon={prompt.icon} text={prompt.text} onClick={() => onPrompt(prompt.text)} />
+                  ))}
+                </div>
+              )}
+              <ChatInput shadow shadowSize="xs" subtleBorder allowReferences={false} hideInspector placeholder="Ask Alva anything. @ for context, / for skills" onSend={onPrompt} />
             </div>
           </div>
         </>
+        )
       ) : tab === 'tasks' ? (
-        <AgentTasksPanel />
+        tabCounts.tasks > 0 ? <AgentTasksPanel /> : <EmptyPanel tabId="tasks" />
       ) : tab === 'memory' ? (
         <AgentMemory />
       ) : tab === 'alerts' ? (
-        <AgentAlertsPanel />
+        tabCounts.alerts > 0 ? (
+          <AgentAlertsPanel
+            alerts={sessionAlerts.length ? sessionAlerts : undefined}
+            getStarted={ALERT_GET_STARTED_CARDS.map((c) => ({
+              ...c,
+              onClick: () => {
+                setTab('chat');
+                if (c.id === 'gs-portfolio') openFlow('portfolio');
+                if (c.id === 'gs-fintwit') openFlow('fintwit');
+              },
+            }))}
+          />
+        ) : <EmptyPanel tabId="alerts" />
       ) : tab === 'artifacts' ? (
-        <AgentArtifactsPanel />
+        tabCounts.artifacts > 0 ? <AgentArtifactsPanel /> : <EmptyPanel tabId="artifacts" />
       ) : (
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-[10px]">
           <CdnIcon name={TABS.find((t) => t.id === tab)?.icon ?? 'folder-l'} size={28} color="var(--text-n2, rgba(0,0,0,0.2))" />
@@ -957,6 +1271,17 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
         </div>
       )}
 
+      {editChannelOpen && channel && (
+        <EditChannelModal
+          description={channel.description ?? ''}
+          onClose={() => setEditChannelOpen(false)}
+          onSave={(desc) => {
+            channelsStore.updateDescription(channel.id, desc);
+            setEditChannelOpen(false);
+          }}
+        />
+      )}
+
       {imModalOpen && (
         <ConnectAppsModal
           rows={IMS.map((im) => ({ id: im.id, name: im.label, sub: im.sub, handle: im.handle, logo: `${base}${im.logo}` }))}
@@ -966,6 +1291,7 @@ export function AgentNewSession({ onNavigate }: { onNavigate: (page: Page) => vo
           onConnect={connectIm}
           onDisconnect={disconnectIm}
           onSetActive={setImActive}
+          linkRows={[{ id: 'imessage', name: 'iMessage', sub: 'Connect Messages to send and receive alerts.', logo: `${base}logo-social-imessage.svg` }]}
         />
       )}
 
