@@ -1,15 +1,30 @@
 /**
- * [INPUT]: Figma Page/Agent/Chat(10998:50677)— alva-to-the-moon 频道的预置对话（digest 推送 + playbook 构建任务卡）
+ * [INPUT]: Figma Page/Agent/Chat(8341:125803)— alva-to-the-moon 频道预置对话:playbook 构建任务卡 + 自动化 digest 推送(带 source chip + 连接渠道卡)
  * [OUTPUT]: 演示频道聊天区的静态历史消息流；用户继续发消息由 AgentNewSession 的 extra 流接在其后
  * [POS]: AgentNewSession chat tab 在 channel.id === SEED_CHANNEL_ID 时渲染（替代 onboard 空态）
  */
 
 import type { ReactNode } from 'react';
+import { CdnIcon } from '@/app/components/shared/CdnIcon';
+import { MsgHeaderActions, SelectCheckbox, SelectableMessage } from '@/app/components/share/SelectableMessage';
+import {
+  CHANNEL_SEED_SHARE_MESSAGES,
+  SEED_MEME_PULSE,
+  SEED_PLAYBOOK_PLAN_TEXT,
+  SEED_USER_PROMPT_TEXT,
+  SEED_VWAP_ASK_TEXT,
+  SEED_VWAP_CONFIRM_TEXT,
+  SEED_VWAP_PUSH,
+  SEED_WHALE_ASK_TEXT,
+  SEED_WHALE_RISK,
+  SEED_WRAPUP_TEXT,
+} from '@/app/components/share/channel-seed-share-messages';
+import type { ConversationShareMessage } from '@/app/components/share/conversation-share';
 
 const FONT = "'Delight', sans-serif";
 const BASE = import.meta.env.BASE_URL;
 
-/* User Bubble — Figma 10998:50684:m1-10 底,max-w 560,px16 py12,radius 8 */
+/* User Bubble — Figma 8341:125813:m1-10 底,max-w 560,px16 py12,radius 8 */
 function SeedUserMsg({ text }: { text: string }) {
   return (
     <div className="flex w-full flex-col items-end">
@@ -20,95 +35,261 @@ function SeedUserMsg({ text }: { text: string }) {
   );
 }
 
-/* Answer — Figma 10998:50685:头行(22px 头像 + Alva + 时间,gap 8) + 内容 pl-30 gap-12,与头行 gap 8 */
-function SeedAgentMsg({ time, children }: { time: string; children: ReactNode }) {
+/* Answer — Figma Chat/Block-Answer:头行(22px 头像 + Alva + 时间,gap 8) + 内容 pl-30 gap-12,与头行 gap 8;
+   portrait 位分享选择态换成 checkbox(9281:37663),actions 为 header 行内 copy+share(9246:36248) */
+function SeedAgentMsg({ time, portrait, actions, children }: { time: string; portrait?: ReactNode; actions?: ReactNode; children: ReactNode }) {
   return (
     <div className="flex w-full flex-col gap-[8px]">
       <div className="flex h-[22px] w-full items-center gap-[8px]">
-        <img src={`${BASE}logo-portrait.svg`} alt="Alva" className="size-[22px] shrink-0 rounded-[4px]" />
+        {portrait ?? <img src={`${BASE}logo-portrait.svg`} alt="Alva" className="size-[22px] shrink-0 rounded-[4px]" />}
         <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>Alva</p>
         <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>{time}</p>
+        {actions}
       </div>
       <div className="flex w-full flex-col items-start gap-[12px] pl-[30px]">{children}</div>
     </div>
   );
 }
 
-/* 列表项 — Figma Markdown Item:20×22 圆点位(4px n9 dot) + 富文本(handle Medium + 正文 Regular) */
-function SeedBullet({ handle, text }: { handle: string; text: string }) {
+/* 段标题 / 富文本行 — Markdown/M:Medium 14 或 Regular 14,n9 */
+function SeedLine({ medium, children }: { medium?: boolean; children: ReactNode }) {
+  return (
+    <p className={`text-[14px] leading-[22px] tracking-[0.14px] ${medium ? 'font-medium' : ''}`} style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+      {children}
+    </p>
+  );
+}
+
+/* 列表项 — Figma Markdown Item:20×22 圆点位(4px n9 dot) + 正文(Regular 14 n9) */
+function SeedBullet({ text }: { text: string }) {
   return (
     <div className="flex w-full items-start">
       <span className="flex h-[22px] w-[20px] shrink-0 items-center justify-center">
         <span className="size-[4px] rounded-full" style={{ background: 'var(--text-n9, rgba(0,0,0,0.9))' }} />
       </span>
-      <p className="min-w-0 flex-1 text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-        <span className="font-medium">{handle}</span>
-        {text}
-      </p>
+      <p className="min-w-0 flex-1 text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{text}</p>
     </div>
   );
 }
 
-export function ChannelSeedThread({ onOpenTasks }: { onOpenTasks?: () => void }) {
+/* 归因 chip — Figma Chat/Element/Card(Automation 变体 11404:128447):pill,l2 描边 + br02 底,
+   pl5 pr8 py2 gap4;live 点(m1 实心 + m1 半透光晕) + 名称(Regular 12 n9) + arrow-right-l2 12(n9) */
+function SeedSourceChip({ label }: { label: string }) {
   return (
-    <div className="flex w-full flex-col gap-[28px]">
-      <SeedUserMsg text="Any updates today? Any updates today? Any updates today?" />
+    <span
+      className="inline-flex items-center gap-[4px] rounded-full py-[2px] pl-[5px] pr-[8px]"
+      style={{ border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}
+    >
+      <span className="relative flex size-[14px] shrink-0 items-center justify-center">
+        <span className="absolute size-[14px] rounded-full" style={{ background: 'var(--main-m1, #49A3A6)', opacity: 0.2 }} />
+        <span className="size-[6px] rounded-full" style={{ background: 'var(--main-m1, #49A3A6)' }} />
+      </span>
+      <span className="whitespace-nowrap text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>{label}</span>
+      <CdnIcon name="arrow-right-l2" size={12} color="var(--text-n9, rgba(0,0,0,0.9))" />
+    </span>
+  );
+}
 
-      <SeedAgentMsg time="Jun 29, 6:09 PM">
-        <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-          Hey, I'm Alva, your AI investing agent.
-          <br aria-hidden />
-          Ask me for market research, or set up live automations to watch your portfolio, tickers, and market voices. Pick what you want me to help with first.
-        </p>
-        <p className="text-[14px] font-medium leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-          📬 AI Chip Supply Chain — Daily Digest · 2026-06-12
-        </p>
-        <div className="flex w-full flex-col gap-[4px]">
-          <SeedBullet
-            handle="@CosmicInglewood"
-            text=" — Foundry-side bottlenecks are spreading: HBM is displacing DRAM production at roughly a 3:1 ratio, pushing Micron and others to abandon consumer DDR5 modules while TSMC scales back consumer SoC/CPU/GPU lines. Compute supply is tilting hard toward AI, and consumer electronics is getting squeezed out."
-          />
-          <SeedBullet
-            handle="@babywhitemonkey"
-            text=" — An overlooked upstream choke point: Kanto Denka Kogyo has notified Samsung / SK Hynix / TSMC that inventories run out in June and lines shut for good from July 1. The material is essential for ultra-thin tungsten layers in semiconductors (3D NAND, DRAM, logic chips). If accurate, this is a hard materials-side constraint signal."
-          />
-        </div>
-        <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-          <span className="font-medium">What to watch next: </span>
-          TSMC monthly sales cadence and any new SMIC capacity disclosures.
-        </p>
-      </SeedAgentMsg>
+interface ChannelSeedThreadProps {
+  onOpenTasks?: () => void;
+  selectionMode?: boolean;
+  selectedIds?: ReadonlySet<string>;
+  onToggleShare?: (id: string) => void;
+  onCopyMessage?: (message: ConversationShareMessage) => void;
+  onShareMessage?: (id: string) => void;
+}
 
-      <SeedUserMsg text="Build a trading playbook, NVDA, AAPL, TSLA" />
+export function ChannelSeedThread({
+  onOpenTasks,
+  selectionMode = false,
+  selectedIds,
+  onToggleShare,
+  onCopyMessage,
+  onShareMessage,
+}: ChannelSeedThreadProps) {
+  const [
+    userShareMessage,
+    planShareMessage,
+    digestShareMessage,
+    memePulseShareMessage,
+    whaleAskShareMessage,
+    whaleRiskShareMessage,
+    vwapAskShareMessage,
+    vwapConfirmShareMessage,
+    vwapPushShareMessage,
+    wrapupShareMessage,
+  ] = CHANNEL_SEED_SHARE_MESSAGES;
+  const seedAgentShareProps = (message: ConversationShareMessage) => ({
+    portrait: selectionMode ? <SelectCheckbox checked={selectedIds?.has(message.id) ?? false} /> : undefined,
+    actions: !selectionMode && onCopyMessage && onShareMessage
+      ? <MsgHeaderActions onCopy={() => onCopyMessage(message)} onShare={() => onShareMessage(message.id)} />
+      : undefined,
+  });
 
-      <SeedAgentMsg time="10:28 PM">
-        <p className="text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-          I'll build this as a backtested trading strategy on NVDA / AAPL / TSLA using Altra, then wrap it in a live playbook. One thing I need from you before I build, since “trading playbook” can mean very different engines:Quick build decisions before I spin up the backtest:
-        </p>
-        {/* Agent/Card/Chat — Figma 10998:50697:白底 l2 描边 radius 8,px16 py12 gap8;step-f 24(n2) + 标题/副文 + Running tag;点击跳 Tasks tab */}
-        <button
-          type="button"
-          onClick={onOpenTasks}
-          className="flex w-full max-w-[560px] cursor-pointer items-start gap-[8px] overflow-hidden rounded-[8px] px-[16px] py-[12px] text-left transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
-          style={{ background: 'var(--b0-container, #ffffff)', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}
-        >
-          <img src={`${BASE}icon-task-step.svg`} alt="" className="size-[24px] shrink-0" />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <p className="w-full truncate text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
-              Market Reactions: SPY, XLE, WTI to Iranian Deal Headlines and Oil Drop
-            </p>
-            <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
-              Background task — I'll post here when it's done.
-            </p>
-          </div>
-          <span
-            className="shrink-0 rounded-[4px] px-[6px] py-[1px] text-center text-[12px] leading-[20px] tracking-[0.12px]"
-            style={{ fontFamily: FONT, color: 'var(--main-m1, #49A3A6)', background: 'var(--main-m1-10, rgba(73,163,166,0.1))' }}
+  return (
+    <div className={`flex w-full flex-col ${selectionMode ? 'gap-[12px]' : 'gap-[28px]'}`}>
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(userShareMessage.id) ?? false}
+        label="Select user message for sharing"
+        onToggle={() => onToggleShare?.(userShareMessage.id)}
+        variant="user"
+        hoverTime={userShareMessage.time}
+        onQuickCopy={() => onCopyMessage?.(userShareMessage)}
+      >
+        <SeedUserMsg text={SEED_USER_PROMPT_TEXT} />
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(planShareMessage.id) ?? false}
+        label="Select Alva answer for sharing"
+        onToggle={() => onToggleShare?.(planShareMessage.id)}
+      >
+        <SeedAgentMsg time="10:28 PM" {...seedAgentShareProps(planShareMessage)}>
+          <SeedLine>{SEED_PLAYBOOK_PLAN_TEXT}</SeedLine>
+          {/* The task card remains interactive in chat but is omitted from the share snapshot. */}
+          <button
+            type="button"
+            onClick={onOpenTasks}
+            className="flex w-full cursor-pointer items-start gap-[8px] overflow-hidden rounded-[8px] p-[16px] text-left transition-colors hover:bg-[var(--b-r02,rgba(0,0,0,0.02))]"
+            style={{ background: 'var(--b0-container, #ffffff)', border: '0.5px solid var(--line-l2, rgba(0,0,0,0.2))' }}
           >
-            Running
-          </span>
-        </button>
-      </SeedAgentMsg>
+            <img src={`${BASE}icon-task-step.svg`} alt="" className="size-[24px] shrink-0" />
+            <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
+              <p className="w-full truncate text-[14px] leading-[22px] tracking-[0.14px]" style={{ fontFamily: FONT, color: 'var(--text-n9, rgba(0,0,0,0.9))' }}>
+                Market Reactions: SPY, XLE, WTI to Iranian Deal Headlines and Oil Drop
+              </p>
+              <p className="text-[12px] leading-[20px] tracking-[0.12px]" style={{ fontFamily: FONT, color: 'var(--text-n5, rgba(0,0,0,0.5))' }}>
+                Background task — I'll post here when it's done.
+              </p>
+            </div>
+            <span
+              className="shrink-0 rounded-[4px] px-[6px] py-[1px] text-center text-[12px] leading-[20px] tracking-[0.12px]"
+              style={{ fontFamily: FONT, color: 'var(--main-m1, #49A3A6)', background: 'var(--main-m1-10, rgba(73,163,166,0.1))' }}
+            >
+              Running
+            </span>
+          </button>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(digestShareMessage.id) ?? false}
+        label="Select digest notification for sharing"
+        onToggle={() => onToggleShare?.(digestShareMessage.id)}
+      >
+        <SeedAgentMsg time="10:28 PM" {...seedAgentShareProps(digestShareMessage)}>
+          <SeedSourceChip label="nvda-macd-hft-notify" />
+          <SeedLine medium>📬 AI Chip Supply Chain — Daily Digest · 2026-06-12</SeedLine>
+          <SeedLine medium>What moved today:</SeedLine>
+          <div className="flex w-full flex-col gap-[4px]">
+            <SeedBullet text="TSMC’s Winbond DRAM Deal Isn’t Domination, It’s Insurance. Here’s What It Actually Means for Chip ETFs [1]" />
+            <SeedBullet text="TSMC Q2 Earnings July 16: Three CoWoS Signals That Test AI’s Spending Ceiling [2]" />
+            <SeedBullet text="Memory Market Expert: “SK Hynix Is Bigger, Cheaper and Closer to NVIDIA.” Inside Its $26.5 Billion Nasdaq Debut [3]" />
+          </div>
+          <SeedLine medium>What to watch next:</SeedLine>
+          <div className="flex w-full flex-col gap-[4px]">
+            <SeedBullet text="TSMC monthly sales cadence and any new SMIC capacity disclosures." />
+            <SeedBullet text="TSMC Q2 Earnings July 16: Three CoWoS Signals That Test AI’s Spending Ceiling [2]" />
+          </div>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      {/* 第 4 条 — Figma 9246:36256(9282:39168):Meme token pulse 标题 + 3 bullets */}
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(memePulseShareMessage.id) ?? false}
+        label="Select Alva answer for sharing"
+        onToggle={() => onToggleShare?.(memePulseShareMessage.id)}
+      >
+        <SeedAgentMsg time="10:28 PM" {...seedAgentShareProps(memePulseShareMessage)}>
+          <SeedLine medium>{SEED_MEME_PULSE.title}</SeedLine>
+          <div className="flex w-full flex-col gap-[4px]">
+            {SEED_MEME_PULSE.bullets.map((line) => (
+              <SeedBullet key={line} text={line} />
+            ))}
+          </div>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      {/* 5-10 条 — 追问链 mock:whale 风险 → VWAP 硬警报 → 自动化建立 → 推送触发 → 收尾建议 */}
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(whaleAskShareMessage.id) ?? false}
+        label="Select user message for sharing"
+        onToggle={() => onToggleShare?.(whaleAskShareMessage.id)}
+        variant="user"
+        hoverTime={whaleAskShareMessage.time}
+        onQuickCopy={() => onCopyMessage?.(whaleAskShareMessage)}
+      >
+        <SeedUserMsg text={SEED_WHALE_ASK_TEXT} />
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(whaleRiskShareMessage.id) ?? false}
+        label="Select Alva answer for sharing"
+        onToggle={() => onToggleShare?.(whaleRiskShareMessage.id)}
+      >
+        <SeedAgentMsg time={whaleRiskShareMessage.time} {...seedAgentShareProps(whaleRiskShareMessage)}>
+          <SeedLine>{SEED_WHALE_RISK.intro}</SeedLine>
+          <SeedLine medium>Watch for:</SeedLine>
+          <div className="flex w-full flex-col gap-[4px]">
+            {SEED_WHALE_RISK.bullets.map((line) => (
+              <SeedBullet key={line} text={line} />
+            ))}
+          </div>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(vwapAskShareMessage.id) ?? false}
+        label="Select user message for sharing"
+        onToggle={() => onToggleShare?.(vwapAskShareMessage.id)}
+        variant="user"
+        hoverTime={vwapAskShareMessage.time}
+        onQuickCopy={() => onCopyMessage?.(vwapAskShareMessage)}
+      >
+        <SeedUserMsg text={SEED_VWAP_ASK_TEXT} />
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(vwapConfirmShareMessage.id) ?? false}
+        label="Select Alva answer for sharing"
+        onToggle={() => onToggleShare?.(vwapConfirmShareMessage.id)}
+      >
+        <SeedAgentMsg time={vwapConfirmShareMessage.time} {...seedAgentShareProps(vwapConfirmShareMessage)}>
+          <SeedLine>{SEED_VWAP_CONFIRM_TEXT}</SeedLine>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(vwapPushShareMessage.id) ?? false}
+        label="Select notification for sharing"
+        onToggle={() => onToggleShare?.(vwapPushShareMessage.id)}
+      >
+        <SeedAgentMsg time={vwapPushShareMessage.time} {...seedAgentShareProps(vwapPushShareMessage)}>
+          <SeedSourceChip label="goldendog-vwap-guard" />
+          <SeedLine medium>{SEED_VWAP_PUSH.title}</SeedLine>
+          <SeedLine>{SEED_VWAP_PUSH.body}</SeedLine>
+        </SeedAgentMsg>
+      </SelectableMessage>
+
+      <SelectableMessage
+        active={selectionMode}
+        selected={selectedIds?.has(wrapupShareMessage.id) ?? false}
+        label="Select Alva answer for sharing"
+        onToggle={() => onToggleShare?.(wrapupShareMessage.id)}
+      >
+        <SeedAgentMsg time={wrapupShareMessage.time} {...seedAgentShareProps(wrapupShareMessage)}>
+          <SeedLine>{SEED_WRAPUP_TEXT}</SeedLine>
+        </SeedAgentMsg>
+      </SelectableMessage>
     </div>
   );
 }

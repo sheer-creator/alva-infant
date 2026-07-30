@@ -316,29 +316,6 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
   );
 }
 
-/**
- * Mobile-only top nav. Per Figma `Home - Common` 1194:33015 (mobile topbar
- * pattern), but stripped per latest spec to only the left-side settings
- * button — no centered logo, no right-side action. The settings button
- * doubles as the drawer trigger so the full sidebar is still reachable.
- */
-export function MobileTopBar({ onOpenDrawer }: { onOpenDrawer: () => void }) {
-  return (
-    <div
-      className="sticky top-0 z-[20] flex items-center h-[48px] px-[12px] shrink-0"
-      style={{ background: '#f6f6f6' }}
-    >
-      <button
-        onClick={onOpenDrawer}
-        className="flex items-center justify-center w-[36px] h-[36px] rounded-[8px] hover:bg-[var(--b-r05)] cursor-pointer transition-colors"
-        aria-label="Open navigation"
-      >
-        <CdnIcon name="menu-l" size={20} color="var(--text-n9)" />
-      </button>
-    </div>
-  );
-}
-
 export function AppShell({ activePage, onNavigate, onUserMouseEnter, onUserMouseLeave, children }: AppShellProps) {
   return (
     <AppShellInner
