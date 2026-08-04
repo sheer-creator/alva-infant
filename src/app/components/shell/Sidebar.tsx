@@ -137,7 +137,15 @@ function Logo({ collapsed }: { collapsed?: boolean }) {
         </div>
       )}
       {!collapsed && (
-        <CdnIcon name="sidebar-onoff" size={16} />
+        <a
+          href="#demo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative shrink-0 cursor-pointer font-['Delight',sans-serif] text-[12px] leading-[16px] tracking-[0.12px] no-underline transition-colors hover:text-white"
+          style={{ color: 'rgba(255, 255, 255, 0.5)' }}
+        >
+          Demo
+        </a>
       )}
     </div>
   );

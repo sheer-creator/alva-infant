@@ -4,5 +4,6 @@ export const DEMO_AUTHORS: Record<string, string> = {
   'agent-channel-new-user': 'sheer-creator',
   'automation-detail-modal': 'sheer-creator',
   'automation-popover': 'sheer-creator',
+  'channel-onboard-immersive': 'sheer-creator',
   'portfolio-watchlist-agent': 'sheer-creator',
 };

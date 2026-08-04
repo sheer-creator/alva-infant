@@ -51,7 +51,8 @@ function getPageFromHash(): Page {
   if (hash.startsWith('demo/')) return hash as Page;
   // 频道深链形如 #agent?flow=portfolio / #agent?tab=tasks,路由只认 ? 之前的部分(同 Baby)
   const base = hash.split('?')[0];
-  return ROUTABLE_PAGES.includes(base as (typeof ROUTABLE_PAGES)[number]) ? (base as Page) : 'new-chat';
+  // 无 hash / 无效 hash 默认落 Alva channel(agent 页,channelsStore currentId 默认 null = Alva)
+  return ROUTABLE_PAGES.includes(base as (typeof ROUTABLE_PAGES)[number]) ? (base as Page) : 'agent';
 }
 
 export default function App() {

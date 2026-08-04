@@ -10,9 +10,10 @@ import { AutomationPopoverDemo } from '@/app/components/demo/AutomationPopoverDe
 import { AutomationDetailModalDemo } from '@/app/components/demo/AutomationDetailModalDemo';
 import { AgentChannelNewUserDemo } from '@/app/components/demo/AgentChannelNewUserDemo';
 import { PortfolioWatchlistAgentDemo } from '@/app/components/demo/PortfolioWatchlistAgentDemo';
+import { ChannelOnboardImmersiveDemo } from '@/app/components/demo/ChannelOnboardImmersiveDemo';
 import { DEMO_AUTHORS } from '@/data/demo-authors.generated';
 
-type DemoSlug = 'automation-popover' | 'automation-detail-modal' | 'agent-channel-new-user' | 'portfolio-watchlist-agent';
+type DemoSlug = 'automation-popover' | 'automation-detail-modal' | 'agent-channel-new-user' | 'portfolio-watchlist-agent' | 'channel-onboard-immersive';
 
 interface DemoProps {
   onNavigate: (page: Page) => void;
@@ -28,6 +29,13 @@ interface DemoEntry {
 }
 
 const DEMOS: DemoEntry[] = [
+  {
+    slug: 'channel-onboard-immersive',
+    name: 'Channel Onboard — Universal Automation Card',
+    status: 'Draft',
+    summary: 'Hook and config merged into one card (Portfolio Watch instance): animated hero streaming real alerts with a quiet-run pill, tag-based simplified setup in-card (no full-screen layer), spec-accurate every-2h promise, and a receipt card with timeline.',
+    author: DEMO_AUTHORS['channel-onboard-immersive'] ?? 'sheer-creator',
+  },
   {
     slug: 'portfolio-watchlist-agent',
     name: 'Portfolio / Watchlist — Agent Onboarding',
@@ -231,7 +239,9 @@ export default function Demo({ onNavigate, demoId }: DemoProps) {
   return (
     <div className="min-h-screen bg-white">
       <main className="mx-auto flex min-h-screen w-full max-w-[1024px] flex-col px-[20px] py-[28px] sm:px-[40px] sm:py-[40px]">
-        {activeDemo?.slug === 'portfolio-watchlist-agent' ? (
+        {activeDemo?.slug === 'channel-onboard-immersive' ? (
+          <ChannelOnboardImmersiveDemo />
+        ) : activeDemo?.slug === 'portfolio-watchlist-agent' ? (
           <PortfolioWatchlistAgentDemo />
         ) : activeDemo?.slug === 'automation-popover' ? (
           <AutomationPopoverDemo />
