@@ -1,4 +1,4 @@
-import{n as e,s as t}from"./index-LWmaJPZm.js";import{t as n}from"./AppShell-B2hcyOau.js";import{t as r}from"./inlinePlaybookHeader-CjvLmovc.js";var i=`<!doctype html>
+import{n as e,s as t}from"./index-B93a61jd.js";import{t as n}from"./AppShell-Dl5OeWRg.js";import{t as r}from"./inlinePlaybookHeader-BB0h8fHL.js";var i=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -904,7 +904,7 @@ import{n as e,s as t}from"./index-LWmaJPZm.js";import{t as n}from"./AppShell-B2h
     background: var(--b0-container, #fff);
     width: 100%; max-width: 896px;
     max-height: 100%;
-    border-radius: var(--radius-pop-dialog, 12px);
+    border-radius: var(--radius-pop-dialog, 8px);
     border: 0.5px solid var(--line-l2, rgba(0,0,0,0.1));
     padding: var(--spacing-xxl);
     display:flex; flex-direction:column; gap: var(--spacing-m);

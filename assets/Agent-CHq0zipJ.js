@@ -1,4 +1,4 @@
-import{c as e,f as t,l as n,n as r}from"./index-LWmaJPZm.js";import{n as i,r as a,t as o}from"./ChatInput-BN0psCDM.js";import{c as s,i as c,l,n as u,o as d,r as f,s as p,t as m}from"./AppShell-B2hcyOau.js";import{r as h,t as g}from"./FeedDetailModal-CWmP-mle.js";import{t as _}from"./ConnectAppsModal-7TiG86By.js";var v=t(n(),1),y=r(),b=`'Delight', sans-serif`,x=[{id:`user`,name:`User.md`,lastUpdated:`03/02/2026`,content:`## Who you are
+import{c as e,f as t,l as n,n as r}from"./index-B93a61jd.js";import{n as i,r as a,t as o}from"./ChatInput-DRlxY7ee.js";import{c as s,i as c,l,n as u,o as d,r as f,s as p,t as m}from"./AppShell-Dl5OeWRg.js";import{r as h,t as g}from"./FeedDetailModal-COUYEv8D.js";import{t as _}from"./ConnectAppsModal-DyfUrglm.js";var v=t(n(),1),y=r(),b=`'Delight', sans-serif`,x=[{id:`user`,name:`User.md`,lastUpdated:`03/02/2026`,content:`## Who you are
 
 Growth-oriented investor with a US large-cap core and a tactical crypto sleeve. Comfortable reading charts and funding data; prefers theses backed by numbers over narratives. Checks in most weekday mornings before the US open, usually 8:00–9:00 AM ET.
 
