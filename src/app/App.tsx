@@ -15,11 +15,10 @@ const VALID_PAGES = [
   // 左侧栏入口
   'new-chat',
   'explore',
-  'agent', 'portfolio', 'alva-skills',
+  'agent', 'portfolio',
   'demo',
   'creator-earnings',
-  'template-screener', 'template-thesis', 'template-whatif', 'template-notification',
-  'screener',
+  'template-screener', 'template-whatif',
   'pricing',
   'user-profile',
 ] as const;
@@ -35,14 +34,10 @@ const CreatorEarnings = lazy(() => import('../pages/CreatorEarnings'));
 const Explore = lazy(() => import('../pages/Explore'));
 const Notifications = lazy(() => import('../pages/Notifications'));
 const PortfolioSettings = lazy(() => import('../pages/PortfolioSettings'));
-const Screener = lazy(() => import('../pages/Screener'));
 const TemplateScreener = lazy(() => import('../pages/TemplateScreener'));
-const TemplateThesis = lazy(() => import('../pages/TemplateThesis'));
 const TemplateWhatif = lazy(() => import('../pages/TemplateWhatif'));
-const TemplateNotification = lazy(() => import('../pages/TemplateNotification'));
 const Agent = lazy(() => import('../pages/Agent'));
 const Portfolio = lazy(() => import('../pages/Portfolio'));
-const AlvaSkills = lazy(() => import('../pages/AlvaSkills'));
 const Demo = lazy(() => import('../pages/Demo'));
 
 function getPageFromHash(): Page {
@@ -94,14 +89,10 @@ export default function App() {
         {page === 'explore' && <Explore onNavigate={navigate} />}
         {page === 'notifications' && <Notifications onNavigate={navigate} />}
         {page === 'portfolio-settings' && <PortfolioSettings onNavigate={navigate} />}
-        {page === 'screener' && <Screener onNavigate={navigate} />}
         {page === 'template-screener' && <TemplateScreener onNavigate={navigate} />}
-        {page === 'template-thesis' && <TemplateThesis onNavigate={navigate} />}
         {page === 'template-whatif' && <TemplateWhatif onNavigate={navigate} />}
-        {page === 'template-notification' && <TemplateNotification onNavigate={navigate} />}
         {page === 'agent' && <Agent onNavigate={navigate} />}
         {page === 'portfolio' && <Portfolio onNavigate={navigate} />}
-        {page === 'alva-skills' && <AlvaSkills onNavigate={navigate} />}
         {(page === 'demo' || page.startsWith('demo/')) && (
           <Demo
             onNavigate={navigate}

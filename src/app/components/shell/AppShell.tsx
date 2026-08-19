@@ -293,8 +293,12 @@ function AppShellInner({ activePage, onNavigate, onUserMouseEnter, onUserMouseLe
         </div>
       </main>
 
-      {/* 方案C: FAB trigger */}
-      {contextTag !== null && <FloatingChatFAB />}
+      {/* 方案C: FAB trigger — 桌面专属；mobile 由页面自己的吸底 dock 承担 Ask Alva 入口 */}
+      {contextTag !== null && (
+        <div className="hidden lg:block">
+          <FloatingChatFAB />
+        </div>
+      )}
 
       {isUserInfoOpen && (
         <div

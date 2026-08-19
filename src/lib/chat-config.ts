@@ -48,7 +48,6 @@ export const PAGE_TITLES: Record<string, string> = {
   explore: 'Explore',
   portfolio: 'Portfolio',
   agent: 'Agent',
-  'alva-skills': 'Alva Skill',
   account: 'Account',
   'user-profile': 'Profile',
   pricing: 'Pricing',
@@ -86,7 +85,7 @@ export const PAGE_DEFAULT_THREAD: Record<string, string> = {};
 
 /** Pages where the current user is the playbook owner (主态).
  *  Starred / template pages are visitor (客态). */
-const OWNER_PLAYBOOK_PAGES = new Set(['screener']);
+const OWNER_PLAYBOOK_PAGES = new Set<string>();
 
 export function isPlaybookOwnerPage(page: string): boolean {
   return OWNER_PLAYBOOK_PAGES.has(page);

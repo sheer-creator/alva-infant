@@ -135,7 +135,7 @@ const FEEDS: AlertFeed[] = [
     lastRun: '15m',
     runEvery: 'Every 5 minutes',
     totalRuns: '142',
-    from: { label: '@leo/BTC Ultimate AI Trader', author: 'leo', target: 'screener' },
+    from: { label: '@leo/BTC Ultimate AI Trader', author: 'leo', target: 'template-screener' },
   },
   {
     id: 'whale',
@@ -156,7 +156,7 @@ const FEEDS: AlertFeed[] = [
     lastRun: '15m',
     runEvery: 'Every 5 minutes',
     totalRuns: '73',
-    from: { label: '@yggyll/NVDA Price Fetcher', author: 'yggyll', target: 'screener' },
+    from: { label: '@yggyll/NVDA Price Fetcher', author: 'yggyll', target: 'template-screener' },
   },
   {
     id: 'funding',
@@ -177,7 +177,7 @@ const FEEDS: AlertFeed[] = [
     lastRun: '4h',
     runEvery: 'Every day at 9:00 AM',
     totalRuns: '48',
-    from: { label: '@maya/ai-infra-screener', author: 'maya', target: 'screener' },
+    from: { label: '@maya/ai-infra-screener', author: 'maya', target: 'template-screener' },
   },
 ];
 

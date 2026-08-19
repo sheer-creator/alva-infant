@@ -28,33 +28,7 @@ export const SIDEBAR_W_COLLAPSED = 56;
 
 /* ========== 导航项组件 ========== */
 
-const ICON_CDN = 'https://alva-ai-static.b-cdn.net/icons';
-const FINTWIT_GRADIENT = 'linear-gradient(90deg, #6BDBD5 0%, #8FAFFF 42%, #C092F6 74%, #F5C579 100%)';
-
-function GradientCdnIcon({ name, size = 16 }: { name: string; size?: number }) {
-  const url = `${ICON_CDN}/${name}.svg`;
-  return (
-    <span
-      aria-hidden
-      className="block shrink-0"
-      style={{
-        width: size,
-        height: size,
-        backgroundImage: FINTWIT_GRADIENT,
-        WebkitMaskImage: `url(${url})`,
-        WebkitMaskSize: 'contain',
-        WebkitMaskRepeat: 'no-repeat',
-        WebkitMaskPosition: 'center',
-        maskImage: `url(${url})`,
-        maskSize: 'contain',
-        maskRepeat: 'no-repeat',
-        maskPosition: 'center',
-      }}
-    />
-  );
-}
-
-function NavItem({ label, icon, iconNode, avatarName, badge, active, deprecated, collapsed, gradient, onClick }: { label: string; icon?: string; iconNode?: ReactNode; avatarName?: string; badge?: string | number; active?: boolean; deprecated?: boolean; collapsed?: boolean; gradient?: boolean; onClick?: () => void }) {
+function NavItem({ label, icon, avatarName, badge, active, deprecated, collapsed, onClick }: { label: string; icon?: string; avatarName?: string; badge?: string | number; active?: boolean; deprecated?: boolean; collapsed?: boolean; onClick?: () => void }) {
   const interactive = Boolean(onClick);
   const textClass = deprecated
     ? 'text-white/35'
@@ -75,23 +49,15 @@ function NavItem({ label, icon, iconNode, avatarName, badge, active, deprecated,
         <div className="overflow-clip relative shrink-0 size-[16px] flex items-center justify-center">
           {avatarName ? (
             <Avatar name={avatarName} size={16} />
-          ) : icon && gradient ? (
-            <GradientCdnIcon name={icon} size={16} />
           ) : icon ? (
             <CdnIcon name={icon} size={16} color={iconColor} />
           ) : null}
         </div>
       )}
-      {iconNode && (
-        <div className="relative shrink-0 size-[16px] flex items-center justify-center">
-          {iconNode}
-        </div>
-      )}
       {!collapsed && (
         <>
           <p
-            className={`font-['Delight',sans-serif] leading-[22px] overflow-hidden relative text-[13px] text-ellipsis tracking-[0.13px] whitespace-nowrap ${badge != null ? 'shrink-0' : 'flex-[1_0_0] min-w-px'} ${gradient ? 'text-transparent bg-clip-text' : ''}`}
-            style={gradient ? { backgroundImage: FINTWIT_GRADIENT } : undefined}
+            className={`font-['Delight',sans-serif] leading-[22px] overflow-hidden relative text-[13px] text-ellipsis tracking-[0.13px] whitespace-nowrap ${badge != null ? 'shrink-0' : 'flex-[1_0_0] min-w-px'}`}
           >
             {label}
           </p>
@@ -201,8 +167,8 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
       <div className="content-stretch flex flex-col gap-0 items-start py-[4px] relative shrink-0 w-full z-[7]">
         <NavItem label="Explore" icon="sidebar-discover-normal" active={activePage === 'explore'} collapsed={collapsed} onClick={() => onNavigate('explore')} />
         <NavItem label="Portfolio" icon="sidebar-portfolio-normal" active={activePage === 'portfolio' || activePage === 'portfolio-settings'} collapsed={collapsed} onClick={() => onNavigate('portfolio')} />
-        <NavItem label="Alva Skill" icon="sidebar-skills-normal" active={activePage === 'alva-skills'} collapsed={collapsed} onClick={() => onNavigate('alva-skills')} />
-        <NavItem label="FinTwit Alpha League" icon="smart-money-l" gradient collapsed={collapsed} />
+        {/* Markets — Figma 11831:60745 */}
+        <NavItem label="Markets" icon="sidebar-k-normal" collapsed={collapsed} />
       </div>
 
       {/* Channels */}
@@ -211,13 +177,15 @@ export function Sidebar({ activePage, onNavigate, onUserMouseEnter, onUserMouseL
           label="Channels"
           collapsed={collapsed}
           action={
+            /* 14×14 / 50% 白。CDN add-l2.svg 的 path 带 fill-opacity=".9"，
+               CdnIcon 走 maskMode:'alpha' 会把这 0.9 乘进遮罩，故 0.5/0.9 除回去 */
             <button
               type="button"
-              className="flex cursor-pointer items-center justify-center border-none bg-transparent p-0 opacity-50 transition-opacity hover:opacity-100"
+              className="flex cursor-pointer items-center justify-center border-none bg-transparent p-0 opacity-[0.556] transition-opacity hover:opacity-100"
               onClick={() => setNewChannelOpen(true)}
               aria-label="New channel"
             >
-              <CdnIcon name="add-l2" size={12} color="#ffffff" />
+              <CdnIcon name="add-l2" size={14} color="#ffffff" />
             </button>
           }
         />
