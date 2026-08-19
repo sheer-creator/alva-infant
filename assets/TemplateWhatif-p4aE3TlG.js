@@ -1,4 +1,4 @@
-import{n as e,s as t}from"./index-B93a61jd.js";import{t as n}from"./AppShell-Dl5OeWRg.js";import{t as r}from"./inlinePlaybookHeader-BB0h8fHL.js";var i=`<!DOCTYPE html>
+import{n as e,s as t}from"./index-Bhq-q187.js";import{t as n}from"./AppShell-Rt5RjIwI.js";import{t as r}from"./inlinePlaybookHeader-DzsJwLCT.js";var i=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -677,4 +677,4 @@ import{n as e,s as t}from"./index-B93a61jd.js";import{t as n}from"./AppShell-Dl5
 
 </body>
 </html>
-`,a=e(),o=r(i);function s(){return(0,a.jsx)(`div`,{className:`h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,a.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,a.jsx)(`iframe`,{srcDoc:o,title:t[`template-whatif`],className:`block h-full w-full border-0`})})})}function c({onNavigate:e}){return(0,a.jsx)(n,{activePage:`template-whatif`,onNavigate:e,children:(0,a.jsx)(s,{})})}export{c as default};
+`,a=e(),o=r(i);function s(){return(0,a.jsx)(`div`,{className:`h-[calc(100dvh-56px)] lg:h-screen flex flex-col`,style:{background:`var(--b0-page)`},children:(0,a.jsx)(`div`,{className:`flex-1 overflow-hidden`,children:(0,a.jsx)(`iframe`,{srcDoc:o,title:t[`template-whatif`],className:`block h-full w-full border-0`})})})}function c({onNavigate:e}){return(0,a.jsx)(n,{activePage:`template-whatif`,onNavigate:e,children:(0,a.jsx)(s,{})})}export{c as default};
